@@ -18,6 +18,7 @@
     <typeAlias type="org.nmfw.foodietree.domain.product.entity.Product" alias="product"/>
     <typeAlias type="org.nmfw.foodietree.domain.customer.entity.Customer" alias="customer"/>
     <typeAlias type="org.nmfw.foodietree.domain.auth.dto.EmailCodeDto" alias="EmailCodeDto"/>
+    <typeAlias type="org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto" alias="StoreMyPageDto"/>
   </typeAliases>
   <mappers>
     <mapper resource="mappers/CustomerMapper.xml" />
@@ -27,6 +28,7 @@
     <mapper resource="mappers/ProductMapper.xml"/>
     <mapper resource="mappers/CustomerMyPageMapper.xml"/>
     <mapper resource="mappers/EmailMapper.xml"/>
+    <mapper resource="mappers/StoreMyPageMapper.xml"/>
   </mappers>
 
 </configuration>
