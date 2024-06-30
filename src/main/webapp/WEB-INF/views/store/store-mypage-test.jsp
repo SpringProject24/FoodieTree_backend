@@ -14,6 +14,30 @@
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage.css">
 </head>
 <body>
+<style>
+    #calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    #calendar div {
+        padding: 20px;
+        background-color: #f0f0f0;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    #events {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fafafa;
+        border: 1px solid #ddd;
+    }
+</style>
 <header>
     <div class="container">
         <div class="logo"><h1>FoodieTree</h1></div>
@@ -41,113 +65,105 @@
                 <div class="title">
                     <h3 class="title-text">예약 내역</h3>
                 </div>
+            </div>
+            <div id="product-count">
+                <div class="title">
+                    <h3 class="title-text">오늘의 랜덤박스 수량</h3>
+                </div>
+                <button id="decrease">감소</button>
+                <span id="count">${storeInfo.productCnt}</span>
+                <button id="increase">증가</button>
+            </div>
 
-<%--                <div class="info-wrapper reservation">--%>
-<%--                    <ul class="reservation-list">--%>
-<%--                        <c:forEach var="reservation" items="${reservations}" varStatus="status">--%>
-<%--                            <li id="reservation-${status.index}" class="reservation-item">--%>
-<%--                                <div class="item">--%>
-<%--                                    <div class="img-wrapper">--%>
-<%--                                        <div class="img-box">--%>
-<%--                                            <img src="${reservation.storeImg != null ? reservation.storeImg : "/assets/img/western.jpg"}"--%>
-<%--                                                 alt="Store Image"/>--%>
-<%--                                        </div>--%>
-<%--                                        <c:if test="${reservation.status == 'CANCELED'}">--%>
-<%--                                            <i class="fa-solid fa-circle-xmark canceled"></i>--%>
-<%--                                        </c:if>--%>
-<%--                                        <c:if test="${reservation.status == 'RESERVED'}">--%>
-<%--                                            <i class="fa-solid fa-spinner loading"></i>--%>
-<%--                                        </c:if>--%>
-<%--                                        <c:if test="${reservation.status == 'PICKEDUP'}">--%>
-<%--                                            <i class="fa-solid fa-circle-check done"></i>--%>
-<%--                                        </c:if>--%>
-<%--                                    </div>--%>
-<%--                                    <span>${reservation.storeName}</span>--%>
-<%--                                </div>--%>
-<%--                                <div class="item">--%>
-<%--                                    <span>${reservation.status}</span>--%>
-<%--                                </div>--%>
-<%--                                <div class="item">--%>
-<%--                                    <span>${reservation.pickUpTime}</span>--%>
-<%--                                </div>--%>
-<%--                            </li>--%>
-<%--                        </c:forEach>--%>
-<%--                    </ul>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--            <div class="info-box">--%>
-<%--                <div class="title">--%>
-<%--                    <h3 class="title-text">선호 지역</h3>--%>
-<%--                </div>--%>
-<%--                <div class="info-wrapper">--%>
-<%--                    <ul class="info-list area">--%>
-<%--                        <c:forEach var="area" items="${customerMyPageDto.preferredArea}">--%>
-<%--                            <li>${area}</li>--%>
-<%--                        </c:forEach>--%>
-<%--                    </ul>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--            <div class="info-box">--%>
-<%--                <div class="title">--%>
-<%--                    <h3 class="title-text">선호 음식</h3>--%>
-<%--                </div>--%>
-<%--                <div class="info-wrapper">--%>
-<%--                    <ul class="info-list food">--%>
-<%--                        <c:forEach var="food" items="${customerMyPageDto.preferredFood}">--%>
-<%--                            <li>--%>
-<%--                                <div class="img-box">--%>
-<%--                                    <img src="${food.foodImage}" alt="선호음식이미지"/>--%>
-<%--                                </div>--%>
-<%--                                <span>${food.preferredFood}</span>--%>
-<%--                            </li>--%>
-<%--                        </c:forEach>--%>
-<%--                    </ul>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--            <div class="info-box">--%>
-<%--                <div class="title">--%>
-<%--                    <h3 class="title-text">최애 가게</h3>--%>
-<%--                </div>--%>
-<%--                <div class="info-wrapper">--%>
-<%--                    <ul class="info-list store">--%>
-<%--                        <c:forEach var="store" items="${customerMyPageDto.favStore}">--%>
-<%--                            <li id="${store.storeId}">--%>
-<%--                                <div class="img-box">--%>
-<%--                                    <img src="${store.storeImg ? store.storeImg : "/assets/img/japanese.jpg"}" alt="최애가게이미지">--%>
-<%--                                </div>--%>
-<%--                                <span>${store.storeName}</span>--%>
-<%--                            </li>--%>
-<%--                        </c:forEach>--%>
-<%--                    </ul>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--            <div class="info-box">--%>
-<%--                <div class="title">--%>
-<%--                    <h3 class="title-text">이슈 내역</h3>--%>
-<%--                </div>--%>
-<%--                <div class="info-wrapper">--%>
-<%--                    <ul class="issue-list">--%>
-<%--                        <c:forEach var="issue" items="${issues}">--%>
-<%--                            <li class="issue-item">--%>
-<%--                                <span>${issue.issueCategory.issueName}</span>--%>
-<%--                                <span>${issue.issueText}</span>--%>
-<%--                                <span>${issue.issueStatus}</span>--%>
-<%--                                <span>${issue.cancelIssueAt}</span>--%>
-<%--                                <span>${issue.storeName}</span>--%>
-<%--                                <span>${issue.nickname}</span>--%>
-<%--                            </li>--%>
-<%--                        </c:forEach>--%>
-<%--                    </ul>--%>
-<%--                </div>--%>
-<%--            </div>--%>
+            <div id="calendar-header">
+                <div class="title">
+                    <h3 class="title-text">가게 스케줄 조정</h3>
+                </div>
+                <button id="prev-month">Previous</button>
+                <span id="current-month"></span>
+                <button id="next-month">Next</button>
+            </div>
+            <div id="calendar"></div>
+            <div id="events"></div>
             <div class="stats">
                 <div>10kg의 음쓰를 줄였습니다</div>
                 <div>지금까지 10만원을 아꼈어요</div>
             </div>
         </div>
-<%--    </div>--%>
+    </div>
 </section>
 
+<script>
 
+    const BASE_URL = 'http://localhost:8083';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const calendarElement = document.getElementById('calendar');
+        const statusElement = document.getElementById('status');
+        const currentMonthElement = document.getElementById('current-month');
+        const prevMonthButton = document.getElementById('prev-month');
+        const nextMonthButton = document.getElementById('next-month');
+
+        let today = new Date();
+        let currentYear = today.getFullYear();
+        let currentMonth = today.getMonth();
+
+        function updateCalendar(year, month) {
+            calendarElement.innerHTML = '';
+            const date = new Date(year, month);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            currentMonthElement.textContent = date.toLocaleDateString('default', { year: 'numeric', month: 'long' });
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.textContent = i;
+                dayElement.classList.add('day');
+                if (year === today.getFullYear() && month === today.getMonth() && i === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+                dayElement.addEventListener('click', () => closeStoreForDay(year, month, i));
+                calendarElement.appendChild(dayElement);
+            }
+        }
+
+        async function closeStoreForDay(year, month, day) {
+            const dateString = `\${year}-\${String(month + 1).padStart(2, '0')}-\${String(day).padStart(2, '0')}`;
+            const response = await fetch(`\${BASE_URL}/store/mypage/main/calendar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ date: dateString })
+            });
+
+            if (response.ok) {
+                statusElement.textContent = `The store will be closed on \${dateString}.`;
+            } else {
+                statusElement.textContent = `Failed to close the store on \${dateString}.`;
+            }
+        }
+
+        prevMonthButton.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateCalendar(currentYear, currentMonth);
+        });
+
+        nextMonthButton.addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateCalendar(currentYear, currentMonth);
+        });
+
+        updateCalendar(currentYear, currentMonth);
+    });
+
+</script>
 </body>
 </html>
