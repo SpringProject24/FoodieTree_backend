@@ -41,7 +41,7 @@ public class CustomerService {
 			customerMapper.savePreferredFoods(dto.getCustomerId(), dto.getFood());
 		}
 
-		System.out.println("\nsave = " + saved);
+		System.out.println("\n save = " + saved);
 		System.out.println(dto.getFood());
 
 		return saved; // 데이터 저장 결과 반환

@@ -38,8 +38,8 @@
             <form action="#" method="post">
                 <div class="container">
                     <div class="input-wrapper">
-                        <input type="text" name="account" placeholder="아이디">
-                        <input type="password" name="password" placeholder="비밀번호">
+                        <input type="text" name="customerId" placeholder="아이디">
+                        <input type="password" name="customerPassword" placeholder="비밀번호">
                     </div>
                     <button type="submit" id="sign-in-btn">로그인</button>
                 </div>

@@ -21,7 +21,6 @@
         WHERE customer_id = #{keyword}
     </select>
 
-
     <!--  고객 1명의 정보를 조회 -->
     <select id="findOne" resultType="customer">
         SELECT
@@ -43,17 +42,6 @@
             (#{customerId}, #{food})
         </foreach>
     </insert>
-
-
-    <!-- 선호하는 음식 저장하기 -->
-<!--    <insert id="savePreferredFoods">-->
-<!--        INSERT INTO tbl_fav_food-->
-<!--            (customer_id, preferred_food)-->
-<!--        VALUES-->
-<!--        <foreach collection="foods" item="food" separator=",">-->
-<!--            (#{customerId}, #{food})-->
-<!--        </foreach>-->
-<!--    </insert>-->
 
 
 </mapper>
