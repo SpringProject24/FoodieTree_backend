@@ -1,5 +1,5 @@
-<!-- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> -->
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foodie Tree</title>
-    <link rel="stylesheet" href="/assets/css/mainpage.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/mainpage.css">
 </head>
 <body>
     <header>
@@ -40,63 +40,18 @@
         <section class="category">
             <h2>지역</h2>
             <div class="card-container">
-                <c:forEach var="items" items="${categoryByArea}">
+                <c:forEach var="item" items="${categoryByArea}">
                     <div class="card">
                         <div class="photo"></div>
                         <div class="info">
-                            <p>가게이름 : ${items.storeName}</p>
-                            <p>픽업시간 : ${items.pickupTime}</p>
+                            <p>가게이름 : ${item.storeName}</p>
+                            <p>픽업시간 : ${item.pickupTime}</p>
                             <p>평점 / 거리</p>
-                            <p>가격 : ${items.price}</p>
+                            <p>가격 : ${item.price}</p>
                             <p>수량 : </p>
                         </div>
                     </div>
                 </c:forEach>
-                <div class="card">
-                    <div class="photo">사진</div>
-                    <div class="info">
-                        <p>매장이름</p>
-                        <p>픽업시간</p>
-                        <p>평점 / 거리</p>
-                        <p>가격</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="photo">사진</div>
-                    <div class="info">
-                        <p>매장이름</p>
-                        <p>픽업시간</p>
-                        <p>평점 / 거리</p>
-                        <p>가격</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="photo">사진</div>
-                    <div class="info">
-                        <p>매장이름</p>
-                        <p>픽업시간</p>
-                        <p>평점 / 거리</p>
-                        <p>가격</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="photo">사진</div>
-                    <div class="info">
-                        <p>매장이름</p>
-                        <p>픽업시간</p>
-                        <p>평점 / 거리</p>
-                        <p>가격</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="photo">사진</div>
-                    <div class="info">
-                        <p>매장이름</p>
-                        <p>픽업시간</p>
-                        <p>평점 / 거리</p>
-                        <p>가격</p>
-                    </div>
-                </div>
             </div>
             <div class="pagination">
                 <button class="prev-button">◀</button>
@@ -108,8 +63,8 @@
         <div class="footer-content">
             <p>FOODIE TREE</p>
             <div class="store-links">
-                <img src="appstore.png" alt="App Store">
-                <img src="googleplay.png" alt="Google Play">
+                <img src="${pageContext.request.contextPath}/appstore.png" alt="App Store">
+                <img src="${pageContext.request.contextPath}/googleplay.png" alt="Google Play">
             </div>
             <div class="footer-links">
                 <a href="#">Get Help</a>
