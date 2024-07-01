@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.product.dto.response;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter@ToString
 @EqualsAndHashCode
@@ -19,5 +20,9 @@ public class ProductDto {
     private String storeName;
     private String category;
     private int price;
+    private String storeId;
+    private String
+    private List<String> preferredArea;
+    private List<String> preferredFood;
 
 }

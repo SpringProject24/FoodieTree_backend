@@ -26,40 +26,36 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductMainPageController {
 
+    String customerId = "test@gmail.com";
+
     private final ProductMainPageService productMainPageService;
     private final CustomerMyPageService customerMyPageService;
 
-    @GetMapping("/mainpage")
+    @GetMapping("/main")
     public String mainpageMain(HttpSession session
                                , Model model
                                 , HttpServletRequest request
                                 , HttpServletResponse response) {
         log.info("/product/mainpage-main POST");
 
-        //1. 로그인해논 회원 아이디 가져오기
-        String customerId = "test@gmail.com";
+
         //2. DB에서 해당회원 데이터 조회하기
         CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
 
-        List<MyPageReservationDetailDto> myPageReservationDetailDto = customerMyPageService.getReservationInfo(customerId);
-
-        List<CustomerIssueDetailDto> customerIssueDetailDto = customerMyPageService.getCustomerIssues(customerId);
         // 3. JSP파일에 조회한 데이터 보내기
         model.addAttribute("customerMyPageDto", customerMyPageDto);
-        model.addAttribute("reservations", myPageReservationDetailDto);
-        model.addAttribute("issues", customerIssueDetailDto);
 
-        List<ProductDto> productInfo = productMainPageService.getProductInfo();
+        List<String> productInfo = productMainPageService.getProductInfo();
         model.addAttribute("productList", productInfo);
 
-        List<CategoryByFoodDto> categoryByFood = productMainPageService.getCategoryByFood(customerId);
+        List<String> categoryByFood = productMainPageService.getCategoryByFood(customerId);
         model.addAttribute("categoryByFood", categoryByFood);
 
         List<String> categoryByArea = productMainPageService.getCategoryByArea(customerId);
         model.addAttribute("categoryByArea" ,categoryByArea);
 
 
-        return "product/mainpage";
+        return "product/main";
     }
 
 }

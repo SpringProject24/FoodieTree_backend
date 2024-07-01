@@ -19,3 +19,4 @@ public class CustomerMyPageDto {
     private List<String> preferredFood;
     private List<CustomerFavStoreDto> favStore;
 }
+

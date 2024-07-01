@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.product.service;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.PreferredFoodDto;
@@ -19,16 +20,16 @@ public class ProductMainPageService {
     private final CustomerMyPageMapper customerMyPageMapper;
 
     // product 메인페이지 상품정보 조회 중간 처리
-    public List<ProductDto> getProductInfo() {
+    public List<String> getProductInfo() {
         return productMainPageMapper.findAll();
     }
 
-    public List<CategoryByFoodDto> getCategoryByFood(String customerId) {
-        List<PreferredFoodDto> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
+    public List<String> getCategoryByFood(String customerId) {
+        List<String> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
         preferenceFoods.forEach(e-> log.info("{}", e));
         if (preferenceFoods.isEmpty()) {
             log.info("null");
-            return null;
+            return getProductInfo();
         }
         return productMainPageMapper.categoryByFoodList(preferenceFoods);
     }
@@ -36,9 +37,11 @@ public class ProductMainPageService {
     public List<String> getCategoryByArea(String customerId) {
         List<String> preferenceAreas = customerMyPageMapper.findPreferenceAreas(customerId);
         if (preferenceAreas.isEmpty()) {
-            return null;
+            return getProductInfo();
         }
         return productMainPageMapper.categoryByAreaList(preferenceAreas);
     }
+
+
 
 }

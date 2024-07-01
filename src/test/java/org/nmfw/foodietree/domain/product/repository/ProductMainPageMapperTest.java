@@ -22,7 +22,7 @@ class ProductMainPageMapperTest {
     @Test
     @DisplayName("")
     void findAllTest(){
-        List<ProductDto> all = productMainPageMapper.findAll();
+        List<String> all = productMainPageMapper.findAll();
 
         System.out.println("all = " + all);
 
