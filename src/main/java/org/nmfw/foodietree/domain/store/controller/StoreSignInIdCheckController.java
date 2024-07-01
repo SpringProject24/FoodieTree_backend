@@ -36,6 +36,4 @@ public class StoreSignInIdCheckController {
         System.out.println("LoginIdCheckController.check");
         return "LoginIdCheck";
     }
-
-
 }

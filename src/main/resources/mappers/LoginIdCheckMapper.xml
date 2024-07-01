@@ -11,5 +11,4 @@
             WHERE store_id = #{keyword}
         </if>
     </select>
-
 </mapper>

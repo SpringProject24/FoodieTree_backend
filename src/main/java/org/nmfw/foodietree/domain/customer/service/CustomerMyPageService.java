@@ -10,6 +10,7 @@ import org.nmfw.foodietree.domain.customer.entity.value.IssueStatus;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.entity.value.PreferredFoodCategory;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,13 +29,14 @@ import static org.nmfw.foodietree.domain.customer.entity.value.IssueStatus.*;
 @Slf4j
 public class CustomerMyPageService {
     private final CustomerMyPageMapper customerMyPageMapper;
+    private final PasswordEncoder encoder;
 
     // customer 마이페이지 소비자 정보 조회 중간 처리
     public CustomerMyPageDto getCustomerInfo(String customerId, HttpServletRequest request, HttpServletResponse response) {
 
         CustomerMyPageDto customer = customerMyPageMapper.findOne(customerId);
         List<String> preferenceAreas = customerMyPageMapper.findPreferenceAreas(customerId);
-        List<PreferredFoodDto> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
+        List<String> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
         List<CustomerFavStoreDto> favStore = customerMyPageMapper.findFavStore(customerId);
 
         return CustomerMyPageDto.builder()
@@ -112,10 +114,6 @@ public class CustomerMyPageService {
         }
     }
 
-    public boolean checkNicknameDuplicate(String nickname) {
-        return customerMyPageMapper.isNicknameDuplicate(nickname);
-    }
-
     public boolean updateCustomerInfo(String customerId, List<UpdateDto> updates) {
         for (UpdateDto update : updates) {
             String type = update.getType();
@@ -162,5 +160,11 @@ public class CustomerMyPageService {
             }
         }
         return false;
+    }
+
+    public boolean updateCustomerPw(String customerId, String newPassword) {
+        String encodedPw = encoder.encode(newPassword);
+        customerMyPageMapper.updateCustomerInfo(customerId,"customer_password", encodedPw);
+        return true;
     }
 }

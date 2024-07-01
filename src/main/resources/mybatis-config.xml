@@ -17,14 +17,17 @@
     <typeAlias type="org.nmfw.foodietree.domain.store.entity.Store" alias="store"/>
     <typeAlias type="org.nmfw.foodietree.domain.product.entity.Product" alias="product"/>
     <typeAlias type="org.nmfw.foodietree.domain.customer.entity.Customer" alias="customer"/>
+    <typeAlias type="org.nmfw.foodietree.domain.auth.dto.EmailCodeDto" alias="EmailCodeDto"/>
   </typeAliases>
   <mappers>
     <mapper resource="mappers/CustomerMapper.xml" />
     <mapper resource="mappers/StoreMapper.xml" />
     <mapper resource="mappers/StoreApprovalMapper.xml" />
+    <mapper resource="mappers/ProductApprovalMapper.xml" />
     <mapper resource="mappers/LoginIdCheckMapper.xml"/>
     <mapper resource="mappers/ProductMapper.xml"/>
     <mapper resource="mappers/CustomerMyPageMapper.xml"/>
+    <mapper resource="mappers/EmailMapper.xml"/>
   </mappers>
 
 </configuration>

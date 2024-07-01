@@ -20,7 +20,7 @@ public interface CustomerMyPageMapper {
     List<String> findPreferenceAreas(@Param("customerId") String customerId);
 
     // 회원 선호 음식 조회
-    List<PreferredFoodDto> findPreferenceFoods(@Param("customerId") String customerId);
+    List<String> findPreferenceFoods(@Param("customerId") String customerId);
 
     // customer 좋아요 표시한 가게 조회
     List<CustomerFavStoreDto> findFavStore(@Param("customerId") String customerId);

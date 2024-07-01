@@ -24,7 +24,7 @@
     </div>
     <div class="form-wrapper">
         <div class="sign-in">
-            <form action="/sign-in" method="post">
+            <form action="/customer/sign-in" method="post">
                 <div class="container">
                     <div class="input-wrapper">
                         <input type="text" name="account" placeholder="아이디">
@@ -57,7 +57,7 @@
         if ($btnWrapper.querySelector('.checked').id === 'store-btn') {
             $formSignIn.action = '/store/sign-in';
         } else if ($btnWrapper.querySelector('.checked').id === 'customer-btn') {
-            $formSignIn.action = '/sign-in';
+            $formSignIn.action = '/customer/sign-in';
         }
         $formSignIn.submit();
     });

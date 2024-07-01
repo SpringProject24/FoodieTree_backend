@@ -1,0 +1,284 @@
+/* customer common style */
+
+.title {
+    position: relative;
+    display: block;
+    padding: 15px 38px 13px 18px;
+    border-radius: 12px 12px 0 0;
+    border: 1px solid #e3e9ed
+}
+
+.title .title-text {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -.19px;
+    color: #1d1d1d;
+}
+
+.info-wrapper {
+    padding: 10px;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 1px 1px 10px 0 rgba(72, 75, 108, .08);
+    border: solid 1px #e3e9ed;
+    background-color: #fff;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.img-box {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: white 0 0 0 2px;
+    transform: translateZ(0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.img-box img {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+/* customer common style  END */
+
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+header .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+header .logo-img {
+    width: 70px;
+    height: 70px;
+}
+
+header .logo-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.my-page-area .container {
+    margin-top: 20px;
+    display: flex;
+}
+
+.my-page-area .container .profile, .info {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.my-page-area .container .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: none;
+    width: 30%;
+}
+
+.my-page-area .container .profile #avatar {
+    display: block;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: white 0 0 0 2px;
+    transform: translateZ(0);
+}
+
+.my-page-area .container .profile #avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.my-page-area .container .profile #avatar img:hover {
+    transform: scale(1.1);
+}
+
+.my-page-area .container .profile h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.my-page-area .container .profile p {
+    margin-top: 10px;
+}
+
+.my-page-area .container .profile ul {
+    margin-top: 20px;
+    padding : 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+}
+
+.my-page-area .container .profile ul li {
+    margin: 5px 0;
+    opacity: .9;
+    width: inherit;
+
+}
+
+.my-page-area .container .profile ul li.nave-item:hover {
+    color: #1d1d1d;
+    background-color: rgb(223, 233, 241, 0.64);
+}
+
+.my-page-area .container .profile ul li.nav-item a.nav-link {
+    width: inherit;
+    padding-top: .6rem;
+    padding-bottom: .6rem;
+    border-radius: .75rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+}
+
+.my-page-area .container .profile ul li.nav-item a.nav-link:hover {
+
+    background-color: rgb(223, 233, 241, 0.64);;
+}
+
+@media (hover: hover) {
+    .nav-link {
+        transition: background-color .3s ease-in-out;
+    }
+}
+
+.my-page-area .container .info {
+    width: 70%;
+}
+
+.my-page-area .container .info ul {
+    display: flex;
+}
+
+.my-page-area .container .info ul li {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    width: 35%;
+}
+
+.my-page-area .container .info ul.info-list li .img-box {
+    border-radius: 5px;
+}
+
+/* ===========================================   예약 내역     */
+
+.my-page-area .container .info .info-wrapper.reservation {
+    height: 200px;
+    overflow: scroll;
+}
+
+.my-page-area .container .info .reservation-list {
+    flex-wrap: wrap;
+}
+
+.my-page-area .container .info .reservation-item, .issue-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    margin: 5px 0;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.my-page-area .container .info .reservation-item .item {
+    width: 160px;
+    display: flex;
+    align-items: center;
+}
+
+.my-page-area .container .info .reservation-item .item span {
+    margin-left: 10px;
+}
+
+/* 예약 상태 아이콘 */
+.my-page-area .container .info .reservation-item .img-wrapper {
+    position: relative;
+}
+
+.my-page-area .container .info .reservation-item .item i {
+    position: absolute;
+    right: -5px;
+    bottom: 0;
+}
+
+.my-page-area .container .info .reservation-item .item i.canceled {
+    color: red;
+}
+
+.my-page-area .container .info .reservation-item .item i.done {
+    color: green;
+}
+
+.my-page-area .container .info .reservation-item .item i.loading {
+    color: blue;
+    animation: spin 3s linear infinite;
+}
+
+/* spinner animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.my-page-area .container .info .reservation-item .img-box {
+    width: 50px;
+    height: 50px;
+}
+
+.info-box .info-wrapper ul.info-list li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.info-box .info-wrapper ul.info-list li span {
+    margin-top: 10px;
+}
+
+.my-page-area .container .info-box .info-wrapper ul.issue-list {
+    flex-direction: column;
+}
+
+.my-page-area .container .info-box .info-wrapper ul li.issue-item {
+    width: 100%;
+}
+
+.my-page-area .container .stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.my-page-area .container .stats div {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 45%;
+}

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodieTree</title>
     <link rel="stylesheet" href="/assets/css/common.css">
-    <link rel="stylesheet" href="/assets/css/customer-sign-up.css">
+    <link rel="stylesheet" href="/assets/css/customer/customer-sign-up.css">
 </head>
 <body>
 <header>
@@ -19,20 +19,20 @@
     </div>
 </header>
 <section class="input-area">
-    <form action="http://localhost:8083/customer/sign-up" method="post">
+    <form action="/customer/sign-up" method="post">
         <div class="container">
             <div class="id-wrapper">
                 <h2>회원 등록을 위한 이메일을 입력해주세요!</h2>
-                <input type="text" name="account" placeholder="이메일을 입력해주세요">
+                <input type="text" id="input_id" name="customerId" placeholder="이메일을 입력해주세요">
                 <button id="id-btn">계속</button>
             </div>
             <div class="pass-wrapper none">
                 <div class="pass">
                     <h2>계속해서 비밀번호를 입력해주세요!</h2>
-                    <input type="password" name="password" placeholder="비밀번호를 입력해주세요">
+                    <input type="password" id="input_pw" name="customerPassword" placeholder="비밀번호를 입력해주세요">
                 </div>
                 <div class="pass-check">
-                    <input type="password" name="password-chk" placeholder="비밀번호를 확인해주세요">
+                    <input type="password" id="input_pw_chk" name="password-chk" placeholder="비밀번호를 확인해주세요">
                     <div class="wrapper">
                         <button id="prev-btn">이전</button>
                         <button id="pass-btn">계속</button>
@@ -120,13 +120,10 @@
     const $idWrapper = document.querySelector('.id-wrapper');
     const $passWrapper = document.querySelector('.pass-wrapper');
     const $passCheck = document.querySelector('.pass-check');
-    const $inputId = document.querySelector('input[name=account]');
-    const $inputPw = document.querySelector('input[name=password]');
+    const $inputId = document.getElementById('input_id');
+    const $inputPw = document.getElementById('input_pw');
     const $prevBtn = document.getElementById('prev-btn');
     const $h2Id = document.querySelector('.id-wrapper h2');
-
-    $inputId.addEventListener('keyup', () => {
-    });
 
     $idBtn.addEventListener('click', async (e) => {
         e.preventDefault();
@@ -139,7 +136,9 @@
         }
 
         const res = await fetch(
-            `http://localhost:8083/store/check?type=account&keyword=\${$inputId.value}`);
+            // `http://localhost:8083/customer/check?type=$account&keyword=\${$inputId.value}`);
+            `http://localhost:8083/customer/check?type=account&keyword=${$inputId.value}`);
+
         const result = await res.json();
         if (result) {
             $h2Id.textContent = '이미 사용중인 이메일입니다.';
@@ -150,10 +149,6 @@
         $passWrapper.classList.remove('none');
     });
 
-    $inputPw.addEventListener('keyup', (e) => {
-        $passCheck.classList.remove('none');
-    });
-
     $prevBtn.addEventListener('click', (e) => {
         e.preventDefault();
         $idWrapper.classList.remove('none');
@@ -162,8 +157,11 @@
 
     $passBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        const $password = document.querySelector('input[name=password]').value;
-        const $passwordChk = document.querySelector('input[name=password-chk]').value;
+        const password = $inputPw.value;
+        const passwordChk = $inputPwChk.value;
+
+        // const $password = document.getElementById('input[id=password]').value;
+        // const $passwordChk = document.getElementById('input[id=password-chk]').value;
         if ($password !== $passwordChk) {
             alert('비밀번호가 일치하지 않습니다.');
             return;
@@ -173,6 +171,8 @@
     });
 </script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}"></script>
+
+
 <script>
     <!--선호하는 음식 선택-->
     const $btnFood = document.getElementById('btn-food');
@@ -187,7 +187,7 @@
 
     $btnFood.addEventListener('click', (e) => {
         e.preventDefault();
-        const $food = document.querySelectorAll('input[name=food]:checked');
+        const $food = document.getElementById('input[id=food]:checked');
         if ($food.length === 0) {
             alert('선호하는 음식을 1개 이상 선택해주세요.');
             return;
@@ -213,7 +213,7 @@
 
     $skipBtnFood.addEventListener('click', (e) => {
     //     체크된 음식을 해제하기
-        const $food = document.querySelectorAll('input[name=food]:checked');
+        const $food = document.getElementById('input[id=food]:checked');
         $food.forEach($f => $f.checked = false);
         map = new kakao.maps.Map(container, options);
     });
