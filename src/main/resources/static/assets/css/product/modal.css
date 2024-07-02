@@ -1,75 +1,108 @@
 .modal-content .modal-header {
-  display: block;
-  position: relative;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  padding-bottom: 0;
+    display: block;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding-bottom: 0;
 }
 
 .modal-content .modal-header .wrapper {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* 텍스트 그림자 추가 */
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* 텍스트 그림자 추가 */
 }
 
 .modal-content .modal-header .wrapper button {
-  border: none;
-  background: none;
-  position: relative;
-  padding: 0;
-  margin: 0;
-  color: white;
-  opacity: .8;
+    border: none;
+    background: none;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    color: white;
+    opacity: .8;
 }
 
 .modal-content .modal-header .wrapper button i {
-  font-size: 21px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: white;
+    font-size: 21px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: white;
 }
 
 .modal-content .modal-header .wrapper.info {
-  display: block;
-  margin-top: 60px;
+    display: block;
+    margin-top: 60px;
 }
 
 .modal-content .modal-header .wrapper.info .store-info {
-  display: flex;
-  align-items: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* 텍스트 그림자 추가 */
+    display: flex;
+    align-items: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* 텍스트 그림자 추가 */
 }
 
 .modal-content .modal-header .wrapper.info #product-cnt {
-  display: flex;
-  width: 60px;
-  height: 30px;
-  background-color: #1d1d1d;
-  border-radius: 40%;
-  justify-content: center;
-  align-items: center;
-  text-shadow: none;
-  margin-bottom: 15px;
-  color: white;
+    display: flex;
+    width: 60px;
+    height: 30px;
+    background-color: #1d1d1d;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    text-shadow: none;
+    margin-bottom: 15px;
+    color: white;
+    font-size: 12px;
 }
 
 .modal-content .modal-header .wrapper.info .store-info .img-box {
-  margin-right: 15px;
+    margin-right: 15px;
 }
 
 .modal-content .modal-header .wrapper.info .store-info h6 {
-  font-size: 18px;
-  font-weight: 700;
+    font-size: 18px;
+    font-weight: 700;
 }
 
 .modal-content .modal-header .wrapper.info .img-box {
-  width: 48px;
-  height: 48px;
+    width: 48px;
+    height: 48px;
 }
+
+.modal-content .modal-body .detail {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-content .modal-body .prod-info-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-content .modal-body .prod-info div {
+    margin-bottom: 7px;
+}
+
+
+.modal-content .modal-body .prod-info:last-child div {
+    display: flex;
+    justify-content: right;
+}
+
+
+.modal-content .modal-footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-top: none;
+}
+
+#reservation-btn {
+    width: 250px;
+}
+
 
 
 

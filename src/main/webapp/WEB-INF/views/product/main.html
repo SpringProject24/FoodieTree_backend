@@ -3,268 +3,351 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FoodieTree</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"/>
-  <link rel="stylesheet" href="/static/assets/css/common.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-  <link rel="stylesheet" href="/static/assets/css/product/main.css">
-  <link rel="stylesheet" href="/static/assets/css/product/modal.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodieTree</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="/static/assets/css/common.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="/static/assets/css/product/main.css">
+    <link rel="stylesheet" href="/static/assets/css/product/modal.css">
+    <link rel="stylesheet" href="/static/assets/css/product/like-btn.css">
 
 </head>
 <body>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-     aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="wrapper">
-          <button class="fav">
-            <i class="fa-solid fa-heart" style="display: none"></i>
-            <i class="fa-regular fa-heart"></i>
-          </button>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div class="wrapper info">
-          <div id="product-cnt">
-            1개 남음
-          </div>
-          <div class="store-info">
-            <div class="img-box">
-              <img src="/static/assets/img/western.jpg" alt="">   <!-- 가게 사진-->
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="wrapper">
+<!--                    heart animation -->
+                    <div class="heart-container" title="Like">
+                        <input type="checkbox" class="checkbox" id="Give-It-An-Id">
+                        <div class="svg-container">
+                            <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z">
+                                </path>
+                            </svg>
+                            <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z">
+                                </path>
+                            </svg>
+                            <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+                                <polygon points="10,10 20,20"></polygon>
+                                <polygon points="10,50 20,50"></polygon>
+                                <polygon points="20,80 30,70"></polygon>
+                                <polygon points="90,10 80,20"></polygon>
+                                <polygon points="90,50 80,50"></polygon>
+                                <polygon points="80,80 70,70"></polygon>
+                            </svg>
+                        </div>
+                    </div>
+<!--                    heart animation end -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="wrapper info">
+                    <div id="product-cnt">
+                        1개 남음
+                    </div>
+                    <div class="store-info">
+                        <div class="img-box">
+                            <img id="store-img" alt="">   <!-- 가게 사진-->
+                        </div>
+                        <h6 id="store-name">가게이름</h6>
+                    </div>
+                </div>
             </div>
-            <h6 id="store-name">가게이름</h6>
-          </div>
+            <div class="modal-body">
+                <div class="detail">
+                    <div class="prod-info-wrapper">
+                        <div class="prod-info">
+                            <div id="prod-category">
+                                <i class="fa-solid fa-basket-shopping"></i>
+                                <span>음식종류</span>
+                            </div>
+                            <div id="prod-rate">
+                                <i class="fa-solid fa-star"></i>
+                                <span>평점</span>
+                            </div>
+                            <div id="pickup-time">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>픽업시간</span>
+                            </div>
+                        </div>
+                        <div class="prod-info">
+                            <div id="prod-price">
+                                17000원
+                            </div>
+                            <div id="prod-discount">
+                                4900원
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+
+            </div>
+            <div class="modal-footer">
+                <button id="reservation-btn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">예약하기</button>
+            </div>
         </div>
-      </div>
-      <div class="modal-body">
-        <div class="detail">
-          <div class="title">
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
     </div>
-  </div>
 </div>
 
 <header>
-  <div class="container">
-    <div class="logo-wrapper">
-      <div class="logo"><h1>FoodieTree</h1></div>
+    <div class="container">
+        <div class="logo-wrapper">
+            <div class="logo"><h1>FoodieTree</h1></div>
+        </div>
+        <div class="input-wrapper">
+            <button><i class="fa-solid fa-search"></i></button>
+            <input type="text" placeholder="Search">
+        </div>
+        <ul class="profile-wrapper">
+            <li>
+                <a href="#" class="profile img-box">
+                    <img src="/static/assets/img/western.jpg" alt="">
+                </a>
+            </li>
+            <li>
+                <a href="/customer/mypage">마이페이지</a>
+            </li>
+            <li>
+                <a href="/customer/signout">로그아웃</a>
+            </li>
+        </ul>
     </div>
-    <div class="input-wrapper">
-      <button><i class="fa-solid fa-search"></i></button>
-      <input type="text" placeholder="Search">
-    </div>
-    <ul class="profile-wrapper">
-      <li>
-        <a href="#" class="profile img-box">
-          <img src="/static/assets/img/western.jpg" alt="">
-        </a>
-      </li>
-      <li>
-        <a href="/customer/mypage">마이페이지</a>
-      </li>
-      <li>
-        <a href="/customer/signout">로그아웃</a>
-      </li>
-    </ul>
-  </div>
 </header>
 
 <section class="container category">
-  <div class="swiper category-list">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="img-box">
-            <img src="/static/assets/img/western.jpg" alt="">
-          </div>
-          <p>양식</p>
+    <div class="swiper category-list">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="img-box">
+                        <img src="/static/assets/img/western.jpg" alt="">
+                    </div>
+                    <p>양식</p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="img-box">
+                        <img src="/static/assets/img/cafe.jpg" alt="">
+                    </div>
+                    <p>카페</p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="img-box">
+                        <img src="/static/assets/img/dessert.jpg" alt="">
+                    </div>
+                    <p>디저트</p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="img-box">
+                        <img src="/static/assets/img/japanese.jpg" alt="">
+                    </div>
+                    <p>일식</p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="img-box">
+                        <img src="/static/assets/img/chinese.jpg" alt="">
+                    </div>
+                    <p>중식</p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="img-box">
+                        <img src="/static/assets/img/korean.jpg" alt="">
+                    </div>
+                    <p>한식</p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="img-box">
+                        <img src="/static/assets/img/etc.jpg" alt="">
+                    </div>
+                    <p>기타</p>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="img-box">
-            <img src="/static/assets/img/cafe.jpg" alt="">
-          </div>
-          <p>카페</p>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="img-box">
-            <img src="/static/assets/img/dessert.jpg" alt="">
-          </div>
-          <p>디저트</p>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="img-box">
-            <img src="/static/assets/img/japanese.jpg" alt="">
-          </div>
-          <p>일식</p>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="img-box">
-            <img src="/static/assets/img/chinese.jpg" alt="">
-          </div>
-          <p>중식</p>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="img-box">
-            <img src="/static/assets/img/korean.jpg" alt="">
-          </div>
-          <p>한식</p>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="img-box">
-            <img src="/static/assets/img/etc.jpg" alt="">
-          </div>
-          <p>기타</p>
-        </div>
-      </div>
     </div>
-  </div>
 </section>
 <section class="container category">
-  <div class="swiper myswiper1">
-    <div class="title-wrapper">
-      <h2>선호하는 음식</h2>
-      <div class="swiper-button-prev"><i class="fa-solid fa-arrow-left"></i></div>
-      <div class="swiper-button-next"><i class="fa-solid fa-arrow-right"></i></div>
+    <div class="swiper myswiper1">
+        <div class="title-wrapper">
+            <h2>선호하는 음식</h2>
+            <div class="swiper-button-prev"><i class="fa-solid fa-arrow-left"></i></div>
+            <div class="swiper-button-next"><i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="store-img-box">
+                        <img src="/static/assets/img/western.jpg" alt="">
+                    </div>
+                    <div class="store-info">
+                        <h3>가게 이름</h3>
+                        <p>픽업 시간</p>
+                        <div class="wrapper">
+                            <p>평점 / 거리</p>
+                            <p>가격</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="store-img-box">
+                        <img src="/static/assets/img/cafe.jpg" alt="">
+                    </div>
+                    <div class="store-info">
+                        <h3>가게 이름</h3>
+                        <p>픽업 시간</p>
+                        <div class="wrapper">
+                            <p>평점 / 거리</p>
+                            <p>가격</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="store-img-box">
+                        <img src="/static/assets/img/dessert.jpg" alt="">
+                    </div>
+                    <div class="store-info">
+                        <h3>가게 이름</h3>
+                        <p>픽업 시간</p>
+                        <div class="wrapper">
+                            <p>평점 / 거리</p>
+                            <p>가격</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="store-img-box">
+                        <img src="/static/assets/img/japanese.jpg" alt="">
+                    </div>
+                    <div class="store-info">
+                        <h3>가게 이름</h3>
+                        <p>픽업 시간</p>
+                        <div class="wrapper">
+                            <p>평점 / 거리</p>
+                            <p>가격</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="store-img-box">
+                        <img src="/static/assets/img/chinese.jpg" alt="">
+                    </div>
+                    <div class="store-info">
+                        <h3>가게 이름</h3>
+                        <p>픽업 시간</p>
+                        <div class="wrapper">
+                            <p>평점 / 거리</p>
+                            <p>가격</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="store-img-box">
+                        <img src="/static/assets/img/korean.jpg" alt="">
+                    </div>
+                    <div class="store-info">
+                        <h3>가게 이름</h3>
+                        <p>픽업 시간</p>
+                        <div class="wrapper">
+                            <p>평점 / 거리</p>
+                            <p>가격</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="store-img-box">
+                        <img src="/static/assets/img/etc.jpg" alt="">
+                    </div>
+                    <div class="store-info">
+                        <h3>가게 이름</h3>
+                        <p>픽업 시간</p>
+                        <div class="wrapper">
+                            <p>평점 / 거리</p>
+                            <p>가격</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="/static/assets/img/western.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="/static/assets/img/cafe.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="/static/assets/img/dessert.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="/static/assets/img/japanese.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="/static/assets/img/chinese.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="/static/assets/img/korean.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="/static/assets/img/etc.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!--<section class="container category">-->
@@ -569,9 +652,9 @@
 
 
 <footer>
-  <div class="container">
-    <p>&copy; 2024 FoodieTree. All rights reserved.</p>
-  </div>
+    <div class="container">
+        <p>&copy; 2024 FoodieTree. All rights reserved.</p>
+    </div>
 </footer>
 
 </body>
@@ -581,68 +664,68 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-  // new Swiper('.category-list', {
-  //   slidesPerView: 7,
-  //   centralDirOffset: 1,
-  //   navigation: {
-  //     nextEl: '.swiper-button-next',
-  //     prevEl: '.swiper-button-prev',
-  //   },
-  // });
+    // new Swiper('.category-list', {
+    //   slidesPerView: 7,
+    //   centralDirOffset: 1,
+    //   navigation: {
+    //     nextEl: '.swiper-button-next',
+    //     prevEl: '.swiper-button-prev',
+    //   },
+    // });
 
-  new Swiper('.myswiper1', {
-    spaceBetween: 20,
-    slidesPerView: 4,
-    slidesPerGroup: 4,
-    loop: true,
-    speed: 1200,
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  });
+    new Swiper('.myswiper1', {
+        spaceBetween: 20,
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+        loop: true,
+        speed: 1200,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
 
-  // new Swiper('.myswiper2', {
-  //   spaceBetween: 20,
-  //   slidesPerView: 5,
-  //   slidesPerGroup: 5,
-  //   speed: 1200,
-  //   navigation: {
-  //     nextEl: '.swiper-button-next-b',
-  //     prevEl: '.swiper-button-prev-b',
-  //   }
-  // });
+    // new Swiper('.myswiper2', {
+    //   spaceBetween: 20,
+    //   slidesPerView: 5,
+    //   slidesPerGroup: 5,
+    //   speed: 1200,
+    //   navigation: {
+    //     nextEl: '.swiper-button-next-b',
+    //     prevEl: '.swiper-button-prev-b',
+    //   }
+    // });
 
-  // new Swiper('.myswiper3', {
-  //   spaceBetween: 20,
-  //   slidesPerView: 5,
-  //   slidesPerGroup: 5,
-  //   speed: 1200,
-  //   navigation: {
-  //     nextEl: '.swiper-button-next-b',
-  //     prevEl: '.swiper-button-prev-b',
-  //   }
-  // });
+    // new Swiper('.myswiper3', {
+    //   spaceBetween: 20,
+    //   slidesPerView: 5,
+    //   slidesPerGroup: 5,
+    //   speed: 1200,
+    //   navigation: {
+    //     nextEl: '.swiper-button-next-b',
+    //     prevEl: '.swiper-button-prev-b',
+    //   }
+    // });
 </script>
 <script>
-  document.querySelector('body').addEventListener('click', e => {
-    if (!e.target.matches('.swiper-slide *')) {
-      return;
-    }
-    const $modalBody = document.querySelector('.modal-content .modal-body');
-    const $element = document.querySelector('.modal-content .modal-header'); // 대상 요소 선택
-    const gradient = 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5))'; // 그라데이션 설정
-    // 클릭한 아이템의 이미지 url 가져오기
-    const getImgSrc = e.target.closest('.item').querySelector('.store-img-box img').src;
-    const imageUrl = `url('${getImgSrc}')`; // 이미지 URL 설정
-    $element.style.background = `${gradient}, ${imageUrl} no-repeat center center / cover`;
+    document.querySelector('body').addEventListener('click', e => {
+        if (!e.target.matches('.swiper-slide *')) {
+            return;
+        }
+        const $modalBody = document.querySelector('.modal-content .modal-body');
+        const gradient = 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5))';
+        const getImgSrc = e.target.closest('.item').querySelector('.store-img-box img').src;
+        const imageUrl = `url('${getImgSrc}')`;
+        document.querySelector('.modal-content .modal-header').style.background = `${gradient}, ${imageUrl} no-repeat center center / cover`; // productImg
+        document.getElementById('store-img').src = getImgSrc; // storeImg
+
 
 //     $modalBody.innerHTML = `
 //       <div>
 //
 // </div>
 //     `
-  })
+    })
 
 </script>
 
