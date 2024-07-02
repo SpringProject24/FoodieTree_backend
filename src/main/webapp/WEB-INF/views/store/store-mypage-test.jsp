@@ -71,8 +71,8 @@
                                     <div class="item">
                                         <div class="img-wrapper">
                                             <div class="img-box">
-                                                <img src="${reservation.storeImg != null ? reservation.storeImg : "/assets/img/western.jpg"}"
-                                                     alt="Store Image"/>
+                                                <img src="${reservation.profileImage != null ? reservation.profileImage : "/assets/img/western.jpg"}"
+                                                     alt="profile Image"/>
                                             </div>
                                             <c:if test="${reservation.status == 'CANCELED'}">
                                                 <i class="fa-solid fa-circle-xmark canceled"></i>
@@ -84,7 +84,7 @@
                                                 <i class="fa-solid fa-circle-check done"></i>
                                             </c:if>
                                         </div>
-                                        <span>${reservation.storeName}</span>
+                                        <span>${reservation.nickname}님이 ${reservation.status}</span>
                                     </div>
                                     <div class="item">
                                         <span>${reservation.status}</span>
@@ -105,6 +105,7 @@
                 <button id="decrease">감소</button>
                 <span id="count">${storeInfo.productCnt}</span>
                 <button id="increase">증가</button>
+                <button id="update">수량업데이트 하기</button>
             </div>
 
             <div id="calendar-header">
@@ -118,8 +119,8 @@
             <div id="calendar"></div>
             <div id="events"></div>
             <div class="stats">
-                <div>10kg의 음쓰를 줄였습니다</div>
-                <div>지금까지 10만원을 아꼈어요</div>
+                <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
+                <div>지금까지 ${stats.customerCnt}명의 손님을 만났어요</div>
             </div>
         </div>
     </div>

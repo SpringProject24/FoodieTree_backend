@@ -24,6 +24,7 @@
     <select id="findReservations" resultType="StoreReservationDto">
         SELECT
             c.customer_id,
+            c.profile_image,
             c.nickname,
             c.customer_phone_number,
             p.product_id,
@@ -44,7 +45,7 @@
             tbl_store s ON s.store_id = p.store_id
         WHERE
             s.store_id = #{store_id}
-
+        ORDER BY p.pickup_time DESC
 
     </select>
 </mapper>
