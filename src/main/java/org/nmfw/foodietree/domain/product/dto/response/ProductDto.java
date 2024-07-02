@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter@ToString
+@Getter@ToString @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,10 +19,8 @@ public class ProductDto {
     private String storeImg;
     private String storeName;
     private String category;
+    private String address;
     private int price;
-    private String storeId;
-    private String
-    private List<String> preferredArea;
-    private List<String> preferredFood;
-
+    private int productCnt;
+    private String proImage;
 }

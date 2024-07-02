@@ -45,6 +45,21 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     </style>
   </head>
   <body>
+  <c:forEach var="item" items="${productTotal.productDtoList}">
+      <div>
+        ${item.storeName}
+      </div>
+  </c:forEach>
+  <c:forEach var="item" items="${productTotal.preferredArea}">
+      <div>
+        ${item}
+      </div>
+  </c:forEach>
+  <c:forEach var="item" items="${productTotal.preferredFood}">
+    <div>
+      ${item}
+    </div>
+</c:forEach>
     <header>
       <div class="container">
         <div class="logo-wrapper">

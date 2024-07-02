@@ -19,13 +19,5 @@ class ProductMainPageMapperTest {
     ProductMainPageMapper productMainPageMapper;
 
 
-    @Test
-    @DisplayName("")
-    void findAllTest(){
-        List<String> all = productMainPageMapper.findAll();
-
-        System.out.println("all = " + all);
-
-    }
 
 }
