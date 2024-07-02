@@ -18,6 +18,7 @@ public class Store {
     private StoreApproveStatus approve;
     private int warningCount;
     private int price;
+    private int productCnt;
     private String businessNumber;
     private String storeName;
     private String storeImage;

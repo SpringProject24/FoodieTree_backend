@@ -19,16 +19,20 @@
     <typeAlias type="org.nmfw.foodietree.domain.customer.entity.Customer" alias="customer"/>
     <typeAlias type="org.nmfw.foodietree.domain.auth.dto.EmailCodeDto" alias="EmailCodeDto"/>
     <typeAlias type="org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto" alias="StoreMyPageDto"/>
+    <typeAlias type="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto" alias="ReservationStatusDto"/>
+    <typeAlias type="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto" alias="ReservationModalDetailDto"/>
   </typeAliases>
   <mappers>
     <mapper resource="mappers/CustomerMapper.xml" />
     <mapper resource="mappers/StoreMapper.xml" />
     <mapper resource="mappers/StoreApprovalMapper.xml" />
+    <mapper resource="mappers/ProductApprovalMapper.xml" />
     <mapper resource="mappers/LoginIdCheckMapper.xml"/>
     <mapper resource="mappers/ProductMapper.xml"/>
     <mapper resource="mappers/CustomerMyPageMapper.xml"/>
     <mapper resource="mappers/EmailMapper.xml"/>
     <mapper resource="mappers/StoreMyPageMapper.xml"/>
+    <mapper resource="mappers/ReservationMapper.xml"/>
   </mappers>
 
 </configuration>

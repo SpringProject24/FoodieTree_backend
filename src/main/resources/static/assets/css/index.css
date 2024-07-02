@@ -111,9 +111,6 @@ section.info .container .left {
   justify-content: center;
   align-items: center;
 }
-section.info .container .left .wrapper {
-
-}
 
 section.info .container .left .wrapper h2 {
   margin-bottom: 20px;
@@ -124,8 +121,6 @@ section.info .container .left .wrapper p {
   margin-bottom: 15px;
   font-size: 14px;
 }
-
-
 
 section.info .container .right {
   flex-grow: 1;
@@ -149,11 +144,4 @@ section.info .container .right .store-signup {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-}
-
-footer {
-  background-color: var(--white-color);
-  color: var(--footer-font-color);
-  text-align: center;
-  padding: 20px 0;
 }

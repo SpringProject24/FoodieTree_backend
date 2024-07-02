@@ -1,0 +1,211 @@
+.swiper {
+    width: 100%;
+    padding: 0 20px;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.swiper-button-next, .swiper-button-prev {
+    color: #000;
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(243, 243, 243);
+    cursor: pointer;
+    position: absolute;
+}
+.swiper-button-next {
+    right: -1px;
+}
+
+.swiper-button-prev {
+    left: -1px;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after {
+    display: none;
+}
+
+.container.category {
+    margin-top: 30px;
+}
+
+.logo-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-wrapper {
+    min-width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
+.input-wrapper button {
+    background-color: inherit;
+    border: none;
+    padding-left: 10px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: inherit;
+}
+
+.profile-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-wrapper li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.profile-wrapper .profile {
+    width: 48px;
+    height: 48px;
+    margin-right: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-wrapper a {
+    margin-right: 15px;
+}
+
+.category {
+    margin-top: 20px;
+}
+
+.category h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.btn-wrapper {
+    display: flex;
+    justify-content: right;
+}
+
+.btn-wrapper .circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(243, 243, 243);
+    cursor: pointer;
+}
+
+.btn-wrapper .circle:first-child {
+    margin-right: 10px;
+}
+
+.btn-wrapper .circle:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+.item .store-img-box {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding-bottom: calc( 100% * (9 / 16));
+    border-radius: 8px;
+}
+
+.item .store-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.item .store-info {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.item .store-info h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.item .store-info p {
+    font-size: 14px;
+}
+
+.item .store-info .wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+/* ====================================== 최상단 카테고리 리스트 == */
+
+.category-list .item {
+    border: none;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.category-list .item p {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+
+.category-list .item .img-box {
+    width: 48px;
+    height: 48px;
+}
+
