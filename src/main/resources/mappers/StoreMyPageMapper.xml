@@ -46,6 +46,19 @@
         WHERE
             s.store_id = #{store_id}
         ORDER BY p.pickup_time DESC
-
     </select>
+
+    <insert id="updateProduct">
+        INSERT INTO tbl_product
+            (store_id, pickup_time, product_upload_date)
+        VALUES
+            (#{storeId}, #{pickupTime}, now())
+    </insert>
+
+    <update id="cancelProductByStore">
+        UPDATE tbl_product
+        SET canceled_by_store_at = now()
+        WHERE store_id = #{storeId}
+        AND DATE(pickup_time) = #{pickupTime}
+    </update>
 </mapper>
