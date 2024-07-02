@@ -11,20 +11,9 @@
 <body>
 <header>
     <div class="container">
-        <div class="logo">FoodieTree ${login.customerId}</div>
+        <div class="logo">FoodieTree </div>
         <div class="logo-img">
             <img src="/assets/img/img_2.png" alt="">
-        </div>
-        <div>
-            <c:if test="${login == null}">
-                <li><a href="/customer/sign-up">Sign Up</a></li>
-                <li><a href="/customer/sign-in">Sign In</a></li>
-              </c:if>
-          
-              <c:if test="${login != null}">
-                <li><a href="#">My Page</a></li>
-                <li><a href="#">Sign Out</a></li>
-              </c:if>
         </div>
     </div>
 </header>
@@ -45,6 +34,14 @@
                 </div>
             </form>
         </div>
+        <tr>
+            <td>
+                <label class="auto-label" for="auto-login">
+                    <span><i class="fas fa-sign-in-alt"></i>자동 로그인</span>
+                    <input type="checkbox" id="auto-login" name="autoLogin">
+                </label>
+            </td>
+        </tr>
     </div>
     <div class="sub-wrapper">
         <a id="find-pw-a" href="#">비밀번호 찾기</a>

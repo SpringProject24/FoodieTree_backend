@@ -16,6 +16,17 @@
     <div class="logo-img">
       <img src="/assets/img/img_2.png" alt="">
     </div>
+    <div>
+      <c:if test="${login == null}">
+        <li><a href="/customer/sign-up">Sign Up</a></li>
+        <li><a href="/customer/sign-in">Sign In</a></li>
+      </c:if>
+    
+      <c:if test="${login != null}">
+        <li><a href="#">My Page</a></li>
+        <li><a href="#">Sign Out</a></li>
+      </c:if>
+  </div>
     <div class="wrapper">
       <div class="signin"><a href="/sign-in">로그인</a></div>
       <div class="signup"><a href="/customer/sign-up">회원가입</a></div>

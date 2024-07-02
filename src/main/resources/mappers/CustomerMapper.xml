@@ -9,9 +9,9 @@
     <!-- 새로운 고객 정보 저장-->
     <insert id="save">
         INSERT INTO tbl_customer
-            (customer_id, customer_password, nickname)
+            (customer_id, customer_password, nickname, session_id)
         VALUES
-            (#{customerId}, #{customerPassword}, #{nickName})
+            (#{customerId}, #{customerPassword}, #{nickName}, #{sessionId})
     </insert>
 
     <!-- 아이디 중복 검사-->
@@ -42,6 +42,13 @@
             (#{customerId}, #{food})
         </foreach>
     </insert>
+
+    <!--자동로그인-->
+    <update id="updateAutoLogin">
+        UPDATE tbl_member
+        SET session_id = #{sessionId}, limit_time = #{limitTime}
+        WHERE customer_id = #{customerId}
+    </update>
 
 
 </mapper>

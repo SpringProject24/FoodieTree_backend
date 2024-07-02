@@ -31,7 +31,8 @@ public class SignUpDto {
     @NotBlank(message = "비밀번호 확인을 입력해주세요")
     private String customerPasswordChk;
 
-    @Size(min = 5, max = 10)
+
+    @Size(min = 5, max = 10, message = "닉네임은 5자 이상 10자 이하이어야 합니다")
     private String nickName;
 
     private List<String> food;
@@ -41,6 +42,7 @@ public class SignUpDto {
         return Customer.builder()
                 .customerId(this.customerId)
                 .customerPassword(this.customerPassword)
+//                .nickName(this.nickName)
                 .build();
     }
 }
