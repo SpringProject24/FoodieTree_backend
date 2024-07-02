@@ -19,6 +19,7 @@
     <typeAlias type="org.nmfw.foodietree.domain.customer.entity.Customer" alias="customer"/>
     <typeAlias type="org.nmfw.foodietree.domain.auth.dto.EmailCodeDto" alias="EmailCodeDto"/>
     <typeAlias type="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto" alias="ReservationStatusDto"/>
+    <typeAlias type="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto" alias="ReservationModalDetailDto"/>
   </typeAliases>
   <mappers>
     <mapper resource="mappers/CustomerMapper.xml" />

@@ -2,6 +2,11 @@ package org.nmfw.foodietree.domain.reservation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
+import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
+import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
+import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.springframework.stereotype.Service;
@@ -12,7 +17,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Slf4j
 public class ReservationService {
-
+    private final CustomerMyPageService customerMyPageService;
     private final ReservationMapper reservationMapper;
 
     /**
@@ -81,5 +86,21 @@ public class ReservationService {
         }
         LocalDateTime now = LocalDateTime.now();
         return now.isBefore(dto.getPickupTime().minusHours(1));
+    }
+
+    public ReservationModalDetailDto getReservationDetail(int reservationId) {
+        ReservationModalDetailDto dto = reservationMapper.findModalDetailByReservationId(reservationId);
+        ReservationDetail rd = ReservationDetail.builder()
+//                .pickupTime(dto.getPickupTime())
+//                .reservationTime(dto.getReservationTime())
+//                .pickedUpAt(dto.getPickedUpAt())
+//                .cancelReservationAt(dto.getCancelReservationAt())
+                .build();
+
+        PickUpStatus pickUpStatus = customerMyPageService.determinePickUpStatus(rd);
+
+//        dto.setStatus(pickUpStatus);
+
+        return dto;
     }
 }

@@ -71,7 +71,7 @@ public class CustomerMyPageService {
         ).collect(Collectors.toList());
     }
 
-    private PickUpStatus determinePickUpStatus(ReservationDetail reservation) {
+    public PickUpStatus determinePickUpStatus(ReservationDetail reservation) {
         if (reservation.getPickedUpAt() != null) {
             return PickUpStatus.PICKEDUP;
         } else if (reservation.getCancelReservationAt() != null) {

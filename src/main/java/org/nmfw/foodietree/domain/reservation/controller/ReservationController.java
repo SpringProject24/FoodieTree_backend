@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.controller.CustomerMyPageController;
 import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -58,5 +59,12 @@ public class ReservationController {
         boolean flag = reservationService.isPickupAllowed(reservationId);
 
         return flag ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("픽업 확인 실패");
+    }
+
+    @GetMapping("/{reservationId}/modal/detail")
+    public ResponseEntity<?> getReservationDetail(@PathVariable int reservationId) {
+        log.info("get reservation detail");
+        ReservationModalDetailDto reservationDetail = reservationService.getReservationDetail(reservationId);
+        return ResponseEntity.ok().body(reservationDetail);
     }
 }

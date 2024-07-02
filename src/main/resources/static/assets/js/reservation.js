@@ -212,35 +212,41 @@ function openModalver2(modal) {
 }
 
 // 모달 열기
-function openModal(reservationId) {
-    const reservationItem = document.querySelector(`.reservation-item[data-reservation-id="${reservationId}"]`);
+async function openModal(reservationId) {
+
+    const res = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
+    const reservation = await res.json();
+    console.log(reservation);
+
+
+    // const reservationItem = document.querySelector(`.reservation-item[data-reservation-id="${reservationId}"]`);
     console.log(reservationId);
-    if (!reservationItem) {
-        console.error(`Reservation with ID ${reservationId} not found.`);
+    if (!reservation) {
+        console.error(`Reservation with ID ${reservation} not found.`);
         return;
     }
 
-    const storeImg = reservationItem.querySelector('img').src;
-    const storeName = reservationItem.querySelector('span:nth-child(2)').textContent;
-    const status = reservationItem.querySelector('span:nth-child(3)').textContent;
-    const statusInfo = reservationItem.querySelector('span:nth-child(4)').textContent;
-
-    const reservationDetail = {
-        storeImg: storeImg,
-        storeName: storeName,
-        status: status,
-        statusInfo: statusInfo,
-        // 여기에 필요한 시간 정보 등 추가
-    };
+    // const storeImg = reservationItem.querySelector('img').src;
+    // const storeName = reservationItem.querySelector('span:nth-child(2)').textContent;
+    // const status = reservationItem.querySelector('span:nth-child(3)').textContent;
+    // const statusInfo = reservationItem.querySelector('span:nth-child(4)').textContent;
+    //
+    // const reservationDetail = {
+    //     storeImg: storeImg,
+    //     storeName: storeName,
+    //     status: status,
+    //     statusInfo: statusInfo,
+    //     // 여기에 필요한 시간 정보 등 추가
+    // };
 
     // 모달에 데이터 추가
     $modalDetails.innerHTML = `
         <div class="reservation-detail-item" data-reservation-id="${reservationId}">
-            <p>가게 이름: ${reservationDetail.storeName}</p>
-            <p>상태: ${reservationDetail.status}</p>
-            <p>${reservationDetail.statusInfo}</p>
-            <img src="${reservationDetail.storeImg}" alt="Store Image"/>
-            ${reservationDetail.status === 'RESERVED' ? '<button class="picked-up-btn">픽업 확인 버튼</button>' : '<button style="background-color:gray;">수정 불가</button>'}
+            <p>가게 이름: ${reservation.storeName}</p>
+            <p>상태: ${reservation.status}</p>
+            <p>${reservation.statusInfo}</p>
+            <img src="${reservation.storeImg}" alt="Store Image"/>
+            ${reservation.status === 'RESERVED' ? '<button class="picked-up-btn">픽업 확인 버튼</button>' : '<button style="background-color:gray;">수정 불가</button>'}
         </div>
     `;
 

@@ -27,4 +27,28 @@
         JOIN tbl_product p ON r.product_id = p.product_id
         WHERE reservation_id = #{reservationId}
     </select>
+
+    <select id="findModalDetailByReservationId" resultType="ReservationModalDetailDto">
+    SELECT
+        r.reservation_id,
+        r.product_id,
+        r.customer_id,
+        r.reservation_time,
+        r.cancel_reservation_at,
+        r.picked_up_at,
+        p.store_id,
+        p.pickup_time,
+        s.store_name,
+        s.category,
+        s.address,
+        s.price,
+        s.store_img,
+        c.nickname
+    FROM
+        tbl_reservation r
+    JOIN tbl_product p ON r.product_id = p.product_id
+    JOIN tbl_store s ON p.store_id = s.store_id
+    JOIN tbl_customer c ON r.customer_id = c.customer_id
+    WHERE r.reservation_id = #{reservationId}
+    </select>
 </mapper>
