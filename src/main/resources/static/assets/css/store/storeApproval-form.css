@@ -1,0 +1,262 @@
+
+header .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+header .logo-img {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+header h1 {
+  font-size: 1.5em;
+}
+
+header h1 span {
+  font-size: 0.8em;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+header .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+header .logo-img {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+header .logo-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+header .container .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header .container .wrapper .signin {
+  margin-right: 20px;
+}
+
+header .signup, .signin {
+  background-color: white;
+  color: var(--header-font-color);
+  padding: 10px 20px;
+  border: var(--header-font-color) 1px solid;
+  cursor: pointer;
+}
+
+footer .container {
+  margin: 130px auto 80px;
+  text-align: center;
+}
+
+
+main {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+}
+
+.registration {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  position: relative;
+}
+
+.registration h2 {
+  font-weight: bolder;
+  font-size: larger;
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+
+.form-group {
+  margin-bottom: 30px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.registration #category{
+  width: 100%;
+  height: 30px;
+  margin-bottom: 40px;
+}
+
+.btn-approval {
+	box-shadow:inset 0px 1px 0px 0px #a4e271;
+	background:linear-gradient(to bottom, #89c403 5%, #77a809 100%);
+	background-color:#89c403;
+	border-radius:6px;
+	border:1px solid #74b807;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528009;
+  position: relative;
+  left: 25%;
+  margin-bottom: 100px;
+}
+.btn-approval:hover {
+	background:linear-gradient(to bottom, #77a809 5%, #89c403 100%);
+	background-color:#77a809;
+}
+.btn-approval:active {
+	position:relative;
+	top:1px;
+}
+
+.info-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 300px;
+}
+
+.related-images {
+  display: flex;
+  padding: 20px;
+  position: relative;
+
+}
+
+.related-image1 {
+  width: 500px;
+  height: 300px;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: #aaa;
+  font-size: 1.2em;
+  position: relative;
+  left: 100px;
+  box-shadow: 0 0 10px rgba(0,0,0, 0.5);
+}
+
+.related-image2 {
+  width: 500px;
+  height: 300px;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: #aaa;
+  font-size: 1.2em;
+  position: relative;
+  top: 200px;
+  right: 30px;
+  box-shadow: 0 0 10px rgba(0,0,0, 0.5);
+}
+
+.related-info {
+  width: 30%;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+}
+
+.related-info h2 {
+  font-size: 1.3em;
+  font-weight: bolder;
+  margin-bottom: 30px;
+}
+
+.slide-container {
+  position: relative;
+  width: 80%;
+  margin: 30px auto 80px;
+  border-radius: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+
+}
+
+.slides {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.7); */
+}
+
+.slide {
+  min-width: 33.33%;
+  margin-right: 10px;
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0, 0.7);
+  text-align: center;
+}
+
+.slide-image {
+  width: 100%;
+  height: 400px;
+  background-color: #ddd;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: #aaa;
+  overflow: hidden;
+  font-size: 1.2em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.slide-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.slide-button.left {
+  left: -15px;
+}
+
+.slide-button.right {
+  right: -35px;
+}
