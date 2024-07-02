@@ -134,26 +134,30 @@ const fetchCancelReservation = async (reservationId) => {
 };
 
 // 예약 취소 처리 클릭 이벤트
-function cancelReservationClickEvent() {
+function cancelReservationClickEvent(reservationId) {
     $reservationList.addEventListener('click',async e => {
-        let tag = ``;
 
-        tag += `<p>픽업시간 기준 1시간 이내로 예약 취소시 취소 수수료 50%가 부과됩니다. 정말 취소하시겠습니까?</p>
-                <p>취소 수수료 계산해서 알려줘야함!!</p>
-                <p>취소 수수료는 결제 금액에서 자동 차감됩니다.</p>`;
-
-        let tag2 = ``;
-        tag2 += `<p>정말 취소하시겠습니까?</p>
-                <p>취소 하는 상품 상세 내역 보여주기</p>`;
 
         e.preventDefault();
         if (!e.target.matches('.reservation-cancel-btn')) return;
 
         const reservationId = e.target.closest('.reservation-item').dataset.reservationId;
         const isCancelAllowed = await fetchIsCancelAllowed(reservationId);
+
+        const res = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
+        const reservation = await res.json();
+        let cancellationFee = reservation.price * 0.5;
+        let tagWithFee = `<p>픽업시간 기준 1시간 이내로 예약 취소시 취소 수수료 50%가 부과됩니다. 정말 취소하시겠습니까?</p>
+                <p>${cancellationFee} 취소수수료</p>
+                <p>취소 수수료는 결제 금액에서 자동 차감됩니다.</p>`;
+
+        let tagWithoutFee = `<p>정말 취소하시겠습니까?</p>
+                <p>${reservation.storeName} 상품이 맞습니까?</p>
+                <p>${reservation.price}는 자동 환불됩니다. </p>
+                `;
         // 픽업시간이 1시간 이내라면 취소 수수료 모달 열기
         if (!isCancelAllowed) {
-            document.getElementById('modal-cancel').innerHTML = tag + `<button id="confirm-cancel-btn">확인</button>`;
+            document.getElementById('modal-cancel').innerHTML = tagWithFee + `<button id="confirm-cancel-btn">확인</button>`;
             openModalver2($cancelModal);
 
             document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
@@ -162,7 +166,7 @@ function cancelReservationClickEvent() {
             }, { once: true }); // 이벤트가 한 번만 발생하도록 설정
         } else {
             // 그 외에는 바로 취소
-            document.getElementById('modal-cancel').innerHTML = tag2 + `<button id="confirm-cancel-btn">확인</button>`;
+            document.getElementById('modal-cancel').innerHTML = tagWithoutFee + `<button id="confirm-cancel-btn">확인</button>`;
             openModalver2($cancelModal);
 
             document.getElementById('confirm-cancel-btn').addEventListener('click', () => {

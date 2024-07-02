@@ -91,15 +91,15 @@ public class ReservationService {
     public ReservationModalDetailDto getReservationDetail(int reservationId) {
         ReservationModalDetailDto dto = reservationMapper.findModalDetailByReservationId(reservationId);
         ReservationDetail rd = ReservationDetail.builder()
-//                .pickupTime(dto.getPickupTime())
-//                .reservationTime(dto.getReservationTime())
-//                .pickedUpAt(dto.getPickedUpAt())
-//                .cancelReservationAt(dto.getCancelReservationAt())
+                .pickupTime(dto.getPickupTime())
+                .reservationTime(dto.getReservationTime())
+                .pickedUpAt(dto.getPickedUpAt())
+                .cancelReservationAt(dto.getCancelReservationAt())
                 .build();
 
         PickUpStatus pickUpStatus = customerMyPageService.determinePickUpStatus(rd);
 
-//        dto.setStatus(pickUpStatus);
+        dto.setStatus(pickUpStatus);
 
         return dto;
     }

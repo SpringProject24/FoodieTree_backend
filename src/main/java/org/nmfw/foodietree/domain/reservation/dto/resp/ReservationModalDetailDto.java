@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ReservationModalDetailDto {
 
@@ -27,5 +28,5 @@ public class ReservationModalDetailDto {
     private int price;
     private String storeImg;
     private String nickname;
-//    private PickUpStatus status; // 고객이 예약을 픽업했는지, 픽업대기중인지, 픽업취소 했는지
+    private PickUpStatus status; // 고객이 예약을 픽업했는지, 픽업대기중인지, 픽업취소 했는지
 }
