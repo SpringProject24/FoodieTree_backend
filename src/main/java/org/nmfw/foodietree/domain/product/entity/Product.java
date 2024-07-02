@@ -22,6 +22,7 @@ public class Product {
     private int price;
     private int productCnt;
     private String proImage;
+
     private List<String> preferredArea;
     private List<String> preferredFood;
 

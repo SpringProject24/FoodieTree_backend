@@ -61,6 +61,32 @@
         ON s.simplified_address = f.pre_area )
     </select>
 
+    <select id="findCategoryByLike" resultType="org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto">
+        SELECT
+        s.store_name,
+        s.price,
+        s.store_img,
+        s.category,
+        p.pickup_time
+        FROM tbl_product p
+        JOIN tbl_store s
+        ON p.store_id = s.store_id
+        WHERE (
+        SELECT
+        fs.customer_id,
+        fs.store_id,
+        s.store_name,
+        s.store_img
+        FROM
+        tbl_fav_store fs
+        JOIN tbl_store s ON fs.store_id = s.store_id
+        WHERE
+        customer_id = #{customerId}
+        )
+
+
+    </select>
+
 <!--    <select id="product" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">-->
 
 <!--        SELECT-->
