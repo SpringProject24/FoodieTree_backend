@@ -171,13 +171,24 @@ public class CustomerMyPageService {
     public statsDto getStats(String customerId){
         List<ReservationDetail> reservations = customerMyPageMapper.findReservations(customerId);
 
-        // 예약 내역 중 pickedUpAt이 null이 아닌 것들의 개수
-        int total = (int) reservations.stream()
+        // 예약 내역 중 pickedUpAt이 null이 아닌 것들의 리스트
+        List<ReservationDetail> pickedUpReservations = reservations.stream()
                 .filter(reservation -> reservation.getPickedUpAt() != null)
-                .count();
+                .collect(Collectors.toList());
+
+        // pickedUpAt이 null이 아닌 것들의 개수
+        int total = pickedUpReservations.size();
+
+        // CO2 계산
         double coTwo = total * 0.12;
-        // money = 예약 내역들 가게 조회 후 가격 계산 한다음 더하기
-        int money = total * 10000;
+
+        // totalPrice 계산
+        int totalPrice = pickedUpReservations.stream()
+                .mapToInt(ReservationDetail::getPrice)
+                .sum();
+
+        // money 계산
+        int money = (int) (totalPrice * 0.7);
 
         return statsDto.builder()
                 .total(total)

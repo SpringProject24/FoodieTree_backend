@@ -144,8 +144,8 @@
                 </div>
             </div>
             <div class="stats">
-                <div>00kg의 음쓰를 줄였습니다</div>
-                <div>지금까지 00만원을 아꼈어요</div>
+                <div>${stats.coTwo}kg의 음쓰를 줄였습니다</div>
+                <div>지금까지 ${stats.money}원을 아꼈어요</div>
             </div>
         </div>
     </div>
