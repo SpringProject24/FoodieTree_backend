@@ -58,7 +58,7 @@ public class ReservationController {
         log.info("check pickup");
         boolean flag = reservationService.isPickupAllowed(reservationId);
 
-        return flag ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("픽업 확인 실패");
+        return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body("픽업 확인 실패");
     }
 
     @GetMapping("/{reservationId}/modal/detail")
