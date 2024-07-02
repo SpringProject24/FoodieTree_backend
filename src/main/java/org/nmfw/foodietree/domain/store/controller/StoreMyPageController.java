@@ -1,6 +1,7 @@
 package org.nmfw.foodietree.domain.store.controller;
 
 import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -32,7 +34,7 @@ public class StoreMyPageController {
         log.info("store my page main");
 
         StoreMyPageDto storeInfo = storeMyPageService.getStoreMypageInfo(storeId);
-
+        List<StoreReservationDto> reservations = storeMyPageService.findReservations(storeId);
         model.addAttribute("storeInfo", storeInfo);
         return "store/store-mypage-test";
     }

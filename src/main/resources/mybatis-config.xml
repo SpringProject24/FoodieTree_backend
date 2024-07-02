@@ -21,6 +21,7 @@
     <typeAlias type="org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto" alias="StoreMyPageDto"/>
     <typeAlias type="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto" alias="ReservationStatusDto"/>
     <typeAlias type="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto" alias="ReservationModalDetailDto"/>
+    <typeAlias type="org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto" alias="StoreReservationDto"/>
   </typeAliases>
   <mappers>
     <mapper resource="mappers/CustomerMapper.xml" />

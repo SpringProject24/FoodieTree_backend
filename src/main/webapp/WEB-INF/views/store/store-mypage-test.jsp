@@ -64,6 +64,38 @@
             <div class="info-box">
                 <div class="title">
                     <h3 class="title-text">예약 내역</h3>
+                    <div class="info-wrapper reservation">
+                        <ul class="reservation-list">
+                            <c:forEach var="reservation" items="${reservations}" varStatus="status">
+                                <li id="reservation-${status.index}" class="reservation-item">
+                                    <div class="item">
+                                        <div class="img-wrapper">
+                                            <div class="img-box">
+                                                <img src="${reservation.storeImg != null ? reservation.storeImg : "/assets/img/western.jpg"}"
+                                                     alt="Store Image"/>
+                                            </div>
+                                            <c:if test="${reservation.status == 'CANCELED'}">
+                                                <i class="fa-solid fa-circle-xmark canceled"></i>
+                                            </c:if>
+                                            <c:if test="${reservation.status == 'RESERVED'}">
+                                                <i class="fa-solid fa-spinner loading"></i>
+                                            </c:if>
+                                            <c:if test="${reservation.status == 'PICKEDUP'}">
+                                                <i class="fa-solid fa-circle-check done"></i>
+                                            </c:if>
+                                        </div>
+                                        <span>${reservation.storeName}</span>
+                                    </div>
+                                    <div class="item">
+                                        <span>${reservation.status}</span>
+                                    </div>
+                                    <div class="item">
+                                        <span>${reservation.pickupTime}</span>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div id="product-count">

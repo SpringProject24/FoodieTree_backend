@@ -20,4 +20,31 @@
         WHERE
             store_id = #{store_id}
     </select>
+
+    <select id="findReservations" resultType="StoreReservationDto">
+        SELECT
+            c.customer_id,
+            c.nickname,
+            c.customer_phone_number,
+            p.product_id,
+            r.reservation_id,
+            r.reservation_time,
+            r.cancel_reservation_at,
+            r.picked_up_at,
+            p.pickup_time,
+            p.product_upload_date,
+            s.price
+        FROM
+            tbl_reservation r
+        JOIN
+            tbl_customer c ON r.customer_id = c.customer_id
+        JOIN
+            tbl_product p ON p.product_id = r.product_id
+        JOIN
+            tbl_store s ON s.store_id = p.store_id
+        WHERE
+            s.store_id = #{store_id}
+
+
+    </select>
 </mapper>
