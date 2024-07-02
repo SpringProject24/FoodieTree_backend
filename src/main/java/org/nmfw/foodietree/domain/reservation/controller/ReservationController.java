@@ -35,7 +35,7 @@ public class ReservationController {
         log.info("cancel reservation");
         boolean flag = reservationService.cancelReservation(reservationId);
 
-        return flag ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 
     @PatchMapping("/{reservationId}/pickup")
@@ -43,7 +43,7 @@ public class ReservationController {
         log.info("complete pickup");
         boolean flag = reservationService.completePickup(reservationId);
 
-        return flag ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 
     @GetMapping("/{reservationId}/check/cancel")

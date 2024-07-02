@@ -207,7 +207,7 @@ function pickUpClickEvent() {
         fetchConfirmPickUp(reservationId);
 
         alert('픽업 완료되었습니다!');
-        closeModal();
+        closeModal($reservationModal);
     });
 }
 
@@ -295,7 +295,7 @@ $reservationList.addEventListener('click', e => {
     if (e.target.matches('.reservation-cancel-btn')) return; // 예약 취소 버튼일 경우 모달 열기 방지
 
     if (e.target.closest('.reservation-item')) {
-        openModal($reservationModal);
+        // openModal($reservationModal);
         openModal(e.target.closest('.reservation-item').dataset.reservationId);
     }
 });
