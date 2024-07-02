@@ -6,6 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodieTree</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
@@ -15,26 +19,26 @@
     <link rel="stylesheet" href="/assets/css/product/main.css">
 
     <style>
-        .rectangle {
-            width: 100px;
-            height: 100px;
-            background-color: red;
-        }
+      .rectangle {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+      }
 
-        .circle {
-            width: 100px;
-            height: 100px;
-            background-color: blue;
-            border-radius: 50%;
-        }
+      .circle {
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+        border-radius: 50%;
+      }
 
-        .triangle {
-            width: 0;
-            height: 0;
-            border-left: 50px solid transparent;
-            border-right: 50px solid transparent;
-            border-bottom: 100px solid green;
-        }
+      .triangle {
+        width: 0;
+        height: 0;
+        border-left: 50px solid transparent;
+        border-right: 50px solid transparent;
+        border-bottom: 100px solid green;
+      }
     </style>
 </head>
 <body>
@@ -542,59 +546,83 @@
         </div>
     </div>
 </section>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <footer>
     <div class="container">
         <p>&copy; 2024 FoodieTree. All rights reserved.</p>
     </div>
 </footer>
-
-</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
 <script>
-    new Swiper('.category-list', {
-        slidesPerView: 7,
-        centralDirOffset: 1,
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
+  new Swiper('.category-list', {
+    slidesPerView: 7,
+    centralDirOffset: 1,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
 
-    new Swiper('.myswiper1', {
-        spaceBetween: 20,
-        slidesPerView: 4,
-        slidesPerGroup: 4,
-        loop: true,
-        speed: 1200,
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
+  new Swiper('.myswiper1', {
+    spaceBetween: 20,
+    slidesPerView: 4,
+    slidesPerGroup: 4,
+    loop: true,
+    speed: 1200,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
 
-    new Swiper('.myswiper2', {
-        spaceBetween: 20,
-        slidesPerView: 5,
-        slidesPerGroup: 5,
-        speed: 1200,
-        navigation: {
-            nextEl: '.swiper-button-next-b',
-            prevEl: '.swiper-button-prev-b',
-        }
-    });
+  new Swiper('.myswiper2', {
+    spaceBetween: 20,
+    slidesPerView: 5,
+    slidesPerGroup: 5,
+    speed: 1200,
+    navigation: {
+      nextEl: '.swiper-button-next-b',
+      prevEl: '.swiper-button-prev-b',
+    }
+  });
 
-    new Swiper('.myswiper3', {
-        spaceBetween: 20,
-        slidesPerView: 5,
-        slidesPerGroup: 5,
-        speed: 1200,
-        navigation: {
-            nextEl: '.swiper-button-next-b',
-            prevEl: '.swiper-button-prev-b',
-        }
-    });
+  new Swiper('.myswiper3', {
+    spaceBetween: 20,
+    slidesPerView: 5,
+    slidesPerGroup: 5,
+    speed: 1200,
+    navigation: {
+      nextEl: '.swiper-button-next-b',
+      prevEl: '.swiper-button-prev-b',
+    }
+  });
 
 </script>
+</body>
 </html>
