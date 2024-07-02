@@ -37,6 +37,13 @@
         background-color: #fafafa;
         border: 1px solid #ddd;
     }
+
+    .stats{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
 </style>
 <header>
     <div class="container">
@@ -58,6 +65,10 @@
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link" href="mypage">마이페이지</a></li>
                 <li class="nav-item"><a class="nav-link" href="mypage-edit">개인정보수정</a></li>
+                <div class="stats">
+                    <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
+                    <div>지금까지 ${stats.customerCnt}명의 손님을 만났어요</div>
+                </div>
             </ul>
         </div>
         <div class="info">
@@ -111,17 +122,13 @@
             <div id="calendar-header">
                 <div class="title">
                     <h3 class="title-text">가게 스케줄 조정</h3>
+                    <button id="prev-month">이전 달</button>
+                    <span id="current-month"></span>
+                    <button id="next-month">다음 달</button>
+                    <div id="calendar"></div>
                 </div>
-                <button id="prev-month">Previous</button>
-                <span id="current-month"></span>
-                <button id="next-month">Next</button>
             </div>
-            <div id="calendar"></div>
-            <div id="events"></div>
-            <div class="stats">
-                <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
-                <div>지금까지 ${stats.customerCnt}명의 손님을 만났어요</div>
-            </div>
+
         </div>
     </div>
 </section>
