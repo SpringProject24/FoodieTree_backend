@@ -1,0 +1,31 @@
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-header {
+    display: contents;
+}
+
+.calendar-day-header, .calendar-day, .calendar-day-empty {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.calendar-day-header {
+    font-weight: bold;
+}
+
+.today {
+    background-color: yellow;
+}
+
+#schedule {
+    font-size: 20px;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    height: 80%;
+    line-height: 2;
+}

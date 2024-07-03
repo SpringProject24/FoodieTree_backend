@@ -19,11 +19,17 @@ public class ProductAutoUpdate {
 //    @Scheduled(cron = "0 8 9 * * *") // 매일 9시 8분에 실행 테스트용
     public void updateProducts() {
         List<StoreCheckDto> stores = storeMyPageMapper.getAllStore();
-        for (StoreCheckDto store : stores) {
-            int count = store.getProductCnt();
-            for (int i = 0; i < count; i++) {
-                storeMyPageMapper.updateProductAuto(store.getStoreId(), store.getPickupTime().toString());
+
+        boolean isOpen = false;
+
+        if (isOpen){
+            for (StoreCheckDto store : stores) {
+                int count = store.getProductCnt();
+                for (int i = 0; i < count; i++) {
+                    storeMyPageMapper.updateProductAuto(store.getStoreId(), store.getPickupTime().toString());
+                }
             }
         }
+
     }
 }

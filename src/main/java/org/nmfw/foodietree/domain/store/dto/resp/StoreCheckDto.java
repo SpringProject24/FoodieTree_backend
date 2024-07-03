@@ -17,4 +17,5 @@ public class StoreCheckDto {
     private String storeName;
     private LocalDateTime pickupTime = LocalDateTime.now().plusHours(5L); // 수정해야함 각 가개별로 픽업시간에 맞게
     private int productCnt;
+    private boolean isOpen; // 가게 영업 여부
 }

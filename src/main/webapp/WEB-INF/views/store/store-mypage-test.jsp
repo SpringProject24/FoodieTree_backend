@@ -12,6 +12,7 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage.css">
+    <link rel="stylesheet" href="/assets/css/store/calendar.css">
     <link rel="stylesheet" href="/assets/css/reservation/reservation-detail-modal.css">
     <script defer src="/assets/js/store/store-mypage.js"></script>
 </head>
@@ -113,12 +114,10 @@
             </div>
             <div id="product-count">
                 <div class="title">
-                    <h3 class="title-text">오늘의 랜덤박스 수량</h3>
+                    <h3 class="title-text">오늘의 랜덤박스 현황</h3>
+                    <span id="count">${storeInfo.productCnt}</span>
+                    <button id="update">수량업데이트 하기</button>
                 </div>
-                <button id="decrease">감소</button>
-                <span id="count">${storeInfo.productCnt}</span>
-                <button id="increase">증가</button>
-                <button id="update">수량업데이트 하기</button>
             </div>
 
             <div id="calendar-header">
@@ -138,9 +137,11 @@
 <!-- 픽업예정, 예약내역 모달 창 -->
 <div id="reservation-modal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>예약 상세 내역</h2>
-        <div id="modal-details"></div>
+        <div>
+            <span class="close">&times;</span>
+            <h2>예약 상세 내역</h2>
+            <div id="modal-store-reservation-details"></div>
+        </div>
     </div>
 </div>
 
@@ -149,8 +150,10 @@
 <div id="store-calendar-modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>가게 문 몇시에 열고 닫는지, 오늘 문 닫을건지</h2>
-        <div id="modal-details"></div>
+        <div id="schedule">
+            <h2>가게 문 몇시에 열고 닫는지, 오늘 문 닫을건지</h2>
+            <div id="modal-schedule-details"></div>
+        </div>
     </div>
 </div>
 

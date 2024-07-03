@@ -24,7 +24,7 @@ public interface StoreMyPageMapper {
      * @param date  : 조회하고자 하는 날짜
      * @return StoreMyPageCalendarModalDto
      */
-    StoreMyPageCalendarModalDto getStoreMyPageCalendarModalInfo(String storeId, String date);
+    List<StoreMyPageCalendarModalDto> getStoreMyPageCalendarModalInfo(String storeId, String date);
     /**
      * 상품 업데이트
      * @param storeId : 가게 아이디

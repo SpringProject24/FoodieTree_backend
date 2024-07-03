@@ -15,7 +15,7 @@
             approve,
             price,
             product_cnt,
-            open_at,
+            open_at
         FROM
             tbl_store
         WHERE
@@ -36,7 +36,7 @@
             p.pickup_time,
             p.product_upload_date,
             s.price,
-            s.open_at,
+            s.open_at
         FROM
             tbl_reservation r
         JOIN
@@ -72,11 +72,11 @@
             p.canceled_by_store_at
         FROM
             tbl_store s
-        JOIN
-            tbl_product p ON p.store_id = s.store_id
+        LEFT JOIN
+        tbl_product p ON p.store_id = s.store_id AND DATE(p.pickup_time) = #{date}
         WHERE
-            s.store_id = #{storeId}
-        AND DATE(p.pickup_time) = #{date}
+        s.store_id = #{storeId}
+        LIMIT 1
     </select>
 
     <select id="getAllStore" resultType="StoreCheckDto">

@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.store.service.StoreMyPageService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,26 +43,32 @@ public class StoreMyPageController {
         return "store/store-mypage-test";
     }
 
-    @GetMapping("/main/calendar")
-    public ResponseEntity<?> getCalender(@RequestParam String storeId, @RequestParam String date){
+    @GetMapping("/main/calendar/{dateString}")
+    public ResponseEntity<?> getCalender(@RequestParam String dateString){
         log.info("store my page calendar");
         StoreMyPageDto storeMyPageInfo = storeMyPageService.getStoreMyPageInfo(storeId);
         return ResponseEntity.ok().body(storeMyPageInfo);
     }
 
-//    @GetMapping("/main/calendar/modal/${storeId}/${date}")
-//    public ResponseEntity<?> getCalenderModalDetail(@RequestParam String storeId, @RequestParam String date){
-//        log.info("store my page calendar modal");
-//
-//        StoreMyPageCalendarModalDto dto = storeMyPageService.getStoreMyPageCalendarModalInfo(storeId, date);
-//
-//        return ResponseEntity.ok().body(dto);
+    @GetMapping("/main/calendar/modal/{dateString}")
+    public ResponseEntity<StoreMyPageCalendarModalDto> getCalenderModalDetail( @PathVariable String dateString){
+        log.info("store my page calendar modal");
+
+        StoreMyPageCalendarModalDto dto = storeMyPageService.getStoreMyPageCalendarModalInfo(storeId, dateString);
+        log.info(dto.toString());
+        return ResponseEntity.ok().body(dto);
+    }
+
+//    @PatchMapping("/main/calendar/close")
+//    public ResponseEntity<?> closeStore(@RequestParam String storeId, @RequestParam String pickupTime){
+//        log.info("store my page close store");
+////        storeMyPageService.cancelProductByStore(storeId, pickupTime);
+//        return ResponseEntity.ok().body(true);
 //    }
 
-    @PatchMapping("/main/calendar/close")
-    public ResponseEntity<?> closeStore(@RequestParam String storeId, @RequestParam String pickupTime){
-        log.info("store my page close store");
-//        storeMyPageService.cancelProductByStore(storeId, pickupTime);
-        return ResponseEntity.ok().body(true);
-    }
+//    @GetMapping("/main/calendar/closed/date")
+//    public ResponseEntity<?> getClosedDate(@RequestParam String storeId) {
+//        log.info("store my page get closed date");
+//        return null;
+//    }
 }

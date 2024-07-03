@@ -2,7 +2,6 @@ package org.nmfw.foodietree.domain.store.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.customer.dto.resp.statsDto;
 import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
@@ -48,7 +47,7 @@ public class StoreMyPageService {
 
     public StoreMyPageCalendarModalDto getStoreMyPageCalendarModalInfo(String storeId, String date) {
         log.info("service get store my page calendar modal info");
-        return storeMyPageMapper.getStoreMyPageCalendarModalInfo(storeId, date);
+        return storeMyPageMapper.getStoreMyPageCalendarModalInfo(storeId, date).get(0);
     }
 
 
