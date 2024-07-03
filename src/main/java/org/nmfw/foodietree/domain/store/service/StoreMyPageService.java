@@ -105,6 +105,18 @@ public class StoreMyPageService {
         return false;
     }
 
+    public boolean undoHoliday(String storeId, String holidayDate) {
+        log.info("service remove holiday");
+        storeMyPageMapper.undoHoliday(storeId, holidayDate);
+        List<StoreHolidayDto> holidays = storeMyPageMapper.getHolidays(storeId);
+        for (StoreHolidayDto holiday : holidays) {
+            if (holiday.getHolidays().equals(holidayDate)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public List<StoreHolidayDto> getHolidays(String storeId) {
         log.info("service get holidays");
         return storeMyPageMapper.getHolidays(storeId);

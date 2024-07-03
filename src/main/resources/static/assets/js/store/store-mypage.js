@@ -28,7 +28,7 @@ let currentMonth = today.getMonth();
 
 // ========= 함수 =========
 
-function updateCalendar(year, month) {
+async function updateCalendar(year, month) {
     calendarElement.innerHTML = '';
 
     // 요일 헤더 생성
@@ -39,9 +39,7 @@ function updateCalendar(year, month) {
         const dayElement = document.createElement('div');
         dayElement.textContent = day;
         dayElement.classList.add('calendar-day-header');
-        if (day === 'Sun') { // Highlight Sundays in red
-            dayElement.classList.add('sunday'); // Add a new class for Sundays
-        }
+        if (day === 'Sun') dayElement.classList.add('sunday');
         headerRow.appendChild(dayElement);
     });
     calendarElement.appendChild(headerRow);
@@ -70,8 +68,38 @@ function updateCalendar(year, month) {
         if (new Date(year, month, i).getDay() === 0) {
             dayElement.classList.add('sunday'); // Highlight Sundays in red
         }
+
+        // Check if it's a holiday and add holiday class
+        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        const isHoliday = await checkHoliday(dateString); // You need to implement this function
+        console.log(dateString, isHoliday);
+        if (isHoliday) {
+            dayElement.classList.add('holiday');
+        }
+
         dayElement.addEventListener('click', () => showModal(year, month, i));
         calendarElement.appendChild(dayElement);
+    }
+}
+
+async function checkHoliday(dateString) {
+    try {
+        const response = await fetch(`${BASE_URL}/store/mypage/main/calendar/check/holiday`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ date: dateString }) // dateString을 JSON 형식으로 변환하여 보냄
+        });
+        console.log(response);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const isHoliday = await response.json();
+        return isHoliday;
+    } catch (error) {
+        console.error('Error checking holiday:', error);
+        return false; // Default to false if there's an error
     }
 }
 
@@ -89,6 +117,8 @@ async function showModal(year, month, day) {
         console.log("pickupTime, openAt, productCnt, canceledByStoreAt");
         console.log(res);
 
+        const isHoliday = await checkHoliday(dateString);
+
         tag = `<div>openAt: ${res.openAt || 'N/A'}</div>
                <div>기본 매일 업데이트 되는 수량: ${res.productCnt || 'N/A'}</div>
                 <div>오늘 총 등록된 수량: ${res.todayProductCnt || 'N/A'}</div>
@@ -102,13 +132,49 @@ async function showModal(year, month, day) {
         today.setHours(0, 0, 0, 0); // Compare dates without time
         let $storeCloseButton = ''; // 버튼 초기화
         let $setPickUpTimeButton = ''; // 버튼 초기화
+        let $cancelStoreCloseButton = ''; // 버튼 초기화
         if (selectedDate > today) {
             $storeCloseButton = '<button id="store-holiday-btn">휴무일로 지정하기</button>';
             $setPickUpTimeButton = '<button id="set-pickup-time-btn">픽업 시간 설정하기</button>';
+            $cancelStoreCloseButton = '<button id="undo-holiday-btn">휴무일 지정 취소하기</button>';
         }
+        let normalTag = `${dateString}의 정보` + tag + $storeCloseButton + '<br>' + $setPickUpTimeButton;
 
-        modalDetailsElement.innerHTML = `${dateString}의 정보` + tag + $storeCloseButton + '<br>' + $setPickUpTimeButton;
+        let holidayTag = `${dateString}은`+'<div>휴무일로 지정되었습니다.</div>' + '<br>' + $cancelStoreCloseButton;
+
+        modalDetailsElement.innerHTML = isHoliday ? holidayTag : normalTag;
         scheduleModal.style.display = 'block';
+
+        const undoHolidayButton = modalDetailsElement.querySelector('#undo-holiday-btn');
+        if (undoHolidayButton) {
+            undoHolidayButton.addEventListener('click', async () => {
+                try{
+                    console.log('휴무일 지정 취소하기 버튼 클릭');
+                    console.log(dateString);
+                    const response = await fetch(`${BASE_URL}/store/mypage/main/calendar/undoHoliday`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            holidayDate: dateString // 휴무일로 지정된 날짜
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result === true){
+                        console.log('휴무일 지정이 취소되었습니다.');
+                        alert('휴무일 지정이 취소되었습니다.')?closeModal(scheduleModal):closeModal(scheduleModal)
+                        // modalDetailsElement.innerHTML = normalTag;
+                        // 여기에 필요한 UI 업데이트 로직 추가
+                        updateCalendar(currentYear, currentMonth); // 예시로 달력 업데이트
+                    }
+                }catch (error) {
+                    console.error('Error setting holiday:', error);
+                    // 에러 처리 로직 추가
+                }
+            });
+        }
 
         // 버튼 이벤트 리스너 추가
         const button = modalDetailsElement.querySelector('#store-holiday-btn');
@@ -129,8 +195,8 @@ async function showModal(year, month, day) {
                     if (result === true) {
                         console.log('휴무일로 지정되었습니다.');
                         // 여기에 필요한 UI 업데이트 로직 추가
-                        // 버튼 내용 변경
-                        button.textContent = '휴무일 지정 취소하기';
+                        alert('휴무일로 지정되었습니다.')?closeModal(scheduleModal):closeModal(scheduleModal);
+                        // modalDetailsElement.innerHTML = holidayTag;
                         // 예를 들어, 달력에서 휴무일로 지정된 날짜에 표시 변경 등
                         updateCalendar(currentYear, currentMonth); // 예시로 달력 업데이트
                     } else {

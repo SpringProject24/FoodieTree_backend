@@ -75,6 +75,14 @@ public class StoreMyPageController {
         return flag? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 
+    @DeleteMapping("/main/calendar/undoHoliday")
+    public ResponseEntity<?> undoHoliday(@RequestBody Map<String, String> requestBody){
+        String holidayDate = requestBody.get("holidayDate");
+        log.info("set holiday");
+        boolean flag = storeMyPageService.undoHoliday(storeId, holidayDate);
+        return flag? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
+    }
+
     @GetMapping("/main/calendar/getHoliday")
     public List<StoreHolidayDto> getHolidays(String storeId) {
         log.info("store my page get closed date");
@@ -83,10 +91,13 @@ public class StoreMyPageController {
     }
 
     // 해당 날짜가 휴무일이면 true 반환
-    @GetMapping("/main/calendar/check/holiday")
-    public boolean checkHoliday(@RequestParam String date) {
+    @PostMapping("/main/calendar/check/holiday")
+    public ResponseEntity<?> checkHoliday(@RequestBody Map<String, String> requestBody) {
+        String date = requestBody.get("date");
         log.info("check holiday");
-        return storeMyPageService.checkHoliday(storeId, date);
+        boolean isHoliday = storeMyPageService.checkHoliday(storeId, date);
+        log.info("isHoliday = " + isHoliday);
+        return ResponseEntity.ok().body(isHoliday);
     }
 
     @PostMapping("/main/calendar/setPickupTime")

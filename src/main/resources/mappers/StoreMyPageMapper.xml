@@ -98,6 +98,14 @@
             (#{storeId}, #{holidays})
     </insert>
 
+    <delete id="undoHoliday">
+        DELETE FROM
+            tbl_store_holidays
+        WHERE
+            store_id = #{storeId}
+        AND holidays = #{holidays}
+    </delete>
+
     <select id="getHolidays" resultType="StoreHolidayDto">
         SELECT
             store_id,

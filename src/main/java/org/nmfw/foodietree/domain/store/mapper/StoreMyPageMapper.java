@@ -43,6 +43,8 @@ public interface StoreMyPageMapper {
 
     void setHoliday(@Param("storeId") String storeId, @Param("holidays") String holidays);
 
+    void undoHoliday(@Param("storeId") String storeId, @Param("holidays") String holidays);
+
     List<StoreHolidayDto> getHolidays(@Param("storeId") String storeId);
 
     List<ProductInfoDto> getProductCntByDate(@Param("storeId") String storeId, @Param("date") String date);
