@@ -6,6 +6,7 @@ import org.nmfw.foodietree.domain.customer.dto.resp.statsDto;
 import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageCalendarModalDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreStatsDto;
@@ -44,6 +45,12 @@ public class StoreMyPageService {
         }
         return reservations;
     }
+
+    public StoreMyPageCalendarModalDto getStoreMyPageCalendarModalInfo(String storeId, String date) {
+        log.info("service get store my page calendar modal info");
+        return storeMyPageMapper.getStoreMyPageCalendarModalInfo(storeId, date);
+    }
+
 
     public StoreStatsDto getStats(String storeId){
         List<StoreReservationDto> reservations = storeMyPageMapper.findReservations(storeId);

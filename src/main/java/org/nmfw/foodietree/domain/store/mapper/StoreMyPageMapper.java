@@ -1,6 +1,8 @@
 package org.nmfw.foodietree.domain.store.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreCheckDto;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageCalendarModalDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 
@@ -17,11 +19,18 @@ public interface StoreMyPageMapper {
     List<StoreReservationDto> findReservations(String storeId);
 
     /**
-     * 상품 업데이트
-     * @param storeId
-     * @param pickupTime
+     * 가게 마이페이지 캘린더 모달 정보 조회
+     * @param storeId : 가게 아이디
+     * @param date  : 조회하고자 하는 날짜
+     * @return StoreMyPageCalendarModalDto
      */
-    void updateProductAuto(String storeId, LocalDateTime pickupTime);
+    StoreMyPageCalendarModalDto getStoreMyPageCalendarModalInfo(String storeId, String date);
+    /**
+     * 상품 업데이트
+     * @param storeId : 가게 아이디
+     * @param pickupTime : 픽업 시간
+     */
+    void updateProductAuto(String storeId, String pickupTime);
 
     /**
      * 상품 삭제 -> 문 닫는 날에 오전 00시에 업데이트된 상품에 대해 cancel_by_store_at 업데이트
@@ -29,4 +38,6 @@ public interface StoreMyPageMapper {
      * @param pickupTime : 문닫는 날 LocalDate.now().toString() 로 전달하거나 "yyyy-MM-dd" 형식으로 전달
      */
     void cancelProductByStore(String storeId, String pickupTime);
+
+    List<StoreCheckDto> getAllStore();
 }

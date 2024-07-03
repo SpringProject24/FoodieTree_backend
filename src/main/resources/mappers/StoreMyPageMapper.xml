@@ -14,7 +14,8 @@
             category,
             approve,
             price,
-            product_cnt
+            product_cnt,
+            open_at,
         FROM
             tbl_store
         WHERE
@@ -34,7 +35,8 @@
             r.picked_up_at,
             p.pickup_time,
             p.product_upload_date,
-            s.price
+            s.price,
+            s.open_at,
         FROM
             tbl_reservation r
         JOIN
@@ -48,7 +50,7 @@
         ORDER BY p.pickup_time DESC
     </select>
 
-    <insert id="updateProduct">
+    <insert id="updateProductAuto">
         INSERT INTO tbl_product
             (store_id, pickup_time, product_upload_date)
         VALUES
@@ -61,4 +63,28 @@
         WHERE store_id = #{storeId}
         AND DATE(pickup_time) = #{pickupTime}
     </update>
+
+    <select id="getStoreMyPageCalendarModalInfo" resultType="StoreMyPageCalendarModalDto">
+        SELECT
+            p.pickup_time,
+            s.open_at,
+            s.product_cnt,
+            p.canceled_by_store_at
+        FROM
+            tbl_store s
+        JOIN
+            tbl_product p ON p.store_id = s.store_id
+        WHERE
+            s.store_id = #{storeId}
+        AND DATE(p.pickup_time) = #{date}
+    </select>
+
+    <select id="getAllStore" resultType="StoreCheckDto">
+        SELECT DISTINCT
+            store_id,
+            store_name,
+            product_cnt
+        FROM
+            tbl_store
+    </select>
 </mapper>

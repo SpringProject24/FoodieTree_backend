@@ -12,6 +12,8 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage.css">
+    <link rel="stylesheet" href="/assets/css/reservation/reservation-detail-modal.css">
+    <script defer src="/assets/js/store/store-mypage.js"></script>
 </head>
 <body>
 <style>
@@ -133,76 +135,26 @@
     </div>
 </section>
 
+<!-- 픽업예정, 예약내역 모달 창 -->
+<div id="reservation-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>예약 상세 내역</h2>
+        <div id="modal-details"></div>
+    </div>
+</div>
+
+
+<!-- 모달 창 -->
+<div id="store-calendar-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>가게 문 몇시에 열고 닫는지, 오늘 문 닫을건지</h2>
+        <div id="modal-details"></div>
+    </div>
+</div>
+
 <script>
-
-    const BASE_URL = 'http://localhost:8083';
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const calendarElement = document.getElementById('calendar');
-        const statusElement = document.getElementById('status');
-        const currentMonthElement = document.getElementById('current-month');
-        const prevMonthButton = document.getElementById('prev-month');
-        const nextMonthButton = document.getElementById('next-month');
-
-        let today = new Date();
-        let currentYear = today.getFullYear();
-        let currentMonth = today.getMonth();
-
-        function updateCalendar(year, month) {
-            calendarElement.innerHTML = '';
-            const date = new Date(year, month);
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            currentMonthElement.textContent = date.toLocaleDateString('default', { year: 'numeric', month: 'long' });
-
-            for (let i = 1; i <= daysInMonth; i++) {
-                const dayElement = document.createElement('div');
-                dayElement.textContent = i;
-                dayElement.classList.add('day');
-                if (year === today.getFullYear() && month === today.getMonth() && i === today.getDate()) {
-                    dayElement.classList.add('today');
-                }
-                dayElement.addEventListener('click', () => closeStoreForDay(year, month, i));
-                calendarElement.appendChild(dayElement);
-            }
-        }
-
-        async function closeStoreForDay(year, month, day) {
-            const dateString = `\${year}-\${String(month + 1).padStart(2, '0')}-\${String(day).padStart(2, '0')}`;
-            const response = await fetch(`\${BASE_URL}/store/mypage/main/calendar`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ date: dateString })
-            });
-
-            if (response.ok) {
-                statusElement.textContent = `The store will be closed on \${dateString}.`;
-            } else {
-                statusElement.textContent = `Failed to close the store on \${dateString}.`;
-            }
-        }
-
-        prevMonthButton.addEventListener('click', () => {
-            currentMonth--;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            updateCalendar(currentYear, currentMonth);
-        });
-
-        nextMonthButton.addEventListener('click', () => {
-            currentMonth++;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            updateCalendar(currentYear, currentMonth);
-        });
-
-        updateCalendar(currentYear, currentMonth);
-    });
 
 </script>
 </body>

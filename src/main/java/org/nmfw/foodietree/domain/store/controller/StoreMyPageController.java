@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.store.controller;
 
+import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageCalendarModalDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreStatsDto;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.store.service.StoreMyPageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,7 +28,7 @@ public class StoreMyPageController {
     String storeId = "aaa@aaa.com";
     private final StoreMyPageService storeMyPageService;
 
-    @RequestMapping("/main")
+    @GetMapping("/main")
     public String main(HttpSession session
             , Model model
             , HttpServletRequest request
@@ -47,6 +49,23 @@ public class StoreMyPageController {
     @GetMapping("/main/calendar")
     public ResponseEntity<?> getCalender(@RequestParam String storeId, @RequestParam String date){
         log.info("store my page calendar");
-        return ResponseEntity.ok().body(storeMyPageService.getStoreMyPageInfo(storeId));
+        StoreMyPageDto storeMyPageInfo = storeMyPageService.getStoreMyPageInfo(storeId);
+        return ResponseEntity.ok().body(storeMyPageInfo);
+    }
+
+//    @GetMapping("/main/calendar/modal/${storeId}/${date}")
+//    public ResponseEntity<?> getCalenderModalDetail(@RequestParam String storeId, @RequestParam String date){
+//        log.info("store my page calendar modal");
+//
+//        StoreMyPageCalendarModalDto dto = storeMyPageService.getStoreMyPageCalendarModalInfo(storeId, date);
+//
+//        return ResponseEntity.ok().body(dto);
+//    }
+
+    @PatchMapping("/main/calendar/close")
+    public ResponseEntity<?> closeStore(@RequestParam String storeId, @RequestParam String pickupTime){
+        log.info("store my page close store");
+//        storeMyPageService.cancelProductByStore(storeId, pickupTime);
+        return ResponseEntity.ok().body(true);
     }
 }
