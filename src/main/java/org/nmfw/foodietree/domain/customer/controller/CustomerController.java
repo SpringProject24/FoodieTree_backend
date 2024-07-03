@@ -45,7 +45,8 @@ public class CustomerController {
     @PostMapping("/sign-up")
     public String signUp(@Validated SignUpDto dto, BindingResult result) {
         if (result.hasErrors()) {
-            return "/customer/sign-up";
+            log.info("{}", result);
+            return "redirect:/customer/sign-up";
         }
 
         boolean flag = customerService.join(dto);
