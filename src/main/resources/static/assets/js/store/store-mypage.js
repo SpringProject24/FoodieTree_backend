@@ -74,7 +74,16 @@ async function showModal(year, month, day) {
                <div>openAt: ${res.openAt || 'N/A'}</div>
                <div>productCnt: ${res.productCnt || 'N/A'}</div>
                <div>canceledByStoreAt: ${res.canceledByStoreAt || 'N/A'}</div>`;
-        modalDetailsElement.innerHTML = `${dateString}의 정보` + tag;
+
+        let storeCloseButton = '<button id="store-holiday-btn">휴무일로 지정하기</button>';
+
+        const selectedDate = new Date(year, month, day);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Compare dates without time
+        if (selectedDate <= today) {
+            storeCloseButton = '';
+        }
+        modalDetailsElement.innerHTML = `${dateString}의 정보` + tag + storeCloseButton;
         scheduleModal.style.display = 'block';
     } catch (error) {
         console.error('Error fetching calendar data:', error);
