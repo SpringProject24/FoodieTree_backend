@@ -43,8 +43,8 @@ public class ProductMainPageController {
         totalInfo.getProductDtoList().forEach(e -> {
             log.info("{}", e);
         });
-        List<TotalInfoDto> productByFood = productMainPageService.findProductByFood(customerId);
-        List<TotalInfoDto> productByArea = productMainPageService.findProductByArea(customerId);
+        List<TotalInfoDto> productByFood = productMainPageService.findProductByFood(customerId,request,response);
+        List<TotalInfoDto> productByArea = productMainPageService.findProductByArea(customerId,request,response);
         model.addAttribute("productTotal", totalInfo);
         model.addAttribute("findByFood", productByFood);
         model.addAttribute("findByArea", productByArea);

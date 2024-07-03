@@ -30,21 +30,19 @@ public class ProductMainPageService {
     // product 메인페이지 상품정보 조회 중간 처리
     public TotalInfoDto getProductInfo(HttpServletRequest request, HttpServletResponse response, String customerId) {
         List<String> preferredFood = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredFood();
-        List<String> preferredArea = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredArea();
+
         return TotalInfoDto.builder()
                 .productDtoList(productMainPageMapper.findAll())
-                .preferredFood(preferredFood)
-                .preferredArea(preferredArea)
+
                 .build();
     }
 
-    public List<TotalInfoDto> findProductByFood(String customerId){
-
-        return productMainPageMapper.findCategoryByFood(customerId);
+    public List<TotalInfoDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response){
+        List<String> preferredFood = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredFood();
+        return productMainPageMapper.findCategoryByFood(preferredFood);
     }
 
-    public List<TotalInfoDto> findProductByArea(String customerId){
-
+    public List<TotalInfoDto> findProductByArea(String customerId, HttpServletRequest request, HttpServletResponse response){
         return productMainPageMapper.findCategoryByArea(customerId);
     }
 

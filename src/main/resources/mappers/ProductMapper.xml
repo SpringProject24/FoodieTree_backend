@@ -28,7 +28,7 @@
         JOIN tbl_store s
         ON p.store_id = s.store_id
         WHERE s.category IN
-        <foreach collection="productTotal" item="arr" open="(" close=")" separator=",">
+        <foreach collection="preferredFood" item="arr" open="(" close=")" separator=",">
             #{arr.preferredFood} -- 카테고리 리스트를 IN 절에 포함시킴
         </foreach>
     </select>
@@ -51,13 +51,14 @@
         f.pre_area
         FROM
         ( SELECT
-        SUBSTRING_INDEX(address, ' ', 3) AS simplified_address
+        SUBSTRING_INDEX(address, ' ', 2) AS simplified_address
         FROM tbl_store ) s
         JOIN
         ( SELECT
         preferred_area AS pre_area
         FROM
-        tbl_fav_area ) f
+        tbl_fav_area
+        where customer_id = #{customerId}) f
         ON s.simplified_address = f.pre_area )
     </select>
 
