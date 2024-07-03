@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.nmfw.foodietree.domain.auth.mapper.EmailMapper">
+
+    <insert id="save">
+        INSERT INTO
+            tbl_verification_code
+                (
+                    customer_id,
+                    code,
+                    expiry_date
+                )
+        VALUES
+                (
+                    #{customerId},
+                    #{code},
+                    #{expiryDate}
+                )
+    </insert>
+
+<!--      현재시간으로부터 유효한 코드 가져옴-->
+    <select id="findByEmail" resultType="EmailCodeDto">
+        SELECT
+            customer_id,
+            code,
+            expiry_date
+        FROM
+            tbl_verification_code
+        WHERE
+            customer_id = #{customerId}
+        AND
+            expiry_date > NOW()
+        ORDER BY
+        expiry_date DESC
+        LIMIT 1
+    </select>
+</mapper>

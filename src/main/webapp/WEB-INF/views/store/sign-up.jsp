@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodieTree</title>
     <link rel="stylesheet" href="/assets/css/common.css">
-    <link rel="stylesheet" href="/assets/css/sign-up.css">
+    <link rel="stylesheet" href="/assets/css/store/sign-up.css">
 </head>
 <body>
 <header>

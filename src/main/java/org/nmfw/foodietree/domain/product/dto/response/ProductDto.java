@@ -3,15 +3,15 @@ package org.nmfw.foodietree.domain.product.dto.response;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Getter
-@ToString
+@Getter@ToString @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+public class ProductDto {
 
-public class ProductFindByCategoryDto {
     private String storeId;
     private String productId;
     private LocalDateTime pickupTime;
@@ -19,5 +19,8 @@ public class ProductFindByCategoryDto {
     private String storeImg;
     private String storeName;
     private String category;
+    private String address;
     private int price;
+    private int productCnt;
+    private String proImage;
 }

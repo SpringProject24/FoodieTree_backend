@@ -39,3 +39,4 @@ out/
 ## foodieTree project
 .idea/
 env.properties
+.DS_Store

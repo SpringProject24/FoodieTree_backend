@@ -11,7 +11,7 @@
 <body>
 <header>
     <div class="container">
-        <div class="logo">FoodieTree </div>
+        <div class="logo">FoodieTree</div>
         <div class="logo-img">
             <img src="/assets/img/img_2.png" alt="">
         </div>
@@ -75,7 +75,7 @@
         if ($btnWrapper.querySelector('.checked').id === 'store-btn') {
             location.href = '/store/find-pw';
         } else if ($btnWrapper.querySelector('.checked').id === 'customer-btn') {
-            location.href = '/find-pw';
+            location.href = '/customer/find-pw';
         }
     });
 
@@ -84,7 +84,7 @@
         if ($btnWrapper.querySelector('.checked').id === 'store-btn') {
             location.href = '/store/sign-up';
         } else if ($btnWrapper.querySelector('.checked').id === 'customer-btn') {
-            location.href = '/sign-up';
+            location.href = '/customer/sign-up';
         }
     });
 

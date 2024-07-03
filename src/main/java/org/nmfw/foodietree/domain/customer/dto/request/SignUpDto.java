@@ -19,9 +19,9 @@ import java.util.List;
 public class SignUpDto {
 
     @NotBlank(message = "아이디를 입력해주세요")
+    @Size(min = 5, max = 50, message = "아이디는 5자에서 50자 사이여야 합니다")
     @Email(message = "유효한 이메일 주소를 입력해주세요")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-    private String customerId;
+    private String customerId; // 아이디
 
     @NotBlank(message = "비밀번호를 입력해주세요")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",

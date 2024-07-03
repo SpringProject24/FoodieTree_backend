@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerFavStoreDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
+import org.nmfw.foodietree.domain.customer.dto.resp.PreferredFoodDto;
 import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
 import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 
@@ -44,18 +45,81 @@ public interface CustomerMyPageMapper {
     );
 
     /**
-     *
-     * @param customerId : 업데이트할 회원 아이디
-     * @param preferredValue : preferredFood는 enum인 PreferredFoodCategory
+     * 선호 지역 추가
+     * @param customerId : 해당 고객 email
+     * @param value : 추가할 주소 ex) 서울특별시 은평구
      */
-    void updateCustomerPreference(
+    void addPreferenceArea(
             @Param("customerId") String customerId,
-            @Param("preferredValue") String preferredValue
-            );
+            @Param("value") String value
+    );
 
-    // 예약 업데이트
+    /**
+     * 선호 음식 추가
+     * @param customerId : 해당 고객 email
+     * @param value : foodCategory Enum의 koreanName
+     */
+    void addPreferenceFood(
+            @Param("customerId") String customerId,
+            @Param("value") String value
+    );
+
+    /**
+     * 선호 지역 삭제
+     * @param customerId : 해당 고객 email
+     * @param target : 삭제할 지역 주소 ex) 서울특별시 은평구
+     */
+    void deletePreferenceArea(
+            @Param("customerId") String customerId,
+            @Param("target") String target
+    );
+
+    /**
+     * 선호 음식 삭제
+     * @param customerId : 해당 고객 email
+     * @param target: foodCategory Enum의 koreanName
+     */
+    void deletePreferenceFood(
+            @Param("customerId") String customerId,
+            @Param("target") String target
+    );
+
+    /**
+     * 선호 가게 추가
+     * @param customerId : 해당 고객 email
+     * @param value: 가게 아이디 ( email) store_id
+     */
+    void addFavStore(
+            @Param("customerId") String customerId,
+            @Param("value") String value
+    );
+
+    /**
+     * 선호 가게 삭제
+     * @param customerId : 해당 고객 email
+     * @param target : 가게 아이디 (email) store_id
+     */
+    void deleteFavStore(
+            @Param("customerId") String customerId,
+            @Param("target") String target
+    );
+
+    /**
+     *
+     * @param customerId
+     */
     void updateReservation(String customerId);
 
-    // 픽업 확인
+    /**
+     *
+     * @param customerId
+     */
     void confirmPickUp(String customerId);
+
+    /**
+     *
+     * @param newNickname
+     * @return
+     */
+    boolean isNicknameDuplicate(String newNickname);
 }

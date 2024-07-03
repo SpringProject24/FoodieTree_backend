@@ -48,16 +48,16 @@ class CustomerMyPageMapperTest {
     }
 
 
-    @Test
-    @DisplayName("선호 음식을 추출해옴")
-    void findPreferenceFoodTest() {
-        //given
-        String customerId = "test@gmail.com";
-        //when
-        List<String> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
-        //then
-        System.out.println("preferenceAreas = " + preferenceFoods);
-    }
+//    @Test
+//    @DisplayName("선호 음식을 추출해옴")
+//    void findPreferenceFoodTest() {
+//        //given
+//        String customerId = "test@gmail.com";
+//        //when
+//        List<String> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
+//        //then
+//        System.out.println("preferenceAreas = " + preferenceFoods);
+//    }
 
     @Test
     @DisplayName("회원 개인정보 업데이트")
@@ -81,7 +81,12 @@ class CustomerMyPageMapperTest {
         //when
         List<ReservationDetail> reservations = customerMyPageMapper.findReservations(customerId);
         //then
-        System.out.println("reservations = " + reservations);
+//        System.out.println("reservations = " + reservations);
+
+        for (ReservationDetail reservation : reservations) {
+            System.out.println("reservation = " + reservation.getReservationId());
+            System.out.println("reservation = " + reservation.getStoreName());
+        }
     }
 
     @Test
@@ -104,5 +109,16 @@ class CustomerMyPageMapperTest {
         List<CustomerFavStoreDto> favStore = customerMyPageMapper.findFavStore(customerId);
         //then
         System.out.println("favStore = " + favStore);
+    }
+    
+    @Test
+    @DisplayName("닉네임 중복 검사")
+    void checkNicknameTest() {
+        //given
+        String nickname = "나는야김테스트";
+        //when
+        boolean nicknameDuplicate = customerMyPageMapper.isNicknameDuplicate(nickname);
+        //then
+        System.out.println("nicknameDuplicate = " + nicknameDuplicate);
     }
 }

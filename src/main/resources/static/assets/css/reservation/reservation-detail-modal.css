@@ -1,0 +1,35 @@
+/* 모달 스타일 */
+.modal {
+    display: none; /* 모달 숨기기 */
+    position: fixed; /* 고정 위치 */
+    z-index: 1; /* 다른 요소들 위에 */
+    left: 0;
+    top: 0;
+    width: 100%; /* 전체 너비 */
+    height: 100%; /* 전체 높이 */
+    overflow: auto; /* 스크롤 가능 */
+    background-color: rgb(0,0,0); /* 검정 배경 */
+    background-color: rgba(0,0,0,0.4); /* 불투명한 배경 */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 화면 가운데 배치 */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* 너비 조절 */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

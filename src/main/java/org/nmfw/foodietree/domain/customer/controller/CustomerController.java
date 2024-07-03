@@ -4,14 +4,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.request.CustomerLoginDto;
 import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
+import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.nmfw.foodietree.domain.customer.service.LoginResult;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -30,10 +36,10 @@ public class CustomerController {
 
     @Value("${env.kakao.api.key:default}")
     private String kakaoApiKey;
-
     private final CustomerService customerService;
 
-    // 회원가입 양식 열기
+
+    //회원가입 양식 열기
     @GetMapping("/sign-up")
     public String signUp(Model model) {
         log.info("customer/sign-up GET : forwarding to sign-up.jsp");
@@ -50,7 +56,7 @@ public class CustomerController {
         }
 
         boolean flag = customerService.join(dto);
-        return flag ? "redirect:/product/sign-in" : "redirect:/customer/sign-up";
+        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
     }
 
     // 아이디 중복검사
@@ -72,7 +78,7 @@ public class CustomerController {
        }
 
         log.info("/customer/sign-in GET : forwarding to sign-in.jsp");
-        return "sign-in";
+        return "/sign-in";
     }
 
     //로그인 요청 처리

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.nmfw.foodietree.domain.product.mapper.ProductApprovalMapper">
+
+    <!-- 상품 컬럼 정보 삽입 -->
+    <insert id="productColumn">
+        INSERT INTO tbl_product
+        (product_id, store_id, pro_image)
+        VALUES
+        (#{productId}, #{storeId}, #{proImage})
+    </insert>
+
+    <!-- 업체 컬럼 정보 삽입 -->
+    <update id="storeColumn">
+        UPDATE tbl_store
+        SET
+        price = #{price},
+        product_cnt = #{productCnt}
+        WHERE store_id = #{storeId}
+    </update>
+
+
+
+
+</mapper>

@@ -1,0 +1,148 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #fff;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+.menu-button {
+    font-size: 24px;
+    background: none;
+    border: none;
+    margin-right: 20px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: auto;
+}
+
+.search-bar {
+    flex-grow: 1;
+    padding: 5px;
+    margin-right: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.profile-button,
+.sign-out-button {
+    background-color: #eee;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+main {
+    padding: 20px;
+}
+
+.category {
+    margin-bottom: 40px;
+}
+
+.category h2 {
+    margin-bottom: 10px;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: calc(33.333% - 20px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.photo {
+    background-color: #ccffcc;
+    text-align: center;
+    padding: 40px 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.info {
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.info p {
+    margin: 5px 0;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.prev-button,
+.next-button {
+    background-color: #eee;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+footer {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+    padding: 20px;
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.store-links img {
+    width: 120px;
+    margin: 10px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.footer-links a {
+    margin: 5px 10px;
+    color: #000;
+    text-decoration: none;
+}
+
+.footer-legal {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.footer-legal a {
+    margin: 5px 10px;
+    color: #000;
+    text-decoration: none;
+}
+
+.footer-content p {
+    margin: 10px 0;
+}

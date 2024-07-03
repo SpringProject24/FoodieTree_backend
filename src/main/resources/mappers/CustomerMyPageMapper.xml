@@ -36,11 +36,13 @@
     </select>
 
     <!-- 선호하는 음식 가져오기 -->
-    <select id="findPreferenceFoods" resultType="String">
+    <select id="findPreferenceFoods" resultType="PreferredFoodDto">
         SELECT
-            preferred_food
+            f.preferred_food,
+            fc.food_image
         FROM
-            tbl_fav_food
+            tbl_fav_food f
+        JOIN tbl_food_category fc ON fc.food_name = f.preferred_food
         WHERE
             customer_id = #{customerId}
     </select>
@@ -69,6 +71,7 @@
 
     <select id="findReservations" resultType="ReservationDetail">
         SELECT
+            r.reservation_id,
             r.customer_id,
             r.product_id,
             r.reservation_time,
@@ -88,7 +91,9 @@
         JOIN tbl_store s ON p.store_id = s.store_id
         JOIN tbl_customer c ON r.customer_id = c.customer_id
         WHERE
-            r.customer_id = #{customerId};
+            r.customer_id = #{customerId}
+        ORDER BY p.pickup_time DESC
+        ;
     </select>
 
     <select id="findIssues" resultType="CustomerIssues">
@@ -121,5 +126,53 @@
         WHERE
             customer_id = #{customerId}
     </select>
+
+    <select id="isNicknameDuplicate" resultType="boolean">
+        SELECT
+            COUNT(*)
+        FROM
+            tbl_customer
+        WHERE
+            nickname = #{nickname}
+    </select>
+
+    <insert id="addPreferenceArea">
+        INSERT INTO tbl_fav_area
+            (customer_id, preferred_area)
+        VALUES
+            (#{customerId}, #{value})
+    </insert>
+
+    <delete id="deletePreferenceArea">
+        DELETE FROM tbl_fav_area
+        WHERE customer_id = #{customerId}
+            AND preferred_area = #{target}
+    </delete>
+
+    <insert id="addPreferenceFood">
+        INSERT INTO tbl_fav_food
+            (customer_id, preferred_food)
+        VALUES
+            (#{customerId}, #{value})
+    </insert>
+
+    <delete id="deletePreferenceFood">
+        DELETE FROM tbl_fav_food
+        WHERE customer_id = #{customerId}
+                AND preferred_food = #{target}
+    </delete>
+
+    <insert id="addFavStore">
+        INSERT INTO tbl_fav_store
+            (customer_id, store_id)
+        VALUES
+            (#{customerId}, #{value})
+    </insert>
+
+    <delete id="deleteFavStore">
+        DELETE FROM tbl_fav_store
+        WHERE customer_id = #{customerId}
+                AND store_id = #{target}
+    </delete>
 
 </mapper>

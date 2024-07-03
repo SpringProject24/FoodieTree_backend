@@ -2,17 +2,13 @@ package org.nmfw.foodietree.domain.customer.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.customer.dto.resp.CustomerFavStoreDto;
-import org.nmfw.foodietree.domain.customer.dto.resp.CustomerIssueDetailDto;
-import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
-import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
+import org.nmfw.foodietree.domain.customer.dto.resp.*;
 import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
 import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
-import org.nmfw.foodietree.domain.customer.entity.value.IssueCategory;
 import org.nmfw.foodietree.domain.customer.entity.value.IssueStatus;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
-import org.nmfw.foodietree.domain.customer.entity.value.PreferredFoodCategory;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +25,7 @@ import static org.nmfw.foodietree.domain.customer.entity.value.IssueStatus.*;
 @Slf4j
 public class CustomerMyPageService {
     private final CustomerMyPageMapper customerMyPageMapper;
+    private final PasswordEncoder encoder;
 
     // customer 마이페이지 소비자 정보 조회 중간 처리
     public CustomerMyPageDto getCustomerInfo(String customerId, HttpServletRequest request, HttpServletResponse response) {
@@ -38,17 +35,12 @@ public class CustomerMyPageService {
         List<String> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
         List<CustomerFavStoreDto> favStore = customerMyPageMapper.findFavStore(customerId);
 
-        // preferenceFoods String 반환 된 값들 enum(PreferredFoodCategory)으로 변경
-        List<PreferredFoodCategory> preferredFoodCategories = preferenceFoods.stream()
-                .map(PreferredFoodCategory::fromKoreanName)
-                .collect(Collectors.toList());
-
         return CustomerMyPageDto.builder()
                 .customerId(customer.getCustomerId())
                 .nickname(customer.getNickname())
                 .profileImage(customer.getProfileImage())
                 .customerPhoneNumber(customer.getCustomerPhoneNumber())
-                .preferredFood(preferredFoodCategories)
+                .preferredFood(preferenceFoods)
                 .preferredArea(preferenceAreas)
                 .favStore(favStore)
                 .build();
@@ -64,25 +56,29 @@ public class CustomerMyPageService {
         List<ReservationDetail> reservations = customerMyPageMapper.findReservations(customerId);
 
         return reservations.stream().map(reservation -> MyPageReservationDetailDto.builder()
+                .reservationId(reservation.getReservationId())
                 .customerId(reservation.getCustomerId())
                 .nickname(reservation.getNickname())
                 .reservationTime(reservation.getReservationTime())
                 .cancelReservationAt(reservation.getCancelReservationAt())
                 .pickedUpAt(reservation.getPickedUpAt())
                 .status(determinePickUpStatus(reservation))
-                .pickUpTime(reservation.getPickupTime())
+                .pickupTime(reservation.getPickupTime())
                 .storeName(reservation.getStoreName())
                 .storeImg(reservation.getStoreImg())
+                .price(reservation.getPrice())
                 .build()
         ).collect(Collectors.toList());
     }
 
-    private PickUpStatus determinePickUpStatus(ReservationDetail reservation) {
-        if (reservation.getCancelReservationAt() != null) {
-            return PickUpStatus.CANCELED;
-        }else if(reservation.getPickedUpAt() != null) {
+    public PickUpStatus determinePickUpStatus(ReservationDetail reservation) {
+        if (reservation.getPickedUpAt() != null) {
             return PickUpStatus.PICKEDUP;
-        }else{
+        } else if (reservation.getCancelReservationAt() != null) {
+            return PickUpStatus.CANCELED;
+        } else if (reservation.getPickupTime().isBefore(LocalDateTime.now())) {
+            return PickUpStatus.NOSHOW;
+        } else {
             return PickUpStatus.RESERVED;
         }
     }
@@ -116,5 +112,88 @@ public class CustomerMyPageService {
         }else{
             return SOLVED;
         }
+    }
+
+    public boolean updateCustomerInfo(String customerId, List<UpdateDto> updates) {
+        for (UpdateDto update : updates) {
+            String type = update.getType();
+            String value = update.getValue();
+            log.info("update type: {}, value: {}", type, value);
+            if ("preferredFood".equals(type)) {
+                customerMyPageMapper.addPreferenceFood(customerId, value);
+                return true;
+            }
+            else if("preferredArea".equals(type)) {
+                customerMyPageMapper.addPreferenceArea(customerId, value);
+                return true;
+            }
+            else if("favStore".equals(type)) {
+                customerMyPageMapper.addFavStore(customerId, value);
+                return true;
+            }
+            else{
+                customerMyPageMapper.updateCustomerInfo(customerId, type, value);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteCustomerInfo(String customerId, List<UpdateDto> dtos) {
+        for (UpdateDto delete : dtos) {
+            String type = delete.getType();
+            String target = delete.getValue();
+
+            log.info("delete type: {}, target: {}", type, target);
+
+            if("preferredFood".equals(type)) {
+                customerMyPageMapper.deletePreferenceFood(customerId, target);
+                return true;
+            }
+            if("preferredArea".equals(type)) {
+                customerMyPageMapper.deletePreferenceArea(customerId, target);
+                return true;
+            }
+            if("favStore".equals(type)) {
+                customerMyPageMapper.deleteFavStore(customerId, target);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateCustomerPw(String customerId, String newPassword) {
+        String encodedPw = encoder.encode(newPassword);
+        customerMyPageMapper.updateCustomerInfo(customerId,"customer_password", encodedPw);
+        return true;
+    }
+
+    public statsDto getStats(String customerId){
+        List<ReservationDetail> reservations = customerMyPageMapper.findReservations(customerId);
+
+        // 예약 내역 중 pickedUpAt이 null이 아닌 것들의 리스트
+        List<ReservationDetail> pickedUpReservations = reservations.stream()
+                .filter(reservation -> reservation.getPickedUpAt() != null)
+                .collect(Collectors.toList());
+
+        // pickedUpAt이 null이 아닌 것들의 개수
+        int total = pickedUpReservations.size();
+
+        // CO2 계산
+        double coTwo = total * 0.12;
+
+        // totalPrice 계산
+        int totalPrice = pickedUpReservations.stream()
+                .mapToInt(ReservationDetail::getPrice)
+                .sum();
+
+        // money 계산
+        int money = (int) (totalPrice * 0.7);
+
+        return statsDto.builder()
+                .total(total)
+                .coTwo(coTwo)
+                .money(money)
+                .build();
     }
 }

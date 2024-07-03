@@ -1,5 +1,10 @@
 package org.nmfw.foodietree.domain.customer.service;
 
+import static org.nmfw.foodietree.domain.customer.service.LoginResult.NO_ID;
+import static org.nmfw.foodietree.domain.customer.service.LoginResult.NO_PW;
+import static org.nmfw.foodietree.domain.customer.service.LoginResult.SUCCESS;
+
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.request.AutoLoginDto;
@@ -14,10 +19,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
-import static org.nmfw.foodietree.domain.customer.service.LoginResult.SUCCESS;
 import static org.nmfw.foodietree.domain.customer.util.LoginUtil.*;
 
 @Service
@@ -48,24 +51,24 @@ public class CustomerService {
 	public LoginResult authenticate(CustomerLoginDto dto, HttpSession session,
 									HttpServletResponse response) {
 
-		// 회원가입 여부 확인
+		//회원가입 여부 확인
 		String customerId = dto.getCustomerId();
 		Customer foundCustomer = customerMapper.findOne(customerId);
 
-
+		//customer가 null일 경우
 		if (foundCustomer == null) {
 			log.info("{} - 회원가입이 필요합니다.", customerId);
-			return LoginResult.NO_ID;
+			return NO_ID;
 		}
 
-		// 비밀번호 일치 확인
-		String inputPassword = dto.getCustomerPassword();
+		//비밀번호 일치 검사
+		String inputCustomerPassword = dto.getCustomerPassword();
 		String originPassword = foundCustomer.getCustomerPassword();
 
-		//비밀번호 암호화
-		if (!encoder.matches(inputPassword, originPassword)) {
+		//실제 비밀번호와 암호화된 비밀번호 비교
+		if (!encoder.matches(inputCustomerPassword, originPassword)) {
 			log.info("비밀번호가 일치하지 않습니다.");
-			return LoginResult.NO_PW;
+			return NO_PW;
 		}
 
 		// 자동로그인 추가 처리
