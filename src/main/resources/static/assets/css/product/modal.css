@@ -114,9 +114,34 @@
     color: var(--header-font-color);
 }
 
-.detail .store-area-wrapper {
-    margin-top: 1rem;
+.detail .wrapper {
+    margin: 1rem 0;
     display: flex;
+}
+
+.detail i {
+    margin-right: 10px;
+}
+
+.detail .desc-area svg {
+    margin-right: 10px;
+    width: 80px;
+}
+
+.detail .desc-area p {
+    display: flex;
+    align-items: center;
+}
+
+.detail .rate-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.detail .rate-area p {
+    margin-bottom: 5px;
 }
 
 
