@@ -92,4 +92,15 @@ public class StoreMyPageService {
         log.info("service get holidays");
         return storeMyPageMapper.getHolidays(storeId);
     }
+
+    public boolean checkHoliday(String storeId, String date) {
+        log.info("service check holiday");
+        List<StoreHolidayDto> holidays = storeMyPageMapper.getHolidays(storeId);
+        for (StoreHolidayDto holiday : holidays) {
+            if (holiday.getHolidays().equals(date)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

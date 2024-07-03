@@ -71,4 +71,11 @@ public class StoreMyPageController {
         List<StoreHolidayDto> holidays = storeMyPageService.getHolidays(storeId);
         return holidays;
     }
+
+    // 해당 날짜가 휴무일이면 true 반환
+    @GetMapping("/main/calendar/check/holiday")
+    public boolean checkHoliday(@RequestParam String date) {
+        log.info("check holiday");
+        return storeMyPageService.checkHoliday(storeId, date);
+    }
 }
