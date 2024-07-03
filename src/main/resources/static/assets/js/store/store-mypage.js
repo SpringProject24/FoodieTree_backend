@@ -8,6 +8,8 @@ const nextMonthButton = document.getElementById('next-month');
 
 const $reservationList = document.querySelector('.reservation-list');
 
+const $productCount = document.getElementById('product-count');
+
 // 모달 관련 요소
 const $reservationModal = document.getElementById('reservation-modal');
 const $modalDetails = document.getElementById('modal-store-reservation-details');
@@ -279,9 +281,11 @@ $addProductButton.addEventListener('click', async e => {
 
                 const result = await response.json();
                 if (result === true) {
-                    console.log('수량이 업데이트되었습니다.');
-                    // 여기에 필요한 UI 업데이트 로직 추가
                     $updateBtn.disabled = true; // 업데이트 버튼 비활성화
+                    alert('수량이 업데이트되었습니다.')?closeModal($productAddModal):closeModal($productAddModal);
+
+                    await updateProductCount();
+                    // 여기에 필요한 UI 업데이트 로직 추가
                 } else {
                     console.error('수량 업데이트 실패');
                     // 실패 시 처리 로직 추가
@@ -340,9 +344,41 @@ $reservationList.addEventListener('click', e => {
     }
 });
 
+async function updateProductCount() {
+    try {
+        // 서버에서 데이터 가져오기
+        const response = await fetch(`${BASE_URL}/store/mypage/main/getProductCount`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch product count');
+        }
+        const data = await response.json();
+        console.log(data); // 데이터 확인용
+
+        // UI 업데이트
+        const $count = document.getElementById('count');
+        const $todayPickedUp = document.getElementById('today-picked-up');
+        const $todayReadyPickedUp = document.getElementById('today-ready-picked-up');
+        const $remain = document.getElementById('remain');
+
+        $count.textContent = `${data.todayProductCnt}개 업데이트 되어있습니다`;
+        $todayPickedUp.textContent = `${data.todayPickedUpCnt}개 픽업완료 되었습니다`;
+        $todayReadyPickedUp.textContent = `${data.readyToPickUpCnt}개 픽업 예정입니다`;
+
+        if (data.remainCnt === 0) {
+            $remain.textContent = '모두 팔렸어요';
+        } else {
+            $remain.textContent = `${data.remainCnt}개 아직 안팔렸어요`;
+        }
+    } catch (error) {
+        console.error('Error updating product count:', error);
+    }
+}
+
 // ========= 함수 실행 =========
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await updateProductCount();
+
     prevMonthButton.addEventListener('click', () => {
         currentMonth--;
         if (currentMonth < 0) {

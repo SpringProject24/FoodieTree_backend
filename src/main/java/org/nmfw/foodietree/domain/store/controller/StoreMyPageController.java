@@ -34,13 +34,21 @@ public class StoreMyPageController {
         StoreMyPageDto storeInfo = storeMyPageService.getStoreMyPageInfo(storeId);
         List<StoreReservationDto> reservations = storeMyPageService.findReservations(storeId);
         StoreStatsDto stats = storeMyPageService.getStats(storeId);
-        StoreProductCountDto count = storeMyPageService.getStoreProductCnt(storeId);
+//        StoreProductCountDto count = storeMyPageService.getStoreProductCnt(storeId);
 
         model.addAttribute("storeInfo", storeInfo);
         model.addAttribute("reservations", reservations);
         model.addAttribute("stats", stats);
-        model.addAttribute("count", count);
+//        model.addAttribute("count", count);
         return "store/store-mypage-test";
+    }
+
+    @GetMapping("/main/getProductCount")
+    public ResponseEntity<StoreProductCountDto> getProductCount() {
+        log.info("store my page get product count");
+        StoreProductCountDto dto = storeMyPageService.getStoreProductCnt(storeId);
+        log.debug(dto.toString());
+        return ResponseEntity.ok().body(dto);
     }
 
     @GetMapping("/main/calendar/{dateString}")

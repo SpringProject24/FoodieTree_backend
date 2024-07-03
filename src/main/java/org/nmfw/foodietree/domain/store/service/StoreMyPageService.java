@@ -163,7 +163,7 @@ public class StoreMyPageService {
         }
 
         List<ProductInfoDto> dto = storeMyPageMapper.getProductCntByDate(storeId, today.toString());
-
+        // true false 뭐로 반환할지 생각좀...
         return true;
     }
 }

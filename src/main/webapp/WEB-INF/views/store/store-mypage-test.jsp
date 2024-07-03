@@ -115,16 +115,10 @@
             <div id="product-count">
                 <div class="title">
                     <h3 class="title-text">오늘의 랜덤박스 현황</h3>
-                    <div id="count">${count.todayProductCnt}개 업데이트 되어있습니다</div>
-                    <div id="today-picked-up">${count.todayPickedUpCnt}개 픽업완료 되었습니다</div>
-                    <div id="today-ready-picked-up">${count.readyToPickUpCnt}개 픽업 예정입니다</div>
-<%--                    <div id="today-canceled">${count.remainCnt}</div>--%>
-                    <c:if test="${count.remainCnt == 0}">
-                        모두 팔렸어요
-                    </c:if>
-                    <c:if test="${count.remainCnt > 0}">
-                        ${count.remainCnt}개 아직 안팔렸어요
-                    </c:if>
+                    <div id="count"></div>
+                    <div id="today-picked-up"></div>
+                    <div id="today-ready-picked-up"></div>
+                    <div id="remain"></div>
                     <br>
                     <button id="product-update-btn">수량업데이트 하기</button>
                 </div>
