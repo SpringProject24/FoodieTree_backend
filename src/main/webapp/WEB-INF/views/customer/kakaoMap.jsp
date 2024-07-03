@@ -10,7 +10,7 @@
       .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
       #centerAddr {display:block;margin-top:2px;font-weight: normal;}
       .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-  </style>
+    </style>
 
 </head>
 <body>
@@ -21,86 +21,87 @@
         <span id="centerAddr"></span>
     </div>
 </div>
-<p>
-  <button onclick="hideMarkers()">마커 감추기</button>
-  <button onclick="showMarkers()">마커 보이기</button>
-</p>
-<body>
-<!-- 지도를 표시할 div 입니다 -->
-<div id="map" style="width:100%;height:500px;"></div>
-
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=23a893b0e496d68634075f77978aa570"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=LIBRARY"></script>
-<!-- services 라이브러리 불러오기 -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services"></script>
-<!-- services와 clusterer, drawing 라이브러리 불러오기 -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer,drawing"></script>
-
-
+<%--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${key}"></script>--%>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${key}&libraries=services"></script>
 <script>
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-    mapOption = {
-        center: new kakao.maps.LatLng(37.55649, 126.9452), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };
+  var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+      mapOption = {
+        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+        level: 1 // 지도의 확대 레벨
+      };
 
-var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+  // 지도를 생성합니다
+  var map = new kakao.maps.Map(mapContainer, mapOption);
 
+  // 주소-좌표 변환 객체를 생성합니다
+  var geocoder = new kakao.maps.services.Geocoder();
 
-// 지도를 클릭했을때 클릭한 위치에 마커를 추가하도록 지도에 클릭이벤트를 등록합니다
-kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-    // 클릭한 위치에 마커를 표시합니다
-    addMarker(mouseEvent.latLng);
-});
-
-// 지도에 표시된 마커 객체를 가지고 있을 배열입니다
-var markers = [];
-
-// 마커 하나를 지도위에 표시합니다
-// addMarker(new kakao.maps.LatLng(37.55649, 126.9452));
-
-// 마커를 생성하고 지도위에 표시하는 함수입니다
-function addMarker(position) {
-
-  if(markers.length<=2){
-    // 마커를 생성합니다
-    var marker = new kakao.maps.Marker({
-        position: position
-    });
-
-    // 마커가 지도 위에 표시되도록 설정합니다
-    marker.setMap(map);
-
-    // 생성된 마커를 배열에 추가합니다
-    markers.push(marker);
-
-    // 마커가 드래그 가능하도록 설정합니다
-    marker.setDraggable(true);
+  var marker = new kakao.maps.Marker(); // 클릭한 위치를 표시할 마커입니다
+  var infowindow = new kakao.maps.InfoWindow({zindex:1});
+  const array = [];
+  for (let i = 0; i < 3; i++) {
+    array[i] = new kakao.maps.InfoWindow({zindex:1});
   }
 
-}
+  // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
+  searchAddrFromCoords(map.getCenter(), displayCenterInfo);
 
+  // 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
+  kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+    searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        var detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
+        detailAddr += '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
 
-// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
-function setMarkers(map) {
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(map);
+        var content = '<div class="bAddr">' +
+            '<span class="title">법정동 주소정보</span>' +
+            detailAddr +
+            '</div>';
+
+        // 마커를 클릭한 위치에 표시합니다
+        marker.setPosition(mouseEvent.latLng);
+        marker.setMap(map);
+
+        // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
+        for (const x of array) {
+          if (x.get()) {
+          }
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+            console.log(infowindow.cc, infowindow)
+      }
+    });
+  });
+
+  // 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
+  kakao.maps.event.addListener(map, 'idle', function() {
+    searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+  });
+
+  function searchAddrFromCoords(coords, callback) {
+    // 좌표로 행정동 주소 정보를 요청합니다
+    geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+  }
+
+  function searchDetailAddrFromCoords(coords, callback) {
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+  }
+
+  // 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
+  function displayCenterInfo(result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      var infoDiv = document.getElementById('centerAddr');
+
+      for(var i = 0; i < result.length; i++) {
+        // 행정동의 region_type 값은 'H' 이므로
+        if (result[i].region_type === 'H') {
+          infoDiv.innerHTML = result[i].address_name;
+          break;
+        }
+      }
     }
-}
-
-// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
-function showMarkers() {
-    setMarkers(map)
-}
-
-// "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
-function hideMarkers() {
-    setMarkers(null);
-}
-
-
-
-
+  }
 </script>
 </body>
 </html>
