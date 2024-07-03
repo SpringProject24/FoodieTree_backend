@@ -40,6 +40,9 @@ public class ProductMainPageController {
         log.info("/product/mainpage-main POST");
 
         TotalInfoDto totalInfo = productMainPageService.getProductInfo(request, response, customerId);
+        totalInfo.getProductDtoList().forEach(e -> {
+            log.info("{}", e);
+        });
         List<TotalInfoDto> productByFood = productMainPageService.findProductByFood(customerId);
         List<TotalInfoDto> productByArea = productMainPageService.findProductByArea(customerId);
         model.addAttribute("productTotal", totalInfo);

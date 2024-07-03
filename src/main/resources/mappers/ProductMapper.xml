@@ -17,7 +17,7 @@
         ON p.store_id = s.store_id
     </select>
 
-    <select id="findCategoryByFood" resultType="org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto">
+    <select id="findCategoryByFood" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
         SELECT
         s.store_name,
         s.price,
@@ -33,7 +33,7 @@
         </foreach>
     </select>
 
-    <select id="findCategoryByArea" resultType="org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto">
+    <select id="findCategoryByArea" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
         SELECT
         p.product_id, -- 상품 ID
         p.store_id, -- 가게 ID
@@ -72,16 +72,16 @@
         JOIN tbl_store s
         ON p.store_id = s.store_id
         WHERE (
-        SELECT
-        fs.customer_id,
-        fs.store_id,
-        s.store_name,
-        s.store_img
-        FROM
-        tbl_fav_store fs
-        JOIN tbl_store s ON fs.store_id = s.store_id
-        WHERE
-        customer_id = #{customerId}
+            SELECT
+            fs.customer_id,
+            fs.store_id,
+            s.store_name,
+            s.store_img
+            FROM
+            tbl_fav_store fs
+            JOIN tbl_store s ON fs.store_id = s.store_id
+            WHERE
+            customer_id = #{customerId}
         )
 
 

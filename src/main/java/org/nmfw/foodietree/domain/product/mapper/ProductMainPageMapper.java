@@ -20,16 +20,4 @@ public interface ProductMainPageMapper {
 
 
 
-
-    ProductDto findOne (String productId);
-
-    boolean save(ProductDto productDto);
-
-    List<String> categoryByFoodList(@Param("category") List<String> category);
-
-    List<String> categoryByAreaList(@Param("Area") List<String> preferenceAreas);
-
-    ProductDto product();
-
-
 }

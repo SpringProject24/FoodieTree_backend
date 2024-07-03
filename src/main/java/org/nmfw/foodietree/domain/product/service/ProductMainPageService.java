@@ -39,15 +39,13 @@ public class ProductMainPageService {
     }
 
     public List<TotalInfoDto> findProductByFood(String customerId){
-        List<TotalInfoDto> categoryByFood = productMainPageMapper.findCategoryByFood(customerId);
 
-        return categoryByFood;
+        return productMainPageMapper.findCategoryByFood(customerId);
     }
 
     public List<TotalInfoDto> findProductByArea(String customerId){
-        List<TotalInfoDto> categoryByArea = productMainPageMapper.findCategoryByArea(customerId);
 
-        return categoryByArea;
+        return productMainPageMapper.findCategoryByArea(customerId);
     }
 
 

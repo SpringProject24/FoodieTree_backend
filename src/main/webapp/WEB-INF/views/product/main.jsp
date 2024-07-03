@@ -45,21 +45,26 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     </style>
   </head>
   <body>
-  <c:forEach var="item" items="${productTotal.productDtoList}">
+  <!-- <c:forEach var="item" items="${productTotal.productDtoList}">
       <div>
         ${item.storeName}
       </div>
   </c:forEach>
-  <c:forEach var="item" items="${productTotal.preferredArea}">
+  <c:if test="${productTotal.preferredArea.size() != 0}">
+    <c:forEach var="item" items="${productTotal.preferredArea}">
+        <div>
+          ${item}
+        </div>
+    </c:forEach>
+  </c:if>
+
+  <c:if test="${productTotal.preferredFood.size() != 0}">
+    <c:forEach var="item" items="${productTotal.preferredFood}">
       <div>
         ${item}
       </div>
   </c:forEach>
-  <c:forEach var="item" items="${productTotal.preferredFood}">
-    <div>
-      ${item}
-    </div>
-</c:forEach>
+  </c:if> -->
     <header>
       <div class="container">
         <div class="logo-wrapper">
@@ -160,7 +165,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </div>
         <div class="swiper-wrapper">
           <div class="swiper-slide">
-            <c:forEach var="item" items="${categoryByFood}">
+            <!-- <c:forEach var="item" items="${categoryByFood}">
             <div class="item">
               <div class="store-img-box">
                 <img src="/assets/img/western.jpg" alt="" />
@@ -173,7 +178,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                   <p>가격 : ${item.price}</p>
                 </div>
               </div>
-            </c:forEach>
+            </c:forEach> -->
             </div>
           </div>
           <div class="swiper-slide">
