@@ -66,8 +66,8 @@
             <h2>${storeInfo.storeName}</h2>
             <p>${storeInfo.storeId}</p>
             <ul class="nav">
-                <li class="nav-item"><a class="nav-link" href="store-mypage-test.jsp">마이페이지</a></li>
-                <li class="nav-item"><a class="nav-link" href="store-mypage-edit-test.jsp">개인정보수정</a></li>
+                <li class="nav-item"><a class="nav-link" href="/store/mypage/main">마이페이지</a></li>
+                <li class="nav-item"><a class="nav-link" href="/store/mypage/edit/main">개인정보수정</a></li>
                 <div class="stats">
                     <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
                     <div>지금까지 ${stats.customerCnt}명의 손님을 만났어요</div>

@@ -24,114 +24,60 @@
     </div>
 </header>
 <section class="my-page-area">
-<%--    <div class="container">--%>
-<%--        <div class="profile">--%>
-<%--            <h2>${customerMyPageDto.customerId}</h2>--%>
-<%--            <li class="nav-item"><a class="nav-link" href="store-mypage-test.jsp">마이페이지</a></li>--%>
-<%--            <li class="nav-item"><a class="nav-link" href="store-mypage-edit-test.jsp">개인정보수정</a></li>--%>
-<%--            <div class="stats">--%>
-<%--                <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>--%>
-<%--                <div>지금까지 ${stats.customerCnt}명의 손님을 만났어요</div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--        <div class="edit">--%>
-<%--            <div class="edit-box">--%>
-<%--                <div class="title">--%>
-<%--                    <h3 class="title-text">내프로필</h3>--%>
-<%--                </div>--%>
-<%--                <div class="edit-wrapper">--%>
-<%--                    <div class="input-area">--%>
-<%--                        <div class="input-wrapper">--%>
-<%--                            <div class="icon"><i class="fa-solid fa-user"></i></div>--%>
-<%--                            <input type="text" id="nickname" value="${customerMyPageDto.nickname}">--%>
-<%--                            <div class="icon"><i class="fa-regular fa-square-check"--%>
-<%--                                                 style="color: #45a049; font-size: 25px; cursor: pointer"></i>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                        <div class="input-wrapper">--%>
-<%--                            <div class="icon"><i class="fa-solid fa-phone"></i></div>--%>
-<%--                            <input type="text" id="phone"--%>
-<%--                                   value="${customerMyPageDto.customerPhoneNumber}">--%>
-<%--                            <div class="icon"><i class="fa-regular fa-square-check"--%>
-<%--                                                 style="color: #45a049; font-size: 25px; cursor: pointer"></i>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                        <div class="input-wrapper">--%>
-<%--                            <div class="icon"><i class="fa-solid fa-key"></i></div>--%>
-<%--                            <button class="btn">비밀번호 재설정</button>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                    <div class="image-wrapper">--%>
-<%--                        <input type="file" name="profileImage" id="profileImage" accept="image/*"--%>
-<%--                               style="display: none;">--%>
-<%--                        <a href="#" id="avatar" class="before">--%>
-<%--                            <i class="fa-solid fa-pen-to-square"></i>--%>
-<%--                            <img--%>
-<%--                                    src="${customerMyPageDto.profileImage ? customerMyPageDto.profileImage : '/assets/img/western.jpg'}"--%>
-<%--                                    alt="Customer profile image">--%>
-<%--                        </a>--%>
-<%--                        <button id="profile_btn" class="btn" type="submit" value="프로필 변경"--%>
-<%--                                style="display: none;">이미지 변경--%>
-<%--                        </button>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--            <div class="edit-box">--%>
-<%--                <div class="title">--%>
-<%--                    <h3 class="title-text">선호지역</h3>--%>
-<%--                </div>--%>
-<%--                <div class="edit-wrapper">--%>
-<%--                    <ul class="preferred">--%>
-<%--                        <c:forEach var="area" items="${customerMyPageDto.preferredArea}"--%>
-<%--                                   varStatus="status">--%>
-<%--                            <li id="area-${status.index}">--%>
-<%--                                <span>${area}</span>--%>
-<%--                                <i class="fa-solid fa-circle-xmark delete-btn"></i>--%>
-<%--                            </li>--%>
-<%--                        </c:forEach>--%>
-<%--                    </ul>--%>
-<%--                </div>--%>
-<%--                <div class="edit-box">--%>
-<%--                    <div class="title">--%>
-<%--                        <h3 class="title-text">선호음식</h3>--%>
-<%--                    </div>--%>
-<%--                    <div class="edit-wrapper">--%>
-<%--                        <ul class="preferred">--%>
-<%--                            <c:forEach var="food" items="${customerMyPageDto.preferredFood}" varStatus="status">--%>
-<%--                                <li id="food-${status.index}">--%>
-<%--                                    <div class="img-box">--%>
-<%--                                        <img src="${food.foodImage}" alt="선호음식이미지">--%>
-<%--                                    </div>--%>
-<%--                                    <span>${food.preferredFood}</span>--%>
-<%--                                    <i class="fa-solid fa-circle-xmark delete-btn"></i>--%>
-<%--                                </li>--%>
-<%--                            </c:forEach>--%>
-<%--                        </ul>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <div class="edit-box">--%>
-<%--                    <div class="title">--%>
-<%--                        <h3 class="title-text">최애가게</h3>--%>
-<%--                    </div>--%>
-<%--                    <div class="edit-wrapper">--%>
-<%--                        <ul class="preferred">--%>
-<%--                            <c:forEach var="store" items="${customerMyPageDto.favStore}" varStatus="status">--%>
-<%--                                <li id="store-${status.index}">--%>
-<%--                                    <div class="img-box">--%>
-<%--                                        <img src="${store}" alt="최애가게이미지">--%>
-<%--                                    </div>--%>
-<%--                                    <span>${store.storeName}</span>--%>
-<%--                                    <i class="fa-solid fa-heart on"></i>--%>
-<%--                                    <i class="fa-regular fa-heart off" style="display: none"></i>--%>
-<%--                                </li>--%>
-<%--                            </c:forEach>--%>
-<%--                        </ul>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--    </div>--%>
-    <h2>store mypage edit test</h2>
+    <div class="container">
+        <div class="profile">
+            <h2>${customerMyPageDto.customerId}</h2>
+            <li class="nav-item"><a class="nav-link" href="/store/mypage/main">마이페이지</a></li>
+            <li class="nav-item"><a class="nav-link" href="/store/mypage/edit/main">개인정보수정</a></li>
+            <div class="stats">
+                <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
+                <div>지금까지 ${stats.customerCnt}명의 손님을 만났어요</div>
+            </div>
+        </div>
+        <div class="edit">
+            <div class="edit-box">
+                <div class="title">
+                    <h3 class="title-text">내프로필</h3>
+                </div>
+                <div class="edit-wrapper">
+                    <div class="input-area">
+                        <div class="input-wrapper">
+                            <div class="icon"><i class="fa-solid fa-user"></i></div>
+                            <input type="text" id="nickname" value="${storeInfo.storeName}">
+                            <div class="icon"><i class="fa-regular fa-square-check"
+                                                 style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                            </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="icon"><i class="fa-solid fa-phone"></i></div>
+                            <input type="text" id="phone"
+                                   value="${storeInfo.price}">
+                            <div class="icon"><i class="fa-regular fa-square-check"
+                                                 style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                            </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="icon"><i class="fa-solid fa-key"></i></div>
+                            <button class="btn">비밀번호 재설정</button>
+                        </div>
+                    </div>
+                    <div class="image-wrapper">
+                        <input type="file" name="profileImage" id="profileImage" accept="image/*"
+                               style="display: none;">
+                        <a href="#" id="avatar" class="before">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            <img
+                                    src="${storeInfo.storeImg ? storeInfo.storeImg : '/assets/img/western.jpg'}"
+                                    alt="Customer profile image">
+                        </a>
+                        <button id="profile_btn" class="btn" type="submit" value="프로필 변경"
+                                style="display: none;">이미지 변경
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <script>

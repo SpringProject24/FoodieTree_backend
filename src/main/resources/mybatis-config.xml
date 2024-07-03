@@ -38,6 +38,7 @@
     <mapper resource="mappers/EmailMapper.xml"/>
     <mapper resource="mappers/StoreMyPageMapper.xml"/>
     <mapper resource="mappers/ReservationMapper.xml"/>
+    <mapper resource="mappers/StoreMyPageEditMapper.xml"/>
   </mappers>
 
 </configuration>
