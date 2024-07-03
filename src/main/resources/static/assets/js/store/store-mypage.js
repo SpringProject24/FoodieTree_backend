@@ -39,6 +39,9 @@ function updateCalendar(year, month) {
         const dayElement = document.createElement('div');
         dayElement.textContent = day;
         dayElement.classList.add('calendar-day-header');
+        if (day === 'Sun') { // Highlight Sundays in red
+            dayElement.classList.add('sunday'); // Add a new class for Sundays
+        }
         headerRow.appendChild(dayElement);
     });
     calendarElement.appendChild(headerRow);
@@ -46,7 +49,7 @@ function updateCalendar(year, month) {
     const date = new Date(year, month);
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    currentMonthElement.textContent = date.toLocaleDateString('default', {year: 'numeric', month: 'long'});
+    currentMonthElement.textContent = date.toLocaleDateString('default', { year: 'numeric', month: 'long' });
 
     // 빈 칸 추가
     for (let i = 0; i < firstDay; i++) {
@@ -62,11 +65,16 @@ function updateCalendar(year, month) {
         dayElement.classList.add('calendar-day');
         if (year === today.getFullYear() && month === today.getMonth() && i === today.getDate()) {
             dayElement.classList.add('today');
+            dayElement.innerHTML = `<span class="circle">${i}</span>`; // Circle today's date
+        }
+        if (new Date(year, month, i).getDay() === 0) {
+            dayElement.classList.add('sunday'); // Highlight Sundays in red
         }
         dayElement.addEventListener('click', () => showModal(year, month, i));
         calendarElement.appendChild(dayElement);
     }
 }
+
 
 async function showModal(year, month, day) {
     const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
