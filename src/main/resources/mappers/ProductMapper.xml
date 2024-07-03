@@ -46,20 +46,12 @@
         s.address -- 주소
         FROM tbl_product p
         JOIN tbl_store s ON p.store_id = s.store_id
-        WHERE s.category IN
-        ( SELECT
-        f.pre_area
-        FROM
-        ( SELECT
-        SUBSTRING_INDEX(address, ' ', 2) AS simplified_address
-        FROM tbl_store ) s
-        JOIN
-        ( SELECT
-        preferred_area AS pre_area
-        FROM
-        tbl_fav_area
-        where customer_id = #{customerId}) f
-        ON s.simplified_address = f.pre_area )
+        WHERE SUBSTRING_INDEX(s.address, ' ', 2) IN (
+        SELECT SUBSTRING_INDEX(f.preferred_area, ' ', 2)
+        FROM tbl_fav_area f
+        WHERE f.customer_id = #{customer_id}
+        );
+
     </select>
 
     <select id="findCategoryByLike" resultType="org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto">
