@@ -14,6 +14,7 @@ public class LoginUtil {
     public static boolean isLoggedIn(HttpSession session) {
         return session.getAttribute(LOGIN) != null;
     }
+
     // 로그인한 회원의 계정명 얻기
     public static String getLoggedInUserAccount(HttpSession session) {
         LoginUserInfoDto loggedInUser = getLoggedInUser(session);
