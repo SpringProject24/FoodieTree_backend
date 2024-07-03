@@ -29,7 +29,7 @@ public class AutoLoginInterceptor implements HandlerInterceptor {
         Cookie autoLoginCookie = WebUtils.getCookie(request, LoginUtil.AUTO_LOGIN_COOKIE);
 
         //2. 자동로그인 쿠키가 있으면 사이트 로그인 처리를 수행
-        if (autoLoginCookie != null) {
+        if (autoLoginCookie != null && !LoginUtil.isLoggedIn(request.getSession())) {
             // 3. 쿠키에 들어있는 랜덤값을 읽기
             String sessionId = autoLoginCookie.getValue();
             // 4. 세션아이디로 회원정보 조회
