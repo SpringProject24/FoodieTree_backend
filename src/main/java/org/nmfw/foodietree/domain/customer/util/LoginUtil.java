@@ -2,6 +2,10 @@ package org.nmfw.foodietree.domain.customer.util;
 
 
 import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class LoginUtil {
@@ -16,13 +20,20 @@ public class LoginUtil {
     }
 
     // 로그인한 회원의 계정명 얻기
-    public static String getLoggedInUserAccount(HttpSession session) {
-        LoginUserInfoDto loggedInUser = getLoggedInUser(session);
-        return loggedInUser != null ? loggedInUser.getCustomerId() : null;
+//    public static String getLoggedInUserAccount(HttpSession session) {
+//        LoginUserInfoDto loggedInUser = getLoggedInUser(session);
+//        return loggedInUser != null ? loggedInUser.getCustomerId() : null;
+//    }
+
+    public static String getLoggedInUser(HttpSession session) {
+        return (String) session.getAttribute(LOGIN);
     }
-    public static LoginUserInfoDto getLoggedInUser(HttpSession session) {
-        return (LoginUserInfoDto) session.getAttribute(LOGIN);
+
+    public static boolean isAutoLogin(HttpServletRequest request) {
+        Cookie autoLoginCookie = WebUtils.getCookie(request, AUTO_LOGIN_COOKIE);
+        return autoLoginCookie != null;
     }
+
 //    public static boolean isAdmin(HttpSession session) {
 //        LoginUserInfoDto loggedInUser = getLoggedInUser(session);
 //        Auth auth = null;
@@ -31,7 +42,8 @@ public class LoginUtil {
 //        }
 //        return auth == Auth.ADMIN;
 //    }
-    public static boolean isMine(String boardAccount, String loggedInUserAccount) {
-        return boardAccount.equals(loggedInUserAccount);
-    }
+
+//    public static boolean isMine(String boardAccount, String loggedInUserAccount) {
+//        return boardAccount.equals(loggedInUserAccount);
+//    }
 }

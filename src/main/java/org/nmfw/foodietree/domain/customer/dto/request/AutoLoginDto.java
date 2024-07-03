@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class AutoLoginDto {
+
     private String sessionId; // 자동로그인 쿠키값
     private LocalDateTime limitTime; // 만료시간
     private String customerId; // 계정명

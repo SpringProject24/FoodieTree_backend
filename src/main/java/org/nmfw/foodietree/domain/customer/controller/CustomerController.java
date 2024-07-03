@@ -4,26 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.request.CustomerLoginDto;
 import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
-import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
-import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
-import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.nmfw.foodietree.domain.customer.service.LoginResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.nmfw.foodietree.domain.customer.util.LoginUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -93,20 +84,19 @@ public class CustomerController {
 
         // 세션 얻기
         HttpSession session = request.getSession();
+        System.out.println("\nsession = " + session);
 
         LoginResult result = customerService.authenticate(dto, session, response);
+        System.out.println("\nresult = " + result);
 
-//        if (dto == null) {
-//            log.warn("CustomerLoginDto is null");
-//            ra.addFlashAttribute("error", "Invalid login details");
-//            return "redirect:/customer/sign-in";
-//        }
 
         ra.addFlashAttribute("result", result);
 
-        if (result == LoginResult.SUCCESS) {
+        if (result == LoginResult.SUCCESS) { //참
             // 혹시 세션에 리다이렉트 URL이 있다면
             String redirect = (String) session.getAttribute("redirect");
+            System.out.println("\nredirect = " + redirect);
+
             if (redirect != null) {
                 session.removeAttribute("redirect");
                 return "redirect:" + redirect;
@@ -115,10 +105,19 @@ public class CustomerController {
         }
         return "redirect:/customer/sign-in";
     }
+
     @GetMapping("/sign-out")
-    public String signOut(HttpSession session) {
+    public String signOut(HttpServletRequest request,
+                          HttpServletResponse response) {
         // 세션 구하기
-//        HttpSession session = request.getSession();
+       HttpSession session = request.getSession();
+
+        // 자동로그인 상태인지 확인
+        if(LoginUtil.isAutoLogin(request)) {
+            // 쿠키를 제거하고, DB에도 자동로그인 관련데이터를 원래대로 해놓음
+            customerService.autoLoginClear(request, response);
+
+        }
 
         // 세션에서 로그인 기록 삭제
         session.removeAttribute("login");

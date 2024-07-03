@@ -29,11 +29,9 @@ public interface CustomerMapper {
                             @Param("preferredFoods") List<String> preferredFoods);
 
 
-    void updateSessionId(@Param("customerId") String customerId,
-                         @Param("sessionId") String sessionId);
 
     // 자동로그인 쿠키값, 만료시간 업데이트
-    // 계정명, session_id, limit_time 이 필요한 관계로 AutoLoginDto 생성
+    void updateAutoLogin(AutoLoginDto dto);
 
-    void updateAutoLogin(AutoLoginDto dto); //이 이름을 복사해서  xml로 넣기
+    Customer findCustomerBySession(String sessionId);
 }

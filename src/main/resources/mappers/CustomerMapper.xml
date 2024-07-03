@@ -43,12 +43,26 @@
         </foreach>
     </insert>
 
+<!--    <select id="findMemberBySessionId" resultType="member">-->
+<!--        SELECT-->
+<!--        account, name, email, auth, limit_time-->
+<!--        FROM tbl_member-->
+<!--        WHERE session_id = #{sessionId}-->
+<!--    </select>-->
+
     <!--자동로그인-->
     <update id="updateAutoLogin">
-        UPDATE tbl_member
+        UPDATE tbl_customer
         SET session_id = #{sessionId}, limit_time = #{limitTime}
         WHERE customer_id = #{customerId}
     </update>
+    
+    <select id="findCustomerBySession" resultType="customer">
+        SELECT
+             customer_id, limit_time
+        FROM tbl_customer
+        WHERE session_id = #{sessionId}
+    </select>
 
 
 </mapper>
