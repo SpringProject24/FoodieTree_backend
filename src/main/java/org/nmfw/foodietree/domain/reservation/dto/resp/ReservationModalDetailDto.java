@@ -28,5 +28,6 @@ public class ReservationModalDetailDto {
     private int price;
     private String storeImg;
     private String nickname;
+    private String profileImage;
     private PickUpStatus status; // 고객이 예약을 픽업했는지, 픽업대기중인지, 픽업취소 했는지
 }

@@ -120,10 +120,15 @@ public class StoreMyPageService {
                 .filter(product -> product.getPickedUpAt() != null)
                 .collect(Collectors.toList())
                 .size();
+        int remainCnt = dto.stream()
+                .filter(product -> product.getReservationTime() == null)
+                .collect(Collectors.toList())
+                .size();
         return StoreProductCountDto.builder()
                 .todayProductCnt(todayProductCnt)
                 .todayPickedUpCnt(todayPickedUpCnt)
-                .remainCnt(todayProductCnt - todayPickedUpCnt)
+                .readyToPickUpCnt(todayProductCnt - todayPickedUpCnt)
+                .remainCnt(remainCnt)
                 .build();
     }
 }

@@ -81,7 +81,7 @@
                     <div class="info-wrapper reservation">
                         <ul class="reservation-list">
                             <c:forEach var="reservation" items="${reservations}" varStatus="status">
-                                <li id="reservation-${status.index}" class="reservation-item">
+                                <li id="reservation-${status.index}" class="reservation-item" data-reservation-id="${reservation.reservationId}">
                                     <div class="item">
                                         <div class="img-wrapper">
                                             <div class="img-box">
@@ -117,7 +117,13 @@
                     <h3 class="title-text">오늘의 랜덤박스 현황</h3>
                     <div id="count">${count.todayProductCnt}개 업데이트 되어있습니다</div>
                     <div id="today-picked-up">${count.todayPickedUpCnt}개 픽업완료 되었습니다</div>
-                    <div id="remain">${count.remainCnt}개 아직 안팔렸어요</div>
+                    <div id="today-ready-picked-up">${count.readyToPickUpCnt}개 픽업 예정입니다</div>
+                    <c:if test=" ${count.remainCnt} == 0" >
+                        <div> 모두 팔렸어요 </div>
+                    </c:if>
+                    <c:if test=" ${count.remainCnt} > 0" >
+                        <div id="remain">${count.remainCnt}개 아직 안팔렸어요</div>
+                    </c:if>
                     <button id="update">수량업데이트 하기</button>
                 </div>
             </div>

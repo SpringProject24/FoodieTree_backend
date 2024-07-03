@@ -6,6 +6,13 @@ const currentMonthElement = document.getElementById('current-month');
 const prevMonthButton = document.getElementById('prev-month');
 const nextMonthButton = document.getElementById('next-month');
 
+const $reservationList = document.querySelector('.reservation-list');
+
+// 모달 관련 요소
+const $reservationModal = document.getElementById('reservation-modal');
+const $modalDetails = document.getElementById('modal-store-reservation-details');
+
+
 const scheduleModal = document.getElementById('store-calendar-modal');
 const modalDetailsElement = document.getElementById('modal-schedule-details');
 const $closeModalButtons = document.querySelectorAll('.close');
@@ -189,6 +196,46 @@ $closeModalButtons.forEach((button) => {
 window.addEventListener('click', (event) => {
     if (event.target === scheduleModal) {
         closeModal(scheduleModal);
+    }
+});
+
+// 예약 내역 모달 열기
+// 모달 열기
+async function openModal(reservationId) {
+
+    const res = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
+    const reservationR = await res.json();
+    console.log(reservationR);
+
+
+    // const reservationItem = document.querySelector(`.reservation-item[data-reservation-id="${reservationId}"]`);
+    console.log(reservationId);
+    if (!reservationR) {
+        console.error(`Reservation with ID ${reservationR} not found.`);
+        return;
+    }
+
+    // 모달에 데이터 추가
+    $modalDetails.innerHTML = `
+        <div class="reservation-detail-item" data-reservation-id="${reservationId}">
+            <p>픽업 닉네임을 확인 해주세요!!!</p>
+<!--            <img src="${reservationR.profileImage}" alt="Customer profile image">-->
+            <p>픽업하는 사람: ${reservationR.nickname}</p>
+            <p>상태: ${reservationR.status}</p>
+        </div>
+    `;
+
+    $reservationModal.style.display = "block";
+}
+
+
+// 모달 열기 이벤트
+$reservationList.addEventListener('click', e => {
+    // if (e.target.matches('.reservation-cancel-btn')) return; // 예약 취소 버튼일 경우 모달 열기 방지
+
+    if (e.target.closest('.reservation-item')) {
+        // openModal($reservationModal);
+        openModal(e.target.closest('.reservation-item').dataset.reservationId);
     }
 });
 

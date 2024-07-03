@@ -14,5 +14,6 @@ public class StoreProductCountDto {
     private int productCnt;
     private int todayProductCnt;
     private int todayPickedUpCnt;
+    private int readyToPickUpCnt;
     private int remainCnt;
 }
