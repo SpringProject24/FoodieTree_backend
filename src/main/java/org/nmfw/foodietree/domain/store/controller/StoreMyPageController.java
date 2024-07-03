@@ -34,10 +34,12 @@ public class StoreMyPageController {
         StoreMyPageDto storeInfo = storeMyPageService.getStoreMyPageInfo(storeId);
         List<StoreReservationDto> reservations = storeMyPageService.findReservations(storeId);
         StoreStatsDto stats = storeMyPageService.getStats(storeId);
+        StoreProductCountDto count = storeMyPageService.getStoreProductCnt(storeId);
 
         model.addAttribute("storeInfo", storeInfo);
         model.addAttribute("reservations", reservations);
         model.addAttribute("stats", stats);
+        model.addAttribute("count", count);
         return "store/store-mypage-test";
     }
 
@@ -77,5 +79,14 @@ public class StoreMyPageController {
     public boolean checkHoliday(@RequestParam String date) {
         log.info("check holiday");
         return storeMyPageService.checkHoliday(storeId, date);
+    }
+
+    @PostMapping("/main/calendar/setPickupTime")
+    public ResponseEntity<?> setPickupTime(@RequestBody Map<String, String> requestBody){
+        String pickupTime = requestBody.get("pickupTime");
+        String date = requestBody.get("date");
+        log.info("set pickup time");
+        boolean flag = storeMyPageService.setPickupTime(storeId, date, pickupTime);
+        return flag? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 }

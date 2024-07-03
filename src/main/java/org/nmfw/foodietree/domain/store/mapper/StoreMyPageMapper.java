@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.store.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.nmfw.foodietree.domain.product.dto.response.ProductInfoDto;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.springframework.security.core.parameters.P;
 
@@ -43,4 +44,6 @@ public interface StoreMyPageMapper {
     void setHoliday(@Param("storeId") String storeId, @Param("holidays") String holidays);
 
     List<StoreHolidayDto> getHolidays(@Param("storeId") String storeId);
+
+    List<ProductInfoDto> getProductCntByDate(@Param("storeId") String storeId, @Param("date") String date);
 }

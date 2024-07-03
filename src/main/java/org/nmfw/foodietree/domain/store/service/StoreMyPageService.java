@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.product.dto.response.ProductInfoDto;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,5 +104,26 @@ public class StoreMyPageService {
             }
         }
         return false;
+    }
+
+    public boolean setPickupTime(String storeId, String date, String pickupTime) {
+        log.info("service set pickup time");
+//        storeMyPageMapper.setPickupTime(storeId, date, pickupTime);
+        return true;
+    }
+
+    public StoreProductCountDto getStoreProductCnt(String storeId) {
+        LocalDate today = LocalDate.now();
+        List<ProductInfoDto> dto = storeMyPageMapper.getProductCntByDate(storeId, today.toString());
+        int todayProductCnt = dto.size();
+        int todayPickedUpCnt = dto.stream()
+                .filter(product -> product.getPickedUpAt() != null)
+                .collect(Collectors.toList())
+                .size();
+        return StoreProductCountDto.builder()
+                .todayProductCnt(todayProductCnt)
+                .todayPickedUpCnt(todayPickedUpCnt)
+                .remainCnt(todayProductCnt - todayPickedUpCnt)
+                .build();
     }
 }

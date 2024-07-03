@@ -61,7 +61,7 @@ async function showModal(year, month, day) {
     let tag = ``;
     console.log(dateString);
     try {
-        const response = await fetch(`${BASE_URL}/store/mypage/main/calendar/modal/${dateString}?storeId=aaa@aaa.com`);
+        const response = await fetch(`${BASE_URL}/store/mypage/main/calendar/modal/${dateString}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -72,18 +72,20 @@ async function showModal(year, month, day) {
         tag = `<div>pickupTime: ${res.pickupTime || 'N/A'}</div>
                <div>openAt: ${res.openAt || 'N/A'}</div>
                <div>productCnt: ${res.productCnt || 'N/A'}</div>
-               <div>canceledByStoreAt: ${res.canceledByStoreAt || 'N/A'}</div>`;
+               <div>canceledByStoreAt: ${res.canceledByStoreAt || 'N/A'}</div>
+                <div>closedAt: ${res.closedAt || 'N/A'}</div>`;
 
         const selectedDate = new Date(year, month, day);
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Compare dates without time
         let $storeCloseButton = ''; // 버튼 초기화
-
+        let $setPickUpTimeButton = ''; // 버튼 초기화
         if (selectedDate > today) {
             $storeCloseButton = '<button id="store-holiday-btn">휴무일로 지정하기</button>';
+            $setPickUpTimeButton = '<button id="set-pickup-time-btn">픽업 시간 설정하기</button>';
         }
 
-        modalDetailsElement.innerHTML = `${dateString}의 정보` + tag + $storeCloseButton;
+        modalDetailsElement.innerHTML = `${dateString}의 정보` + tag + $storeCloseButton +'<br>'+ $setPickUpTimeButton;
         scheduleModal.style.display = 'block';
 
         // 버튼 이벤트 리스너 추가
@@ -123,10 +125,54 @@ async function showModal(year, month, day) {
             });
         }
 
+        const pickupSettingBtn = modalDetailsElement.querySelector('#set-pickup-time-btn');
+        if(pickupSettingBtn){
+            pickupSettingBtn.addEventListener('click', async () => {
+                try{
+                    pickupSettingBtn.textContent = '확인';
+
+                    // <input type="time"> 요소 추가
+                    const inputTime = document.createElement('input');
+                    inputTime.setAttribute('type', 'time');
+                    inputTime.setAttribute('id', 'pickup-time-input');
+
+                    const response = await fetch(`${BASE_URL}/store/mypage/main/calendar/modal/${dateString}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const res = await response.json();
+                    console.log("pickupTime, openAt, productCnt, canceledByStoreAt, closedAt");
+                    console.log(res);
+
+                    // 오픈 시간 1시간 이후의 시간을 선택할 수 있도록 설정
+                    // const now = new Date();
+                    const hours = res.openAt.split(':')[0] * 1 + 1;
+                    const minutes = res.openAt.split(':')[1];
+
+                    const maxHours = res.closedAt.split(':')[0];
+                    const maxMinutes = res.closedAt.split(':')[1];
+                    inputTime.setAttribute('min', `${hours}:${minutes}`);
+                    inputTime.setAttribute('max', `${maxHours}:${maxMinutes}`);
+
+                    // 추가된 input 요소를 삽입할 위치를 찾아서 추가합니다.
+                    const buttonContainer = button.parentNode;
+                    buttonContainer.appendChild(inputTime);
+
+                }
+                catch (error) {
+                    console.error('Error setting pickup time:', error);
+                    // 에러 처리 로직 추가
+                }
+            });
+        }
+
     } catch (error) {
-        console.error('Error fetching calendar data:', error);
+        console.error('Error fetching schedule:', error);
+        // 에러 처리 로직 추가
     }
 }
+
+
 
 // 모달 닫기 =================
 function closeModal(modal) {

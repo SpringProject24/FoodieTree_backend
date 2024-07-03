@@ -115,7 +115,9 @@
             <div id="product-count">
                 <div class="title">
                     <h3 class="title-text">오늘의 랜덤박스 현황</h3>
-                    <span id="count">${storeInfo.productCnt}</span>
+                    <div id="count">${count.todayProductCnt}개 업데이트 되어있습니다</div>
+                    <div id="today-picked-up">${count.todayPickedUpCnt}개 픽업완료 되었습니다</div>
+                    <div id="remain">${count.remainCnt}개 아직 안팔렸어요</div>
                     <button id="update">수량업데이트 하기</button>
                 </div>
             </div>
@@ -146,13 +148,24 @@
 </div>
 
 
-<!-- 모달 창 -->
+<!-- 캘린더 모달 창 -->
 <div id="store-calendar-modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <div id="schedule">
             <h2>가게 문 몇시에 열고 닫는지, 오늘 문 닫을건지</h2>
             <div id="modal-schedule-details"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 수량 추가 모달 창 -->
+<div id="product-add-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="product-count-status">
+            <h2>수량 변경 오늘 등록된 수량, 남은 수량 보여주고 몇개로 업데이트할건지 물어보고 받음</h2>
+            <div id="modal-product-count-details"></div>
         </div>
     </div>
 </div>
