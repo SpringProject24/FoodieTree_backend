@@ -30,7 +30,7 @@ public interface StoreMyPageMapper {
      * @param storeId : 가게 아이디
      * @param pickupTime : 픽업 시간
      */
-    void updateProductAuto(@Param("storeId") String storeId, @Param("pickupTime") String pickupTime);
+    void updateProductAuto(@Param("storeId") String storeId, @Param("closedAt") String pickupTime);
 
     /**
      * 상품 삭제 -> 문 닫는 날에 오전 00시에 업데이트된 상품에 대해 cancel_by_store_at 업데이트

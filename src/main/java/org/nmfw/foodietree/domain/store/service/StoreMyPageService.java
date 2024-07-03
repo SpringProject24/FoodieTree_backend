@@ -11,6 +11,8 @@ import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,22 +115,55 @@ public class StoreMyPageService {
     }
 
     public StoreProductCountDto getStoreProductCnt(String storeId) {
+        if (storeId == null) {
+            throw new IllegalArgumentException("Store ID cannot be null");
+        }
+
+        StoreMyPageDto storeMyPageInfo = getStoreMyPageInfo(storeId);
+        int productCnt = storeMyPageInfo.getProductCnt();
+
         LocalDate today = LocalDate.now();
         List<ProductInfoDto> dto = storeMyPageMapper.getProductCntByDate(storeId, today.toString());
         int todayProductCnt = dto.size();
         int todayPickedUpCnt = dto.stream()
-                .filter(product -> product.getPickedUpAt() != null)
+                .filter(product -> product.getPickedUpAt() != null && product.getReservationTime() != null)
                 .collect(Collectors.toList())
                 .size();
-        int remainCnt = dto.stream()
-                .filter(product -> product.getReservationTime() == null)
+
+        int readyToPickUpCnt = dto.stream()
+                .filter(product -> product.getReservationTime() != null
+                        && product.getPickedUpAt() == null
+                        && product.getCancelReservationAt() == null)
                 .collect(Collectors.toList())
                 .size();
+
+        int remainCnt = todayProductCnt - todayPickedUpCnt - readyToPickUpCnt;
         return StoreProductCountDto.builder()
+                .productCnt(productCnt)
                 .todayProductCnt(todayProductCnt)
                 .todayPickedUpCnt(todayPickedUpCnt)
-                .readyToPickUpCnt(todayProductCnt - todayPickedUpCnt)
+                .readyToPickUpCnt(readyToPickUpCnt)
                 .remainCnt(remainCnt)
                 .build();
+    }
+
+    public boolean updateProductCnt(String storeId, int newCount) {
+        log.info("service update product count");
+
+        StoreMyPageDto storeMyPageInfo = getStoreMyPageInfo(storeId);
+        LocalTime closedAt = storeMyPageInfo.getClosedAt();
+        LocalDate today = LocalDate.now(); // 오늘 날짜
+        LocalTime closedAtTime = LocalTime.parse(closedAt.toString()); // closedAt을 LocalTime으로 파싱
+
+        LocalDateTime pickupDateTime = today.atTime(closedAtTime); // LocalDate와 LocalTime을 결합하여 LocalDateTime 생성
+        String pickupTime = pickupDateTime.toString(); // 문자열로 변환
+
+        for (int i = 0; i < newCount; i++) {
+            storeMyPageMapper.updateProductAuto(storeId, pickupTime);
+        }
+
+        List<ProductInfoDto> dto = storeMyPageMapper.getProductCntByDate(storeId, today.toString());
+
+        return true;
     }
 }

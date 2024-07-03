@@ -15,7 +15,8 @@
             approve,
             price,
             product_cnt,
-            open_at
+            open_at,
+            closed_at
         FROM
             tbl_store
         WHERE
@@ -36,7 +37,8 @@
             p.pickup_time,
             p.product_upload_date,
             s.price,
-            s.open_at
+            s.open_at,
+            s.closed_at
         FROM
             tbl_reservation r
         JOIN

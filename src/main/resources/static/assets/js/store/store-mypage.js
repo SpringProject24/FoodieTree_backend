@@ -12,6 +12,9 @@ const $reservationList = document.querySelector('.reservation-list');
 const $reservationModal = document.getElementById('reservation-modal');
 const $modalDetails = document.getElementById('modal-store-reservation-details');
 
+const $productAddModal = document.getElementById('product-add-modal');
+const $productAddDetails = document.getElementById('modal-product-count-details');
+const $addProductButton = document.getElementById('product-update-btn');
 
 const scheduleModal = document.getElementById('store-calendar-modal');
 const modalDetailsElement = document.getElementById('modal-schedule-details');
@@ -41,7 +44,7 @@ function updateCalendar(year, month) {
     const date = new Date(year, month);
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    currentMonthElement.textContent = date.toLocaleDateString('default', { year: 'numeric', month: 'long' });
+    currentMonthElement.textContent = date.toLocaleDateString('default', {year: 'numeric', month: 'long'});
 
     // 빈 칸 추가
     for (let i = 0; i < firstDay; i++) {
@@ -92,7 +95,7 @@ async function showModal(year, month, day) {
             $setPickUpTimeButton = '<button id="set-pickup-time-btn">픽업 시간 설정하기</button>';
         }
 
-        modalDetailsElement.innerHTML = `${dateString}의 정보` + tag + $storeCloseButton +'<br>'+ $setPickUpTimeButton;
+        modalDetailsElement.innerHTML = `${dateString}의 정보` + tag + $storeCloseButton + '<br>' + $setPickUpTimeButton;
         scheduleModal.style.display = 'block';
 
         // 버튼 이벤트 리스너 추가
@@ -103,11 +106,9 @@ async function showModal(year, month, day) {
                     console.log('휴무일로 지정하기 버튼 클릭')
                     console.log(dateString);
                     const response = await fetch(`${BASE_URL}/store/mypage/main/calendar/setHoliday`, {
-                        method: 'POST',
-                        headers: {
+                        method: 'POST', headers: {
                             'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
+                        }, body: JSON.stringify({
                             holidayDate: dateString // 휴무일로 지정할 날짜
                         })
                     });
@@ -133,9 +134,9 @@ async function showModal(year, month, day) {
         }
 
         const pickupSettingBtn = modalDetailsElement.querySelector('#set-pickup-time-btn');
-        if(pickupSettingBtn){
+        if (pickupSettingBtn) {
             pickupSettingBtn.addEventListener('click', async () => {
-                try{
+                try {
                     pickupSettingBtn.textContent = '확인';
 
                     // <input type="time"> 요소 추가
@@ -165,8 +166,7 @@ async function showModal(year, month, day) {
                     const buttonContainer = button.parentNode;
                     buttonContainer.appendChild(inputTime);
 
-                }
-                catch (error) {
+                } catch (error) {
                     console.error('Error setting pickup time:', error);
                     // 에러 처리 로직 추가
                 }
@@ -178,7 +178,6 @@ async function showModal(year, month, day) {
         // 에러 처리 로직 추가
     }
 }
-
 
 
 // 모달 닫기 =================
@@ -197,7 +196,109 @@ window.addEventListener('click', (event) => {
     if (event.target === scheduleModal) {
         closeModal(scheduleModal);
     }
+
+    if (event.target === $reservationModal) {
+        closeModal($reservationModal);
+    }
+
+    if (event.target === $productAddModal) {
+        closeModal($productAddModal);
+    }
 });
+
+// 수량 추가 모달 열기
+
+$addProductButton.addEventListener('click', async e => {
+    try {
+        const res = await fetch(`${BASE_URL}/store/mypage/main/getProductCnt`);
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const products = await res.json();
+        console.log(products);
+        let updateCount = 0;
+        let initialCount = products.remainCnt;
+        let tag = `
+            <div class="product-add-item">
+                <div>아직 안팔린 상품 수: <span id="product-update-count">${initialCount}</span></div>
+                <button id="decrease-btn" disabled>-</button>
+                <button id="increase-btn">+</button>
+                <div>되될릴 수 없으니 신중히 선택하세요!!</div>
+                <div>추가되는 상품 수: <span id="product-update-amount">${updateCount}</span></div>
+                <button id="update-btn" disabled>업데이트하기</button>
+            </div>
+        `;
+
+        $productAddDetails.innerHTML = tag;
+        $productAddModal.style.display = "block";
+
+        const $increaseBtn = document.getElementById('increase-btn');
+        const $decreaseBtn = document.getElementById('decrease-btn');
+        const $productCount = document.getElementById('product-update-count');
+        const $updateBtn = document.getElementById('update-btn');
+        const $productUpdateAmount = document.getElementById('product-update-amount');
+
+        $increaseBtn.addEventListener('click', () => {
+            initialCount++;
+            updateCount++;
+            $productCount.textContent = initialCount;
+            $productUpdateAmount.textContent = updateCount;
+            $decreaseBtn.disabled = false; // 활성화
+            $updateBtn.disabled = false; // 활성화
+        });
+
+        $decreaseBtn.addEventListener('click', () => {
+            if (initialCount > products.remainCnt) {
+                initialCount--;
+                updateCount--;
+                $productCount.textContent = initialCount;
+                $productUpdateAmount.textContent = updateCount;
+                if (initialCount <= products.remainCnt) {
+                    $decreaseBtn.disabled = true; // 비활성화
+                }
+                if (initialCount === products.remainCnt) {
+                    $updateBtn.disabled = true; // 비활성화
+                }
+            }
+        });
+
+        $updateBtn.addEventListener('click', async () => {
+            try {
+                const newUpdateCount = Number(updateCount);
+                // 여기서 업데이트 로직을 추가
+                console.log('업데이트하기 버튼 클릭');
+                const response = await fetch(`${BASE_URL}/store/mypage/main/updateProductCnt`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        newCount: newUpdateCount // 업데이트할 수량
+                    })
+                });
+
+                const result = await response.json();
+                if (result === true) {
+                    console.log('수량이 업데이트되었습니다.');
+                    // 여기에 필요한 UI 업데이트 로직 추가
+                    $updateBtn.disabled = true; // 업데이트 버튼 비활성화
+                } else {
+                    console.error('수량 업데이트 실패');
+                    // 실패 시 처리 로직 추가
+                }
+
+            } catch (error) {
+                console.error('Error updating product count:', error);
+                // 에러 처리 로직 추가
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching product count:', error);
+    }
+});
+
+
 
 // 예약 내역 모달 열기
 // 모달 열기

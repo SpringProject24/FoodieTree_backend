@@ -89,4 +89,20 @@ public class StoreMyPageController {
         boolean flag = storeMyPageService.setPickupTime(storeId, date, pickupTime);
         return flag? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
+
+    @GetMapping("/main/getProductCnt")
+    public ResponseEntity<StoreProductCountDto> getStoreProductCnt() {
+        log.info("store my page get product count");
+        StoreProductCountDto dto = storeMyPageService.getStoreProductCnt(storeId);
+        log.debug(dto.toString());
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @PostMapping("/main/updateProductCnt")
+    public ResponseEntity<?> updateProductCnt(@RequestBody Map<String, Integer> requestBody){
+        int productCnt = requestBody.get("newCount");
+        log.info("update product count");
+        boolean flag = storeMyPageService.updateProductCnt(storeId, productCnt);
+        return flag? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
+    }
 }

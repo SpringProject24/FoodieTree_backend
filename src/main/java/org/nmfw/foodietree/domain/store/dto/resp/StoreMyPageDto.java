@@ -3,6 +3,8 @@ package org.nmfw.foodietree.domain.store.dto.resp;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalTime;
+
 @Getter
 @Setter
 @ToString
@@ -20,5 +22,7 @@ public class StoreMyPageDto {
     private String approve;
     private int price;
     private int productCnt;
+    private LocalTime openAt;
+    private LocalTime closedAt;
 //    private <StoreReservationDto> storeReservationDto;
 }
