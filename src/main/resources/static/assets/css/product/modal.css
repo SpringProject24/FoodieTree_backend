@@ -79,16 +79,44 @@
 .modal-content .modal-body .prod-info-wrapper {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .modal-content .modal-body .prod-info div {
     margin-bottom: 7px;
 }
 
-
 .modal-content .modal-body .prod-info:last-child div {
     display: flex;
     justify-content: right;
+}
+
+.detail {
+    color: #555;
+}
+
+#prod-rate i {
+    color: #ffb700;
+}
+
+#pickup-time i {
+    color: #999;
+}
+
+#prod-price {
+    font-size: 12px;
+    color: #777777;
+}
+
+#prod-discount {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--header-font-color);
+}
+
+.detail .store-area-wrapper {
+    margin-top: 1rem;
+    display: flex;
 }
 
 
@@ -102,10 +130,3 @@
 #reservation-btn {
     width: 250px;
 }
-
-
-
-
-
-
-
