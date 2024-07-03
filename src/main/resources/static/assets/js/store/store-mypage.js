@@ -89,11 +89,13 @@ async function showModal(year, month, day) {
         console.log("pickupTime, openAt, productCnt, canceledByStoreAt");
         console.log(res);
 
-        tag = `<div>pickupTime: ${res.pickupTime || 'N/A'}</div>
-               <div>openAt: ${res.openAt || 'N/A'}</div>
-               <div>productCnt: ${res.productCnt || 'N/A'}</div>
+        tag = `<div>openAt: ${res.openAt || 'N/A'}</div>
+               <div>기본 매일 업데이트 되는 수량: ${res.productCnt || 'N/A'}</div>
+                <div>오늘 총 등록된 수량: ${res.todayProductCnt || 'N/A'}</div>
+                <div>오늘 총 팔린 수량: ${res.todayPickedUpCnt || 'N/A'}</div>
                <div>canceledByStoreAt: ${res.canceledByStoreAt || 'N/A'}</div>
-                <div>closedAt: ${res.closedAt || 'N/A'}</div>`;
+                <div>closedAt: ${res.closedAt || 'N/A'}</div>
+               <div>pickupTime: ${res.pickupTime || 'N/A'}</div>`;
 
         const selectedDate = new Date(year, month, day);
         const today = new Date();

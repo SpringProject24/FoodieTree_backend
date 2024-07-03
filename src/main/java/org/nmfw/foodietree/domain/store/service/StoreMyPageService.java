@@ -48,7 +48,20 @@ public class StoreMyPageService {
 
     public StoreMyPageCalendarModalDto getStoreMyPageCalendarModalInfo(String storeId, String date) {
         log.info("service get store my page calendar modal info");
-        return storeMyPageMapper.getStoreMyPageCalendarModalInfo(storeId, date).get(0);
+        List<StoreMyPageCalendarModalDto> list = storeMyPageMapper.getStoreMyPageCalendarModalInfo(storeId, date);
+        StoreMyPageCalendarModalDto dto = list.get(0);
+
+        List<ProductInfoDto> productCntByDate = storeMyPageMapper.getProductCntByDate(storeId, date);
+        int tpuc = productCntByDate.stream()
+                .filter(product -> product.getPickedUpAt() != null && product.getReservationTime() != null && product.getCancelReservationAt() == null)
+                .collect(Collectors.toList())
+                .size();
+
+        int tpc = productCntByDate.size();
+
+        dto.setTodayPickedUpCnt(tpuc);
+        dto.setTodayProductCnt(tpc);
+        return dto;
     }
 
 
