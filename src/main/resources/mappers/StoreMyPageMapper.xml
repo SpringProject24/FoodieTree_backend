@@ -87,4 +87,21 @@
         FROM
             tbl_store
     </select>
+
+    <insert id="setHoliday">
+        INSERT INTO tbl_store_holidays
+            (store_id, holidays)
+        VALUES
+            (#{storeId}, #{holidays})
+    </insert>
+
+    <select id="getHolidays" resultType="StoreHolidayDto">
+        SELECT
+            store_id,
+            holidays
+        FROM
+            tbl_store_holidays
+        WHERE
+            store_id = #{storeId}
+    </select>
 </mapper>

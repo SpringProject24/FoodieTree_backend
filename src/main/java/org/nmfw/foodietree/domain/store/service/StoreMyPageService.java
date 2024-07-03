@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
-import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageCalendarModalDto;
-import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
-import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
-import org.nmfw.foodietree.domain.store.dto.resp.StoreStatsDto;
+import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
 import org.springframework.stereotype.Service;
 
@@ -76,5 +73,23 @@ public class StoreMyPageService {
                 .coTwo(coTwo)
                 .customerCnt(customerCnt)
                 .build();
+    }
+
+    public boolean setHoliday(String storeId, String holidayDate) {
+        log.info("service set holiday");
+        storeMyPageMapper.setHoliday(storeId, holidayDate);
+        List<StoreHolidayDto> holidays = storeMyPageMapper.getHolidays(storeId);
+        for (StoreHolidayDto holiday : holidays) {
+            log.info("holiday = " + holiday.getHolidays());
+            if (holiday.getHolidays().equals(holidayDate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<StoreHolidayDto> getHolidays(String storeId) {
+        log.info("service get holidays");
+        return storeMyPageMapper.getHolidays(storeId);
     }
 }

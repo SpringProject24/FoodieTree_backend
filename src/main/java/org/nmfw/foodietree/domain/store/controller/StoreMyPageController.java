@@ -1,9 +1,6 @@
 package org.nmfw.foodietree.domain.store.controller;
 
-import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageCalendarModalDto;
-import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
-import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
-import org.nmfw.foodietree.domain.store.dto.resp.StoreStatsDto;
+import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -59,16 +57,18 @@ public class StoreMyPageController {
         return ResponseEntity.ok().body(dto);
     }
 
-//    @PatchMapping("/main/calendar/close")
-//    public ResponseEntity<?> closeStore(@RequestParam String storeId, @RequestParam String pickupTime){
-//        log.info("store my page close store");
-////        storeMyPageService.cancelProductByStore(storeId, pickupTime);
-//        return ResponseEntity.ok().body(true);
-//    }
+    @PostMapping("/main/calendar/setHoliday")
+    public ResponseEntity<?> closeStore(@RequestBody Map<String, String> requestBody){
+        String holidayDate = requestBody.get("holidayDate");
+        log.info("set holiday");
+        boolean flag = storeMyPageService.setHoliday(storeId, holidayDate);
+        return flag? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
+    }
 
-//    @GetMapping("/main/calendar/closed/date")
-//    public ResponseEntity<?> getClosedDate(@RequestParam String storeId) {
-//        log.info("store my page get closed date");
-//        return null;
-//    }
+    @GetMapping("/main/calendar/getHoliday")
+    public List<StoreHolidayDto> getHolidays(String storeId) {
+        log.info("store my page get closed date");
+        List<StoreHolidayDto> holidays = storeMyPageService.getHolidays(storeId);
+        return holidays;
+    }
 }

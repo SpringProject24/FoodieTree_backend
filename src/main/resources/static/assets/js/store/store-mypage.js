@@ -2,14 +2,13 @@
 const BASE_URL = 'http://localhost:8083';
 
 const calendarElement = document.getElementById('calendar');
-const statusElement = document.getElementById('status');
 const currentMonthElement = document.getElementById('current-month');
 const prevMonthButton = document.getElementById('prev-month');
 const nextMonthButton = document.getElementById('next-month');
 
 const scheduleModal = document.getElementById('store-calendar-modal');
-const $closeModalButtons = document.querySelectorAll('.close');
 const modalDetailsElement = document.getElementById('modal-schedule-details');
+const $closeModalButtons = document.querySelectorAll('.close');
 
 let today = new Date();
 let currentYear = today.getFullYear();
@@ -75,16 +74,55 @@ async function showModal(year, month, day) {
                <div>productCnt: ${res.productCnt || 'N/A'}</div>
                <div>canceledByStoreAt: ${res.canceledByStoreAt || 'N/A'}</div>`;
 
-        let storeCloseButton = '<button id="store-holiday-btn">휴무일로 지정하기</button>';
-
         const selectedDate = new Date(year, month, day);
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Compare dates without time
-        if (selectedDate <= today) {
-            storeCloseButton = '';
+        let $storeCloseButton = ''; // 버튼 초기화
+
+        if (selectedDate > today) {
+            $storeCloseButton = '<button id="store-holiday-btn">휴무일로 지정하기</button>';
         }
-        modalDetailsElement.innerHTML = `${dateString}의 정보` + tag + storeCloseButton;
+
+        modalDetailsElement.innerHTML = `${dateString}의 정보` + tag + $storeCloseButton;
         scheduleModal.style.display = 'block';
+
+        // 버튼 이벤트 리스너 추가
+        const button = modalDetailsElement.querySelector('#store-holiday-btn');
+        if (button) {
+            button.addEventListener('click', async () => {
+                try {
+                    console.log('휴무일로 지정하기 버튼 클릭')
+                    console.log(dateString);
+                    const response = await fetch(`${BASE_URL}/store/mypage/main/calendar/setHoliday`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            holidayDate: dateString // 휴무일로 지정할 날짜
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result === true) {
+                        console.log('휴무일로 지정되었습니다.');
+                        // 여기에 필요한 UI 업데이트 로직 추가
+                        // 버튼 내용 변경
+                        button.textContent = '휴무일 지정 취소하기';
+                        // 예를 들어, 달력에서 휴무일로 지정된 날짜에 표시 변경 등
+                        updateCalendar(currentYear, currentMonth); // 예시로 달력 업데이트
+                    } else {
+                        console.error('휴무일로 지정 실패');
+                        // 실패 시 처리 로직 추가
+                    }
+
+                } catch (error) {
+                    console.error('Error setting holiday:', error);
+                    // 에러 처리 로직 추가
+                }
+            });
+        }
+
     } catch (error) {
         console.error('Error fetching calendar data:', error);
     }
@@ -130,9 +168,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updateCalendar(currentYear, currentMonth);
-
-    // fetchReservations(); // 초기 예약 데이터 로드
-    // window.addEventListener('scroll', setupInfiniteScroll); // 무한 스크롤 설정
-    // cancelReservationClickEvent(); // 예약 취소 이벤트 설정
-    // pickUpClickEvent(); // 픽업 완료 이벤트 설정
 });
