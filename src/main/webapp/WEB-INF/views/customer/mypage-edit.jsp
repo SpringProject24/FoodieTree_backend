@@ -167,15 +167,15 @@
     <div class="modal-content">
         <span class="close" id="close-modal-btn">&times;</span>
         <h2>비밀번호 재설정</h2>
-        <div id="emailStep">
+        <div id="step-email">
             <p>인증번호를 받으세요.</p>
             <button id="send-verification-code-btn">인증번호 받기</button>
         </div>
-        <div id="codeStep" class="hidden">
+        <div id="step-code" class="hidden">
             <p>인증번호를 입력하세요.</p>
-            <input type="text" id="verificationCode" maxlength="6">
-            <button onclick="verifyCode()">인증하기</button>
-            <div id="verificationResult"></div>
+            <input type="text" id="verification-code" maxlength="6">
+            <button id="verification-code-btn">인증하기</button>
+            <div id="verification-result"></div>
         </div>
         <div id="countdown"></div>
     </div>
@@ -184,15 +184,15 @@
 <!-- 비밀번호 재설정 입력 모달 -->
 <div id="newPasswordModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeNewPwModal()">&times;</span> <!-- X 버튼 추가 -->
+        <span class="close" id="close-new-modal-btn">&times;</span> <!-- X 버튼 추가 -->
         <h2>새 비밀번호 설정</h2>
         <div class="pass">
-            <input id="new-password-input" type="password" name="password" placeholder="새 비밀번호를 입력해주세요" onkeyup="debounceCheckPassword()">
+            <input id="new-password-input" type="password" name="password" placeholder="새 비밀번호를 입력해주세요">
         </div>
         <div class="pass-check">
-            <input id="new-password-check" type="password" name="password-chk" placeholder="새 비밀번호를 다시 입력해주세요" onkeyup="debounceCheckPassword()">
+            <input id="new-password-check" type="password" name="password-chk" placeholder="새 비밀번호를 다시 입력해주세요">
             <div class="wrapper">
-                <button id="submit-new-pw" onclick="updatePassword()" disabled>비밀번호 재설정하기</button>
+                <button id="update-new-pw-btn" disabled>비밀번호 재설정하기</button>
             </div>
         </div>
         <div id="password-match-status"></div> <!-- 비밀번호 일치 여부 표시 -->

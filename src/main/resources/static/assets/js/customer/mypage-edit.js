@@ -39,7 +39,6 @@ export async function fetchUpdates(type, value) {
 }
 
 export async function deleteItem(type, value) {
-
     const payload = {
         type: type,
         value: value
@@ -79,7 +78,6 @@ function handleKeyUp(event, fieldId) {
     }
 }
 
-
 // 비밀번호 재설정 모달 관련 함수
 export function openModal(e) {
     e.preventDefault();
@@ -91,34 +89,13 @@ export function closeModal() {
 }
 
 // 비밀번호 재설정 입력 모달 관련 함수
-function openNewPwModal() {
-    // e.preventDefault();
+export function openNewPwModal() {
     document.getElementById('newPasswordModal').style.display = 'block';
 }
 
-function closeNewPwModal() {
+export function closeNewPwModal() {
     document.getElementById('newPasswordModal').style.display = 'none';
 }
-
-// X 버튼 클릭 시 모달 닫기
-document.addEventListener('DOMContentLoaded', function() {
-    const closeButtons = document.querySelectorAll('.close');
-    closeButtons.forEach(button => button.addEventListener('click', closeModal));
-    closeButtons.forEach(button => button.addEventListener('click', closeNewPwModal));
-
-    // 모달 바깥 클릭 시 모달 닫기
-    window.onclick = function(event) {
-        const resetModal = document.getElementById('resetPasswordModal');
-        const newPwModal = document.getElementById('newPasswordModal');
-        if (event.target === resetModal) {
-            closeModal();
-        }
-        if (event.target === newPwModal) {
-            closeNewPwModal();
-        }
-    };
-});
-
 
 export async function sendVerificationCode() {
     try {
@@ -132,18 +109,18 @@ export async function sendVerificationCode() {
 
         if (response.ok) {
             startCountdown(300); // 5분(300초) 카운트다운 시작
-            document.getElementById('emailStep').classList.add('hidden');
-            document.getElementById('codeStep').classList.remove('hidden');
+            return true;
         } else {
             console.error('Failed to send verification code');
+            return false;
         }
     } catch (error) {
         console.error('Error sending verification code:', error);
+        return false;
     }
 }
 
-export async function verifyCode() {
-    const code = document.getElementById('verificationCode').value;
+export async function verifyCode(code) {
     try {
         const response = await fetch(`${BASE_URL}/email/verifyCode`, {
             method: 'POST',
@@ -155,17 +132,15 @@ export async function verifyCode() {
         console.log(response);
 
         if (response.ok) {
-            const result = await response.text();
-            document.getElementById('verificationResult').textContent = result;
-            clearInterval(countdownInterval); // 인증 성공 시 타이머 멈춤
-            openNewPwModal(); // 새로운 비밀번호 입력 모달 표시
+            stopCountdown();
+            return { ok: true, result: await response.text() };
         } else {
             console.error('Verification failed');
-            document.getElementById('verificationResult').textContent = '실패';
+            return { ok: false, result: '실패' };
         }
     } catch (error) {
         console.error('Error verifying code:', error);
-        document.getElementById('verificationResult').innerText = '실패';
+        return { ok: false, result: '실패' };
     }
 }
 
@@ -185,6 +160,10 @@ function startCountdown(seconds) {
     }, 1000);
 }
 
+function stopCountdown() {
+    clearInterval(countdownInterval);
+}
+
 function debounce(func, delay) {
     return function() {
         const context = this;
@@ -198,7 +177,7 @@ function checkPasswordMatch() {
     const newPassword = document.getElementById('new-password-input').value;
     const newPasswordCheck = document.getElementById('new-password-check').value;
     const statusElement = document.getElementById('password-match-status');
-    const submitBtn = document.getElementById('submit-new-pw');
+    const submitBtn = document.getElementById('update-new-pw-btn');
 
     if (newPassword && newPasswordCheck) {
         if (newPassword === newPasswordCheck) {
@@ -216,17 +195,9 @@ function checkPasswordMatch() {
     }
 }
 
-const debounceCheckPassword = debounce(checkPasswordMatch, 1000);
+export const debounceCheckPassword = debounce(checkPasswordMatch, 1000);
 
-export async function updatePassword() {
-    const newPassword = document.getElementById('new-password-input').value;
-    const newPasswordCheck = document.getElementById('new-password-check').value;
-
-    if (newPassword !== newPasswordCheck) {
-        alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
-        return;
-    }
-
+export async function updatePassword(newPassword, newPasswordCheck) {
     try {
         const response = await fetch(`${BASE_URL}/customer/${customerId}/update/password`, {
             method: 'PATCH',
@@ -237,16 +208,15 @@ export async function updatePassword() {
         });
 
         if (response.ok) {
-            alert('비밀번호가 성공적으로 변경되었습니다.');
-            closeNewPwModal();
+            return true;
         } else {
             const errorText = await response.text();
             console.error('Password update failed:', errorText);
-            alert('비밀번호 변경에 실패했습니다.');
+            return false;
         }
     } catch (error) {
         console.error('Error updating password:', error);
-        alert('비밀번호 변경 중 오류가 발생했습니다.');
+        return false;
     }
 }
 
