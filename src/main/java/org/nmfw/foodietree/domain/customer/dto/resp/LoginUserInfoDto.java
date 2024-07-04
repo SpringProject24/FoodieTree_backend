@@ -5,6 +5,7 @@ import org.nmfw.foodietree.domain.customer.entity.Customer;
 
     //로그인한 유저의 정보를 담고 있는 dto
     @Getter
+    @Setter
     @ToString
     @EqualsAndHashCode
     @NoArgsConstructor

@@ -134,16 +134,15 @@ public class CustomerService {
 			c.setPath("/");
 			c.setMaxAge(0);
 			response.addCookie(c);
+			customerMapper.updateAutoLogin(
+					AutoLoginDto.builder()
+							.sessionId("none")
+							.limitTime(LocalDateTime.now())
+							.customerId(LoginUtil.getLoggedInUser(request.getSession()))
+							.build()
+			);
 		}
 
-		// 2. DB에 자동로그인 칼럼들을 원래대로 돌려놓음
-		customerMapper.updateAutoLogin(
-				AutoLoginDto.builder()
-						.sessionId("none")
-						.limitTime(LocalDateTime.now())
-						.customerId(LoginUtil.getLoggedInUser(request.getSession()))
-						.build()
-		);
 
 
 
