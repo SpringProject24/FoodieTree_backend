@@ -267,11 +267,11 @@
                             <img src="/assets/img/western.jpg" alt="">
                         </div>
                         <div class="store-info">
-                            <h3>가게 이름 : ${item.storeId}</h3>
-                            <p>픽업 시간</p>
+                            <h3>가게 이름 : ${item.storeName}</h3>
+                            <p>픽업 시간 : ${item.pickupTime}</p>
                             <div class="wrapper">
                                 <p>평점 / 거리</p>
-                                <p>가격</p>
+                                <p>가격 : ${item.price}</p>
                             </div>
                         </div>
                     </div>

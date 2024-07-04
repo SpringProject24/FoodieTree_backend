@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.product.dto.response.ProductDto;
 import org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto;
 import org.nmfw.foodietree.domain.product.mapper.ProductMainPageMapper;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,11 @@ public class ProductMainPageService {
      * Finds products by customer's preferred food.
      *
      * @param customerId the ID of the customer
-     * @param request  the HTTP servlet request
-     * @param response the HTTP servlet response
+     * @param request    the HTTP servlet request
+     * @param response   the HTTP servlet response
      * @return a list of TotalInfoDto containing filtered product information
      */
-    public List<TotalInfoDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response) {
+    public List<ProductDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response) {
         List<String> preferredFood = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredFood();
 
 //        if (preferredFood == null) {
@@ -66,11 +67,11 @@ public class ProductMainPageService {
      * Finds products by customer's preferred area.
      *
      * @param customerId the ID of the customer
-     * @param request  the HTTP servlet request
-     * @param response the HTTP servlet response
+     * @param request    the HTTP servlet request
+     * @param response   the HTTP servlet response
      * @return a list of TotalInfoDto containing filtered product information
      */
-    public List<TotalInfoDto> findProductByArea(String customerId, HttpServletRequest request, HttpServletResponse response) {
+    public List<ProductDto> findProductByArea(String customerId, HttpServletRequest request, HttpServletResponse response) {
         List<String> preferredArea = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredArea();
 //        if (preferredArea == null) {
 //            log.warn("Preferred area list is null for customerId: {}", customerId);
