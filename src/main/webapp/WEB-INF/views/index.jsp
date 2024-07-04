@@ -30,29 +30,30 @@
       <div class="wrapper">
         <c:if test="${login == null}">
             <div class="signin">
-                <a href="/customer/sign-in">
-                    <button><span>로그인</span></button>
+                <a href="/customer/sign-in" class="button btnFade btnBlueGreen">
+                    로그인
                 </a>
             </div>
             <div class="signup">
-                <a href="/customer/sign-up">
-                    <button><span>회원가입</span></button>
+                <a href="/customer/sign-up" class="button btnFade btnBlueGreen">
+                    회원가입
                 </a>
             </div>
         </c:if>
         <c:if test="${login != null}">
             <div class="mypage">
-                <a href="/customer/mypage">
-                    <button><span>마이페이지</span></button>
+                <a href="/customer/mypage" class="button btnFade btnBlueGreen">
+                    마이페이지
                 </a>
             </div>
             <div class="signout">
-                <a href="/customer/sign-out">
-                    <button><span>로그아웃</span></button>
+                <a href="/customer/sign-out" class="button btnFade btnBlueGreen">
+                    로그아웃
                 </a>
             </div>
         </c:if>
-      </div>
+    </div>
+    
     </div>
   </header>
 <section class="hero">

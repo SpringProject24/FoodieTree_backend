@@ -52,79 +52,39 @@ header nav ul li a {
   text-decoration: none;
 }
 
-/* 버튼 */
 
-/* .wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 10px; /* 버튼 사이의 간격
-}
-*/
-
-/* button {
+a.button {
+  display: block;
   position: relative;
-  height: 50px;
-  padding: 0 30px;
-  border: 2px solid #000;
-  background: #e8e8e8;
-  user-select: none;
-  white-space: nowrap;
-  transition: all 0.05s linear;
-  font-family: inherit;
-}
-
-button:before, button:after {
-  content: "";
-  position: absolute;
-  background: #e8e8e8;
-  transition: all 0.2s linear;
-}
-
-button:before {
-  width: calc(100% + 6px);
-  height: calc(100% - 16px);
-  top: 8px;
-  left: -3px;
-}
-
-button:after {
-  width: calc(100% - 16px);
-  height: calc(100% + 6px);
-  top: -3px;
-  left: 8px;
-}
-
-button:active {
-  transform: scale(0.95);
-}
-
-button:hover:before {
-  height: calc(100% - 32px);
-  top: 16px;
-}
-
-button:hover:after {
-  width: calc(100% - 32px);
-  left: 16px;
-}
-
-button span {
-  font-size: 15px;
-  z-index: 3;
-  position: relative;
+  float: left;
+  width: 100px;
+  padding: 0;
+  /* margin: 10px 20px 10px 0; */
   font-weight: 600;
-}  */
+  text-align: center;
+  line-height: 40px;
+  color: #FFF;
+  border-radius: 15px;
+  transition: all 0.2s ;
+}
 
+.btnBlueGreen {
+  /* background: #00AE68; */
+  background: #00AE68;
+}
 
-
+/* FADE */
+.btnFade.btnBlueGreen:hover {
+  background: #21825B;
+}
 
 
 
 header .signup, .signin {
-  background-color: white;
+  /* background-color: white; */
   color: var(--header-font-color);
-  padding: 10px 20px;
-  border: var(--header-font-color) 1px solid;
+  /* padding: 10px 20px; */
+  /* border: var(--header-font-color) 1px solid; */
   cursor: pointer;
 }
 
