@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body>
-  <header>
+   <header>
     <div class="container">
       <div class="logo">FoodieTree</div>
       <div class="logo-img">
@@ -58,7 +58,31 @@
 
 <footer>
   <div class="container">
-    <p>&copy; 2024 FoodieTree. All rights reserved.</p>
+    <div class="big-title">FOODIE TREE</div>
+    <div class="custom_link_all">
+      <a href="#" title="Legal">
+        <p>Legal</p>
+      </a>
+      <a href="#" title="Privacy Policy">
+        <p class="custom_link_text">Privacy Policy</p>
+      </a>
+      <a href="#" title="Cookie Policy">
+        <p class="custom_link_text">Cookie Policy</p>
+      </a>
+      <a href="#" title="Terms & Conditions">
+        <p class="custom_link_text">Terms & Conditions</p>
+      </a>
+      <a href="#" title="Contact us">
+        <p class="custom_link_text">Contact us</p>
+      </a>
+      <a href="#" title="DSA Disclosure">
+        <p class="custom_link_text">DSA Disclosure</p>
+      </a>
+      <a href="#" title="Food Waste Sources">
+        <p class="custom_link_text">Food Waste Sources</p>
+      </a>
+    </div>
+    <p class="footer-text">&copy; 2024 FoodieTree. All rights reserved.</p>
   </div>
 </footer>
   <script>
