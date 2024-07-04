@@ -20,7 +20,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/store/mypage")
 public class StoreMyPageController {
-    String storeId = "aaa@aaa.com";
+//    String storeId = "aaa@aaa.com";
+String storeId = "sji4205@naver.com";
+
     private final StoreMyPageService storeMyPageService;
 
     @GetMapping("/main")

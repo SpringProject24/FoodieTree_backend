@@ -12,7 +12,6 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">
-    <script defer src="/assets/js/store/store-mypage.js"></script>
     <script defer src="/assets/js/store/store-mypage-edit.js"></script>
 </head>
 <body>
@@ -50,9 +49,9 @@
                             <div class="icon"><i class="far fa-clock"></i></div>
                             <div>픽업 시작 시간
                                 <label>
-                                <input type="time" value="${storeInfo.openAt}"/>
+                                <input id="pickup-start-time" type="time" value="${storeInfo.openAt}"/>
                             </label>
-                                <i class="fa-regular fa-square-check"
+                                <i class="time-set fa-regular fa-square-check"
                                    style="color: #45a049; font-size: 25px; cursor: pointer"></i>
                             </div>
                         </div>
@@ -60,22 +59,36 @@
                             <div class="icon"><i class="far fa-clock"></i></div>
                             <div>픽업 마감 시간
                                 <label>
-                                    <input type="time" value="${storeInfo.closedAt}"/>
+                                    <input id="pickup-end-time" type="time" value="${storeInfo.closedAt}"/>
                                 </label>
-                                <i class="fa-regular fa-square-check"
+                                <i class="time-set fa-regular fa-square-check"
                                    style="color: #45a049; font-size: 25px; cursor: pointer"></i>
                                 </div>
                         </div>
+                        <div id="error-message" style="color: red; display: none;">픽업 시작 시간은 픽업 마감 시간보다 늦을 수 없습니다.</div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-user"></i></div>
                             <div>기본 수량 값
                                 <label>
-                                    <input type="number" value="${storeInfo.productCnt}" min="1"/>
+                                    <input id="product-cnt-input" type="number" value="${storeInfo.productCnt}" min="1"/>
                                 </label>
-                                <i class="fa-regular fa-square-check"
+                                <i class="product-cnt fa-regular fa-square-check"
                                    style="color: #45a049; font-size: 25px; cursor: pointer"></i>
                             </div>
                         </div>
+                        <div id="product-cnt-error-message" style="display: none; color: red;"></div>
+
+                        <div class="input-wrapper">
+                            <i class="fas fa-phone-alt"></i>
+                            <div>가게 전화번호
+                                <label>
+                                    <input id="business-number-input" value="${storeInfo.businessNumber}" min="1"/>
+                                </label>
+                                <i class="business-num fa-regular fa-square-check"
+                                   style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                            </div>
+                        </div>
+                        <div id="business-num-error-message" style="display: none; color: red;"></div>
 
 
                         <div class="input-wrapper">
@@ -85,12 +98,12 @@
                                 <option value="5900">5900</option>
                                 <option value="7900">7900</option>
                             </select>
-                            <i class="fa-regular fa-square-check"
+                            <i class="price-update fa-regular fa-square-check"
                                                  style="color: #45a049; font-size: 25px; cursor: pointer"></i>
                         </div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-key"></i></div>
-                            <button class="btn">비밀번호 재설정</button>
+                            <button class="btn" id="reset-pw-btn">비밀번호 재설정</button>
                         </div>
                     </div>
                     <div class="image-wrapper">
@@ -172,7 +185,7 @@
         const formData = new FormData();
         formData.append('storeImg', storeImg.files[0]);
         //   비동기 요청
-        const response = await fetch('/store/mypage-edit', {
+        const response = await fetch('/store/mypage/edit/update/img', {
             method: 'POST',
             body: formData
         });
@@ -187,7 +200,7 @@
     const priceSelect = document.getElementById('price');
 
     // storeInfo.price 값이 유효한 옵션인지 확인합니다.
-    const validPrices = ["3900", "5900", "7900", "8900"];
+    const validPrices = ["3900", "5900", "7900"];
     if (validPrices.includes(storeInfo.price)) {
         priceSelect.value = storeInfo.price;
     } else {

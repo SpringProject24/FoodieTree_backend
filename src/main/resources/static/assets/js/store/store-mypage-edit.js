@@ -1,4 +1,4 @@
-// const BASE_URL = 'http://localhost:8083';
+const BASE_URL = 'http://localhost:8083';
 const customerId = 'sji4205@naver.com'; // Replace this with the actual customer ID
 
 let type;
@@ -9,6 +9,51 @@ function editField(fieldId) {
     type = fieldId;
 }
 
+async function fetchCountUpdates(value) {
+    try {
+        const response = await fetch(`${BASE_URL}/store/mypage/edit/update/productCnt`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(value)
+        });
+
+        if (response.ok) {
+            console.log('Update successful');
+        } else {
+            const errorText = await response.text();
+            console.error('Update failed:', errorText);
+        }
+    } catch (error) {
+        console.error('Error updating data:', error);
+    }
+
+}
+
+async function fetchPriceUpdates(value) {
+    try {
+        const response = await fetch(`${BASE_URL}/store/mypage/edit/update/price`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(value)
+        });
+
+        if (response.ok) {
+            console.log('Update successful');
+        } else {
+            const errorText = await response.text();
+            console.error('Update failed:', errorText);
+        }
+    } catch (error) {
+        console.error('Error updating data:', error);
+    }
+}
+
+
+
 async function fetchUpdates(type, value) {
     const payload = {
         type: type,
@@ -17,12 +62,38 @@ async function fetchUpdates(type, value) {
     console.log('Updates to be sent:', payload); // Debugging line
 
     try {
-        const response = await fetch(`${BASE_URL}/store/mypage/update`, {
+        const response = await fetch(`${BASE_URL}/store/mypage/edit/update/info`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify([payload])
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            console.log('Update successful');
+        } else {
+            const errorText = await response.text();
+            console.error('Update failed:', errorText);
+        }
+    } catch (error) {
+        console.error('Error updating data:', error);
+    }
+}
+
+async function fetchTimeUpdates(type, value) {
+    let time = 'openAt';
+
+    if (type === 'closedAt'){
+        time = 'closedAt';
+    }
+    try {
+        const response = await fetch(`${BASE_URL}/store/mypage/edit/update/${time}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(value)
         });
 
         if (response.ok) {
@@ -224,14 +295,136 @@ $btn.addEventListener('click', openModal);
 const $submitBtn = document.getElementById('submit-new-pw');
 $submitBtn.addEventListener('click', openNewPwModal);
 
-document.getElementById('price-btn').addEventListener('click', e => {
-    // 선택된 옵션의 값을 가져옵니다.
-    console.log("clicked");
+const errorMessage = document.getElementById('error-message');
+const productCntInput = document.getElementById('product-cnt-input');
+const productCntErrorMessage = document.getElementById('product-cnt-error-message');
+const startTimeInput = document.getElementById('pickup-start-time');
+const endTimeInput = document.getElementById('pickup-end-time');
+const checkBtns = document.querySelectorAll('.fa-square-check');
+const bnumInput = document.getElementById('business-number-input');
+const bnumErrorMessage = document.getElementById('business-num-error-message');
+// 시간을 분으로 변환하는 함수
+const timeToMinutes = (time) => {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+};
 
-    const selectedPrice = document.getElementById('price').value;
-    console.log(selectedPrice);
+// 시간 비교 및 유효성 검사 함수
+const validateTimes = () => {
+    const startTime = startTimeInput.value;
+    const endTime = endTimeInput.value;
 
-    // input 요소의 값을 선택된 값으로 설정합니다.
-    document.getElementById('price-input').value = selectedPrice;
+    if (startTime && endTime) {
+        const startTimeInMinutes = timeToMinutes(startTime);
+        const endTimeInMinutes = timeToMinutes(endTime);
 
+        if (startTimeInMinutes >= endTimeInMinutes) {
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = '픽업 시작 시간은 픽업 마감 시간보다 늦어야 합니다.';
+            return false;
+        } else if (Math.abs(endTimeInMinutes - startTimeInMinutes) < 30) {
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = '픽업 가능 시간은 30분 이상이어야 합니다.';
+            return false;
+        } else {
+            errorMessage.style.display = 'none';
+            return true;
+        }
+    }
+};
+
+// 기본 수량 값 입력 필드의 유효성 검사 함수
+const validateProductCnt = () => {
+    const cnt = parseInt(productCntInput.value, 10);
+
+    if (cnt <= 0) {
+        productCntErrorMessage.style.display = 'block';
+        productCntErrorMessage.textContent = '기본 수량 값은 0 이하일 수 없습니다.';
+        productCntInput.value = 1; // 최소값인 1로 설정
+        return false;
+    } else {
+        productCntErrorMessage.style.display = 'none';
+        return true;
+    }
+};
+
+// 입력 필드 값 변경 시 유효성 검사 함수를 호출합니다.
+productCntInput.addEventListener('change', () => {
+    validateProductCnt();
+});
+
+bnumInput.addEventListener('change', () => {
+    validateBusinessNumber();
+});
+
+// 가게 전화번호 유효성 검사 함수
+// 가게 전화번호 유효성 검사 함수
+const validateBusinessNumber = () => {
+    const bnum = bnumInput.value.replace(/-/g, ''); // 입력된 값에서 '-'를 제거합니다.
+    const bnumPattern1 = /^\d{3}-\d{2}-\d{5}$/;
+    const bnumPattern2 = /^\d{3}-\d{3}-\d{4}$/;
+    const bnumPattern3 = /^\d{2}-\d{4}-\d{4}$/;
+    const numericOnlyPattern = /^\d{10,}$/; // 10자리 이상인 숫자 패턴
+
+    if (bnumPattern1.test(bnum) || bnumPattern2.test(bnum) || bnumPattern3.test(bnum) || numericOnlyPattern.test(bnum)) {
+        bnumErrorMessage.style.display = 'none';
+        return true;
+    } else {
+        bnumErrorMessage.style.display = 'block';
+        bnumErrorMessage.textContent = '전화번호 형식에 맞지 않습니다.';
+        return false;
+    }
+};
+
+
+// 시간 입력 필드 값 변경 시 유효성 검사 함수를 호출합니다.
+startTimeInput.addEventListener('input', validateTimes);
+endTimeInput.addEventListener('input', validateTimes);
+
+// 체크 버튼에 클릭 이벤트 리스너를 추가합니다.
+checkBtns.forEach(checkBtn => {
+    checkBtn.addEventListener('click', async (e) => {
+        const inputWrapper = e.target.closest('.input-wrapper');
+        const input = inputWrapper.querySelector('input');
+
+        if (e.target.classList.contains('business-num')) {
+            if (!validateBusinessNumber()) {
+                return;
+            }
+            const value = bnumInput.value;
+            fetchUpdates('business_number', value);
+        }
+
+        if (e.target.classList.contains('price-update')) {
+            const value = document.getElementById('price').value;
+            fetchPriceUpdates(value);
+        }
+
+        if (e.target.classList.contains('product-cnt')) {
+            // 기본 수량 값 유효성 검사를 수행합니다.
+            if (!validateProductCnt()) {
+                return; // 유효하지 않으면 중단합니다.
+            }
+
+            const value = productCntInput.value;
+            fetchCountUpdates(value); // 기본 수량 값 업데이트 함수 호출
+        }
+
+        if (e.target.classList.contains('time-set')) {
+            // 시간 유효성 검사를 수행합니다.
+            if (!validateTimes()) {
+                return; // 유효하지 않으면 중단합니다.
+            }
+
+            // 시간에 따라 API 업데이트 함수를 호출합니다.
+            const startTime = startTimeInput.value;
+            const endTime = endTimeInput.value;
+
+            if (input.id === 'pickup-start-time') {
+                fetchTimeUpdates('openAt', startTime);
+            } else if (input.id === 'pickup-end-time') {
+                fetchTimeUpdates('closedAt', endTime);
+            }
+        }
+    });
 });
