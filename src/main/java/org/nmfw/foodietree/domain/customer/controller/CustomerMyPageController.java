@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.*;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/customer")
 public class CustomerMyPageController {
-    String customerId = "test@gmail.com";
     private final CustomerMyPageService customerMyPageService;
 
     @GetMapping("/mypage")
@@ -29,8 +29,7 @@ public class CustomerMyPageController {
                             , HttpServletResponse response){
         log.info("/customer/mypage GET");
 
-        // 1. 로그인 되어있는 회원 아이디 가져오기
-//        String customerId = "sji4205@naver.com";
+        String customerId = LoginUtil.getLoggedInUser(session);
         // 2. 데이터베이스에서 해당 회원 데이터 조회하기
         CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
 
@@ -48,12 +47,13 @@ public class CustomerMyPageController {
         return "customer/mypage";
     }
 
-    @GetMapping("/customer-mypage-edit")
+    @GetMapping("/mypage-edit")
     public String editCustomerInfo(HttpSession session,
                                    Model model,
                                    HttpServletRequest request,
                                    HttpServletResponse response) {
         log.info("/customer/customer-mypage-edit-test GET");
+        String customerId = LoginUtil.getLoggedInUser(session);
 
         CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
 

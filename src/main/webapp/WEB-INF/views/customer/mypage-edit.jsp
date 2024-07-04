@@ -25,7 +25,7 @@
 <section class="my-page-area">
     <div class="container">
         <div class="profile">
-            <h2>${customerMyPageDto.customerId}</h2>
+            <h2>${sessionScope.login.customerId}</h2>
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link" href="mypage">마이페이지</a></li>
                 <li class="nav-item"><a class="nav-link" href="mypage-edit">개인정보수정</a></li>

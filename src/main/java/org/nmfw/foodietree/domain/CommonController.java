@@ -72,7 +72,7 @@ public class CommonController {
 	}
 
 
-    @GetMapping("/customer/mypage-edit")
+    @GetMapping("/customer/mypage-edit-test")
     public String myPageEdit(
                             Model model
                             , HttpServletRequest request
