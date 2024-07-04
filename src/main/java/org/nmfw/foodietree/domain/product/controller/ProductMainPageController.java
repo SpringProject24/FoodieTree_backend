@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.product.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
+import org.nmfw.foodietree.domain.product.dto.response.ProductDto;
 import org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto;
 import org.nmfw.foodietree.domain.product.service.ProductMainPageService;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
@@ -50,11 +51,13 @@ public class ProductMainPageController {
 //            }
 
             // 3. 선호 음식 기반 제품 조회
-            List<TotalInfoDto> productByFood = productMainPageService.findProductByFood(customerId, request, response);
+            List<ProductDto> productByFood = productMainPageService.findProductByFood(customerId, request, response);
+            productByFood.forEach(e -> {
+            });
             model.addAttribute("findByFood", productByFood);
 
             // 4. 선호 지역 기반 제품 조회
-            List<TotalInfoDto> productByArea = productMainPageService.findProductByArea(customerId, request, response);
+            List<ProductDto> productByArea = productMainPageService.findProductByArea(customerId, request, response);
             model.addAttribute("findByArea", productByArea);
 
             // 5. 고객 정보 조회

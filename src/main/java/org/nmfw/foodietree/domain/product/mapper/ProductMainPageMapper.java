@@ -13,9 +13,9 @@ public interface ProductMainPageMapper {
 
     List<ProductDto> findAll();
 
-    List<TotalInfoDto> findCategoryByFood(@Param("preferredFood") List<String> preferredFood);
+    List<ProductDto> findCategoryByFood(@Param("preferredFood") List<String> preferredFood);
 
-    List<TotalInfoDto> findCategoryByArea(@Param("customerId") String customerId);
+    List<ProductDto> findCategoryByArea(@Param("customerId") String customerId);
 
 
 
