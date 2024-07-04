@@ -131,14 +131,14 @@ async function showModal(year, month, day) {
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Compare dates without time
         let $storeCloseButton = ''; // 버튼 초기화
-        let $setPickUpTimeButton = ''; // 버튼 초기화
+        // let $setPickUpTimeButton = ''; // 버튼 초기화
         let $cancelStoreCloseButton = ''; // 버튼 초기화
         if (selectedDate > today) {
             $storeCloseButton = '<button id="store-holiday-btn">휴무일로 지정하기</button>';
-            $setPickUpTimeButton = '<button id="set-pickup-time-btn">픽업 시간 설정하기</button>';
+            // $setPickUpTimeButton = '<button id="set-pickup-time-btn">픽업 시간 설정하기</button>';
             $cancelStoreCloseButton = '<button id="undo-holiday-btn">휴무일 지정 취소하기</button>';
         }
-        let normalTag = `${dateString}의 정보` + tag + $storeCloseButton + '<br>' + $setPickUpTimeButton;
+        let normalTag = `${dateString}의 정보` + tag + $storeCloseButton + '<br>';
 
         let holidayTag = `${dateString}은`+'<div>휴무일로 지정되었습니다.</div>' + '<br>' + $cancelStoreCloseButton;
 

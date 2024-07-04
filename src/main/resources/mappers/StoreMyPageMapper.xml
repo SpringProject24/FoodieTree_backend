@@ -86,7 +86,9 @@
         SELECT DISTINCT
             store_id,
             store_name,
-            product_cnt
+            product_cnt,
+            open_at,
+            closed_at
         FROM
             tbl_store
     </select>

@@ -2,8 +2,6 @@ package org.nmfw.foodietree.domain.customer.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Update;
 import org.nmfw.foodietree.domain.customer.dto.resp.*;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.springframework.http.ResponseEntity;
