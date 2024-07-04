@@ -6,7 +6,7 @@
 
 
 header .logo {
-  font-size: 24px;
+  font-size: 36px;
   font-weight: bold;
 }
 
@@ -52,6 +52,74 @@ header nav ul li a {
   text-decoration: none;
 }
 
+/* 버튼 */
+
+/* .wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* 버튼 사이의 간격
+}
+*/
+
+/* button {
+  position: relative;
+  height: 50px;
+  padding: 0 30px;
+  border: 2px solid #000;
+  background: #e8e8e8;
+  user-select: none;
+  white-space: nowrap;
+  transition: all 0.05s linear;
+  font-family: inherit;
+}
+
+button:before, button:after {
+  content: "";
+  position: absolute;
+  background: #e8e8e8;
+  transition: all 0.2s linear;
+}
+
+button:before {
+  width: calc(100% + 6px);
+  height: calc(100% - 16px);
+  top: 8px;
+  left: -3px;
+}
+
+button:after {
+  width: calc(100% - 16px);
+  height: calc(100% + 6px);
+  top: -3px;
+  left: 8px;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:hover:before {
+  height: calc(100% - 32px);
+  top: 16px;
+}
+
+button:hover:after {
+  width: calc(100% - 32px);
+  left: 16px;
+}
+
+button span {
+  font-size: 15px;
+  z-index: 3;
+  position: relative;
+  font-weight: 600;
+}  */
+
+
+
+
+
+
 header .signup, .signin {
   background-color: white;
   color: var(--header-font-color);
@@ -65,39 +133,55 @@ header .signup, .signin {
   color: var(--white-color);
   text-align: center;
   padding: 100px 0;
-
 }
 
 .hero .container {
   text-align: center;
 }
 
+.hero .container h2 {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
 .hero .container .search-wrapper {
+  font-size: 15px;
+  font-weight: 300;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-.hero .container .search-wrapper .search {
-  padding: 10px 20px;
-  width: 350px;
-  background-color: var(--white-color);
-  color: var(--header-font-color);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
+.hero .container .search-wrapper .sub-signup a{
+  font-size: 15px;
 }
 
-.hero .sub-signup {
-  margin-top: 15px;
-  font-size: 12px;
-}
+.hero .container .search-wrapper .search {
+  padding: 12px 20px;
+  width: 500px;
+  background-color: var(--white-color);
+  /* color: var(--header-font-color); */
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  /* 폰트 */
+  font-family: "Gaegu", sans-serif;
+  font-weight: bold;
+  font-style: normal;
+  color: black;
+} 
 
 section {
   padding: 50px 0;
   text-align: center;
+  /* 폰트 */
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 section.info .container {
@@ -114,12 +198,13 @@ section.info .container .left {
 
 section.info .container .left .wrapper h2 {
   margin-bottom: 20px;
-  font-size: 20px;
+  font-size: 25px;
+  font-weight: 500;
 }
 
 section.info .container .left .wrapper p {
   margin-bottom: 15px;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 section.info .container .right {
@@ -134,7 +219,58 @@ section.info .container .right {
   flex-direction: column;
 }
 
-section.info .container .right .store-signup {
+/* 새로운 입점신청 css 코드 */
+
+.right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.store-signup a {
+  position: relative;
+  display: inline-block;
+  padding: 15px 30px;
+  color: #fff;
+  background: #4CAF50; /* 기본 초록색 배경 */
+  border-radius: 15px; /* 모서리 둥글게 */
+  text-decoration: none;
+  font-size: 16px;
+  overflow: hidden;
+  transition: background 0.3s, color 0.3s; /* 배경색 전환 추가 */
+  z-index: 1;
+}
+
+.store-signup a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #388E3C; /* 어두운 초록색 배경 */
+  border-radius: 15px; /* 모서리 둥글게 */
+  transition: left 0.3s;
+  z-index: -1;
+}
+
+.store-signup a:hover {
+  background: #388E3C; /* 배경색 전환 */
+}
+
+.store-signup a:hover::before {
+  left: 0;
+}
+
+.store-signup a span {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* 기존 입점신청 코드 */
+/* section.info .container .right .store-signup {
   width: 200px;
   height: 50px;
   background-color: var(--header-font-color);
@@ -144,18 +280,20 @@ section.info .container .right .store-signup {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-}
+} */
+
+
 
 footer {
   height: 300px; /* 푸터의 고정된 높이를 설정 */
-    background-color: #00715A;
-  /* background-color: #20835e; */
-  color: #F5F5DC;
+  background-color: #2a6f2b;;
+  color: white;
 }
 
 .big-title {
-  font-size: 100pt;
-  font-weight:900;
+
+  font-size: 120pt;
+  font-weight:1000;
   font-family: 'Roboto', sans-serif; 
   margin-bottom: 40px;
   text-align: center; /* 텍스트 수평 정렬 */
