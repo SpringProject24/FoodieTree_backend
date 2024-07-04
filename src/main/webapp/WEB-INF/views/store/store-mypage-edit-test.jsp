@@ -47,38 +47,46 @@
                             <div>${storeInfo.storeName}</div>
                         </div>
                         <div class="input-wrapper">
-                            <div class="icon"><i class="fa-solid fa-user"></i></div>
-                            <div>픽업 시작 시간 <label>
+                            <div class="icon"><i class="far fa-clock"></i></div>
+                            <div>픽업 시작 시간
+                                <label>
                                 <input type="time" value="${storeInfo.openAt}"/>
-                            </label></div>
+                            </label>
+                                <i class="fa-regular fa-square-check"
+                                   style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                            </div>
                         </div>
                         <div class="input-wrapper">
-                            <div class="icon"><i class="fa-solid fa-user"></i></div>
+                            <div class="icon"><i class="far fa-clock"></i></div>
                             <div>픽업 마감 시간
                                 <label>
                                     <input type="time" value="${storeInfo.closedAt}"/>
                                 </label>
+                                <i class="fa-regular fa-square-check"
+                                   style="color: #45a049; font-size: 25px; cursor: pointer"></i>
                                 </div>
                         </div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-user"></i></div>
                             <div>기본 수량 값
                                 <label>
-                                    <input value="${storeInfo.productCnt}"/>
+                                    <input type="number" value="${storeInfo.productCnt}" min="1"/>
                                 </label>
-                               </div>
+                                <i class="fa-regular fa-square-check"
+                                   style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                            </div>
                         </div>
 
+
                         <div class="input-wrapper">
+                            <i class="fas fa-dollar-sign"></i>
                             <select id="price">
                                 <option value="3900">3900</option>
                                 <option value="5900">5900</option>
                                 <option value="7900">7900</option>
                             </select>
-                            <input id="price-input" type="text" value="${storeInfo.price}">
-                            <div id="price-btn" class="icon"><i class="fa-regular fa-square-check"
+                            <i class="fa-regular fa-square-check"
                                                  style="color: #45a049; font-size: 25px; cursor: pointer"></i>
-                            </div>
                         </div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-key"></i></div>
