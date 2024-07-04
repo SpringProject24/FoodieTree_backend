@@ -112,7 +112,7 @@
                     <h3 class="title-text">선호지역</h3>
                 </div>
                 <div class="edit-wrapper">
-                    <ul class="preferred">
+                    <ul class="preferred" id="preferred-area">
                         <c:forEach var="area" items="${customerMyPageDto.preferredArea}"
                                    varStatus="status">
                             <li id="area-${status.index}">
@@ -127,7 +127,7 @@
                         <h3 class="title-text">선호음식</h3>
                     </div>
                     <div class="edit-wrapper">
-                        <ul class="preferred">
+                        <ul class="preferred" id="preferred-food">
                             <c:forEach var="food" items="${customerMyPageDto.preferredFood}" varStatus="status">
                                 <li id="food-${status.index}">
                                     <div class="img-box">
@@ -145,9 +145,9 @@
                         <h3 class="title-text">최애가게</h3>
                     </div>
                     <div class="edit-wrapper">
-                        <ul class="preferred">
+                        <ul class="preferred" id="preferred-store">
                             <c:forEach var="store" items="${customerMyPageDto.favStore}" varStatus="status">
-                                <li id="store-${status.index}">
+                                <li id="${store.storeId}">
                                     <div class="img-box">
                                         <img src="${store}" alt="최애가게이미지">
                                     </div>

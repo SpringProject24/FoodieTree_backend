@@ -5,7 +5,9 @@ import {
     sendVerificationCode,
     verifyCode,
     openNewPwModal,
-    closeNewPwModal, debounceCheckPassword, updatePassword,
+    closeNewPwModal,
+    debounceCheckPassword,
+    updatePassword, deleteItem,
 
 } from "./mypage-edit.js";
 
@@ -63,6 +65,41 @@ document.getElementById('update-new-pw-btn').addEventListener('click', async (e)
         closeModal();
     } else{
         alert('비밀번호 변경에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
+});
+
+document.getElementById('preferred-area').addEventListener('click', async (e) => {
+    if (e.target.matches('i') === false) return;
+    const $li = e.target.closest('li');
+    const $span = $li.querySelector('span');
+    const res = await deleteItem('preferredArea', $span.textContent);
+    if (res) {
+        $li.remove();
+    } else {
+        alert('선호지역 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
+});
+
+document.getElementById('preferred-food').addEventListener('click', async (e) => {
+    if (e.target.matches('i') === false) return;
+    const $li = e.target.closest('li');
+    const $span = $li.querySelector('span');
+    const res = await deleteItem('preferredFood', $span.textContent);
+    if (res) {
+        $li.remove();
+    } else {
+        alert('선호음식 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
+});
+
+document.getElementById('preferred-store').addEventListener('click', async (e) => {
+    if (e.target.matches('i') === false) return;
+    const $li = e.target.closest('li');
+    const res = await deleteItem('favStore', $li.id);
+    if (res) {
+        $li.remove();
+    } else {
+        alert('최애가게 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.');
     }
 });
 

@@ -55,15 +55,15 @@ export async function deleteItem(type, value) {
 
         if (response.ok) {
             console.log('Delete successful');
-            // Remove the item from the DOM
-            const listItem = document.querySelector(`[onclick="deleteItem('${type}', '${value}')"]`);
-            if (listItem) listItem.remove();
+            return true;
         } else {
             const errorText = await response.text();
             console.error('Delete failed:', errorText);
+            return false;
         }
     } catch (error) {
         console.error('Error deleting item:', error);
+        return false;
     }
 }
 function handleKeyUp(event, fieldId) {

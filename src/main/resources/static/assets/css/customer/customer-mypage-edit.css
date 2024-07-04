@@ -237,9 +237,9 @@ p {
   object-fit: cover;
 }
 
-.edit-wrapper .preferred .img-box img:hover {
-  transform: scale(1.1);
-}
+/*.edit-wrapper .preferred .img-box img:hover {*/
+/*  transform: scale(1.1);*/
+/*}*/
 
 .edit-wrapper .preferred li {
   display: flex;
