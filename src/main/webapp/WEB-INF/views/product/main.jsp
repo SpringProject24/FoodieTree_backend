@@ -236,6 +236,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     </div>
   </div>
 </section>
+
+
 <section class="container category">
   <div class="swiper myswiper1">
     <div class="title-wrapper">
@@ -243,6 +245,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       <div class="swiper-button-prev"><i class="fa-solid fa-arrow-left"></i></div>
       <div class="swiper-button-next"><i class="fa-solid fa-arrow-right"></i></div>
     </div>
+
+    
     <div class="swiper-wrapper">
       <div class="swiper-slide">
         <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -250,115 +254,26 @@ uri="http://java.sun.com/jsp/jstl/core" %>
             <img src="
             /assets/img/western.jpg" alt="">
           </div>
+          <c:forEach var="stores" items="${findByFood}">
+          <c:forEach var="item" items="${stores.productDtoList}">
           <div class="store-info">
-            <h3>가게 이름</h3>
+            <h3>가게 이름 : ${item.storeId}</h3>
             <p>픽업 시간</p>
             <div class="wrapper">
               <p>평점 / 거리</p>
               <p>가격</p>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="
-            /assets/img/cafe.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="
-            /assets/img/dessert.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="
-            /assets/img/japanese.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="
-            /assets/img/chinese.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="
-            /assets/img/korean.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <div class="store-img-box">
-            <img src="
-            /assets/img/etc.jpg" alt="">
-          </div>
-          <div class="store-info">
-            <h3>가게 이름</h3>
-            <p>픽업 시간</p>
-            <div class="wrapper">
-              <p>평점 / 거리</p>
-              <p>가격</p>
-            </div>
-          </div>
+        </c:forEach>
+        </c:forEach>
         </div>
       </div>
     </div>
+
   </div>
 </section>
+
+
 
 <section class="container category">
   <div class="swiper myswiper2">
