@@ -118,8 +118,8 @@
                 </c:forEach>
             </div>
             <div class="stats">
-                <div>10kg의 음쓰를 줄였습니다</div>
-                <div>지금까지 10만원을 아꼈어요</div>
+                <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
+                <div>지금까지 ${stats.money}만원을 아꼈어요</div>
             </div>
         </div>
     </div>

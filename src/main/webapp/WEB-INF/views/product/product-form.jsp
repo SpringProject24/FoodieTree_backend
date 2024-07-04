@@ -75,7 +75,5 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <input type="submit" value="상품 등록" />
       </form>
     </div>
-
-    
   </body>
 </html>

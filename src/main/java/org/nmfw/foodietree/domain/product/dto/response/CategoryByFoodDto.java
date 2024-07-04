@@ -4,13 +4,13 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter@ToString
+@Getter
+@ToString
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductFindAllDto {
-
+public class CategoryByFoodDto {
     private String storeId;
     private String productId;
     private LocalDateTime pickupTime;
@@ -19,5 +19,4 @@ public class ProductFindAllDto {
     private String storeName;
     private String category;
     private int price;
-
 }

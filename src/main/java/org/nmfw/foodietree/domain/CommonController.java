@@ -12,10 +12,12 @@ import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @Slf4j
@@ -32,6 +34,11 @@ public class CommonController {
         return "sign-in";
     }
 
+    @GetMapping("/common/sign-up")
+    public String signUp(Model model) {
+        model.addAttribute("kakaoApiKey", kakaoApiKey);
+        return "common/sign-up";
+	}
     @GetMapping("/customer/mypage-test")
     public String myPageMain(
                             Model model
@@ -57,6 +64,12 @@ public class CommonController {
         return "customer/mypage";
     }
 
+    @PostMapping("/common/sign-up")
+    @CrossOrigin
+    public String signUp(SignUpDto signUpDto) {
+        log.info("signUpDto: {}", signUpDto);
+        return "redirect:/sign-in";
+	}
 
 
     @GetMapping("/customer/mypage-edit")

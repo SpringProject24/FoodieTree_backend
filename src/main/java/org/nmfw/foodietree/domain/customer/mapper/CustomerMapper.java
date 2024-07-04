@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.customer.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.nmfw.foodietree.domain.customer.dto.request.AutoLoginDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface CustomerMapper {
     boolean save(Customer customer);
 
     // 회원 정보 개별 조회
-    Customer findOne(String customer);
+    Customer findOne(@Param("customerId") String customerId);
 
     // 중복 확인 아아디(이메일)
     /*
@@ -21,12 +22,16 @@ public interface CustomerMapper {
      * @return - 중복이면 true, 아니면 false
      */
     boolean existsById(
-            @Param("keyword") String keyword
-    );
+            @Param("keyword") String keyword);
 
-
-    // N선호하는 음식 저장하기
-    void savePreferredFoods(@Param("customerId") String customerId,
+    //선호하는 음식 받아서 저장
+    boolean savePreferredFoods(@Param("customerId") String customerId,
                             @Param("preferredFoods") List<String> preferredFoods);
 
+
+
+    // 자동로그인 쿠키값, 만료시간 업데이트
+    void updateAutoLogin(AutoLoginDto dto);
+
+    Customer findCustomerBySession(String sessionId);
 }

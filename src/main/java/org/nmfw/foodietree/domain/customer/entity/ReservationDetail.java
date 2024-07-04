@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ReservationDetail {
     //tbl_reservation
+    private int reservationId;
     private String customerId;
     private String productId;
     private LocalDateTime reservationTime;
@@ -25,7 +26,7 @@ public class ReservationDetail {
     private String storeName;
     private String category;
     private String address;
-    private String price;
+    private int price;
     private String storeImg;
     //tbl_customer
     private String nickname;

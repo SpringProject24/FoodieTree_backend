@@ -1,10 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8" %> <%@ taglib prefix="c"
+uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FoodieTree</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -40,509 +41,529 @@
         border-bottom: 100px solid green;
       }
     </style>
-</head>
-<body>
-
-<header>
-    <div class="container">
+  </head>
+  <body>
+  <c:forEach var="item" items="${productTotal.productDtoList}">
+      <div>
+        ${item.storeName}
+      </div>
+  </c:forEach>
+  <c:forEach var="item" items="${productTotal.preferredArea}">
+      <div>
+        ${item}
+      </div>
+  </c:forEach>
+  <c:forEach var="item" items="${productTotal.preferredFood}">
+    <div>
+      ${item}
+    </div>
+</c:forEach>
+    <header>
+      <div class="container">
         <div class="logo-wrapper">
-            <div class="logo"><h1>FoodieTree</h1></div>
+          <div class="logo"><h1>FoodieTree</h1></div>
         </div>
         <div class="input-wrapper">
-            <button><i class="fa-solid fa-search"></i></button>
-            <input type="text" placeholder="Search">
+          <button><i class="fa-solid fa-search"></i></button>
+          <input type="text" placeholder="Search" />
         </div>
         <ul class="profile-wrapper">
-            <li>
-                <a href="#" class="profile img-box">
-                    <img src="/assets/img/western.jpg" alt="">
-                </a>
-            </li>
-            <li>
-                <a href="/customer/mypage">마이페이지</a>
-            </li>
-            <li>
-                <a href="/customer/signout">로그아웃</a>
-            </li>
+          <li>
+            <a href="#" class="profile img-box">
+              <img src="/assets/img/western.jpg" alt="" />
+            </a>
+          </li>
+          <li>
+            <a href="/customer/mypage">마이페이지</a>
+          </li>
+          <li>
+            <a href="/customer/signout">로그아웃</a>
+          </li>
         </ul>
-    </div>
-</header>
+      </div>
+    </header>
 
-<section class="container category">
-    <div class="swiper category-list">
+    <section class="container category">
+      <div class="swiper category-list">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="img-box">
-                        <img src="/assets/img/western.jpg" alt="">
-                    </div>
-                    <p>양식</p>
-                </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="img-box">
+                <img src="/assets/img/western.jpg" alt="" />
+              </div>
+              <p>양식</p>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="img-box">
-                        <img src="/assets/img/cafe.jpg" alt="">
-                    </div>
-                    <p>카페</p>
-                </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="img-box">
+                <img src="/assets/img/cafe.jpg" alt="" />
+              </div>
+              <p>카페</p>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="img-box">
-                        <img src="/assets/img/dessert.jpg" alt="">
-                    </div>
-                    <p>디저트</p>
-                </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="img-box">
+                <img src="/assets/img/dessert.jpg" alt="" />
+              </div>
+              <p>디저트</p>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="img-box">
-                        <img src="/assets/img/japanese.jpg" alt="">
-                    </div>
-                    <p>일식</p>
-                </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="img-box">
+                <img src="/assets/img/japanese.jpg" alt="" />
+              </div>
+              <p>일식</p>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="img-box">
-                        <img src="/assets/img/chinese.jpg" alt="">
-                    </div>
-                    <p>중식</p>
-                </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="img-box">
+                <img src="/assets/img/chinese.jpg" alt="" />
+              </div>
+              <p>중식</p>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="img-box">
-                        <img src="/assets/img/korean.jpg" alt="">
-                    </div>
-                    <p>한식</p>
-                </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="img-box">
+                <img src="/assets/img/korean.jpg" alt="" />
+              </div>
+              <p>한식</p>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="img-box">
-                        <img src="/assets/img/etc.jpg" alt="">
-                    </div>
-                    <p>기타</p>
-                </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="img-box">
+                <img src="/assets/img/etc.jpg" alt="" />
+              </div>
+              <p>기타</p>
             </div>
+          </div>
         </div>
-    </div>
-</section>
-<section class="container category">
-    <div class="swiper myswiper1">
+      </div>
+    </section>
+    <section class="container category">
+      <div class="swiper myswiper1">
         <div class="title-wrapper">
-            <h2>선호하는 음식</h2>
-            <div class="swiper-button-prev"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="swiper-button-next"><i class="fa-solid fa-arrow-right"></i></div>
+          <h2>선호하는 음식</h2>
+          <div class="swiper-button-prev">
+            <i class="fa-solid fa-arrow-left"></i>
+          </div>
+          <div class="swiper-button-next">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
         </div>
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/western.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          <div class="swiper-slide">
+            <c:forEach var="item" items="${categoryByFood}">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/western.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름 : ${item.storeName}</h3>
+                <p>픽업 시간 : ${item.pickupTime}</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격 : ${item.price}</p>
                 </div>
+              </div>
+            </c:forEach>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/cafe.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/cafe.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/dessert.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/dessert.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/japanese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/japanese.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/chinese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/chinese.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/korean.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/korean.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/etc.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/etc.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<section class="container category">
-    <div class="swiper myswiper2">
+    <section class="container category">
+      <div class="swiper myswiper2">
         <div class="title-wrapper">
-            <h2>선호하는 지역</h2>
-            <div class="btn-wrapper">
-                <div class="swiper-button-prev-b circle">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </div>
-                <div class="swiper-button-next-b circle">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
+          <h2>선호하는 지역</h2>
+          <div class="btn-wrapper">
+            <div class="swiper-button-prev-b circle">
+              <i class="fa-solid fa-arrow-left"></i>
             </div>
+            <div class="swiper-button-next-b circle">
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
         </div>
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/western.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/western.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/cafe.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/cafe.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/dessert.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/dessert.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/japanese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/japanese.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/chinese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/chinese.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/korean.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/korean.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/etc.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/etc.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="rectangle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="triangle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="rectangle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="triangle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<section class="container category">
-    <div class="swiper myswiper3">
+    <section class="container category">
+      <div class="swiper myswiper3">
         <div class="title-wrapper">
-            <h2>최애 가게</h2>
-            <div class="btn-wrapper">
-                <div class="swiper-button-prev-b circle">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </div>
-                <div class="swiper-button-next-b circle">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
+          <h2>최애 가게</h2>
+          <div class="btn-wrapper">
+            <div class="swiper-button-prev-b circle">
+              <i class="fa-solid fa-arrow-left"></i>
             </div>
+            <div class="swiper-button-next-b circle">
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
         </div>
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/western.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/western.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/cafe.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/cafe.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/dessert.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/dessert.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/japanese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/japanese.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/chinese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/chinese.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/korean.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/korean.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="item">
-                    <div class="store-img-box">
-                        <img src="/assets/img/etc.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 수량</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="item">
+              <div class="store-img-box">
+                <img src="/assets/img/etc.jpg" alt="" />
+              </div>
+              <div class="store-info">
+                <h3>가게 이름</h3>
+                <p>픽업 시간</p>
+                <div class="wrapper">
+                  <p>평점 / 수량</p>
+                  <p>가격</p>
                 </div>
+              </div>
             </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="rectangle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="triangle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="rectangle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="triangle"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="circle"></div>
+          </div>
         </div>
     </div>
 </section>
@@ -570,11 +591,11 @@
     </div>
 </div>
 
-<footer>
-    <div class="container">
+    <footer>
+      <div class="container">
         <p>&copy; 2024 FoodieTree. All rights reserved.</p>
-    </div>
-</footer>
+      </div>
+    </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>

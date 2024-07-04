@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 public class StoreSignUpDetailDto {
 
     @NotBlank
-    private String account;
+    private String storeId;
 
     @NotBlank
     private String password;

@@ -9,9 +9,9 @@
     <!-- 새로운 고객 정보 저장-->
     <insert id="save">
         INSERT INTO tbl_customer
-            (customer_id, customer_password, nickname)
+            (customer_id, customer_password, nickname, session_id)
         VALUES
-            (#{customerId}, #{customerPassword}, #{nickName})
+            (#{customerId}, #{customerPassword}, #{nickName}, #{sessionId})
     </insert>
 
     <!-- 아이디 중복 검사-->
@@ -20,8 +20,6 @@
         FROM tbl_customer
         WHERE customer_id = #{keyword}
     </select>
-
-
 
     <!--  고객 1명의 정보를 조회 -->
     <select id="findOne" resultType="customer">
@@ -36,14 +34,35 @@
         WHERE customer_id = #{customerId}
     </select>
 
+    <!-- 선호하는 음식 저장하기 -->
+    <insert id="savePreferredFoods">
+        INSERT INTO tbl_fav_food (customer_id, preferred_food)
+        VALUES
+        <foreach collection="preferredFoods" item="food" separator=",">
+            (#{customerId}, #{food})
+        </foreach>
+    </insert>
 
-<!--    &lt;!&ndash; N 선호하는 음식 저장하기 &ndash;&gt;-->
-<!--    <insert id="savePreferredFoods">-->
-<!--        INSERT INTO tbl_fav_food (customer_id, preferred_food)-->
-<!--        VALUES-->
-<!--        <foreach collection="preferredFoods" item="food" separator=",">-->
-<!--            (#{customerId}, #{food})-->
-<!--        </foreach>-->
-<!--    </insert>-->
+<!--    <select id="findMemberBySessionId" resultType="member">-->
+<!--        SELECT-->
+<!--        account, name, email, auth, limit_time-->
+<!--        FROM tbl_member-->
+<!--        WHERE session_id = #{sessionId}-->
+<!--    </select>-->
+
+    <!--자동로그인-->
+    <update id="updateAutoLogin">
+        UPDATE tbl_customer
+        SET session_id = #{sessionId}, limit_time = #{limitTime}
+        WHERE customer_id = #{customerId}
+    </update>
+    
+    <select id="findCustomerBySession" resultType="customer">
+        SELECT
+             customer_id, limit_time
+        FROM tbl_customer
+        WHERE session_id = #{sessionId}
+    </select>
+
 
 </mapper>
