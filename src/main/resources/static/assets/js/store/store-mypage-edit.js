@@ -210,11 +210,11 @@ async function verifyCode() {
 
 function startCountdown(seconds) {
     const countdownElement = document.getElementById('countdown');
-    countdownElement.textContent = `남은 시간: \${seconds}초`;
+    countdownElement.textContent = `남은 시간: ${seconds}초`;
 
     countdownInterval = setInterval(() => {
         seconds -= 1;
-        countdownElement.textContent = `남은 시간: \${seconds}초`;
+        countdownElement.textContent = `남은 시간: ${seconds}초`;
 
         if (seconds <= 0) {
             clearInterval(countdownInterval);
