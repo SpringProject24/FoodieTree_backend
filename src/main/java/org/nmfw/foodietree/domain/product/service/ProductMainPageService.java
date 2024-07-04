@@ -1,16 +1,11 @@
 package org.nmfw.foodietree.domain.product.service;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.customer.dto.resp.PreferredFoodDto;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
-import org.nmfw.foodietree.domain.product.dto.response.ProductDto;
-import org.nmfw.foodietree.domain.product.dto.response.CategoryByFoodDto;
 import org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto;
 import org.nmfw.foodietree.domain.product.mapper.ProductMainPageMapper;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,51 +15,68 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-
 public class ProductMainPageService {
+
     private final ProductMainPageMapper productMainPageMapper;
     private final CustomerMyPageMapper customerMyPageMapper;
     private final CustomerMyPageService customerMyPageService;
 
-
-    // product 메인페이지 상품정보 조회 중간 처리
+    /**
+     * Retrieves product information for the main page based on customer's preferred food.
+     *
+     * @param request  the HTTP servlet request
+     * @param response the HTTP servlet response
+     * @param customerId the ID of the customer
+     * @return TotalInfoDto containing product information
+     */
     public TotalInfoDto getProductInfo(HttpServletRequest request, HttpServletResponse response, String customerId) {
         List<String> preferredFood = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredFood();
 
+//        if (preferredFood == null) {
+//            log.warn("Preferred food list is null for customerId: {}", customerId);
+//            return null; // or handle the case accordingly
+//        }
+
         return TotalInfoDto.builder()
                 .productDtoList(productMainPageMapper.findAll())
-
+                .preferredFood(preferredFood)
                 .build();
     }
 
-    public List<TotalInfoDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response){
+    /**
+     * Finds products by customer's preferred food.
+     *
+     * @param customerId the ID of the customer
+     * @param request  the HTTP servlet request
+     * @param response the HTTP servlet response
+     * @return a list of TotalInfoDto containing filtered product information
+     */
+    public List<TotalInfoDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response) {
         List<String> preferredFood = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredFood();
+
+//        if (preferredFood == null) {
+//            log.warn("Preferred food list is null for customerId: {}", customerId);
+//            return null; // or handle the case accordingly
+//        }
+
         return productMainPageMapper.findCategoryByFood(preferredFood);
     }
 
-    public List<TotalInfoDto> findProductByArea(String customerId, HttpServletRequest request, HttpServletResponse response){
+    /**
+     * Finds products by customer's preferred area.
+     *
+     * @param customerId the ID of the customer
+     * @param request  the HTTP servlet request
+     * @param response the HTTP servlet response
+     * @return a list of TotalInfoDto containing filtered product information
+     */
+    public List<TotalInfoDto> findProductByArea(String customerId, HttpServletRequest request, HttpServletResponse response) {
+        List<String> preferredArea = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredArea();
+//        if (preferredArea == null) {
+//            log.warn("Preferred area list is null for customerId: {}", customerId);
+//            return null; // or handle the case accordingly
+//        }
+
         return productMainPageMapper.findCategoryByArea(customerId);
     }
-
-
-//    public List<String> getCategoryByFood(String customerId) {
-//        List<String> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
-//        preferenceFoods.forEach(e-> log.info("{}", e));
-//        if (preferenceFoods.isEmpty()) {
-//            log.info("null");
-//            return getProductInfo();
-//        }
-//        return productMainPageMapper.categoryByFoodList(preferenceFoods);
-//    }
-//
-//    public List<String> getCategoryByArea(String customerId) {
-//        List<String> preferenceAreas = customerMyPageMapper.findPreferenceAreas(customerId);
-//        if (preferenceAreas.isEmpty()) {
-//            return getProductInfo();
-//        }
-//        return productMainPageMapper.categoryByAreaList(preferenceAreas);
-//    }
-
-
-
 }

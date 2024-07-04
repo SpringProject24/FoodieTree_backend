@@ -23,4 +23,6 @@ public class ProductDto {
     private int price;
     private int productCnt;
     private String proImage;
+
+
 }
