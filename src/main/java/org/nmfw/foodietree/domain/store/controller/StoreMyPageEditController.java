@@ -6,10 +6,10 @@ import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreStatsDto;
 import org.nmfw.foodietree.domain.store.service.StoreMyPageEditService;
 import org.nmfw.foodietree.domain.store.service.StoreMyPageService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,5 +40,11 @@ public class StoreMyPageEditController {
         model.addAttribute("stats", stats);
 
         return "store/store-mypage-edit-test";
+    }
+
+    @PatchMapping("/update/password")
+    public ResponseEntity<?> updateCustomerPw(@PathVariable String customerId, @RequestBody String newPassword) {
+        boolean flag = storeMyPageEditService.updateStorePw(customerId, newPassword);
+        return flag? ResponseEntity.ok("password reset successful"): ResponseEntity.status(400).body("reset fail");
     }
 }

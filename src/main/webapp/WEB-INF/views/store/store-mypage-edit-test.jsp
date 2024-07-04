@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">
     <script defer src="/assets/js/store/store-mypage.js"></script>
+    <script defer src="/assets/js/store/store-mypage-edit.js"></script>
 </head>
 <body>
 <header>
@@ -43,16 +44,39 @@
                     <div class="input-area">
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-user"></i></div>
-                            <input type="text" id="nickname" value="${storeInfo.storeName}">
-                            <div class="icon"><i class="fa-regular fa-square-check"
-                                                 style="color: #45a049; font-size: 25px; cursor: pointer"></i>
-                            </div>
+                            <div>${storeInfo.storeName}</div>
                         </div>
                         <div class="input-wrapper">
-                            <div class="icon"><i class="fa-solid fa-phone"></i></div>
-                            <input type="text" id="phone"
-                                   value="${storeInfo.price}">
-                            <div class="icon"><i class="fa-regular fa-square-check"
+                            <div class="icon"><i class="fa-solid fa-user"></i></div>
+                            <div>픽업 시작 시간 <label>
+                                <input type="time" value="${storeInfo.openAt}"/>
+                            </label></div>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="icon"><i class="fa-solid fa-user"></i></div>
+                            <div>픽업 마감 시간
+                                <label>
+                                    <input type="time" value="${storeInfo.closedAt}"/>
+                                </label>
+                                </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="icon"><i class="fa-solid fa-user"></i></div>
+                            <div>기본 수량 값
+                                <label>
+                                    <input value="${storeInfo.productCnt}"/>
+                                </label>
+                               </div>
+                        </div>
+
+                        <div class="input-wrapper">
+                            <select id="price">
+                                <option value="3900">3900</option>
+                                <option value="5900">5900</option>
+                                <option value="7900">7900</option>
+                            </select>
+                            <input id="price-input" type="text" value="${storeInfo.price}">
+                            <div id="price-btn" class="icon"><i class="fa-regular fa-square-check"
                                                  style="color: #45a049; font-size: 25px; cursor: pointer"></i>
                             </div>
                         </div>
@@ -80,30 +104,67 @@
     </div>
 </section>
 
+<!-- 비밀번호 재설정 모달 -->
+<div id="resetPasswordModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span> <!-- X 버튼 추가 -->
+        <h2>비밀번호 재설정</h2>
+        <div id="emailStep">
+            <p>인증번호를 받으세요.</p>
+            <button id="sendVerificationCodeBtn" onclick="sendVerificationCode()">인증번호 받기</button>
+        </div>
+        <div id="codeStep" class="hidden">
+            <p>인증번호를 입력하세요.</p>
+            <input type="text" id="verificationCode" maxlength="6">
+            <button onclick="verifyCode()">인증하기</button>
+            <div id="verificationResult"></div>
+        </div>
+        <div id="countdown"></div>
+    </div>
+</div>
+
+<!-- 비밀번호 재설정 입력 모달 -->
+<div id="newPasswordModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeNewPwModal()">&times;</span> <!-- X 버튼 추가 -->
+        <h2>새 비밀번호 설정</h2>
+        <div class="pass">
+            <input id="new-password-input" type="password" name="password" placeholder="새 비밀번호를 입력해주세요" onkeyup="debounceCheckPassword()">
+        </div>
+        <div class="pass-check">
+            <input id="new-password-check" type="password" name="password-chk" placeholder="새 비밀번호를 다시 입력해주세요" onkeyup="debounceCheckPassword()">
+            <div class="wrapper">
+                <button id="submit-new-pw" onclick="updatePassword()" disabled>비밀번호 재설정하기</button>
+            </div>
+        </div>
+        <div id="password-match-status"></div> <!-- 비밀번호 일치 여부 표시 -->
+    </div>
+</div>
+
 <script>
     const avatar = document.getElementById('avatar');
-    const profileImage = document.getElementById('profileImage');
-    const $profileBtn = document.getElementById('profile_btn');
+    const storeImg = document.getElementById('profileImage');
+    const $ImgBtn = document.getElementById('profile_btn');
 
     avatar.addEventListener('click', () => {
-        profileImage.click();
+        storeImg.click();
     });
     profileImage.addEventListener('change', () => {
-        console.log(profileImage.files[0]);
-        avatar.querySelector('img').src = URL.createObjectURL(profileImage.files[0]);
-        $profileBtn.style.display = 'block';
+        console.log(storeImg.files[0]);
+        avatar.querySelector('img').src = URL.createObjectURL(storeImg.files[0]);
+        $ImgBtn.style.display = 'block';
         avatar.classList.remove('before');
     });
 
-    $profileBtn.addEventListener('click', () => {
+    $ImgBtn.addEventListener('click', () => {
         requestProfileImg();
     });
 
     const requestProfileImg = async () => {
         const formData = new FormData();
-        formData.append('profileImage', profileImage.files[0]);
+        formData.append('storeImg', storeImg.files[0]);
         //   비동기 요청
-        const response = await fetch('/customer/mypage-edit', {
+        const response = await fetch('/store/mypage-edit', {
             method: 'POST',
             body: formData
         });
@@ -111,20 +172,20 @@
         console.log(result);
     };
 
-    //   하트 클릭
-    const $heart = document.querySelectorAll('.fa-heart');
-    $heart.forEach(heart => {
-        heart.addEventListener('click', () => {
-            if (heart.classList.contains('on')) {
-                heart.style.display = 'none';
-                heart.nextElementSibling.style.display = 'block';
-            }
-            else {
-                heart.style.display = 'none';
-                heart.previousElementSibling.style.display = 'block';
-            }
-        });
-    });
+    const storeInfo = {
+        price: "${storeInfo.price}" // 예시 값을 설정합니다.
+    };
+
+    const priceSelect = document.getElementById('price');
+
+    // storeInfo.price 값이 유효한 옵션인지 확인합니다.
+    const validPrices = ["3900", "5900", "7900", "8900"];
+    if (validPrices.includes(storeInfo.price)) {
+        priceSelect.value = storeInfo.price;
+    } else {
+        // 유효한 값이 아닌 경우 기본값을 설정합니다 (예: 첫 번째 옵션).
+        priceSelect.value = validPrices[0];
+    }
 </script>
 </body>
 </html>

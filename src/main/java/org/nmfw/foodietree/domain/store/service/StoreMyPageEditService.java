@@ -6,6 +6,7 @@ import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreStatsDto;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageEditMapper;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +17,8 @@ public class StoreMyPageEditService {
     private final StoreMyPageService storeMyPageService;
     private final StoreMyPageEditMapper storeMyPageEditMapper;
     private final StoreMyPageMapper storeMyPageMapper;
+    private final PasswordEncoder encoder;
+
 
     public StoreMyPageDto getStoreMyPageInfo(String storeId) {
         log.info("store my page service");
@@ -45,5 +48,11 @@ public class StoreMyPageEditService {
 
     public void updateProductCnt() {
         log.info("update product cnt");
+    }
+
+    public boolean updateStorePw(String customerId, String newPassword) {
+        String encodedPw = encoder.encode(newPassword);
+        storeMyPageEditMapper.updateStoreInfo(customerId,"customer_password", encodedPw);
+        return true;
     }
 }
