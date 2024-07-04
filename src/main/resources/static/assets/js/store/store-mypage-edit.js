@@ -340,7 +340,6 @@ const validateProductCnt = () => {
     if (cnt <= 0) {
         productCntErrorMessage.style.display = 'block';
         productCntErrorMessage.textContent = '기본 수량 값은 0 이하일 수 없습니다.';
-        productCntInput.value = 1; // 최소값인 1로 설정
         return false;
     } else {
         productCntErrorMessage.style.display = 'none';
@@ -389,6 +388,7 @@ checkBtns.forEach(checkBtn => {
 
         if (e.target.classList.contains('business-num')) {
             if (!validateBusinessNumber()) {
+                alert('전화번호 형식에 맞지 않습니다. 다시 입력해주세요. 전화번호는 10자리 이상의 숫자여야 합니다.');
                 return;
             }
             const value = bnumInput.value;
@@ -403,6 +403,7 @@ checkBtns.forEach(checkBtn => {
         if (e.target.classList.contains('product-cnt')) {
             // 기본 수량 값 유효성 검사를 수행합니다.
             if (!validateProductCnt()) {
+                alert('수량은 0이 될 수 없습니다. 수량을 0으로 설정하려면 가게 문을 닫으세요');
                 return; // 유효하지 않으면 중단합니다.
             }
 
@@ -413,6 +414,7 @@ checkBtns.forEach(checkBtn => {
         if (e.target.classList.contains('time-set')) {
             // 시간 유효성 검사를 수행합니다.
             if (!validateTimes()) {
+                alert('픽업 가능 시간 또는 픽업 마감 시간을 다시 확인해주세요.');
                 return; // 유효하지 않으면 중단합니다.
             }
 
