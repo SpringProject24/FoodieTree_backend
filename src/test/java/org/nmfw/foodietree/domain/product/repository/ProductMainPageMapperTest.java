@@ -24,18 +24,18 @@ class ProductMainPageMapperTest {
     @Autowired
     private ProductMainPageService productMainPageService;
 
-    @Test
-    @DisplayName("선호지역에 따른상품 조회")
-    void findPreferenceAreaTest() {
-        //given
-        String customerId = "test@gmail.com";
-        List<TotalInfoDto> categoryByArea = productMainPageMapper.findCategoryByArea(customerId);
-
-        System.out.println("\n\n\n");
-        categoryByArea.forEach(System.out::println);
-        System.out.println("\n\n\n");
-
-    }
+//    @Test
+//    @DisplayName("선호지역에 따른상품 조회")
+//    void findPreferenceAreaTest() {
+//        //given
+//        String customerId = "test@gmail.com";
+//        List<TotalInfoDto> categoryByArea = productMainPageMapper.findCategoryByArea(customerId);
+//
+//        System.out.println("\n\n\n");
+//        categoryByArea.forEach(System.out::println);
+//        System.out.println("\n\n\n");
+//
+//    }
 
     @Test
     @DisplayName("선호지역에 따른상품 조회")

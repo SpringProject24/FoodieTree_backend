@@ -2,10 +2,9 @@ package org.nmfw.foodietree.domain.product.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.product.Service.ProductApprovalService;
+import org.nmfw.foodietree.domain.product.service.ProductApprovalService;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
 import org.nmfw.foodietree.domain.product.dto.response.ProductApprovalDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
