@@ -13,10 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
@@ -28,7 +30,7 @@ import java.time.LocalTime;
 public class StoreMyPageEditController {
     String storeId = "sji4205@naver.com";
 
-    @Value("${file.upload.root-path}")
+    @Value("${env.upload.path}")
     private String uploadDir;
 
     private final StoreMyPageEditService storeMyPageEditService;
@@ -65,21 +67,29 @@ public class StoreMyPageEditController {
 
     @PostMapping("/update/img")
     public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg) {
-        Path path = Paths.get(uploadDir + "/" + storeImg.getOriginalFilename());
         try {
-            storeMyPageEditService.updateStoreInfo(storeId, "store_img", path.toString());
-
             // 예시로 파일 이름과 크기를 출력하는 코드
             String fileName = storeImg.getOriginalFilename();
             long fileSize = storeImg.getSize();
             System.out.println("Received file: " + fileName + ", Size: " + fileSize + " bytes");
+            String imagePath = null;
+            if (!storeImg.isEmpty()) {
+                // 서버에 업로드 후 업로드 경로 반환
+                File dir = new File(uploadDir);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                imagePath = FileUtil.uploadFile(uploadDir, storeImg);
+                storeMyPageEditService.updateStoreInfo(storeId, "store_img", imagePath);
+                return ResponseEntity.ok().body(true);
+            }
+//            FileUtil.uploadFile(rootPath, storeImg);
 
-            // 성공적으로 업데이트되었음을 클라이언트에 응답합니다.
-            return ResponseEntity.ok().body("Successfully uploaded file");
         } catch (Exception e) {
             // 업로드 실패 시 예외 처리
             return ResponseEntity.badRequest().body("Failed to upload file");
         }
+        return ResponseEntity.badRequest().body("Failed to upload file");
     }
 
     @PatchMapping("/update/price")
