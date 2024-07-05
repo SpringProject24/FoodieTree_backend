@@ -71,6 +71,7 @@
 
     <select id="findReservations" resultType="ReservationDetail">
         SELECT
+            r.reservation_id,
             r.customer_id,
             r.product_id,
             r.reservation_time,
@@ -90,7 +91,9 @@
         JOIN tbl_store s ON p.store_id = s.store_id
         JOIN tbl_customer c ON r.customer_id = c.customer_id
         WHERE
-            r.customer_id = #{customerId};
+            r.customer_id = #{customerId}
+        ORDER BY p.pickup_time DESC
+        ;
     </select>
 
     <select id="findIssues" resultType="CustomerIssues">

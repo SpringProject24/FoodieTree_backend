@@ -10,7 +10,8 @@ import lombok.ToString;
 public enum PickUpStatus {
     RESERVED("픽업대기"),
     PICKEDUP("픽업완료"),
-    CANCELED("예약취소");
+    CANCELED("예약취소"),
+    NOSHOW("노쇼");
 
     private final String status;
 }

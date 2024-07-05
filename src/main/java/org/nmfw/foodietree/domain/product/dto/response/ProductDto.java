@@ -9,8 +9,9 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ProductDto {
 
     private String storeId;

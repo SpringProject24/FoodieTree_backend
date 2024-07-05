@@ -1,18 +1,26 @@
 package org.nmfw.foodietree.domain.customer.service;
 
-import static org.nmfw.foodietree.domain.customer.service.LoginResult.NO_ID;
-import static org.nmfw.foodietree.domain.customer.service.LoginResult.NO_PW;
-import static org.nmfw.foodietree.domain.customer.service.LoginResult.SUCCESS;
-
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.customer.dto.request.AutoLoginDto;
 import org.nmfw.foodietree.domain.customer.dto.request.CustomerLoginDto;
 import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
+import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
+import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+
+import static org.nmfw.foodietree.domain.customer.util.LoginUtil.AUTO_LOGIN_COOKIE;
+
 
 @Service
 @RequiredArgsConstructor
@@ -21,104 +29,123 @@ public class CustomerService {
 
 	//고객 정보를 데이터베이스에 저장하거나 조회하는데 사용되는 객체
 	private final CustomerMapper customerMapper;
-
 	//비밀번호 암호화 객체
 	private final PasswordEncoder encoder;
 
-	//회원 가입 중간 처리
+	//회원 가입 중간 처리 (저장 성공 여부 boolean 값으로 반환)
 	public boolean join(SignUpDto dto) {
-
-		// dto를 엔터티로 변환
 		Customer customer = dto.toEntity();
 
 		// 비밀번호를 인코딩(암호화)
 		String encodedPassword = encoder.encode(dto.getCustomerPassword());
-		customer.setCustomerPassword(encodedPassword);
+		customer.setCustomerPassword(encodedPassword); //인코딩 된 비밀번호를 Customer에 주입
 
-		return customerMapper.save(customer);
+		boolean saved = customerMapper.save(customer); //데이터에 저장
+
+		if (saved && dto.getFood() != null) {
+			customerMapper.savePreferredFoods(dto.getCustomerId(), dto.getFood());
+		}
+
+		System.out.println("\n save = " + saved);
+		System.out.println(dto.getFood());
+
+		return saved; // 데이터 저장 결과 반환
 	}
-//		String id = dto.getCustomerId();
-//		String password = dto.getCustomerPassword();
-
-		// 아이디 형식: 영문자(대소문자 구분 없음), 소문자로 구성,
-		// 길이는 5~20 사이, 특수문자 불가
-//        if(!id.matches("^[a-zA-Z0-9]{5,20}$")) {
-//            throw new IllegalArgumentException("아이디 형식이 틀렸습니다.");
-//        }
-//        // 비밀번호 형식: 길이가 최대 8글자 이면서, 영문자, 숫자 포함
-//        if(!password.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{1,8}$")) {
-//            throw new IllegalArgumentException("비밀번호 형식이 틀렸습니다.");
-//        }
-
-//        if(!customerMapper.existsById(dto.getCustomerId())) {
-//            throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
-//        }
-
-//		// dto를 엔터티로 변환
-//		Customer customer = dto.toEntity();
-//
-//		// 비밀번호 인코딩
-//		String encodedPassword = encoder.encode(dto.getCustomerPassword());
-//		customer.setCustomerPassword(encodedPassword);
-//
-//		boolean saveResult = customerMapper.save(customer);
-//
-//		if (saveResult) {
-//			customerMapper.savePreferredFoods(dto.getCustomerId(), dto.getPreferredFoods());
-//		}
-//
-//		return saveResult;
-//	}
 
 
 	//로그인 검증 처리
-//	public LoginResult authenticate(CustomerLoginDto dto, HttpSession session)
-	public LoginResult authenticate(CustomerLoginDto dto) {
+	public LoginResult authenticate(CustomerLoginDto dto,
+									HttpSession session,
+									HttpServletResponse response) {
 
-		//회원가입 여부 확인
+		// 회원가입 여부 확인
 		String customerId = dto.getCustomerId();
-		Customer foundCustomer =
-				customerMapper.findOne(customerId);
+		System.out.println("\ncustomerId = " + customerId);
 
-		//customer가 null일 경우
+		Customer foundCustomer = customerMapper.findOne(customerId); //db에 있는 customerId 꺼내옴.
+		System.out.println("\nfoundCustomer = " + foundCustomer);
+
 		if (foundCustomer == null) {
 			log.info("{} - 회원가입이 필요합니다.", customerId);
-			return NO_ID;
+			return LoginResult.NO_ID;
 		}
 
-		//비밀번호 일치 검사
-		String inputCustomerPassword = dto.getCustomerPassword(); //클라이언트에 입력한 비번
-		String originPassword = foundCustomer.getCustomerPassword(); //데이터베이스에 저장된 비번
+		// 비밀번호 일치 검사
+		String inputPassword = dto.getCustomerPassword();
+		String originPassword = foundCustomer.getCustomerPassword();
 
-		//실제 비밀번호와 암호화된 비밀번호 비교
-		if (!encoder.matches(inputCustomerPassword, originPassword)) {
+		if (!encoder.matches(inputPassword, originPassword)) {
 			log.info("비밀번호가 일치하지 않습니다.");
-			return NO_PW;
+			return LoginResult.NO_PW;
 		}
 
-		log.info("{}님 로그인 성공", foundCustomer.getNickName());
+		// 자동로그인 추가 처리
+		if (dto.isAutoLogin()) {
+			// 1. 자동 로그인 쿠키 생성
+			String sessionId = session.getId();
 
-//		//세션 최대 비활성화 간격
-//		int maxInactiveInterval = session.getMaxInactiveInterval();
-//
-//		//세션 수명 1시간 설정
-//		session.setMaxInactiveInterval(60 * 60);
-//		log.debug("session time: {}", maxInactiveInterval);
-//
-//		session.setAttribute("loginUserName", foundCustomer.getNickName());
+			System.out.println("\nsessionId = " + sessionId);
+			Cookie autoLoginCookie = new Cookie(AUTO_LOGIN_COOKIE, sessionId);
+			System.out.println("\nautoLoginCookie = " + autoLoginCookie);
+			// 쿠키 설정
+			autoLoginCookie.setPath("/"); // 쿠키를 사용할 경로
+			autoLoginCookie.setMaxAge(60 * 60 * 24 * 90); // 자동로그인 유지 시간
+			// 2. 쿠키를 클라이언트에 전송 - 응답바디에 실어보내야 함
+			response.addCookie(autoLoginCookie);
+			log.debug("\nAuto login cookie set: " + autoLoginCookie.toString());
 
-		return SUCCESS;
+			// 3. DB에도 해당 쿠키값을 저장
+			customerMapper.updateAutoLogin(
+					AutoLoginDto.builder()
+							.sessionId(sessionId)
+							.limitTime(LocalDateTime.now().plusDays(90))
+							.customerId(customerId)
+							.build()
+			);
+		}
+
+
+		maintainLoginState(session, foundCustomer);
+
+		return LoginResult.SUCCESS;
 	}
 
-	//아이디(이메일) 중복 검사
-	// 아이디, 이메일 중복검사
+	public static void maintainLoginState(HttpSession session, Customer foundCustomer) {
+		log.info("{}님 로그인 성공", foundCustomer.getCustomerId());
+
+		// 세션의 수명 : 설정된 시간 or 브라우저를 닫기 전까지
+		int maxInactiveInterval = session.getMaxInactiveInterval();
+		session.setMaxInactiveInterval(60 * 60);
+		log.debug("session time: {}", maxInactiveInterval);
+
+		session.setAttribute("login", new LoginUserInfoDto(foundCustomer));
+	}
+
+	// 아이디 중복 검사
 	public boolean checkIdentifier(String keyword) {
 		return customerMapper.existsById(keyword);
 	}
+
+	public void autoLoginClear(HttpServletRequest request,
+							   HttpServletResponse response) {
+
+		Cookie c = WebUtils.getCookie(request, AUTO_LOGIN_COOKIE);
+		if(c != null) {
+			c.setPath("/");
+			c.setMaxAge(0);
+			response.addCookie(c);
+			customerMapper.updateAutoLogin(
+					AutoLoginDto.builder()
+							.sessionId("none")
+							.limitTime(LocalDateTime.now())
+							.customerId(LoginUtil.getLoggedInUser(request.getSession()))
+							.build()
+			);
+		}
+
+
+
+
+
+	}
 }
-
-//    public boolean checkIdentifier(String type, String keyword) {
-//        return customerMapper.existsById(type, keyword);
-//    }
-
-

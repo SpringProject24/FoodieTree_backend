@@ -10,6 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -78,4 +82,18 @@ class CustomerMapperTest {
         System.out.println("encodedPassword = " + encodePassword);
     }
 
+    @Test
+    @DisplayName("선호하는 음식 2개를 저장한다.")
+    void savePreferredFoodsTest() {
+        //given
+        String customerId = "pet123@gmail.com";
+        List<String> preferredFoods = Arrays.asList("한식", "디저트");
+
+        //when
+        boolean flag = customerMapper.savePreferredFoods(customerId, preferredFoods);
+
+        //then
+        assertTrue(flag);
+
+    }
 }

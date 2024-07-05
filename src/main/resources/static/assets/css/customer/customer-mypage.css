@@ -185,7 +185,7 @@ header .logo-img img {
 /* ===========================================   예약 내역     */
 
 .my-page-area .container .info .info-wrapper.reservation {
-    height: 200px;
+    height: 300px;
     overflow: scroll;
 }
 

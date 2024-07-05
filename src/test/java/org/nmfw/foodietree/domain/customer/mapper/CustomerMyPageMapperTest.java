@@ -81,7 +81,12 @@ class CustomerMyPageMapperTest {
         //when
         List<ReservationDetail> reservations = customerMyPageMapper.findReservations(customerId);
         //then
-        System.out.println("reservations = " + reservations);
+//        System.out.println("reservations = " + reservations);
+
+        for (ReservationDetail reservation : reservations) {
+            System.out.println("reservation = " + reservation.getReservationId());
+            System.out.println("reservation = " + reservation.getStoreName());
+        }
     }
 
     @Test

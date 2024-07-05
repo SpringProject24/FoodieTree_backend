@@ -2,11 +2,14 @@ package org.nmfw.foodietree.domain.customer.entity;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class Customer {
 
     //고객 id
@@ -26,6 +29,9 @@ public class Customer {
     private String profileImage;
 
     //고객 세션아이디
+//    @Setter
     private String sessionId;
+
+    private LocalDateTime limitTime;
 
 }
