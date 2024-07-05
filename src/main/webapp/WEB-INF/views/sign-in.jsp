@@ -7,6 +7,7 @@
     <title>FoodieTree</title>
         <link rel="stylesheet" href="/assets/css/common.css">
         <link rel="stylesheet" href="/assets/css/sign-in.css">
+        
 </head>
 <body>
     <header>
@@ -89,5 +90,7 @@
     });
 
 </script>
+    <!-- 공통푸터 -->
+    <%@ include file="include/footer.jsp" %> 
 </body>
 </html>

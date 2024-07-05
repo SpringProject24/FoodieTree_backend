@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FoodieTree</title>
-  <link rel="stylesheet" href="/assets/css/common.css">
+  <!-- <link rel="stylesheet" href="/assets/css/common.css"> -->
   <link rel="stylesheet" href="/assets/css/index.css">
   <!-- 구글폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,50 +21,19 @@
   <!-- <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css"> -->
 </head>
 <body>
-   <header>
-    <div class="container">
-      <div class="logo">FOODIE TREE</div>
-      <div class="logo-img">
-        <img src="/assets/img/img_2.png" alt="FoodieTree Logo">
-      </div>
-      <div class="wrapper">
-        <c:if test="${login == null}">
-            <div class="signin">
-                <a href="/customer/sign-in" class="button btnFade btnBlueGreen">
-                    로그인
-                </a>
-            </div>
-            <div class="signup">
-                <a href="/customer/sign-up" class="button btnFade btnBlueGreen">
-                    회원가입
-                </a>
-            </div>
-        </c:if>
-        <c:if test="${login != null}">
-            <div class="mypage">
-                <a href="/customer/mypage" class="button btnFade btnBlueGreen">
-                    마이페이지
-                </a>
-            </div>
-            <div class="signout">
-                <a href="/customer/sign-out" class="button btnFade btnBlueGreen">
-                    로그아웃
-                </a>
-            </div>
-        </c:if>
-    </div>
-    
-    </div>
-  </header>
+
+  <!-- 공통헤더 -->
+  <%@ include file="include/header.jsp" %>  
+
 <section class="hero">
   <div class="container">
     <h2>환경 보호에 동참하는</h2>
     <p>우리 주변의 음식점들을 찾아보세요!</p>
     <div class="search-wrapper">
       <div class="search">
-        <span>>>> 여기에 원하는 음식점 이름 또는 주소를 입력하세요!</span>
+        <span>여기에 원하는 음식점 이름 또는 주소를 입력하세요!</span>
       </div>
-      <div class="sub-signup"><a href="#">Foodie Tree 회원이 되어 더 많은 혜택을 누려보세요!</a></div>
+      <div class="sub-signup"><a href="#">FOODIE TREE 회원이 되어 더 많은 혜택을 누려보세요!</a></div>
     </div>
   </div>
 </section>
@@ -84,36 +53,11 @@
     </div>
   </div>
 </section>
-<footer>
-  <div class="container">
-    <div class="big-title">FOODIE TREE</div>
-    <div class="custom_link_all">
-      <a href="#" title="Legal">
-        <p>Legal</p>
-      </a>
-      <a href="#" title="Privacy Policy">
-        <p class="custom_link_text">Privacy Policy</p>
-      </a>
-      <a href="#" title="Cookie Policy">
-        <p class="custom_link_text">Cookie Policy</p>
-      </a>
-      <a href="#" title="Terms & Conditions">
-        <p class="custom_link_text">Terms & Conditions</p>
-      </a>
-      <a href="#" title="Contact us">
-        <p class="custom_link_text">Contact us</p>
-      </a>
-      <a href="#" title="DSA Disclosure">
-        <p class="custom_link_text">DSA Disclosure</p>
-      </a>
-      <a href="#" title="Food Waste Sources">
-        <p class="custom_link_text">Food Waste Sources</p>
-      </a>
-    </div>
-    <p class="footer-text">&copy; 2024 FoodieTree. All rights reserved.</p>
-  </div>
-</footer>
-  <script>
+
+  <!-- 공통 푸터 -->
+  <%@ include file="include/footer.jsp" %> 
+
+<script>
   const $storeSignup = document.querySelector('.store-signup');
     $storeSignup.addEventListener('click', () => {
         location.href = '/store/sign-up';

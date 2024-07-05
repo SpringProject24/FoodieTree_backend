@@ -74,5 +74,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           </tr>
       </table>
   </form>
+
+    <!-- 공통푸터 -->
+    <%@ include file="include/footer.jsp" %> 
   </body>
 </html>

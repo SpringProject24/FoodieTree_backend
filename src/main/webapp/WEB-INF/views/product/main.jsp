@@ -570,11 +570,14 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       </div>
     </section>
 
-    <footer>
+    <!-- <footer>
       <div class="container">
         <p>&copy; 2024 FoodieTree. All rights reserved.</p>
       </div>
-    </footer>
+    </footer> -->
+
+      <!-- 공통푸터 -->
+   <%@ include file="include/footer.jsp" %> 
   </body>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
