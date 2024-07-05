@@ -38,6 +38,8 @@
         <foreach collection="preferredFood" item="arr" open="(" close=")" separator=",">
             #{arr.preferredFood}
         </foreach>
+        GROUP BY
+        s.store_name;
     </select>
 
     <!-- 선호 지역별 제품 조회 -->
@@ -67,6 +69,8 @@
         WHERE
         f.customer_id = #{customerId}
         )
+        GROUP BY
+        s.store_name;
     </select>
 
     <!-- 선호 가게별 제품 조회 (LIKE) -->
@@ -92,6 +96,9 @@
         WHERE
         fs.customer_id = #{customerId}
         )
+        GROUP BY
+        s.store_name;
+
     </select>
 
 </mapper>

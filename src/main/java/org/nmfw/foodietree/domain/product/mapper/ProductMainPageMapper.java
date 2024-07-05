@@ -17,6 +17,8 @@ public interface ProductMainPageMapper {
 
     List<ProductDto> findCategoryByArea(@Param("customerId") String customerId);
 
+    List<ProductDto> findCategoryByLike(@Param("customerId") String customerId);
+
 
 
 

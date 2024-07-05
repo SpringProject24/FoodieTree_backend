@@ -60,7 +60,10 @@ public class ProductMainPageController {
             List<ProductDto> productByArea = productMainPageService.findProductByArea(customerId, request, response);
             model.addAttribute("findByArea", productByArea);
 
-            // 5. 고객 정보 조회
+            List<ProductDto> productByLike = productMainPageService.findProductByLike(customerId, request, response);
+            model.addAttribute("findByLike",productByLike);
+
+        // 5. 고객 정보 조회
             CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
             if (customerMyPageDto != null) {
                 model.addAttribute("customerMyPageDto", customerMyPageDto);

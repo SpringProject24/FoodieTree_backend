@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.product.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.customer.dto.resp.CustomerFavStoreDto;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.product.dto.response.ProductDto;
@@ -80,4 +81,10 @@ public class ProductMainPageService {
 
         return productMainPageMapper.findCategoryByArea(customerId);
     }
+
+    public List<ProductDto> findProductByLike(String customerId, HttpServletRequest request, HttpServletResponse response) {
+        List<CustomerFavStoreDto> favStore = customerMyPageService.getCustomerInfo(customerId, request, response).getFavStore();
+        return productMainPageMapper.findCategoryByLike(customerId);
+    }
+
 }

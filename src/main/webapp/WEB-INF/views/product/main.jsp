@@ -297,118 +297,26 @@
             </div>
         </div>
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/western.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
+           
+         
+                <c:forEach var = "item" items="${findByArea}">
+                    <div class="swiper-slide">
+                        <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <div class="store-img-box">
+                                <img src="/assets/img/western.jpg" alt="">
+                            </div>
+                            <div class="store-info">
+                                <h3>가게 이름 : ${item.storeName}</h3>
+                                <p>픽업시간 : ${item.pickupTime}</p>
+                                <div class="wrapper">
+                                    <p>평점 / 거리</p>
+                                    <p>가격 : ${item.price}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/cafe.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/dessert.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/japanese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/chinese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/korean.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/etc.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </c:forEach>
+          
             <div class="swiper-slide">
                 <div class="circle"></div>
             </div>
@@ -454,22 +362,30 @@
             </div>
         </div>
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/western.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
+
+
+
+            <c:forEach var="item" items="${findByLike}">
+                <div class="swiper-slide">
+                    <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <div class="store-img-box">
+                            <img src="
+                /assets/img/western.jpg" alt="">
+                        </div>
+                        <div class="store-info">
+                            <h3>가게 이름 : ${item.storeName}</h3>
+                            <p>픽업 시간 : ${item.pickupTime}</p>
+                            <div class="wrapper">
+                                <p>평점 / 거리</p>
+                                <p>가격 : ${item.price}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </c:forEach>
+
+
+
             <div class="swiper-slide">
                 <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <div class="store-img-box">
