@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -55,13 +57,31 @@ public class ProductMainPageService {
      */
     public List<ProductDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response) {
         List<String> preferredFood = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredFood();
-
 //        if (preferredFood == null) {
 //            log.warn("Preferred food list is null for customerId: {}", customerId);
 //            return null; // or handle the case accordingly
 //        }
 
-        return productMainPageMapper.findCategoryByFood(preferredFood);
+
+
+        List<ProductDto> categoryByFood = productMainPageMapper.findCategoryByFood(preferredFood);
+
+        for (ProductDto productDto : categoryByFood) {
+            LocalDateTime pickupTime = productDto.getPickupTime();
+            String formatted = setFormattedPickupTime(pickupTime);
+
+            productDto.setFormattedPickupTime(formatted);
+        }
+
+        return categoryByFood;
+    }
+
+    public String setFormattedPickupTime(LocalDateTime pickupTime) {
+        if (pickupTime == null) {
+            return "";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일 HH시");
+        return pickupTime.format(formatter);
     }
 
     /**
