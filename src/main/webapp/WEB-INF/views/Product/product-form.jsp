@@ -31,7 +31,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <h2>푸디트리와 지구를 위한 한걸음 함께 해보아요!</h2>
 
         <form
-          action="/storeMyPage/storeApproval-result"
+          action="/store/mypage/main"
           method="post"
           enctype="multipart/form-data"
         >
