@@ -61,7 +61,7 @@
         <div class="profile">
             <a href="#" id="avatar">
                 <img src="${storeInfo.storeImg ? storeInfo.storeImg : '/assets/img/western.jpg'}"
-                     alt="Customer profile image">
+                     alt="store image">
             </a>
             <h2>${storeInfo.storeName}</h2>
             <p>${storeInfo.storeId}</p>

@@ -16,7 +16,8 @@
             price,
             product_cnt,
             open_at,
-            closed_at
+            closed_at,
+            business_number
         FROM
             tbl_store
         WHERE

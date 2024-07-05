@@ -14,7 +14,7 @@ public interface StoreMyPageEditMapper {
 
     void updateOpenAt(@Param("storeId") String storeId, @Param("openAt") LocalTime openAt);
 
-    void updateClosedAt(@Param("storeId") String storeId, @Param("openAt") LocalTime closedAt);
+    void updateClosedAt(@Param("storeId") String storeId, @Param("closedAt") LocalTime closedAt);
 
     void updateProductCnt(@Param("storeId") String storeId, @Param("productCnt") int productCnt);
 }

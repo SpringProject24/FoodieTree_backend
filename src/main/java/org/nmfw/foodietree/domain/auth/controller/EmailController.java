@@ -18,7 +18,7 @@ public class EmailController {
     @GetMapping("/send-reset-email")
     public String sendVerificationCode(@RequestParam String to) {
         try {
-            emailService.sendResetVerificationCode(to);
+            emailService.sendResetVerificationCode(to, "reset");
             return "Password reset email sent successfully";
         } catch (Exception e) {
             return "Failed to send password reset email: " + e.getMessage();
@@ -37,8 +37,9 @@ public class EmailController {
     @PostMapping("/sendVerificationCode")
     public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
         String email = request.get("email");
+        String purpose = request.get("purpose");
         try {
-            emailService.sendResetVerificationCode(email);
+            emailService.sendResetVerificationCode(email, purpose);
             return ResponseEntity.ok("Verification code sent");
         } catch (MessagingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification code");

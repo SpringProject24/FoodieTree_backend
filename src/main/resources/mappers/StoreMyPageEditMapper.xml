@@ -9,20 +9,14 @@
         UPDATE tbl_store
         <set>
             <choose>
-                <when test="type == 'store_name'">
-                    store_name = #{value}
-                </when>
-                <when test="type == 'customer_phone_number'">
-                    category = #{category}
-                </when>
                 <when test="type == 'store_img'">
                     store_img = #{value}
                 </when>
                 <when test="type == 'password'">
                     password = #{value}
                 </when>
-                <when test="type == 'address'">
-                    address = #{address}
+                <when test="type == 'business_number'">
+                    business_number = #{value}
                 </when>
             </choose>
         </set>

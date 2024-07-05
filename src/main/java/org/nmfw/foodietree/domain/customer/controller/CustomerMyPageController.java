@@ -28,7 +28,6 @@ public class CustomerMyPageController {
                             , HttpServletRequest request
                             , HttpServletResponse response){
         log.info("/customer/mypage GET");
-
         String customerId = LoginUtil.getLoggedInUser(session);
         // 2. 데이터베이스에서 해당 회원 데이터 조회하기
         CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);

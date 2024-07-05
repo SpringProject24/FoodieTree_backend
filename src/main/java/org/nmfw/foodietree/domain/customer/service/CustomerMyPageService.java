@@ -24,6 +24,7 @@ import static org.nmfw.foodietree.domain.customer.entity.value.IssueStatus.*;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomerMyPageService {
+
     private final CustomerMyPageMapper customerMyPageMapper;
     private final PasswordEncoder encoder;
 
