@@ -144,7 +144,7 @@ export async function verifyCode(code) {
     }
 }
 
-function startCountdown(seconds) {
+export function startCountdown(seconds) {
     const countdownElement = document.getElementById('countdown');
     countdownElement.textContent = `남은 시간: ${seconds}초`;
 
@@ -160,7 +160,7 @@ function startCountdown(seconds) {
     }, 1000);
 }
 
-function stopCountdown() {
+export function stopCountdown() {
     clearInterval(countdownInterval);
 }
 
