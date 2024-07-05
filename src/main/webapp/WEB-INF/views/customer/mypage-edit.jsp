@@ -200,7 +200,7 @@
 </div>
 
 <script>
-    const customerId = "${sessionScope.login.customerId}";
+    const customerId = "sji4205@naver.com";
     const avatar = document.getElementById('avatar');
     const profileImage = document.getElementById('profileImage');
     const $profileBtn = document.getElementById('profile_btn');

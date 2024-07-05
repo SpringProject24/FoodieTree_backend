@@ -166,7 +166,9 @@ async function sendVerificationCode() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: customerId }) // Replace with actual email
+            body: JSON.stringify({ email: customerId,
+                purpose: 'reset'
+            }) // Replace with actual email
         });
 
         if (response.ok) {
