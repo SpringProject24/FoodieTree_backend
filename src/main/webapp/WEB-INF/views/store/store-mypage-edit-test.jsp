@@ -226,6 +226,7 @@
         });
         const result = await response.json();
         alert("가게 이미지가 성공적으로 업데이트 되었습니다.");
+        $ImgBtn.style.display = 'none'; // 이미지 업데이트 후 버튼 숨김
         console.log(result);
     };
 
