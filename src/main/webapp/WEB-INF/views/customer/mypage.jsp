@@ -38,6 +38,10 @@
                 <li class="nav-item"><a class="nav-link" href="mypage">마이페이지</a></li>
                 <li class="nav-item"><a class="nav-link" href="mypage-edit">개인정보수정</a></li>
             </ul>
+            <div class="stats">
+                <div>${stats.coTwo}kg의 음쓰를 줄였습니다</div>
+                <div>지금까지 ${stats.money}원을 아꼈어요</div>
+            </div>
         </div>
         <div class="info">
             <div class="info-box">
@@ -142,10 +146,6 @@
                         </c:forEach>
                     </ul>
                 </div>
-            </div>
-            <div class="stats">
-                <div>${stats.coTwo}kg의 음쓰를 줄였습니다</div>
-                <div>지금까지 ${stats.money}원을 아꼈어요</div>
             </div>
         </div>
     </div>
