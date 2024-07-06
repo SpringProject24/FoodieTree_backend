@@ -8,6 +8,7 @@
     <title>FoodieTree</title>
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-sign-up.css">
+    <script type="module" defer src="/assets/js/sign-up.js"></script>
 </head>
 <body>
     <header>
@@ -23,19 +24,19 @@
         <div class="container">
             <div class="id-wrapper">
                 <h2>회원 등록을 위한 이메일을 입력해주세요!</h2>
-                <input type="text" id="input_id" name="customerId" placeholder="이메일을 입력해주세요">
+                <input type="text" id="input-id" name="customerId" placeholder="이메일을 입력해주세요">
                 <button id="id-btn">계속</button>
             </div>
             <div class="pass-wrapper none">
                 <div class="pass">
                     <h2>계속해서 비밀번호를 입력해주세요!</h2>
-                    <input type="password" id="input_pw" name="customerPassword" placeholder="비밀번호를 입력해주세요">
+                    <input type="password" id="input-pw" name="customerPassword" placeholder="비밀번호를 입력해주세요">
                 </div>
                 <div class="pass-check">
-                    <input type="password" id="input_pw_chk" name="customerPasswordChk" placeholder="비밀번호를 확인해주세요">
+                    <input disabled type="password" id="input-pw-chk" name="customerPasswordChk" placeholder="비밀번호를 확인해주세요">
                     <div class="wrapper">
                         <button id="prev-btn">이전</button>
-                        <button id="pass-btn">계속</button>
+                        <button id="pass-btn" style="background-color: gray">계속</button>
                     </div>
                 </div>
             </div>
@@ -114,60 +115,7 @@
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const $idBtn = document.getElementById('id-btn');
-        const $passBtn = document.getElementById('pass-btn');
-        const $idWrapper = document.querySelector('.id-wrapper');
-        const $passWrapper = document.querySelector('.pass-wrapper');
-        const $inputId = document.getElementById('input_id');
-        const $inputPw = document.getElementById('input_pw');
-        const $prevBtn = document.getElementById('prev-btn');
-        const $h2Id = document.querySelector('.id-wrapper h2');
 
-        $idBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            // 이메일 형식
-            const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!emailRegExp.test($inputId.value)) {
-                $h2Id.textContent = '이메일 형식이 올바르지 않습니다.';
-                $h2Id.style.color = 'red';
-                return;
-            }
-
-            const res = await fetch(`http://localhost:8083/customer/check?type=account&keyword=\${$inputId.value}`);
-            const result = await res.json();
-            if (result) {
-                $h2Id.textContent = '이미 사용중인 이메일입니다.';
-                $h2Id.style.color = 'red';
-                return;
-            }
-            $idWrapper.classList.add('none');
-            $passWrapper.classList.remove('none');
-        });
-
-        $prevBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            $idWrapper.classList.remove('none');
-            $passWrapper.classList.add('none');
-        });
-
-        $passBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-
-            const $password = document.getElementById('input_pw').value;
-            const $passwordChk = document.getElementById('input_pw_chk').value;
-
-            if ($password !== $passwordChk) {
-                alert('비밀번호가 일치하지 않습니다.');
-                return;
-            }
-
-            document.querySelector('.pass-wrapper').classList.add('none');
-            document.querySelector('.food-wrapper').classList.remove('none');
-        });
-
-        // Other script sections can be added similarly within DOMContentLoaded
-    });
 </script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}"></script>
 <script>

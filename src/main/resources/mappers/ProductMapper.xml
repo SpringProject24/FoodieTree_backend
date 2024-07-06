@@ -4,36 +4,46 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nmfw.foodietree.domain.product.mapper.ProductMainPageMapper">
 
-
-
+    <!-- 모든 제품 정보 조회 -->
     <select id="findAll" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
         SELECT
         s.store_name,
         s.price,
         s.store_img,
         p.pickup_time
-        FROM tbl_product p
-        JOIN tbl_store s
-        ON p.store_id = s.store_id
+        FROM
+        tbl_product p
+        JOIN
+        tbl_store s
+        ON
+        p.store_id = s.store_id
     </select>
 
-    <select id="findCategoryByFood" resultType="org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto">
+    <!-- 선호 음식 카테고리별 제품 조회 -->
+    <select id="findCategoryByFood" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
         SELECT
         s.store_name,
         s.price,
         s.store_img,
         s.category,
         p.pickup_time
-        FROM tbl_product p
-        JOIN tbl_store s
-        ON p.store_id = s.store_id
-        WHERE s.category IN
-        <foreach collection="productTotal" item="arr" open="(" close=")" separator=",">
-            #{arr.preferredFood} -- 카테고리 리스트를 IN 절에 포함시킴
+        FROM
+        tbl_product p
+        JOIN
+        tbl_store s
+        ON
+        p.store_id = s.store_id
+        WHERE
+        s.category IN
+        <foreach collection="preferredFood" item="arr" open="(" close=")" separator=",">
+            #{arr.preferredFood}
         </foreach>
+        GROUP BY
+        s.store_name;
     </select>
 
-    <select id="findCategoryByArea" resultType="org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto">
+    <!-- 선호 지역별 제품 조회 -->
+    <select id="findCategoryByArea" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
         SELECT
         p.product_id, -- 상품 ID
         p.store_id, -- 가게 ID
@@ -44,102 +54,51 @@
         s.category, -- 카테고리
         s.price, -- 가격
         s.address -- 주소
-        FROM tbl_product p
-        JOIN tbl_store s ON p.store_id = s.store_id
-        WHERE s.category IN
-        ( SELECT
-        f.pre_area
         FROM
-        ( SELECT
-        SUBSTRING_INDEX(address, ' ', 3) AS simplified_address
-        FROM tbl_store ) s
+        tbl_product p
         JOIN
-        ( SELECT
-        preferred_area AS pre_area
+        tbl_store s
+        ON
+        p.store_id = s.store_id
+        WHERE
+        SUBSTRING_INDEX(s.address, ' ', 2) IN (
+        SELECT
+        SUBSTRING_INDEX(f.preferred_area, ' ', 2)
         FROM
-        tbl_fav_area ) f
-        ON s.simplified_address = f.pre_area )
+        tbl_fav_area f
+        WHERE
+        f.customer_id = #{customerId}
+        )
+        GROUP BY
+        s.store_name;
     </select>
 
-<!--    <select id="product" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">-->
+    <!-- 선호 가게별 제품 조회 (LIKE) -->
+    <select id="findCategoryByLike" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
+        SELECT
+        s.store_name,
+        s.price,
+        s.store_img,
+        s.category,
+        p.pickup_time
+        FROM
+        tbl_product p
+        JOIN
+        tbl_store s
+        ON
+        p.store_id = s.store_id
+        WHERE
+        s.store_id IN (
+        SELECT
+        fs.store_id
+        FROM
+        tbl_fav_store fs
+        WHERE
+        fs.customer_id = #{customerId}
+        )
+        GROUP BY
+        s.store_name;
 
-<!--        SELECT-->
-<!--        p.product_id-->
-<!--        , p.store_id-->
-<!--        , p.pickup_time-->
-<!--        , p.product_upload_date-->
-<!--        , s.store_img-->
-<!--        , s.store_name-->
-<!--        , s.category-->
-<!--        , s.price-->
-<!--        FROM tbl_product p-->
-<!--        JOIN tbl_store s-->
-<!--        ON p.store_id = s.store_id-->
-
-<!--    </select>-->
-
-    <!--    <select id="categoryByFoodList" resultType="org.nmfw.foodietree.domain.product.dto.response.CategoryByFoodDto">-->
-    <!--        SELECT-->
-    <!--            p.product_id, &#45;&#45; 상품 ID-->
-    <!--            p.store_id, &#45;&#45; 가게 ID-->
-    <!--            p.pickup_time, &#45;&#45; 픽업 시간-->
-    <!--            p.product_upload_date,&#45;&#45; 상품 업로드 날짜-->
-    <!--            s.store_img, &#45;&#45; 가게 이미지-->
-    <!--            s.store_name, &#45;&#45; 가게 이름-->
-    <!--            s.category, &#45;&#45; 카테고리-->
-    <!--            s.price &#45;&#45; 가격-->
-    <!--        FROM tbl_product p-->
-    <!--        JOIN tbl_store s-->
-    <!--        ON p.store_id = s.store_id &#45;&#45; 두 테이블을 가게 ID로 조인-->
-    <!--        WHERE s.category IN-->
-    <!--        <foreach collection="category" item="arr" open="(" close=")" separator=",">-->
-    <!--            #{arr.preferredFood} &#45;&#45; 카테고리 리스트를 IN 절에 포함시킴-->
-    <!--        </foreach>-->
-    <!--    </select>-->
-
-
-<!--    <select id="categoryByAreaList" resultType="org.nmfw.foodietree.domain.product.dto.response.CategoryByAreaDto">-->
-<!--        SELECT-->
-<!--        p.product_id, &#45;&#45; 상품 ID-->
-<!--        p.store_id, &#45;&#45; 가게 ID-->
-<!--        p.pickup_time, &#45;&#45; 픽업 시간-->
-<!--        p.product_upload_date, &#45;&#45; 상품 업로드 날짜-->
-<!--        s.store_img, &#45;&#45; 가게 이미지-->
-<!--        s.store_name, &#45;&#45; 가게 이름-->
-<!--        s.category, &#45;&#45; 카테고리-->
-<!--        s.price, &#45;&#45; 가격-->
-<!--        s.address &#45;&#45; 주소-->
-<!--        FROM tbl_product p-->
-<!--        JOIN tbl_store s ON p.store_id = s.store_id-->
-<!--        WHERE s.category IN-->
-<!--        ( SELECT-->
-<!--        f.pre_area-->
-<!--        FROM-->
-<!--        ( SELECT-->
-<!--        SUBSTRING_INDEX(address, ' ', 3) AS simplified_address-->
-<!--        FROM tbl_store ) s-->
-<!--        JOIN-->
-<!--        ( SELECT-->
-<!--        preferred_area AS pre_area-->
-<!--        FROM-->
-<!--        tbl_fav_area ) f-->
-<!--        ON s.simplified_address = f.pre_area )-->
-
-<!--    </select>-->
-
-
-    <!--    SELECT-->
-    <!--    SUBSTRING_INDEX(address,' ', 3)-->
-    <!--    AS simplified_address-->
-    <!--    FROM tbl_store-->
-
-    <!--    SELECT-->
-    <!--    preferred_area-->
-    <!--    AS pre_area-->
-    <!--    FROM tbl_fav_area-->
-
-
-    <!--서울시 마포구 대현동 111-111-->
-
+    </select>
 
 </mapper>

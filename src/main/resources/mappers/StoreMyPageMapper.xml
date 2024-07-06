@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper">
+
+    <select id="getStoreMyPageInfo" resultType="StoreMyPageDTO">
+        SELECT
+            store_id,
+            store_name,
+            address,
+            store_img,
+            category,
+            approve,
+            price,
+            product_cnt,
+            open_at,
+            closed_at,
+            business_number
+        FROM
+            tbl_store
+        WHERE
+            store_id = #{store_id}
+    </select>
+
+    <select id="findReservations" resultType="StoreReservationDto">
+        SELECT
+            c.customer_id,
+            c.profile_image,
+            c.nickname,
+            c.customer_phone_number,
+            p.product_id,
+            r.reservation_id,
+            r.reservation_time,
+            r.cancel_reservation_at,
+            r.picked_up_at,
+            p.pickup_time,
+            p.product_upload_date,
+            s.price,
+            s.open_at,
+            s.closed_at
+        FROM
+            tbl_reservation r
+        JOIN
+            tbl_customer c ON r.customer_id = c.customer_id
+        JOIN
+            tbl_product p ON p.product_id = r.product_id
+        JOIN
+            tbl_store s ON s.store_id = p.store_id
+        WHERE
+            s.store_id = #{store_id}
+        ORDER BY p.pickup_time DESC
+    </select>
+
+    <insert id="updateProductAuto">
+        INSERT INTO tbl_product
+            (store_id, pickup_time, product_upload_date)
+        VALUES
+            (#{storeId}, #{closedAt}, now())
+    </insert>
+
+    <update id="cancelProductByStore">
+        UPDATE tbl_product
+        SET canceled_by_store_at = now()
+        WHERE store_id = #{storeId}
+        AND DATE(pickup_time) = #{pickupTime}
+    </update>
+
+    <select id="getStoreMyPageCalendarModalInfo" resultType="StoreMyPageCalendarModalDto">
+        SELECT
+            p.pickup_time,
+            s.open_at,
+            s.closed_at,
+            s.product_cnt,
+            p.canceled_by_store_at
+        FROM
+            tbl_store s
+        LEFT JOIN
+        tbl_product p ON p.store_id = s.store_id AND DATE(p.pickup_time) = #{date}
+        WHERE
+        s.store_id = #{storeId}
+        LIMIT 1
+    </select>
+
+    <select id="getAllStore" resultType="StoreCheckDto">
+        SELECT DISTINCT
+            store_id,
+            store_name,
+            product_cnt,
+            open_at,
+            closed_at
+        FROM
+            tbl_store
+    </select>
+
+    <insert id="setHoliday">
+        INSERT INTO tbl_store_holidays
+            (store_id, holidays)
+        VALUES
+            (#{storeId}, #{holidays})
+    </insert>
+
+    <delete id="undoHoliday">
+        DELETE FROM
+            tbl_store_holidays
+        WHERE
+            store_id = #{storeId}
+        AND holidays = #{holidays}
+    </delete>
+
+    <select id="getHolidays" resultType="StoreHolidayDto">
+        SELECT
+            store_id,
+            holidays
+        FROM
+            tbl_store_holidays
+        WHERE
+            store_id = #{storeId}
+    </select>
+
+    <select id="getProductCntByDate" resultType="ProductInfoDto">
+        SELECT
+            p.pickup_time,
+            p.product_upload_date,
+            p.canceled_by_store_at,
+            r.reservation_time,
+            r.cancel_reservation_at,
+            r.picked_up_at
+        FROM
+            tbl_product p
+        LEFT OUTER JOIN
+            tbl_reservation r ON p.product_id = r.product_id
+        WHERE
+            p.store_id = #{storeId}
+        AND DATE(product_upload_date) = #{date}
+    </select>
+</mapper>

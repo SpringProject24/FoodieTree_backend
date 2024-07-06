@@ -13,23 +13,13 @@ public interface ProductMainPageMapper {
 
     List<ProductDto> findAll();
 
-    List<TotalInfoDto> findCategoryByFood(String customerId);
+    List<ProductDto> findCategoryByFood(@Param("preferredFood") List<String> preferredFood);
 
-    List<TotalInfoDto> findCategoryByArea(String customerId);
+    List<ProductDto> findCategoryByArea(@Param("customerId") String customerId);
+
+    List<ProductDto> findCategoryByLike(@Param("customerId") String customerId);
 
 
-
-
-
-    ProductDto findOne (String productId);
-
-    boolean save(ProductDto productDto);
-
-    List<String> categoryByFoodList(@Param("category") List<String> category);
-
-    List<String> categoryByAreaList(@Param("Area") List<String> preferenceAreas);
-
-    ProductDto product();
 
 
 }

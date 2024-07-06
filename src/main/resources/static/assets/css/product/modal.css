@@ -1,0 +1,157 @@
+.modal-content .modal-header {
+    display: block;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding-bottom: 0;
+}
+
+.modal-content .modal-header .wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* 텍스트 그림자 추가 */
+}
+
+.modal-content .modal-header .wrapper button {
+    border: none;
+    background: none;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    color: white;
+    opacity: .8;
+}
+
+.modal-content .modal-header .wrapper button i {
+    font-size: 21px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: white;
+}
+
+.modal-content .modal-header .wrapper.info {
+    display: block;
+    margin-top: 60px;
+}
+
+.modal-content .modal-header .wrapper.info .store-info {
+    display: flex;
+    align-items: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* 텍스트 그림자 추가 */
+}
+
+.modal-content .modal-header .wrapper.info #product-cnt {
+    display: flex;
+    width: 60px;
+    height: 30px;
+    background-color: #1d1d1d;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    text-shadow: none;
+    margin-bottom: 15px;
+    color: white;
+    font-size: 12px;
+}
+
+.modal-content .modal-header .wrapper.info .store-info .img-box {
+    margin-right: 15px;
+}
+
+.modal-content .modal-header .wrapper.info .store-info h6 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.modal-content .modal-header .wrapper.info .img-box {
+    width: 48px;
+    height: 48px;
+}
+
+.modal-content .modal-body .detail {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-content .modal-body .prod-info-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.modal-content .modal-body .prod-info div {
+    margin-bottom: 7px;
+}
+
+.modal-content .modal-body .prod-info:last-child div {
+    display: flex;
+    justify-content: right;
+}
+
+.detail {
+    color: #555;
+}
+
+#prod-rate i {
+    color: #ffb700;
+}
+
+#pickup-time i {
+    color: #999;
+}
+
+#prod-price {
+    font-size: 12px;
+    color: #777777;
+}
+
+#prod-discount {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--header-font-color);
+}
+
+.detail .wrapper {
+    margin: 1rem 0;
+    display: flex;
+}
+
+.detail i {
+    margin-right: 10px;
+}
+
+.detail .desc-area svg {
+    margin-right: 10px;
+    width: 80px;
+}
+
+.detail .desc-area p {
+    display: flex;
+    align-items: center;
+}
+
+.detail .rate-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.detail .rate-area p {
+    margin-bottom: 5px;
+}
+
+
+.modal-content .modal-footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-top: none;
+}
+
+#reservation-btn {
+    width: 250px;
+}
