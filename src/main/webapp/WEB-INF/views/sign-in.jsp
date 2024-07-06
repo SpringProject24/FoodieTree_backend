@@ -15,22 +15,55 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <script defer type="module" src="/assets/js/customer/sign-in-event.js"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .input-pass-wrapper input {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 Forget PassWord?
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                hello
+                <div class="input-id-wrapper">
+                    <p>아이디를 입력하세요.</p>
+                    <input type="text" id="input-id" placeholder="아이디를 입력하세요(ex foodietree@gmail.com)">
+                    <button id="check-id-btn">확인</button>
+                    <div class="verify-wrapper hidden">
+                        <div id="step-email">
+                            <p>인증번호를 받으세요.</p>
+                            <button id="send-verification-code-btn">인증번호 받기</button>
+                        </div>
+                        <div id="step-code" class="hidden">
+                            <p>인증번호를 입력하세요.</p>
+                            <input type="text" id="verification-code" maxlength="6">
+                            <button id="verification-code-btn">인증하기</button>
+                            <div id="verification-result"></div>
+                        </div>
+                        <div id="countdown"></div>
+                    </div>
+                </div>
+                <div class="input-pass-wrapper hidden">
+                    <p>새로운 비밀번호를 입력하세요.</p>
+                    <input type="password" id="input-pw" placeholder="비밀번호를 입력하세요">
+                    <input type="password" id="input-pw-chk" placeholder="비밀번호를 확인하세요" disabled>
+                    <button id="update-new-pw-btn" disabled>변경하기</button>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">인증번호</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
