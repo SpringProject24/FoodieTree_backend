@@ -28,7 +28,7 @@ public class EmailService {
     @Autowired
     private EmailMapper emailMapper;
 
-    static final Map<String, EmailCodeDto> signUpList = new HashMap<>();
+    private static final Map<String, EmailCodeDto> signUpList = new HashMap<>();
 
     public void sendResetVerificationCode(String to, String purpose) throws MessagingException {
         String code = CodeGenerator.generateCode();
