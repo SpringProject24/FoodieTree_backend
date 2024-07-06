@@ -8,6 +8,7 @@
     <title>FoodieTree</title>
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-sign-up.css">
+    <script defer src="/assets/js/utils/lodash.js"></script>
     <script defer type="module" src="/assets/js/customer/sign-up-event.js"></script>
 </head>
 <body>
@@ -25,14 +26,15 @@
             <div class="id-wrapper">
                 <h2>회원 등록을 위한 이메일을 입력해주세요!</h2>
                 <input type="text" id="input-id" name="customerId" placeholder="이메일을 입력해주세요">
-                <button id="id-btn">계속</button>
-                <button id="id-get-code-btn">인증코드 받기</button>
-            </div>
-            <div class="id-verify-wrapper">
-                <h2>해당 이메일로 인증코드가 전송되었습니다입력해주세요!</h2>
-                <h3>인증코드를 입력해주세요!</h3>
-                <input type="text" id="id-verify-code" name="customerId" placeholder="인증코드를 입력해주세요">
-                <button id="id-verify-btn">이메일 인증번호 확인</button>
+                <button id="id-get-code-btn" class="disable" disabled>인증코드 받기</button>
+                <div class="id-verify-wrapper" style="display: block">
+                    <h2>해당 이메일로 인증코드가 전송되었습니다</h2>
+                    <h3>인증코드를 입력해주세요!</h3>
+                    <input type="text" id="id-verify-code" name="customerId" placeholder="인증코드를 입력해주세요">
+                    <span id="countdown"></span>
+                    <button id="id-verify-btn">이메일 인증번호 확인</button>
+                    <button id="id-btn" style="display: none">계속</button>
+                </div>
             </div>
             <div class="pass-wrapper none">
                 <div class="pass">
@@ -179,8 +181,6 @@
 </script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}"></script>
 <script>
-  const customerId = "${sessionScope.login.customerId}";
-
   document.addEventListener('DOMContentLoaded', () => {
     const $btnFood = document.getElementById('btn-food');
     const $skipBtnFood = document.getElementById('skip-btn-food');
