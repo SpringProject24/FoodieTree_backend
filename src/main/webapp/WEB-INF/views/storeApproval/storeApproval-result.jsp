@@ -12,5 +12,8 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
   
   <h1>${message}</h1>
 
+    <!-- 공통푸터 -->
+    <%@ include file="include/footer.jsp" %> 
+
 </body>
 </html>

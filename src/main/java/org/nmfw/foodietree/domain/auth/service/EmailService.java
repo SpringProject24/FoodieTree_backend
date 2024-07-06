@@ -29,7 +29,12 @@ public class EmailService {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setTo(to);
-        helper.setSubject("비밀번호 재설정 인증 코드");
+
+        String subject = "FoodieTree 비밀번호 재설정 인증코드";
+        if(purpose.equalsIgnoreCase("signup")) {
+            subject = "FoodieTree 회원가입 인증코드";
+        }
+        helper.setSubject(subject);
 
         // 생성한 코드와 유효시간을 이메일 템플릿에 포함하여 HTML을 직접 작성
         String htmlContent = generateEmailHtml(code, purpose);
@@ -124,7 +129,7 @@ public class EmailService {
                 "        <p>아래 코드를 " + title + " 창으로 돌아가 입력해주세요.</p>\n" +
                 "        <div class=\"code-container\">\n" +
                 "            <h3 style=\"color: darkgreen;\">" + headerMessage + "</h3>\n" +
-                "            <div>" + code + "</div>\n" +
+                "            <div style=\"size: 1.5em;\">" + code + "</div>\n" +
                 "        </div>\n" +
                 "        <p class=\"expiry-info\">유효 시간: " + expiryDate.format(formatter) + "</p>\n" +
                 "    </div>\n" +

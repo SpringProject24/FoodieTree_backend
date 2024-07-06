@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -71,18 +72,19 @@ public class CustomerMyPageController {
     public ResponseEntity<?> updateCustomerInfo(@PathVariable String customerId, @RequestBody List<UpdateDto> updates) {
 
         boolean flag = customerMyPageService.updateCustomerInfo(customerId, updates);
-        return flag? ResponseEntity.ok("Update successful"): ResponseEntity.status(400).body("Update fail");
+        return flag? ResponseEntity.ok(true): ResponseEntity.status(400).body(false);
     }
 
     @PatchMapping("/{customerId}/delete")
     public ResponseEntity<?> deleteCustomerInfo(@PathVariable String customerId, @RequestBody List<UpdateDto> dtos) {
         boolean flag = customerMyPageService.deleteCustomerInfo(customerId, dtos);
-        return flag? ResponseEntity.ok("Delete successful"): ResponseEntity.status(400).body("Delete fail");
+        return flag? ResponseEntity.ok(true): ResponseEntity.status(400).body(false);
     }
 
     @PatchMapping("/{customerId}/update/password")
-    public ResponseEntity<?> updateCustomerPw(@PathVariable String customerId, @RequestBody String newPassword) {
+    public ResponseEntity<?> updateCustomerPw(@PathVariable String customerId, @RequestBody Map<String, String> map) {
+        String newPassword = map.get("newPassword");
         boolean flag = customerMyPageService.updateCustomerPw(customerId, newPassword);
-        return flag? ResponseEntity.ok("password reset successful"): ResponseEntity.status(400).body("reset fail");
+        return flag? ResponseEntity.ok(true): ResponseEntity.status(400).body(false);
     }
 }

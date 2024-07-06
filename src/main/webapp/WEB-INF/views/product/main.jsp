@@ -506,53 +506,48 @@
                 <div class="circle"></div>
             </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2024 FoodieTree. All rights reserved.</p>
-    </div>
-</footer>
-
-</body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+   <%@ include file="../include/footer.jsp" %>
+  </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-<script>
-  new Swiper('.category-list', {
-    slidesPerView: 7,
-    centralDirOffset: 1,
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  });
+  <script>
+    new Swiper(".category-list", {
+      slidesPerView: 7,
+      centralDirOffset: 1,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
 
-  new Swiper('.myswiper1', {
-    spaceBetween: 20,
-    slidesPerView: 4,
-    slidesPerGroup: 4,
-    loop: true,
-    speed: 1200,
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  });
+    new Swiper(".myswiper1", {
+      spaceBetween: 20,
+      slidesPerView: 4,
+      slidesPerGroup: 4,
+      loop: true,
+      speed: 1200,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
 
-  new Swiper('.myswiper2', {
-    spaceBetween: 20,
-    slidesPerView: 5,
-    slidesPerGroup: 5,
-    speed: 1200,
-    navigation: {
-      nextEl: '.swiper-button-next-b',
-      prevEl: '.swiper-button-prev-b',
-    }
-  });
+    new Swiper(".myswiper2", {
+      spaceBetween: 20,
+      slidesPerView: 5,
+      slidesPerGroup: 5,
+      speed: 1200,
+      navigation: {
+        nextEl: ".swiper-button-next-b",
+        prevEl: ".swiper-button-prev-b",
+      },
+    });
 
   new Swiper('.myswiper3', {
     spaceBetween: 20,

@@ -245,5 +245,7 @@
         });
     });
 </script>
+<!-- 공통푸터 -->
+<%@ include file="include/footer.jsp" %> 
 </body>
 </html>
