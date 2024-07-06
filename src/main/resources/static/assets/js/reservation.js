@@ -1,5 +1,4 @@
 // =========== 전역 변수 ==============
-const customerId = "test@gmail.com";
 const BASE_URL = "http://localhost:8083";
 
 const $reservationList = document.querySelector('.reservation-list');
@@ -229,19 +228,6 @@ async function openModal(reservationId) {
         console.error(`Reservation with ID ${reservation} not found.`);
         return;
     }
-
-    // const storeImg = reservationItem.querySelector('img').src;
-    // const storeName = reservationItem.querySelector('span:nth-child(2)').textContent;
-    // const status = reservationItem.querySelector('span:nth-child(3)').textContent;
-    // const statusInfo = reservationItem.querySelector('span:nth-child(4)').textContent;
-    //
-    // const reservationDetail = {
-    //     storeImg: storeImg,
-    //     storeName: storeName,
-    //     status: status,
-    //     statusInfo: statusInfo,
-    //     // 여기에 필요한 시간 정보 등 추가
-    // };
 
     // 모달에 데이터 추가
     $modalDetails.innerHTML = `

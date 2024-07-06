@@ -43,7 +43,8 @@
         s.address,
         s.price,
         s.store_img,
-        c.nickname
+        c.nickname,
+        c.profile_image
     FROM
         tbl_reservation r
     JOIN tbl_product p ON r.product_id = p.product_id
