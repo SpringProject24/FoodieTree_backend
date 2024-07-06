@@ -12,7 +12,7 @@
 
 <footer>
   <div class="container">
-    <div class="big-title">FOODIE TREE</div>
+    <div class="big-title francois-one-regular">FOODIE TREE</div>
     <div class="custom_link_all">
       <a href="#" title="Legal">
         <p>Legal</p>
