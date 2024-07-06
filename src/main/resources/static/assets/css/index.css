@@ -1,56 +1,31 @@
 
-.container {
-  width: 80%;
-  margin: 0 auto;
-}
 
+/* 헤더코드 */
 
-header .logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-header .logo-img {
-  width: 70px;
-  height: 70px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-header .logo-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-header .container .wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-header .container .wrapper .signin {
-  margin-right: 20px;
-}
-
-
-header nav ul {
-  list-style: none;
-  margin: 0;
+/* a.button {
+  display: block;
+  position: relative;
+  float: left;
+  width: 100px;
   padding: 0;
-  display: flex;
+  margin: 10px 20px 10px 0;
+  font-weight: 600;
+  text-align: center;
+  line-height: 40px;
+  color: #FFF;
+  border-radius: 15px;
+  transition: all 0.2s ;
+}
+  
+.btnBlueGreen {
+  background: #00AE68;
+
+
+FADE
+.btnFade.btnBlueGreen:hover {
+  background: #21825B;
 }
 
-header nav ul li {
-  margin-left: 20px;
-}
-
-header nav ul li a {
-  color: var(--white-color);
-  text-decoration: none;
-}
 
 header .signup, .signin {
   background-color: white;
@@ -58,46 +33,68 @@ header .signup, .signin {
   padding: 10px 20px;
   border: var(--header-font-color) 1px solid;
   cursor: pointer;
-}
+} 
+*/
+
 
 .hero {
   background-color: var(--header-font-color);
   color: var(--white-color);
   text-align: center;
   padding: 100px 0;
-
+  font-family: 'WandocleanseaB';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/WandocleanseaB.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 .hero .container {
   text-align: center;
 }
 
+.hero .container h2 {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
 .hero .container .search-wrapper {
+  font-size: 15px;
+  font-weight: 300;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-.hero .container .search-wrapper .search {
-  padding: 10px 20px;
-  width: 350px;
-  background-color: var(--white-color);
-  color: var(--header-font-color);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
+.hero .container .search-wrapper .sub-signup a{
+  font-size: 15px;
 }
 
-.hero .sub-signup {
-  margin-top: 15px;
-  font-size: 12px;
-}
+.hero .container .search-wrapper .search {
+  padding: 12px 20px;
+  width: 500px;
+  background-color: var(--white-color);
+  /* color: var(--header-font-color); */
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  /* 폰트 */
+  font-family: "Gaegu", sans-serif;
+  font-weight: bold;
+  font-style: normal;
+  color: black;
+} 
 
 section {
   padding: 50px 0;
   text-align: center;
+  /* 폰트 */
+  /* font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal; */
 }
 
 section.info .container {
@@ -114,12 +111,13 @@ section.info .container .left {
 
 section.info .container .left .wrapper h2 {
   margin-bottom: 20px;
-  font-size: 20px;
+  font-size: 25px;
+  font-weight: 500;
 }
 
 section.info .container .left .wrapper p {
   margin-bottom: 15px;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 section.info .container .right {
@@ -134,7 +132,58 @@ section.info .container .right {
   flex-direction: column;
 }
 
-section.info .container .right .store-signup {
+/* 새로운 입점신청 css 코드 */
+
+.right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.store-signup a {
+  position: relative;
+  display: inline-block;
+  padding: 15px 30px;
+  color: #fff;
+  background: #4CAF50; /* 기본 초록색 배경 */
+  border-radius: 15px; /* 모서리 둥글게 */
+  text-decoration: none;
+  font-size: 16px;
+  overflow: hidden;
+  transition: background 0.3s, color 0.3s; /* 배경색 전환 추가 */
+  z-index: 1;
+}
+
+.store-signup a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #388E3C; /* 어두운 초록색 배경 */
+  border-radius: 15px; /* 모서리 둥글게 */
+  transition: left 0.3s;
+  z-index: -1;
+}
+
+.store-signup a:hover {
+  background: #388E3C; /* 배경색 전환 */
+}
+
+.store-signup a:hover::before {
+  left: 0;
+}
+
+.store-signup a span {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* 기존 입점신청 코드 : 삭제 예정*/
+/* section.info .container .right .store-signup {
   width: 200px;
   height: 50px;
   background-color: var(--header-font-color);
@@ -144,4 +193,4 @@ section.info .container .right .store-signup {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-}
+} */

@@ -59,7 +59,7 @@
             </div>
         </section>
     </main>
-    <footer>
+    <!-- <footer>
         <div class="footer-content">
             <p>FOODIE TREE</p>
             <div class="store-links">
@@ -88,6 +88,9 @@
             </div>
             <p>© 2024 Uber Technologies Inc.</p>
         </div>
-    </footer>
+    </footer> -->
+
+      <!-- 공통푸터 -->
+  <%@ include file="include/footer.jsp" %> 
 </body>
 </html>
