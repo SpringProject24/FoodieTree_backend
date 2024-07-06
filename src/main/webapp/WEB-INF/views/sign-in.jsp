@@ -12,7 +12,7 @@
 <body>
     <header>
         <div class="container">
-            <div class="logo">FoodieTree </div>
+            <div class="logo">FOODIE TREE</div>
             <div class="logo-img">
                 <img src="/assets/img/img_2.png" alt="">
             </div>

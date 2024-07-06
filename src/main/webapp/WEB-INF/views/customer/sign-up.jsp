@@ -11,14 +11,17 @@
     <script type="module" defer src="/assets/js/sign-up.js"></script>
 </head>
 <body>
-    <header>
+    공통헤더
+    <%@ include file="/include/header.jsp" %>  
+
+    <!-- <header>
         <div class="container">
             <div class="logo">FoodieTree</div>
             <div class="logo-img">
                 <img src="/assets/img/img_2.png" alt="">
             </div>
         </div>
-    </header>
+    </header> -->
 <section class="input-area">
     <form action="/customer/sign-up" method="post">
         <div class="container">
@@ -114,6 +117,9 @@
     </form>
 </section>
 
+
+
+
 <script>
 
 </script>
@@ -189,5 +195,10 @@
         });
     });
 </script>
+
+
+  <!-- 공통 푸터
+  <%@ include file="..include/footer.jsp" %>  -->
+  
 </body>
 </html>

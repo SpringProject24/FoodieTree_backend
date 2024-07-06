@@ -7,6 +7,9 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
 
+      <!-- 공통헤더 -->
+  <!-- <%@ include file="../include/header.jsp" %>   -->
+
     <h1>상품 등록 내역입니다.</h1>
 
     <ul>
@@ -17,6 +20,6 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
       <!-- 공통푸터 -->
-  <%@ include file="include/footer.jsp" %> 
+  <!-- <%@ include file="include/footer.jsp" %>  -->
 </body>
 </html>

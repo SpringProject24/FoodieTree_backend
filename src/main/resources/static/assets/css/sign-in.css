@@ -41,6 +41,10 @@ section.input-area .form-wrapper {
     box-shadow: 0 5px 8px 0 rgba(68, 68, 68, .04);
 }
 
+section.input-area .form-wrapper .input-wrapper {
+   
+}
+
 section.input-area .btn-wrapper {
     display: flex;
 }
