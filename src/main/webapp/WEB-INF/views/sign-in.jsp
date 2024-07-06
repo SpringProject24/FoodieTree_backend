@@ -5,18 +5,45 @@
 <head>
     <meta charset="UTF-8">
     <title>FoodieTree</title>
-        <link rel="stylesheet" href="/assets/css/common.css">
-        <link rel="stylesheet" href="/assets/css/sign-in.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <link rel="stylesheet" href="/assets/css/sign-in.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script defer type="module" src="/assets/js/customer/sign-in-event.js"></script>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">FoodieTree ${login.customerId}</div>
-            <div class="logo-img">
-                <img src="/assets/img/img_2.png" alt="">
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                Forget PassWord?
+            </div>
+            <div class="modal-body">
+                hello
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">인증번호</button>
             </div>
         </div>
-    </header>
+    </div>
+</div>
+
+<header>
+    <div class="container">
+        <div class="logo">FoodieTree ${login.customerId}</div>
+        <div class="logo-img">
+            <img src="/assets/img/img_2.png" alt="">
+        </div>
+    </div>
+</header>
 <section class="input-area">
     <div class="btn-wrapper">
         <button class="btn checked" id="customer-btn">사용자 회원</button>
@@ -44,8 +71,8 @@
         </div>
     </div>
     <div class="sub-wrapper">
-        <a id="find-pw-a" href="#">비밀번호 찾기</a>
-        <a id="sign-up-a" href="#">회원가입</a>
+        <a id="find-pw-a" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Forget PassWord?</a>
+        <a id="sign-up-a" href="#">Sign Up</a>
     </div>
 </section>
 <script>
@@ -68,15 +95,6 @@
             $formSignIn.action = '/customer/sign-in';
         }
         $formSignIn.submit();
-    });
-
-    document.querySelector('#find-pw-a').addEventListener('click', (e) => {
-        e.preventDefault();
-        if ($btnWrapper.querySelector('.checked').id === 'store-btn') {
-            location.href = '/store/find-pw';
-        } else if ($btnWrapper.querySelector('.checked').id === 'customer-btn') {
-            location.href = '/customer/find-pw';
-        }
     });
 
     document.querySelector('#sign-up-a').addEventListener('click', (e) => {
