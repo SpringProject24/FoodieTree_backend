@@ -163,6 +163,16 @@ header .signup, .signin {
     transition: transform 0.5s;
 }
 
+.jua-regular {
+    font-family: "Jua", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.search span{
+    /*font-weight: 200;*/
+}
+
 
 
 /* 기존 푸터 (삭제예정) */
