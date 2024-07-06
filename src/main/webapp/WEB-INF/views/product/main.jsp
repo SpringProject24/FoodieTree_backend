@@ -1,25 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8" %> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %>
+         pageEncoding="UTF-8" %>
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>FoodieTree</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="stylesheet" href="/assets/css/common.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    />
-    <link rel="stylesheet" href="/assets/css/product/main.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="/assets/css/product/main.css">
+    <link rel="stylesheet" href="/assets/css/product/modal.css">
+    <link rel="stylesheet" href="/assets/css/product/like-btn.css">
 
     <style>
       .rectangle {
@@ -162,87 +163,87 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 <header>
     <div class="container">
         <div class="logo-wrapper">
-          <div class="logo"><h1>FoodieTree</h1></div>
+            <div class="logo"><h1>FoodieTree</h1></div>
         </div>
         <div class="input-wrapper">
-          <button><i class="fa-solid fa-search"></i></button>
-          <input type="text" placeholder="Search" />
+            <button><i class="fa-solid fa-search"></i></button>
+            <input type="text" placeholder="Search">
         </div>
         <ul class="profile-wrapper">
-          <li>
-            <a href="#" class="profile img-box">
-              <img src="/assets/img/western.jpg" alt="" />
-            </a>
-          </li>
-          <li>
-            <a href="/customer/mypage">마이페이지</a>
-          </li>
-          <li>
-            <a href="/customer/signout">로그아웃</a>
-          </li>
+            <li>
+                <a href="#" class="profile img-box">
+                    <img src="/assets/img/western.jpg" alt="">
+                </a>
+            </li>
+            <li>
+                <a href="/customer/mypage">마이페이지</a>
+            </li>
+            <li>
+                <a href="/customer/signout">로그아웃</a>
+            </li>
         </ul>
-      </div>
-    </header>
+    </div>
+</header>
 
-    <section class="container category">
-      <div class="swiper category-list">
+<section class="container category">
+    <div class="swiper category-list">
         <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <div class="item">
-              <div class="img-box">
-                <img src="/assets/img/western.jpg" alt="" />
-              </div>
-              <p>양식</p>
+            <div class="swiper-slide">
+                <div class="item">
+                    <div class="img-box">
+                        <img src="/assets/img/western.jpg" alt="">
+                    </div>
+                    <p>양식</p>
+                </div>
             </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="item">
-              <div class="img-box">
-                <img src="/assets/img/cafe.jpg" alt="" />
-              </div>
-              <p>카페</p>
+            <div class="swiper-slide">
+                <div class="item">
+                    <div class="img-box">
+                        <img src="/assets/img/cafe.jpg" alt="">
+                    </div>
+                    <p>카페</p>
+                </div>
             </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="item">
-              <div class="img-box">
-                <img src="/assets/img/dessert.jpg" alt="" />
-              </div>
-              <p>디저트</p>
+            <div class="swiper-slide">
+                <div class="item">
+                    <div class="img-box">
+                        <img src="/assets/img/dessert.jpg" alt="">
+                    </div>
+                    <p>디저트</p>
+                </div>
             </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="item">
-              <div class="img-box">
-                <img src="/assets/img/japanese.jpg" alt="" />
-              </div>
-              <p>일식</p>
+            <div class="swiper-slide">
+                <div class="item">
+                    <div class="img-box">
+                        <img src="/assets/img/japanese.jpg" alt="">
+                    </div>
+                    <p>일식</p>
+                </div>
             </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="item">
-              <div class="img-box">
-                <img src="/assets/img/chinese.jpg" alt="" />
-              </div>
-              <p>중식</p>
+            <div class="swiper-slide">
+                <div class="item">
+                    <div class="img-box">
+                        <img src="/assets/img/chinese.jpg" alt="">
+                    </div>
+                    <p>중식</p>
+                </div>
             </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="item">
-              <div class="img-box">
-                <img src="/assets/img/korean.jpg" alt="" />
-              </div>
-              <p>한식</p>
+            <div class="swiper-slide">
+                <div class="item">
+                    <div class="img-box">
+                        <img src="/assets/img/korean.jpg" alt="">
+                    </div>
+                    <p>한식</p>
+                </div>
             </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="item">
-              <div class="img-box">
-                <img src="/assets/img/etc.jpg" alt="" />
-              </div>
-              <p>기타</p>
+            <div class="swiper-slide">
+                <div class="item">
+                    <div class="img-box">
+                        <img src="/assets/img/etc.jpg" alt="">
+                    </div>
+                    <p>기타</p>
+                </div>
             </div>
-          </div>
         </div>
     </div>
 </section>
@@ -508,15 +509,11 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       </div>
     </section>
 
-    <!-- <footer>
-      <div class="container">
-        <p>&copy; 2024 FoodieTree. All rights reserved.</p>
-      </div>
-    </footer> -->
-
-      <!-- 공통푸터 -->
-   <%@ include file="./include/footer.jsp" %>
+   <%@ include file="../include/footer.jsp" %>
   </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <script>

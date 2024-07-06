@@ -168,12 +168,11 @@
         <div id="modal-cancel"></div>
     </div>
 </div>
+<%@ include file="../include/footer.jsp" %>
 <script>
     const customerId = '${sessionScope.login.customerId}';
 </script>
 
-<!-- 공통푸터 -->
-<%@ include file="include/footer.jsp" %> 
 
 </body>
 </html>
