@@ -12,6 +12,7 @@
     <script defer type="module" src="/assets/js/customer/sign-up-event.js"></script>
 </head>
 <body>
+<%@ include file="../include/spinner.jsp" %>
     <header>
         <div class="container">
             <div class="logo">FoodieTree</div>
@@ -27,7 +28,7 @@
                 <h2>회원 등록을 위한 이메일을 입력해주세요!</h2>
                 <input type="text" id="input-id" name="customerId" placeholder="이메일을 입력해주세요">
                 <button id="id-get-code-btn" class="disable" disabled>인증코드 받기</button>
-                <div class="id-verify-wrapper" style="display: block">
+                <div class="id-verify-wrapper" style="display: none">
                     <h2>해당 이메일로 인증코드가 전송되었습니다</h2>
                     <h3>인증코드를 입력해주세요!</h3>
                     <input type="text" id="id-verify-code" name="customerId" placeholder="인증코드를 입력해주세요">
@@ -122,63 +123,6 @@
         </div>
     </form>
 </section>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const $idBtn = document.getElementById('id-btn');
-        const $passBtn = document.getElementById('pass-btn');
-        const $idWrapper = document.querySelector('.id-wrapper');
-        const $passWrapper = document.querySelector('.pass-wrapper');
-        const $inputId = document.getElementById('input_id');
-        const $inputPw = document.getElementById('input_pw');
-        const $prevBtn = document.getElementById('prev-btn');
-        const $h2Id = document.querySelector('.id-wrapper h2');
-
-        $idBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            // 이메일 형식
-            const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!emailRegExp.test($inputId.value)) {
-                $h2Id.textContent = '이메일 형식이 올바르지 않습니다.';
-                $h2Id.style.color = 'red';
-                return;
-            }
-
-            const res = await fetch(`http://localhost:8083/customer/check?type=account&keyword=\${$inputId.value}`);
-            const result = await res.json();
-            if (result) {
-                $h2Id.textContent = '이미 사용중인 이메일입니다.';
-                $h2Id.style.color = 'red';
-                return;
-            }
-            $idWrapper.classList.add('none');
-            $passWrapper.classList.remove('none');
-        });
-
-        $prevBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            $idWrapper.classList.remove('none');
-            $passWrapper.classList.add('none');
-        });
-
-        $passBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-
-            const $password = document.getElementById('input_pw').value;
-            const $passwordChk = document.getElementById('input_pw_chk').value;
-
-            if ($password !== $passwordChk) {
-                alert('비밀번호가 일치하지 않습니다.');
-                return;
-            }
-
-            document.querySelector('.pass-wrapper').classList.add('none');
-            document.querySelector('.food-wrapper').classList.remove('none');
-        });
-
-        // Other script sections can be added similarly within DOMContentLoaded
-    });
-</script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {

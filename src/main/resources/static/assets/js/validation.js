@@ -17,7 +17,6 @@ const checkIdInput = (value, $idChk) => {
     $idChk.innerHTML = '<b class="warning">[이메일 형식을 지켜주세요]</b>';
     return false;
   }
-  $idChk.innerHTML = '<b class="warning">[사용가능합니다]</b>';
   return true;
 }
 
