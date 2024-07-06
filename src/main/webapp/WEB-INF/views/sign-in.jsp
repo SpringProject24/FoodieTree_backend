@@ -50,6 +50,17 @@
     </div>
 </section>
 <script>
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+
+    if (message === 'signin-fail') {
+        alert('아이디나 비밀번호를 확인해주세요!');
+    }
+    const newUrl = window.location.origin + window.location.pathname;
+
+    // history.replaceState(state, title, url) : 브라우저 조작
+    history.replaceState(null, null, newUrl);
+
     const $formSignIn = document.querySelector('form[method=post]');
     const $btnWrapper = document.querySelector('.btn-wrapper');
     const $signInBtn = document.querySelector('#sign-in-btn');
