@@ -129,7 +129,7 @@ public class EmailService {
                 "        <p>아래 코드를 " + title + " 창으로 돌아가 입력해주세요.</p>\n" +
                 "        <div class=\"code-container\">\n" +
                 "            <h3 style=\"color: darkgreen;\">" + headerMessage + "</h3>\n" +
-                "            <div>" + code + "</div>\n" +
+                "            <div style=\"size: 1.5em;\">" + code + "</div>\n" +
                 "        </div>\n" +
                 "        <p class=\"expiry-info\">유효 시간: " + expiryDate.format(formatter) + "</p>\n" +
                 "    </div>\n" +
