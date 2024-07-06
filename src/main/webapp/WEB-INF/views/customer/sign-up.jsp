@@ -197,8 +197,8 @@
 </script>
 
 
-  <!-- 공통 푸터
-  <%@ include file="..include/footer.jsp" %>  -->
+  <!-- 공통 푸터 -->
+  <%@ include file="include/footer.jsp" %>
   
 </body>
 </html>

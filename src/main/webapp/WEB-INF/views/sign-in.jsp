@@ -7,17 +7,22 @@
     <title>FoodieTree</title>
         <link rel="stylesheet" href="/assets/css/common.css">
         <link rel="stylesheet" href="/assets/css/sign-in.css">
-        
 </head>
 <body>
-    <header>
+
+    
+  <!-- 공통헤더 -->
+  <%@ include file="include/header.jsp" %>
+
+
+    <!-- <header>
         <div class="container">
-            <div class="logo">FOODIE TREE</div>
+            <div class="logo">FoodieTree ${login.customerId}</div>
             <div class="logo-img">
                 <img src="/assets/img/img_2.png" alt="">
             </div>
         </div>
-    </header>
+    </header> -->
 <section class="input-area">
     <div class="btn-wrapper">
         <button class="btn checked" id="customer-btn">사용자 회원</button>
@@ -90,7 +95,8 @@
     });
 
 </script>
-    <!-- 공통푸터 -->
-    <%@ include file="include/footer.jsp" %> 
+
+  <!-- 공통 푸터 -->
+  <%@ include file="include/footer.jsp" %> 
 </body>
 </html>
