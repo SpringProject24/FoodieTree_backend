@@ -1,9 +1,40 @@
+import {
+    checkPwInput,
+    checkPwChkInput
+} from "../validation.js";
+
 const BASE_URL = 'http://localhost:8083';
 const customerId = 'sji4205@naver.com'; // Replace this with the actual customer ID
+
+const $inputPw = document.getElementById('new-password-input');
+const $inputPwChk = document.getElementById('new-password-check');
+const pwMessage = document.querySelector(('.pass-check h2'));
+// const submitBtn = document.getElementById('submit-new-pw');
+
+const newPassword = $inputPw.value;
+const newPasswordCheck = $inputPwChk.value;
+const statusElement = document.getElementById('password-match-status');
+const submitBtn = document.getElementById('submit-new-pw');
+
+const $verificationSendBtn = document.getElementById('sendVerificationCodeBtn');
+const $verifyCodeBtn = document.getElementById('verifyCodeBtn');
+const countdownElement = document.getElementById('countdown');
+
+const errorMessage = document.getElementById('error-message');
+const productCntInput = document.getElementById('product-cnt-input');
+const productCntErrorMessage = document.getElementById('product-cnt-error-message');
+const startTimeInput = document.getElementById('pickup-start-time');
+const endTimeInput = document.getElementById('pickup-end-time');
+const checkBtns = document.querySelectorAll('.fa-square-check');
+const bnumInput = document.getElementById('business-number-input');
+const bnumErrorMessage = document.getElementById('business-num-error-message');
+
 
 let type;
 let countdownInterval;
 let debounceTimeout;
+
+
 
 function editField(fieldId) {
     type = fieldId;
@@ -158,138 +189,141 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 });
 
+document.addEventListener('DOMContentLoaded', () => {
 
-async function sendVerificationCode() {
-    try {
-        const response = await fetch(`${BASE_URL}/email/sendVerificationCode`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: customerId,
-                purpose: 'reset'
-            }) // Replace with actual email
-        });
+    $verificationSendBtn.addEventListener('click', sendVerificationCode);
 
-        if (response.ok) {
-            startCountdown(300); // 5분(300초) 카운트다운 시작
-            document.getElementById('emailStep').classList.add('hidden');
-            document.getElementById('codeStep').classList.remove('hidden');
-        } else {
-            console.error('Failed to send verification code');
+    async function sendVerificationCode() {
+        checkPwInput($inputPw, $inputPwChk, pwMessage, submitBtn);
+        checkPwChkInput($inputPw, $inputPwChk, pwMessage, submitBtn);
+        try {
+            const response = await fetch(`${BASE_URL}/email/sendVerificationCode`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: customerId,
+                    purpose: 'reset'
+                }) // Replace with actual email
+            });
+
+            if (response.ok) {
+                startCountdown(300); // 5분(300초) 카운트다운 시작
+                document.getElementById('emailStep').classList.add('hidden');
+                document.getElementById('codeStep').classList.remove('hidden');
+            } else {
+                console.error('Failed to send verification code');
+            }
+        } catch (error) {
+            console.error('Error sending verification code:', error);
         }
-    } catch (error) {
-        console.error('Error sending verification code:', error);
     }
-}
+    $verifyCodeBtn.addEventListener('click', verifyCode);
+    async function verifyCode() {
+        const code = document.getElementById('verificationCode').value;
+        try {
+            const response = await fetch('http://localhost:8083/email/verifyCode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: customerId, code: code }) // Replace with actual email and code
+            });
+            console.log(response);
 
-async function verifyCode() {
-    const code = document.getElementById('verificationCode').value;
-    try {
-        const response = await fetch('http://localhost:8083/email/verifyCode', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: customerId, code: code }) // Replace with actual email and code
-        });
-        console.log(response);
-
-        if (response.ok) {
-            const result = await response.text();
-            document.getElementById('verificationResult').textContent = result;
-            clearInterval(countdownInterval); // 인증 성공 시 타이머 멈춤
-            openNewPwModal(); // 새로운 비밀번호 입력 모달 표시
-        } else {
-            console.error('Verification failed');
-            document.getElementById('verificationResult').textContent = '실패';
+            if (response.ok) {
+                const result = await response.text();
+                document.getElementById('verificationResult').textContent = result;
+                clearInterval(countdownInterval); // 인증 성공 시 타이머 멈춤
+                openNewPwModal(); // 새로운 비밀번호 입력 모달 표시
+            } else {
+                console.error('Verification failed');
+                document.getElementById('verificationResult').textContent = '실패';
+            }
+        } catch (error) {
+            console.error('Error verifying code:', error);
+            document.getElementById('verificationResult').innerText = '실패';
         }
-    } catch (error) {
-        console.error('Error verifying code:', error);
-        document.getElementById('verificationResult').innerText = '실패';
     }
-}
 
-function startCountdown(seconds) {
-    const countdownElement = document.getElementById('countdown');
-    countdownElement.textContent = `남은 시간: ${seconds}초`;
-
-    countdownInterval = setInterval(() => {
-        seconds -= 1;
+    function startCountdown(seconds) {
         countdownElement.textContent = `남은 시간: ${seconds}초`;
 
-        if (seconds <= 0) {
-            clearInterval(countdownInterval);
-            countdownElement.textContent = '시간 초과';
-            closeModal(); // 모달 닫기
-        }
-    }, 1000);
-}
+        countdownInterval = setInterval(() => {
+            seconds -= 1;
+            countdownElement.textContent = `남은 시간: ${seconds}초`;
 
-function debounce(func, delay) {
-    return function() {
-        const context = this;
-        const args = arguments;
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(() => func.apply(context, args), delay);
-    };
-}
+            if (seconds <= 0) {
+                clearInterval(countdownInterval);
+                countdownElement.textContent = '시간 초과';
+                closeModal(); // 모달 닫기
+            }
+        }, 1000);
+    }
 
-function checkPasswordMatch() {
-    const newPassword = document.getElementById('new-password-input').value;
-    const newPasswordCheck = document.getElementById('new-password-check').value;
-    const statusElement = document.getElementById('password-match-status');
-    const submitBtn = document.getElementById('submit-new-pw');
+    function debounce(func, delay) {
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => func.apply(context, args), delay);
+        };
+    }
 
-    if (newPassword && newPasswordCheck) {
-        if (newPassword === newPasswordCheck) {
-            statusElement.textContent = '비밀번호가 일치합니다.';
-            statusElement.style.color = 'green';
-            submitBtn.disabled = false; // Enable the button when passwords match
+    function checkPasswordMatch() {
+
+        if (newPassword && newPasswordCheck) {
+            if (newPassword === newPasswordCheck) {
+                statusElement.textContent = '비밀번호가 일치합니다.';
+                statusElement.style.color = 'green';
+                submitBtn.disabled = false; // Enable the button when passwords match
+            } else {
+                statusElement.textContent = '비밀번호가 일치하지 않습니다.';
+                statusElement.style.color = 'red';
+                submitBtn.disabled = true; // Disable the button when passwords don't match
+            }
         } else {
-            statusElement.textContent = '비밀번호가 일치하지 않습니다.';
-            statusElement.style.color = 'red';
-            submitBtn.disabled = true; // Disable the button when passwords don't match
+            statusElement.textContent = '';
+            submitBtn.disabled = true; // Disable the button if any field is empty
         }
-    } else {
-        statusElement.textContent = '';
-        submitBtn.disabled = true; // Disable the button if any field is empty
-    }
-}
-
-const debounceCheckPassword = debounce(checkPasswordMatch, 1000);
-
-async function updatePassword() {
-    const newPassword = document.getElementById('new-password-input').value;
-    const newPasswordCheck = document.getElementById('new-password-check').value;
-
-    if (newPassword !== newPasswordCheck) {
-        alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
-        return;
     }
 
-    try {
-        const response = await fetch(`${BASE_URL}/store/mypage/edit/update/password`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ type: 'password', value: newPassword })
-        });
+    const debounceCheckPassword = debounce(checkPasswordMatch, 1000);
 
-        if (response.ok) {
-            alert('비밀번호가 성공적으로 변경되었습니다.');
-            closeNewPwModal();
-        } else {
-            const errorText = await response.text();
-            console.error('Password update failed:', errorText);
-            alert('비밀번호 변경에 실패했습니다.');
+    $submitBtn.addEventListener('click', updatePassword);
+
+    async function updatePassword() {
+
+        if (newPassword !== newPasswordCheck) {
+            alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
+            return;
         }
-    } catch (error) {
-        console.error('Error updating password:', error);
-        alert('비밀번호 변경 중 오류가 발생했습니다.');
+
+        try {
+            const response = await fetch(`${BASE_URL}/store/mypage/edit/update/password`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newPassword)
+            });
+
+            if (response.ok) {
+                alert('비밀번호가 성공적으로 변경되었습니다.');
+                closeNewPwModal();
+                closeModal();
+            } else {
+                const errorText = await response.text();
+                console.error('Password update failed:', errorText);
+                alert('비밀번호 변경에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('Error updating password:', error);
+            alert('비밀번호 변경 중 오류가 발생했습니다.');
+        }
     }
-}
+});
+
 
 const $btn = document.getElementById('reset-pw-btn');
 $btn.addEventListener('click', openModal);
@@ -297,14 +331,7 @@ $btn.addEventListener('click', openModal);
 const $submitBtn = document.getElementById('submit-new-pw');
 $submitBtn.addEventListener('click', openNewPwModal);
 
-const errorMessage = document.getElementById('error-message');
-const productCntInput = document.getElementById('product-cnt-input');
-const productCntErrorMessage = document.getElementById('product-cnt-error-message');
-const startTimeInput = document.getElementById('pickup-start-time');
-const endTimeInput = document.getElementById('pickup-end-time');
-const checkBtns = document.querySelectorAll('.fa-square-check');
-const bnumInput = document.getElementById('business-number-input');
-const bnumErrorMessage = document.getElementById('business-num-error-message');
+
 // 시간을 분으로 변환하는 함수
 const timeToMinutes = (time) => {
     const [hours, minutes] = time.split(':').map(Number);
@@ -376,7 +403,6 @@ const validateBusinessNumber = () => {
         return false;
     }
 };
-
 
 // 시간 입력 필드 값 변경 시 유효성 검사 함수를 호출합니다.
 startTimeInput.addEventListener('input', validateTimes);

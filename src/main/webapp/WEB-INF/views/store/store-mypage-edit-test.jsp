@@ -12,7 +12,7 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">
-    <script defer src="/assets/js/store/store-mypage-edit.js"></script>
+    <script defer type="module" src="/assets/js/store/store-mypage-edit.js"></script>
 
     <style>
 
@@ -167,12 +167,12 @@
         <h2>비밀번호 재설정</h2>
         <div id="emailStep">
             <p>인증번호를 받으세요.</p>
-            <button id="sendVerificationCodeBtn" onclick="sendVerificationCode()">인증번호 받기</button>
+            <button id="sendVerificationCodeBtn">인증번호 받기</button>
         </div>
         <div id="codeStep" class="hidden">
             <p>인증번호를 입력하세요.</p>
             <input type="text" id="verificationCode" maxlength="6">
-            <button onclick="verifyCode()">인증하기</button>
+            <button id="verifyCodeBtn">인증하기</button>
             <div id="verificationResult"></div>
         </div>
         <div id="countdown"></div>
@@ -185,12 +185,13 @@
         <span class="close" onclick="closeNewPwModal()">&times;</span> <!-- X 버튼 추가 -->
         <h2>새 비밀번호 설정</h2>
         <div class="pass">
-            <input id="new-password-input" type="password" name="password" placeholder="새 비밀번호를 입력해주세요" onkeyup="debounceCheckPassword()">
+            <input id="new-password-input" type="password" name="password" placeholder="새 비밀번호를 입력해주세요">
         </div>
         <div class="pass-check">
-            <input id="new-password-check" type="password" name="password-chk" placeholder="새 비밀번호를 다시 입력해주세요" onkeyup="debounceCheckPassword()">
+            <h2>입력하신 비밀번호를 재입력해주세요!</h2>
+            <input id="new-password-check" type="password" name="password-chk" placeholder="새 비밀번호를 다시 입력해주세요">
             <div class="wrapper">
-                <button id="submit-new-pw" onclick="updatePassword()" disabled>비밀번호 재설정하기</button>
+                <button id="submit-new-pw" disabled>비밀번호 재설정하기</button>
             </div>
         </div>
         <div id="password-match-status"></div> <!-- 비밀번호 일치 여부 표시 -->
