@@ -33,6 +33,8 @@
       <div class="search">
         <span>여기에 원하는 음식점 이름 또는 주소를 입력하세요!</span>
       </div>
+
+      </div>
       <div class="sub-signup"><a href="#">FOODIE TREE 회원이 되어 더 많은 혜택을 누려보세요!</a></div>
     </div>
   </div>
@@ -62,6 +64,7 @@
     $storeSignup.addEventListener('click', () => {
         location.href = '/store/sign-up';
     });
+
 </script>
 </body>
 </html>
