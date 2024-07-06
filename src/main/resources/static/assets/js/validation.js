@@ -81,4 +81,37 @@ function checkInfo($submitBtn) {
   $submitBtn.style.backgroundColor = "orange";
 }
 
+export const checkPw = (value) => {
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$/;
+  const result = {
+    ok: false,
+    msg: "",
+  }
+
+  if (value.trim("") === "") {
+    result.msg = '<b class="warning">[비밀번호를 입력해주세요]</b>';
+  } else if (!passwordPattern.test(value)) {
+    result.msg = '<b class="warning">[비밀번호는 8~20자의 영문 대소문자, 숫자, 특수문자를 포함해주세요]</b>';
+  } else {
+    result.ok = true;
+    result.msg = '<b class="success">[사용 가능한 비밀번호입니다.]</b>';
+  }
+  return result;
+}
+
+export const checkPwChk = (v1, v2) => {
+  const result = {
+    ok: false,
+    msg: "",
+  }
+
+  if (v1 === v2) {
+    result.ok = true;
+    result.msg = '<b class="success">[비밀번호가 일치합니다.]</b>';
+  } else {
+    result.msg = '<b class="warning">[비밀번호가 일치하지 않습니다.]</b>';
+  }
+  return result;
+}
+
 export { checkIdInput, checkPwInput, checkPwChkInput };
