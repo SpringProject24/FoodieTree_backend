@@ -47,10 +47,15 @@ public class EmailController {
     }
 
     @PostMapping("/verifyCode")
-    public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> request, @RequestParam(required = false) String type) {
         String email = request.get("email");
         String code = request.get("code");
-        boolean isValid = emailService.verifyCode(email, code);
+        boolean isValid = false;
+        if (type != null && type.equals("signup")) {
+            isValid = emailService.verifyCodeForSignUp(email, code);
+        } else {
+            isValid = emailService.verifyCode(email, code);
+        }
         if (isValid) {
             return ResponseEntity.ok("success");
         } else {
