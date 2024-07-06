@@ -9,7 +9,7 @@ export async function updatePassword(customerId, newPassword, newPasswordCheck) 
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ type: 'password', value: newPassword })
+            body: JSON.stringify(newPassword),
         });
 
         if (response.ok) {
