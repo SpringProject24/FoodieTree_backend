@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.reservation.controller;
 
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.controller.CustomerMyPageController;
@@ -66,5 +67,26 @@ public class ReservationController {
         log.info("get reservation detail");
         ReservationModalDetailDto reservationDetail = reservationService.getReservationDetail(reservationId);
         return ResponseEntity.ok().body(reservationDetail);
+    }
+
+    /**
+     * POST /reservation/{customerId}
+     * {
+     *     "prodId": String,
+     *     "storeId": String,
+     *     "cnt": String
+     * }
+     * @method   createReservation
+     * @param    data { "prodId": Long, "storeId" : String, "cnt" : Integer }
+     * @return   ResponseEntity<?> type
+     * @author   hoho
+     * @date     2024 07 07 08:56
+
+     */
+    @PostMapping("/{customerId}")
+    @CrossOrigin
+    public ResponseEntity<?> createReservation(@PathVariable String customerId, Map<String, String> data) {
+        boolean flag = reservationService.createReservation(customerId, data);
+        return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 }

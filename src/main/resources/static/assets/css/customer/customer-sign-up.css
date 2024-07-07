@@ -66,9 +66,34 @@ section.input-area button {
     cursor: pointer;
 }
 
+section.input-area button.disable {
+    cursor: not-allowed;
+    background-color: gray;
+}
+
 section.input-area .container button#prev-btn {
     margin-right: 10px;
 }
+
+
+section.input-area .id-verify-wrapper {
+    margin-top: 20px;
+}
+
+section.input-area .id-verify-wrapper h2 {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+section.input-area .id-verify-wrapper h3 {
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+#countdown {
+    margin-bottom: 10px;
+}
+
 
 /* -------------------------------선호하는 음식 선택 --------------------------------------*/
 

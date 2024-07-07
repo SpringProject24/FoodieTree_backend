@@ -11,6 +11,7 @@
           crossorigin="anonymous">
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/sign-in.css">
+    <link href="https://fonts.googleapis.com/css2?family=Francois+One&family=Margarine&family=Nanum+Gothic&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
@@ -26,7 +27,6 @@
     </style>
 </head>
 <body>
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
@@ -71,7 +71,7 @@
 
 <header>
     <div class="container">
-        <div class="logo">FoodieTree ${login.customerId}</div>
+        <div class="logo margarine-regular">FoodieTree ${login.customerId}</div>
         <div class="logo-img">
             <img src="/assets/img/img_2.png" alt="">
         </div>
@@ -114,6 +114,8 @@
 
     if (message === 'signin-fail') {
         alert('아이디나 비밀번호를 확인해주세요!');
+    } else if (message === "signin-required") {
+      alert("로그인이 필요한 서비스입니다.");
     }
     const newUrl = window.location.origin + window.location.pathname;
 

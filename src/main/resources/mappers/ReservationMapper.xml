@@ -52,4 +52,24 @@
     JOIN tbl_customer c ON r.customer_id = c.customer_id
     WHERE r.reservation_id = #{reservationId}
     </select>
+
+    <insert id="createReservation">
+        INSERT INTO tbl_reservation
+            (customer_id, product_id)
+        VALUES (#{customerId}, #{productId})
+    </insert>
+
+    <select id="findByStoreIdLimit" resultType="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto">
+        SELECT
+            store_id,
+            product_id,
+            TIMESTAMPDIFF(SECOND, NOW(), pickup_time) as 'sec_left'
+        FROM
+            tbl_product
+        WHERE 1=1
+        AND store_id = #{storeId}
+        AND TIMESTAMPDIFF(SECOND, NOW(), pickup_time) > 0
+        AND canceled_by_store_at IS NULL
+        LIMIT #{cnt}
+    </select>
 </mapper>

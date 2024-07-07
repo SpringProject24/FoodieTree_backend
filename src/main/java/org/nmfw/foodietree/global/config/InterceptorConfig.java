@@ -1,8 +1,10 @@
 package org.nmfw.foodietree.global.config;
 
 import lombok.RequiredArgsConstructor;
-//import org.nmfw.foodietree.domain.customer.interceptor.AfterLoginInterceptor;
-import org.nmfw.foodietree.domain.customer.interceptor.AutoLoginInterceptor;
+import org.nmfw.foodietree.global.interceptor.AfterLoginInterceptor;
+import org.nmfw.foodietree.global.interceptor.AutoLoginInterceptor;
+import org.nmfw.foodietree.global.interceptor.CustomerInterceptor;
+import org.nmfw.foodietree.global.interceptor.StoreInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -13,22 +15,32 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class InterceptorConfig implements WebMvcConfigurer {
 
-    //    private final AfterLoginInterceptor afterLoginInterceptor;
-    private final AutoLoginInterceptor autoLoginInterceptor;
+	private final AfterLoginInterceptor afterLoginInterceptor;
+	private final AutoLoginInterceptor autoLoginInterceptor;
+	private final CustomerInterceptor customerInterceptor;
+	private final StoreInterceptor storeInterceptor;
 
-    // 설정 메서드
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-//        registry
-//                .addInterceptor(afterLoginInterceptor)
-//                // 해당 인터셉터가 동작할 URL을 설정
-//                .addPathPatterns("/members/sign-up", "members/sign-in")
-//                ;
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry
+			.addInterceptor(afterLoginInterceptor)
+			.addPathPatterns("/customer/sign-up", "/customer/sign-in", "/store/sign-up",
+				"/store/sign-in")
+		;
 
+		// 자동로그인 인터셉터 등록
+		registry
+			.addInterceptor(autoLoginInterceptor)
+			.addPathPatterns("/**");
 
-        // 자동로그인 인터셉터 등록
-        registry
-                .addInterceptor(autoLoginInterceptor)
-                .addPathPatterns("/**");
-    }
+		registry
+			.addInterceptor(customerInterceptor)
+			.addPathPatterns("/customer/**")
+			.excludePathPatterns("/customer/sign-in", "/customer/sign-up");
+
+		registry
+			.addInterceptor(storeInterceptor)
+			.addPathPatterns("/store/**")
+			.excludePathPatterns("/store/sign-in", "/store/sign-up");
+	}
 }
