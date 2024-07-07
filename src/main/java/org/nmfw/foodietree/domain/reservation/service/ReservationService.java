@@ -9,9 +9,11 @@ import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +90,8 @@ public class ReservationService {
         return now.isBefore(dto.getPickupTime().minusHours(1));
     }
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH시mm분");
+
     public ReservationModalDetailDto getReservationDetail(int reservationId) {
         ReservationModalDetailDto dto = reservationMapper.findModalDetailByReservationId(reservationId);
         ReservationDetail rd = ReservationDetail.builder()
@@ -100,6 +104,19 @@ public class ReservationService {
         PickUpStatus pickUpStatus = customerMyPageService.determinePickUpStatus(rd);
 
         dto.setStatus(pickUpStatus);
+
+            if (dto.getReservationTime() != null) {
+                dto.setReservationTimeF(dto.getReservationTime().format(formatter));
+            }
+            if (dto.getCancelReservationAt() != null) {
+                dto.setCancelReservationAtF(dto.getCancelReservationAt().format(formatter));
+            }
+            if (dto.getPickedUpAt() != null) {
+                dto.setPickedUpAtF(dto.getPickedUpAt().format(formatter));
+            }
+            if (dto.getPickupTime() != null) {
+                dto.setPickupTimeF(dto.getPickupTime().format(formatter));
+            }
 
         return dto;
     }

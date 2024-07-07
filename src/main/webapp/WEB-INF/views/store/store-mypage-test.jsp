@@ -204,8 +204,7 @@
 <div id="reservation-modal" class="modal">
     <div class="modal-content">
         <div>
-            <span class="close">&times;</span>
-            <h2>예약 상세 내역</h2>
+            <span class="close"><i class="fas fa-times"></i></span>
             <div id="modal-store-reservation-details"></div>
         </div>
     </div>
@@ -215,9 +214,9 @@
 <!-- 캘린더 모달 창 -->
 <div id="store-calendar-modal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close"><i class="fas fa-times"></i></span>
         <div id="schedule">
-            <h2>가게 문 몇시에 열고 닫는지, 오늘 문 닫을건지</h2>
+<%--            <h2>가게 문 몇시에 열고 닫는지, 오늘 문 닫을건지</h2>--%>
             <div id="modal-schedule-details"></div>
         </div>
     </div>

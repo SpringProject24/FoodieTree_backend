@@ -106,6 +106,7 @@ async function checkHoliday(dateString) {
 
 async function showModal(year, month, day) {
     const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const dateStringKr = `${year}년 ${String(month + 1).padStart(2, '0')}월 ${String(day).padStart(2, '0')}일`;
     let tag = ``;
     console.log(dateString);
     try {
@@ -119,13 +120,14 @@ async function showModal(year, month, day) {
 
         const isHoliday = await checkHoliday(dateString);
 
-        tag = `<div>openAt: ${res.openAt || 'N/A'}</div>
-               <div>기본 매일 업데이트 되는 수량: ${res.productCnt || 'N/A'}</div>
-                <div>오늘 총 등록된 수량: ${res.todayProductCnt || 'N/A'}</div>
-                <div>오늘 총 팔린 수량: ${res.todayPickedUpCnt || 'N/A'}</div>
-               <div>canceledByStoreAt: ${res.canceledByStoreAt || 'N/A'}</div>
-                <div>closedAt: ${res.closedAt || 'N/A'}</div>
-               <div>pickupTime: ${res.pickupTime || 'N/A'}</div>`;
+        tag = `<div>오픈 시간: ${res.openAt || 'N/A'}</div>
+            <div>픽업 마감 시간: ${res.closedAt || 'N/A'}</div>\
+<!--                <div>마감 시간: ${res.closedAt || 'N/A'}</div>-->
+               <div>업데이트 될 기본 수량: ${res.productCnt || 'N/A'}</div>
+              `;
+
+        let tag2 = `<div>총 등록된 수량: ${res.todayProductCnt || 'N/A'}</div>
+                <div>총 팔린 수량: ${res.todayPickedUpCnt || 'N/A'}</div>`
 
         const selectedDate = new Date(year, month, day);
         const today = new Date();
@@ -134,15 +136,27 @@ async function showModal(year, month, day) {
         // let $setPickUpTimeButton = ''; // 버튼 초기화
         let $cancelStoreCloseButton = ''; // 버튼 초기화
         if (selectedDate > today) {
-            $storeCloseButton = '<button id="store-holiday-btn">휴무일로 지정하기</button>';
+            $storeCloseButton = '<button class="calendar-button" id="store-holiday-btn">휴무일로 지정하기</button>';
             // $setPickUpTimeButton = '<button id="set-pickup-time-btn">픽업 시간 설정하기</button>';
-            $cancelStoreCloseButton = '<button id="undo-holiday-btn">휴무일 지정 취소하기</button>';
+            $cancelStoreCloseButton = '<button class="calendar-button" id="undo-holiday-btn">휴무일 지정 취소하기</button>';
         }
-        let normalTag = `${dateString}의 정보` + tag + $storeCloseButton + '<br>';
+        let normalTag = `<div class="today-date">${dateStringKr}</div>` + tag + $storeCloseButton + '<br>';
 
-        let holidayTag = `${dateString}은`+'<div>휴무일로 지정되었습니다.</div>' + '<br>' + $cancelStoreCloseButton;
+        let holidayTag = `<div class="today-date">${dateStringKr}</div>`+'<div>휴무일로 지정되었습니다.</div>' + '<br>' + $cancelStoreCloseButton;
 
-        modalDetailsElement.innerHTML = isHoliday ? holidayTag : normalTag;
+        let passedTag = `<div class="today-date">${dateStringKr}</div>` + tag+ tag2 + '<br>';
+
+        let tags = ``;
+        if(isHoliday){
+            tags = holidayTag;
+        }
+        if(!isHoliday &&selectedDate <= today){
+            tags = passedTag;
+        }
+        if(!isHoliday && selectedDate > today){
+            tags = normalTag;
+        }
+        modalDetailsElement.innerHTML = tags;
         scheduleModal.style.display = 'block';
 
         const undoHolidayButton = modalDetailsElement.querySelector('#undo-holiday-btn');
@@ -396,15 +410,53 @@ async function openModal(reservationId) {
         return;
     }
 
-    // 모달에 데이터 추가
-    $modalDetails.innerHTML = `
+    let tag = '';
+    if(reservationR.status === 'CANCELED'){
+        tag = `
         <div class="reservation-detail-item" data-reservation-id="${reservationId}">
-            <p>픽업 닉네임을 확인 해주세요!!!</p>
-<!--            <img src="${reservationR.profileImage}" alt="Customer profile image">-->
-            <p>픽업하는 사람: ${reservationR.nickname}</p>
-            <p>상태: ${reservationR.status}</p>
+        <img src="/assets/img/cancel-stress.png" alt="취소 이미지">
+            <p>예약이 취소되었습니다.</p>
+            <p>취소 시간: ${reservationR.cancelReservationAtF}</p>
         </div>
-    `;
+        `;
+    }
+    if(reservationR.status === 'RESERVED'){
+        tag = `
+        <div class="reservation-detail-item" data-reservation-id="${reservationId}">
+            <img src="/assets/img/caution2.png" alt="경고 이미지">
+            <p class="caution">픽업 닉네임을 확인 해주세요</p>
+            <img src="${reservationR.profileImage}" alt="Customer profile image">
+            <p class="pickup-nickname">닉네임: <span>${reservationR.nickname}</span></p>
+            <p class="modal-reservation-status"> 픽업 대기 중 </p>
+            <p class="pickup-time">픽업 마감 시간: <span>${reservationR.pickupTimeF}</span></p>
+        </div>
+        `;
+    }
+    if(reservationR.status === 'PICKEDUP'){
+        tag = `
+        <div class="reservation-detail-item" data-reservation-id="${reservationId}">
+            <img src="/assets/img/pickedup-happy.png" alt="체크 이미지">
+            <p></p>
+            <img src="${reservationR.profileImage}" alt="고객 이미지">
+            <p><span>픽업 닉네임: </span>${reservationR.nickname}</p>
+            <p>픽업이 완료되었습니다.</p>
+            <p>픽업 시간: ${reservationR.pickedUpAtF}</p>
+        </div>
+        `;
+    }
+    if(reservationR.status === 'NOSHOW'){
+        tag = `
+        <div class="reservation-detail-item" data-reservation-id="${reservationId}">
+            <img src="/assets/img/noshow-sad.png" alt="노쇼 이미지">
+            <p>픽업 마감 시간까지 픽업되지 않았습니다.</p>
+            <p>픽업 마감 시간: ${reservationR.pickupTimeF}</p>
+        </div>
+        `;
+    }
+
+
+    // 모달에 데이터 추가
+    $modalDetails.innerHTML = tag;
 
     $reservationModal.style.display = "block";
 }

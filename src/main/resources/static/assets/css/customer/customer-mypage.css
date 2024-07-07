@@ -493,6 +493,20 @@ button.calendar-button {
     box-shadow: 3px 3px 7px #c5c5c5, -3px -3px 7px #ffffff;
 }
 
+button.calendar-button#store-holiday-btn{
+    background-color: rgba(234, 97, 42, 0.7);
+    color: #FFFFFF;
+    font-size: 20px;
+    margin-top: 20px;
+}
+button.calendar-button#undo-holiday-btn{
+    font-size: 20px;
+    color:#FFFFFF;
+    /*background: rgb(186, 196, 163);*/
+    background-color: rgba(55, 112, 49, 0.5); /* Example circle color */
+    margin-top: 20px;
+}
+
 button.calendar-button:active {
     color: #666;
     box-shadow: inset 4px 4px 3px #c5c5c5, inset -4px -4px 3px #ffffff;
