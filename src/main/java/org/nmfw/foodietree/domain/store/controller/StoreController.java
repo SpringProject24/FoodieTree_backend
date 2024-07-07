@@ -2,8 +2,10 @@ package org.nmfw.foodietree.domain.store.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.nmfw.foodietree.domain.store.dto.request.StoreLoginDto;
 import org.nmfw.foodietree.domain.store.dto.request.StoreSignUpDto;
 import org.nmfw.foodietree.domain.store.service.StoreLoginResult;
@@ -12,7 +14,9 @@ import org.nmfw.foodietree.domain.store.service.StoreSignUpService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import javax.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,19 +32,18 @@ import static org.nmfw.foodietree.domain.store.service.StoreLoginResult.SUCCESS;
 public class StoreController {
 
     private final StoreService storeService;
-    private final StoreSignUpService storeSignUpService;
 
     @GetMapping("/sign-in")
     public String login(HttpSession session
-        , @RequestParam(required = false) String redirect) {
+            , @RequestParam(required = false) String redirect) {
         session.setAttribute("redirect", redirect);
         return "sign-in";
     }
 
     @PostMapping("/sign-in")
     public String login(@RequestBody StoreLoginDto dto,
-        HttpSession session,
-        HttpServletResponse response) {
+                        HttpSession session,
+                        HttpServletResponse response) {
 
         StoreLoginResult result = storeService.authenticate(dto, session, response);
         if (result == SUCCESS) {
@@ -60,7 +63,6 @@ public class StoreController {
     }
 
     /**
-     *
      * @param dto
      * @return StoreSignUpService에서 성공적으로 회원가입완료시 다음페이지로 이동
      */
@@ -69,7 +71,7 @@ public class StoreController {
         log.info("/store-sign-up POST");
         log.info("parameter:{}", dto);
 
-        boolean flag = storeSignUpService.storeSignUp(dto, session);
+        boolean flag = storeService.signUp(dto, session);
         if (!flag) {
             log.debug("회원가입 실패");
             return "redirect:/store/sign-up?message=signup-fail";
@@ -79,7 +81,11 @@ public class StoreController {
     }
 
     @GetMapping("/sign-out")
-    public String signOut(HttpSession session){
+    public String signOut(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        if (LoginUtil.isAutoLogin(request)) {
+            storeService.autoLoginClear(request, response);
+        }
         session.removeAttribute("login");
         session.invalidate();
         return "redirect:/";

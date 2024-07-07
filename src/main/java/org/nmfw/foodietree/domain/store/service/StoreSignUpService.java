@@ -22,15 +22,5 @@ public class StoreSignUpService {
      * @param dto - store 회원가입시 입력되는 필수값 account, password만을 가진 dto
      * @return 정상적으로 tbl_store에 account와 암호화된 비밀번호가 저장되었다면 true반환
      */
-    public boolean storeSignUp(StoreSignUpDto dto, HttpSession session) {
-        Store store = dto.toEntity();
-        String encodedPassword = encoder.encode(dto.getPassword());
-        store.setPassword(encodedPassword);
-        boolean flag = storeMapper.storeSave(store);
-        if (!flag) {
-            return false;
-        }
-        StoreService.maintainLoginState(session, store);
-        return true;
-    }
+
 }
