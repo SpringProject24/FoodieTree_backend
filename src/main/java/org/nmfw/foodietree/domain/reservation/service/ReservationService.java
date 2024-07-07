@@ -8,6 +8,7 @@ import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
 import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
@@ -109,9 +110,9 @@ public class ReservationService {
     public boolean createReservation(String customerId, Map<String, String> data) {
         int cnt = Integer.parseInt(data.get("cnt"));
         String storeId = data.get("storeId");
-        List<Map<String, String>> list = reservationMapper.findByStoreIdLimit(storeId, cnt);
-        for (Map<String, String> tar : list) {
-            int productId = Integer.parseInt(tar.get("product_id").toString());
+        List<ReservationFoundStoreIdDto> list = reservationMapper.findByStoreIdLimit(storeId, cnt);
+        for (ReservationFoundStoreIdDto tar : list) {
+            long productId = tar.getProductId();
             boolean flag = reservationMapper.createReservation(customerId, productId);
             if (!flag) return flag;
         }

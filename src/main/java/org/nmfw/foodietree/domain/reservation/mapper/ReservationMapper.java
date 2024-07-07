@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.reservation.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 
@@ -26,7 +27,7 @@ public interface ReservationMapper {
 
     ReservationModalDetailDto findModalDetailByReservationId(@Param("reservationId") int reservationId);
 
-    boolean createReservation(@Param("customerId") String customerId, @Param("productId") int productId);
+    boolean createReservation(@Param("customerId") String customerId, @Param("productId") long productId);
 
-    List<Map<String, String>> findByStoreIdLimit(@Param("storeId") String storeId, @Param("cnt") int cnt);
+    List<ReservationFoundStoreIdDto> findByStoreIdLimit(@Param("storeId") String storeId, @Param("cnt") int cnt);
 }

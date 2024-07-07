@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.reservation.mapper;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ class ReservationMapperTest {
     void createReservation() {
         // given
         String customerId = "thdghtjd115@gmail.com";
-        int productId = 83;
+        long productId = 83;
         // when
         boolean reservation = reservationMapper.createReservation(customerId, productId);
         // then
@@ -65,12 +66,11 @@ class ReservationMapperTest {
         String storeId = "sji4205@naver.com";
         int cnt = 3;
         // when
-        List<Map<String, String>> byStoreIdLimit = reservationMapper.findByStoreIdLimit(storeId, cnt);
+        List<ReservationFoundStoreIdDto> byStoreIdLimit = reservationMapper.findByStoreIdLimit(storeId, cnt);
         // then
         assertNotNull(byStoreIdLimit);
-        for (Map<String, String> stringStringMap : byStoreIdLimit) {
-
-            log.info("{} sec | productId {}", stringStringMap.get("sec_left"), stringStringMap.get("product_id"));
+        for (ReservationFoundStoreIdDto stringStringMap : byStoreIdLimit) {
+            log.info("{}", stringStringMap);
         }
     }
 }

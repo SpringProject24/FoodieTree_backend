@@ -59,7 +59,7 @@
         VALUES (#{customerId}, #{productId})
     </insert>
 
-    <select id="findByStoreIdLimit" resultType="map">
+    <select id="findByStoreIdLimit" resultType="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto">
         SELECT
             store_id,
             product_id,
