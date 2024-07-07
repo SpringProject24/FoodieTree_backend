@@ -25,7 +25,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 		registry
 			.addInterceptor(afterLoginInterceptor)
 			.addPathPatterns("/customer/sign-up", "/customer/sign-in", "/store/sign-up",
-				"/store/sign-in")
+				"/store/sign-in", "/sign-in", "/sign-up")
 		;
 
 		// 자동로그인 인터셉터 등록

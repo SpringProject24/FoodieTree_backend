@@ -30,7 +30,7 @@ public class LoginUtil {
 
     public static String getLoggedInUser(HttpSession session) {
         LoginUserInfoDto obj = (LoginUserInfoDto)session.getAttribute(LOGIN);
-        return obj.getCustomerId();
+        return obj != null ? obj.getCustomerId() : null;
     }
 
     public static boolean isAutoLogin(HttpServletRequest request) {
