@@ -70,6 +70,24 @@ section.input-area .container button#prev-btn {
     margin-right: 10px;
 }
 
+section.input-area .id-verify-wrapper {
+    margin-top: 20px;
+}
+
+section.input-area .id-verify-wrapper h2 {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+section.input-area .id-verify-wrapper h3 {
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+#countdown {
+    margin-bottom: 10px;
+}
+
 section.info .container .right {
     flex-grow: 1;
     height: 500px;
