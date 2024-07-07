@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import static org.nmfw.foodietree.domain.store.service.StoreLoginResult.SUCCESS;
+
 @Controller
 @RequestMapping("/store")
 @Slf4j
@@ -37,24 +39,19 @@ public class StoreController {
 
     @PostMapping("/sign-in")
     public String login(@RequestBody StoreLoginDto dto,
-        RedirectAttributes ra,
-        HttpServletRequest request,
+        HttpSession session,
         HttpServletResponse response) {
-        HttpSession session = request.getSession();
 
         StoreLoginResult result = storeService.authenticate(dto, session, response);
-
-        ra.addFlashAttribute("result", result);
-
-        if (result == StoreLoginResult.SUCCESS) {
+        if (result == SUCCESS) {
             String redirect = (String) session.getAttribute("redirect");
             if (redirect != null) {
                 session.removeAttribute("redirect");
                 return "redirect:" + redirect;
             }
-            return "redirect:/"; // 로그인 성공시
+            return "redirect:/";
         }
-        return "redirect:/store/sign-in";
+        return "redirect:/store/sign-in?message=signin-fail";
     }
 
     @GetMapping("/sign-up")
@@ -68,20 +65,18 @@ public class StoreController {
      * @return StoreSignUpService에서 성공적으로 회원가입완료시 다음페이지로 이동
      */
     @PostMapping("/sign-up")
-    public String storeSignUp(@Validated StoreSignUpDto dto) {
+    public String storeSignUp(@Validated StoreSignUpDto dto, HttpSession session) {
         log.info("/store-sign-up POST");
         log.info("parameter:{}", dto);
 
-        boolean flag = storeSignUpService.storeSignUp(dto);
-        if (flag) {
-            log.debug("회원가입 성공");
-        } else {
+        boolean flag = storeSignUpService.storeSignUp(dto, session);
+        if (!flag) {
             log.debug("회원가입 실패");
+            return "redirect:/store/sign-up?message=signup-fail";
         }
-        return "redirect:/";
+        log.debug("회원가입 성공");
+        return "redirect:/store/approval";
     }
-
-
 
     @GetMapping("/sign-out")
     public String signOut(HttpSession session){

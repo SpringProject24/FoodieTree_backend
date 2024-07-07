@@ -5,8 +5,11 @@ import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.request.AutoLoginDto;
+import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
+import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.nmfw.foodietree.domain.store.dto.request.LoginDto;
+import org.nmfw.foodietree.domain.store.dto.request.LoginStoreInfoDto;
 import org.nmfw.foodietree.domain.store.dto.request.StoreLoginDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import static org.nmfw.foodietree.domain.store.service.StoreLoginResult.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,14 +40,14 @@ public class StoreService {
         Store foundStore = storeMapper.findOne(storeId);
         if (foundStore == null) {
             log.info("{} - 회원가입이 필요합니다.",storeId);
-            return StoreLoginResult.NO_ACC;
+            return NO_ACC;
         }
 
         String inputPassword = dto.getPassword();
         String originPassword = foundStore.getPassword();
         if (!encoder.matches(inputPassword, originPassword)) {
             log.info("비밀번호가 일치하지 않습니다");
-            return StoreLoginResult.NO_PW;
+            return NO_PW;
         }
 
         if (dto.isAutoLogin()) {
@@ -59,7 +64,12 @@ public class StoreService {
                     .build()
             );
         }
-        return null;
+        maintainLoginState(session, foundStore);
+        return SUCCESS;
     }
 
+    public static void maintainLoginState(HttpSession session, Store found) {
+        session.setMaxInactiveInterval(60 * 60);
+        session.setAttribute("login", new LoginStoreInfoDto(found));
+    }
 }

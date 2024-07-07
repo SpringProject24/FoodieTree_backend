@@ -1,7 +1,9 @@
 package org.nmfw.foodietree.domain.customer.util;
 
 
+import lombok.extern.java.Log;
 import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
+import org.nmfw.foodietree.domain.store.dto.request.LoginStoreInfoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.util.WebUtils;
@@ -36,5 +38,10 @@ public class LoginUtil {
     public static boolean isAutoLogin(HttpServletRequest request) {
         Cookie autoLoginCookie = WebUtils.getCookie(request, AUTO_LOGIN_COOKIE);
         return autoLoginCookie != null;
+    }
+
+    public static String getLoggedInStore(HttpSession session) {
+        LoginStoreInfoDto obj = (LoginStoreInfoDto) session.getAttribute(LOGIN);
+        return obj != null ? obj.getStoreId() : null;
     }
 }
