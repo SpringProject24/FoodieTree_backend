@@ -10,14 +10,14 @@
     <link rel="stylesheet" href="/assets/css/store/sign-up.css">
 </head>
 <body>
-<header>
-    <div class="container">
-        <div class="logo">FoodieTree</div>
-        <div class="logo-img">
-            <img src="/assets/img/img_2.png" alt="">
-        </div>
-    </div>
-</header>
+  <header>
+      <div class="container">
+          <div class="logo margarine-regular">FoodieTree</div>
+          <div class="logo-img">
+              <img src="/assets/img/img_2.png" alt="Logo">
+          </div>
+      </div>
+  </header>
 <section class="input-area">
     <form action="/store/sign-up" method="post">
         <div class="container">
