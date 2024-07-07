@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.product.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.nmfw.foodietree.domain.product.service.ProductApprovalService;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
 import org.nmfw.foodietree.domain.product.dto.response.ProductApprovalDto;
@@ -36,13 +37,10 @@ public class ProductApprovalController {
     }
 
     @PostMapping("/product")
-    public String approveProduct(@Validated ProductApprovalDto productDto, Model model, HttpSession session) {
-
+    public String approveProduct(ProductApprovalDto productDto, Model model, HttpSession session) {
+        log.info("{}", productDto);
         // 세션에서 로그인된 사용자 ID 가져오기
-        String storeId = (String) session.getAttribute("storeId");
-        if (storeId == null) {
-            storeId = "hoho@bbb.com"; // 임시 값 설정, 실제로는 세션에서 가져온 값을 사용
-        }
+        String storeId = LoginUtil.getLoggedInUser(session);
 
         // storeId를 DTO에 설정
         productDto.setStoreId(storeId);
@@ -61,19 +59,11 @@ public class ProductApprovalController {
             }
             profilePath = FileUtil.uploadFile(rootPath, proImage);
         }
-
-        boolean flag1 = productApprovalService.productColumnApproval(productDto, profilePath);
-
         boolean flag2 = productApprovalService.storeColumnApproval(productDto);
 
-        if(flag1){
-            if(flag2){
-                return "Product/product-list";
-            }
-            return "error";
+        if (flag2) {
+            return "redirect:/store/mypage/main";
         }
-        return "error";
-
-
+        return "redirect:/store/product";
     }
 }

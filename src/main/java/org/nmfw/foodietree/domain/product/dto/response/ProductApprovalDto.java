@@ -29,7 +29,6 @@ public class ProductApprovalDto {
         Random random = new Random();
 
         return ProductApproval.builder()
-                .productId(random.nextInt())
                 .storeId(this.storeId)
                 .category(this.category)
                 .price(this.price)
