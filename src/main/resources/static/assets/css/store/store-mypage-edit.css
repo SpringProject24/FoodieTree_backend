@@ -1,0 +1,77 @@
+.edit .edit-box{
+    padding: 15px;
+}
+
+button.calendar-button {
+    color: rgba(9, 9, 9, 0.79);
+    padding: 0.5em 1.3em;
+    font-size: 17px;
+    border-radius: 0.5em;
+    background: rgba(230, 234, 220, .6);
+    cursor: pointer;
+    border: 1px solid #e8e8e8;
+    transition: all 0.3s;
+    box-shadow: 3px 3px 7px #c5c5c5, -3px -3px 7px #ffffff;
+}
+
+
+button.calendar-button:active {
+    color: #666;
+    box-shadow: inset 4px 4px 3px #c5c5c5, inset -4px -4px 3px #ffffff;
+}
+
+#product-count-move{
+    position: relative;
+    left: 15px;
+}
+
+#special-box-price-move{
+    position: relative;
+    left: 15px;
+}
+
+#special-box-price-des{
+    position: relative;
+    bottom: -9px;
+}
+
+#special-box-price-move #price{
+    font-size: 17px;
+    width: 150px;
+    height: 35px;
+}
+
+#store-phone-number-move{
+    position: relative;
+    left: 6px;
+}
+
+#store-name-mypage-edit{
+    font-family: 'Jua', sans-serif;
+    font-size: 22px;
+    position: relative;
+    left: 78px;
+}
+#store-id-mypage-edit{
+    /*font-family: 'Jua', sans-serif;*/
+    /*font-size: 22px;*/
+    position: relative;
+    left: 78px;
+}
+
+#store-mypage-image-edit.image-wrapper{
+    margin-top: 96px;
+    margin-right: 81px;
+}
+
+#store-mypage-image-edit.image-wrapper #profile_btn{
+    margin-bottom: 244px;
+}
+
+.calendar-button#profile_btn{
+    font-size: 18px;
+    width: 133px;
+    height: 45px;
+}
+
+
