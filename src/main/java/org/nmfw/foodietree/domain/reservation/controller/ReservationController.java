@@ -72,11 +72,12 @@ public class ReservationController {
     /**
      * POST /reservation/{customerId}
      * {
-     *     "prodId": Long
+     *     "prodId": String,
+     *     "storeId": String,
+     *     "cnt": String
      * }
      * @method   createReservation
-     * @param    customerId
-     * @param    data { "prodId" : Long }
+     * @param    data { "prodId": Long, "storeId" : String, "cnt" : Integer }
      * @return   ResponseEntity<?> type
      * @author   hoho
      * @date     2024 07 07 08:56
@@ -84,9 +85,8 @@ public class ReservationController {
      */
     @PostMapping("/{customerId}")
     @CrossOrigin
-    public ResponseEntity<?> createReservation(@PathVariable String customerId, @RequestBody
-        Map<String, Long> data) {
-        boolean flag = reservationService.createReservation(customerId, data.get("prodId"));
+    public ResponseEntity<?> createReservation(@PathVariable String customerId, Map<String, String> data) {
+        boolean flag = reservationService.createReservation(customerId, data);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 }

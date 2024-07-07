@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.reservation.service;
 
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
@@ -104,7 +105,9 @@ public class ReservationService {
         return dto;
     }
 
-    public boolean createReservation(String customerId, Long productId) {
+    public boolean createReservation(String customerId, Map<String, String> data) {
+        int cnt = Integer.parseInt(data.get("cnt"));
+
         return reservationMapper.createReservation(customerId, productId);
     }
 }
