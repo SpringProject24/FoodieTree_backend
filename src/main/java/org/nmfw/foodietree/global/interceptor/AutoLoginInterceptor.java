@@ -1,4 +1,4 @@
-package org.nmfw.foodietree.domain.customer.interceptor;
+package org.nmfw.foodietree.global.interceptor;
 
 
 import lombok.RequiredArgsConstructor;

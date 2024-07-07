@@ -114,6 +114,8 @@
 
     if (message === 'signin-fail') {
         alert('아이디나 비밀번호를 확인해주세요!');
+    } else if (message === "signin-required") {
+      alert("로그인이 필요한 서비스입니다.");
     }
     const newUrl = window.location.origin + window.location.pathname;
 
