@@ -89,7 +89,7 @@
                         </div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-key"></i></div>
-                            <button class="btn" id="update-pass-btn">비밀번호 재설정</button>
+                            <button class="btn calendar-button" id="update-pass-btn">비밀번호 재설정</button>
                         </div>
                     </div>
                     <div class="image-wrapper">
@@ -101,7 +101,7 @@
                                     src="${customerMyPageDto.profileImage ? customerMyPageDto.profileImage : '/assets/img/western.jpg'}"
                                     alt="Customer profile image">
                         </a>
-                        <button id="profile_btn" class="btn" type="submit" value="프로필 변경"
+                        <button id="profile_btn" class="btn calendar-button" type="submit" value="프로필 변경"
                                 style="display: none;">이미지 변경
                         </button>
                     </div>
@@ -246,6 +246,6 @@
     });
 </script>
 <!-- 공통푸터 -->
-<%@ include file="include/footer.jsp" %> 
+<%@ include file="../include/footer.jsp" %>
 </body>
 </html>
