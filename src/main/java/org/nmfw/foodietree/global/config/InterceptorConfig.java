@@ -41,6 +41,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
 		registry
 			.addInterceptor(storeInterceptor)
 			.addPathPatterns("/store/**")
-			.excludePathPatterns("/store/sign-in", "/store/sign-up");
+			.excludePathPatterns("/store/sign-in", "/store/sign-up", "/store/check");
 	}
 }

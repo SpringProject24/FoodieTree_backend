@@ -106,7 +106,8 @@ public class CommonController {
         if (loggedInUser != null && customerMapper.findOne(loggedInUser) != null) {
             return "redirect:/product/main";
         }
-        if (loggedInUser != null && storeMapper.findOne(loggedInUser) != null) {
+        String loggedInStore = LoginUtil.getLoggedInStore(session);
+        if (loggedInUser != null && storeMapper.findOne(loggedInStore) != null) {
             return "redirect:/store/mypage/main";
         }
         return "index";

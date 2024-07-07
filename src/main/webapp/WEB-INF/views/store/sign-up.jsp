@@ -26,7 +26,7 @@
         <div class="container">
             <div class="id-wrapper">
                 <h2>회원 등록을 위한 이메일을 입력해주세요!</h2>
-                <input type="text" id="input-id" name="customerId" placeholder="이메일을 입력해주세요">
+                <input type="text" id="input-id" name="account" placeholder="이메일을 입력해주세요">
                 <button id="id-get-code-btn" class="disable" disabled>인증코드 받기</button>
                 <div class="id-verify-wrapper" style="display: none">
                     <h2>해당 이메일로 인증코드가 전송되었습니다</h2>
@@ -40,10 +40,10 @@
             <div class="pass-wrapper none">
                 <div class="pass">
                     <h2>계속해서 비밀번호를 입력해주세요!</h2>
-                    <input type="password" name="password" placeholder="비밀번호를 입력해주세요">
+                    <input id="input-pw" type="password" name="password" placeholder="비밀번호를 입력해주세요">
                 </div>
                 <div class="pass-check">
-                    <input type="password" name="password-chk" placeholder="비밀번호를 확인해주세요">
+                    <input id="input-pw-chk" type="password" name="password-chk" placeholder="비밀번호를 확인해주세요">
                     <div class="wrapper">
                         <button id="prev-btn">이전</button>
                         <button id="pass-btn">계속</button>
@@ -53,60 +53,6 @@
         </div>
     </form>
 </section>
-
-<script>
-  const $idBtn = document.getElementById('id-btn');
-  const $passBtn = document.getElementById('pass-btn');
-  const $idWrapper = document.querySelector('.id-wrapper');
-  const $passWrapper = document.querySelector('.pass-wrapper');
-  const $passCheck = document.querySelector('.pass-check');
-  const $inputId = document.querySelector('input[name=account]');
-  const $inputPw = document.querySelector('input[name=password]');
-  const $prevBtn = document.getElementById('prev-btn');
-  const $h2Id = document.querySelector('.id-wrapper h2');
-
-  $inputId.addEventListener('keyup', () => {
-  });
-
-  $idBtn.addEventListener('click', async (e) => {
-    e.preventDefault();
-    // 이메일 형식
-    const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegExp.test($inputId.value)) {
-      $h2Id.textContent = '이메일 형식이 올바르지 않습니다.';
-      $h2Id.style.color = 'red';
-      return;
-    }
-
-    const res = await fetch(
-        `http://localhost:8083/store/check?type=account&keyword=\${$inputId.value}`);
-    const result = await res.json();
-    if (result) {
-      $h2Id.textContent = '이미 사용중인 이메일입니다.';
-      $h2Id.style.color = 'red';
-      return;
-    }
-    $idWrapper.classList.add('none');
-    $passWrapper.classList.remove('none');
-  });
-
-  $inputPw.addEventListener('keyup', (e) => {
-    $passCheck.classList.remove('none');
-  });
-
-  $passBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    console.log($inputId.value, $inputPw.value);
-    document.querySelector('form').submit();
-  });
-
-  $prevBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    $idWrapper.classList.remove('none');
-    $passWrapper.classList.add('none');
-  });
-</script>
-
   <!-- 공통푸터 -->
   <%@ include file="../include/footer.jsp" %>
 </body>

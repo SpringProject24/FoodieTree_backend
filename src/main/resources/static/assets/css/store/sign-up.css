@@ -66,9 +66,15 @@ section.input-area .container button {
     cursor: pointer;
 }
 
+section.input-area button.disable {
+    cursor: not-allowed;
+    background-color: gray;
+}
+
 section.input-area .container button#prev-btn {
     margin-right: 10px;
 }
+
 
 section.input-area .id-verify-wrapper {
     margin-top: 20px;
@@ -87,6 +93,7 @@ section.input-area .id-verify-wrapper h3 {
 #countdown {
     margin-bottom: 10px;
 }
+
 
 section.info .container .right {
     flex-grow: 1;
