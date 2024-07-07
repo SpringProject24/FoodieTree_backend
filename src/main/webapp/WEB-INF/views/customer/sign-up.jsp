@@ -31,7 +31,7 @@
                 <div class="id-verify-wrapper" style="display: none">
                     <h2>해당 이메일로 인증코드가 전송되었습니다</h2>
                     <h3>인증코드를 입력해주세요!</h3>
-                    <input type="text" id="id-verify-code" name="customerId" placeholder="인증코드를 입력해주세요">
+                    <input type="text" id="id-verify-code" placeholder="인증코드를 입력해주세요">
                     <span id="countdown"></span>
                     <button id="id-verify-btn">이메일 인증번호 확인</button>
                     <button id="id-btn" style="display: none">계속</button>
@@ -189,6 +189,7 @@
         });
 
         $skipBtnLocation.addEventListener('click', (e) => {
+            e.preventDefault();
             const $locations = document.querySelectorAll('.location-item');
             $locations.forEach($location => $location.classList.remove('checked'));
             document.querySelector('form').submit();

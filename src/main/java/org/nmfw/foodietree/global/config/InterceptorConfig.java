@@ -36,7 +36,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 		registry
 			.addInterceptor(customerInterceptor)
 			.addPathPatterns("/customer/**")
-			.excludePathPatterns("/customer/sign-in", "/customer/sign-up");
+			.excludePathPatterns("/customer/sign-in", "/customer/sign-up", "/customer/check");
 
 		registry
 			.addInterceptor(storeInterceptor)
