@@ -1,24 +1,92 @@
 package org.nmfw.foodietree.domain.store.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.store.dto.request.StoreLoginDto;
+import org.nmfw.foodietree.domain.store.dto.request.StoreSignUpDto;
+import org.nmfw.foodietree.domain.store.service.StoreLoginResult;
+import org.nmfw.foodietree.domain.store.service.StoreService;
+import org.nmfw.foodietree.domain.store.service.StoreSignUpService;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequestMapping("/store")
+@Slf4j
+@RequiredArgsConstructor
 public class StoreController {
+
+    private final StoreService storeService;
+    private final StoreSignUpService storeSignUpService;
+
+    @GetMapping("/sign-in")
+    public String login(HttpSession session
+        , @RequestParam(required = false) String redirect) {
+        session.setAttribute("redirect", redirect);
+        return "sign-in";
+    }
+
+    @PostMapping("/sign-in")
+    public String login(@RequestBody StoreLoginDto dto,
+        RedirectAttributes ra,
+        HttpServletRequest request,
+        HttpServletResponse response) {
+        HttpSession session = request.getSession();
+
+        StoreLoginResult result = storeService.authenticate(dto, session, response);
+
+        ra.addFlashAttribute("result", result);
+
+        if (result == StoreLoginResult.SUCCESS) {
+            String redirect = (String) session.getAttribute("redirect");
+            if (redirect != null) {
+                session.removeAttribute("redirect");
+                return "redirect:" + redirect;
+            }
+            return "redirect:/"; // 로그인 성공시
+        }
+        return "redirect:/store/sign-in";
+    }
+
+    @GetMapping("/sign-up")
+    public String StoreSignUpForm() {
+        return "store/sign-up";
+    }
+
+    /**
+     *
+     * @param dto
+     * @return StoreSignUpService에서 성공적으로 회원가입완료시 다음페이지로 이동
+     */
+    @PostMapping("/sign-up")
+    public String storeSignUp(@Validated StoreSignUpDto dto) {
+        log.info("/store-sign-up POST");
+        log.info("parameter:{}", dto);
+
+        boolean flag = storeSignUpService.storeSignUp(dto);
+        if (flag) {
+            log.debug("회원가입 성공");
+        } else {
+            log.debug("회원가입 실패");
+        }
+        return "redirect:/";
+    }
+
+
+
     @GetMapping("/sign-out")
     public String signOut(HttpSession session){
-
-        //세션구하기
-        //HttpSession session = request.getSession();
-
-        // 세션에서 로그인 기록 삭제
         session.removeAttribute("login");
-
-        // 세션을 초기화 (reset)
         session.invalidate();
-
-        // 홈으로 보내기
         return "redirect:/";
     }
 }

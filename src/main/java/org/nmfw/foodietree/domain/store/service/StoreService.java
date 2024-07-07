@@ -1,7 +1,11 @@
 package org.nmfw.foodietree.domain.store.service;
 
+import java.time.LocalDateTime;
+import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.customer.dto.request.AutoLoginDto;
+import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.nmfw.foodietree.domain.store.dto.request.LoginDto;
 import org.nmfw.foodietree.domain.store.dto.request.StoreLoginDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
@@ -19,36 +23,41 @@ public class StoreService {
     private final StoreMapper storeMapper;
     private final PasswordEncoder encoder;
 
-    //회원가입중간 처리
     public boolean join(LoginDto dto) {
         Store store = dto.toEntity();
-
-        //비번 인코딩
         String encodedPassword = encoder.encode(dto.getPassword());
         store.setPassword(encodedPassword);
-
         return storeMapper.save(store);
     }
 
-    //로그인 검증 처리
     public StoreLoginResult authenticate(StoreLoginDto dto, HttpSession session, HttpServletResponse response) {
-
-        //회원가입 여부 확인
         String storeId = dto.getStoreId();
         Store foundStore = storeMapper.findOne(storeId);
-
         if (foundStore == null) {
             log.info("{} - 회원가입이 필요합니다.",storeId);
             return StoreLoginResult.NO_ACC;
         }
 
-        //비밀번호 일치 검사
-        String inputPassword = dto.getPassword(); //입력한 회원의 아이디
-        String originPassword = foundStore.getPassword(); //디비의 저장된 회원 아이디
-
+        String inputPassword = dto.getPassword();
+        String originPassword = foundStore.getPassword();
         if (!encoder.matches(inputPassword, originPassword)) {
             log.info("비밀번호가 일치하지 않습니다");
             return StoreLoginResult.NO_PW;
+        }
+
+        if (dto.isAutoLogin()) {
+            String sessionId = session.getId();
+            Cookie autoLoginCookie = new Cookie(LoginUtil.AUTO_LOGIN_COOKIE, sessionId);
+            autoLoginCookie.setPath("/"); // 쿠키를 사용할 경로
+            autoLoginCookie.setMaxAge(60 * 60 * 24 * 90); // 자동로그인 유지 시간
+            response.addCookie(autoLoginCookie);
+            storeMapper.updateAutoLogin(
+                AutoLoginDto.builder()
+                    .sessionId(sessionId)
+                    .limitTime(LocalDateTime.now().plusDays(90))
+                    .id(storeId)
+                    .build()
+            );
         }
         return null;
     }

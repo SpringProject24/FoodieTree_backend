@@ -15,8 +15,6 @@ public class StoreSignUpService {
     private final StoreMapper storeMapper;
     private final PasswordEncoder encoder;
 
-    // 회원가입 중간 처리
-
     /**
      *
      * @param dto - store 회원가입시 입력되는 필수값 account, password만을 가진 dto
