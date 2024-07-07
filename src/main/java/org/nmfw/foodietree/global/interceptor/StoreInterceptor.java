@@ -18,8 +18,8 @@ public class StoreInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 		Object handler) throws Exception {
-		String loggedInStore = LoginUtil.getLoggedInStore(request.getSession());
-		if (loggedInStore != null) {
+		String loggedInStore = LoginUtil.getLoggedInUser(request.getSession());
+		if (loggedInStore == null) {
 			response.sendRedirect("/store/sign-in?message=signin-required");
 			return false;
 		}

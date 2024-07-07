@@ -31,17 +31,19 @@ public class LoginUtil {
 //    }
 
     public static String getLoggedInUser(HttpSession session) {
-        LoginUserInfoDto obj = (LoginUserInfoDto)session.getAttribute(LOGIN);
-        return obj != null ? obj.getCustomerId() : null;
+        Object attribute = session.getAttribute(LOGIN);
+        if (attribute instanceof LoginUserInfoDto) {
+            LoginUserInfoDto obj = (LoginUserInfoDto) attribute;
+            return obj.getCustomerId();
+        } else if (attribute instanceof LoginStoreInfoDto) {
+            LoginStoreInfoDto obj = (LoginStoreInfoDto) attribute;
+            return obj.getStoreId();
+        }
+        return null;
     }
 
     public static boolean isAutoLogin(HttpServletRequest request) {
         Cookie autoLoginCookie = WebUtils.getCookie(request, AUTO_LOGIN_COOKIE);
         return autoLoginCookie != null;
-    }
-
-    public static String getLoggedInStore(HttpSession session) {
-        LoginStoreInfoDto obj = (LoginStoreInfoDto) session.getAttribute(LOGIN);
-        return obj != null ? obj.getStoreId() : null;
     }
 }
