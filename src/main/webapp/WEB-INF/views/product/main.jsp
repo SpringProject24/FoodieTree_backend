@@ -16,6 +16,8 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+          <!-- font link -->
+    <link href="https://fonts.googleapis.com/css2?family=Francois+One&family=Margarine&family=Nanum+Gothic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="/assets/css/product/main.css">
@@ -163,7 +165,7 @@
 <header>
     <div class="container">
         <div class="logo-wrapper">
-            <div class="logo"><h1>FoodieTree</h1></div>
+            <a href="/" class="logo margarine-regular"><h1>FoodieTree</h1></a>
         </div>
         <div class="input-wrapper">
             <button><i class="fa-solid fa-search"></i></button>

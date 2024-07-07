@@ -8,6 +8,8 @@
     <title>FoodieTree</title>
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-sign-up.css">
+    <!-- font url -->
+    <link href="https://fonts.googleapis.com/css2?family=Francois+One&family=Margarine&family=Nanum+Gothic&display=swap" rel="stylesheet">
     <script defer src="/assets/js/utils/lodash.js"></script>
     <script defer type="module" src="/assets/js/customer/sign-up-event.js"></script>
 </head>
@@ -15,7 +17,7 @@
 <%@ include file="../include/spinner.jsp" %>
     <header>
         <div class="container">
-            <div class="logo">FoodieTree</div>
+            <a href="/" div class="logo margarine-regular ">FoodieTree</a>
             <div class="logo-img">
                 <img src="/assets/img/img_2.png" alt="">
             </div>

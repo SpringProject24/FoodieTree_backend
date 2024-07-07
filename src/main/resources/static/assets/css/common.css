@@ -91,8 +91,6 @@ header .logo-img img {
     object-fit: cover;
 }
 
-/*
-/* 헤더시작 */
 
 .wrapper-header {
   display: flex;
@@ -126,7 +124,6 @@ a.button {
 }
 
 
-
 header .signup, .signin {
   /* background-color: white; */
   color: var(--header-font-color);
@@ -136,9 +133,6 @@ header .signup, .signin {
 }
 
 /* 헤더 끝 */
-
-
-
 
 
 .img-box {
@@ -199,35 +193,35 @@ footer {
     font-style: normal;
 }
 
-  
-  .big-title {
-    font-size: 200pt;
-    font-weight: 1000;
-    /* font-family: 'Roboto', sans-serif;  */
-    margin-bottom: 30px;
-    padding-top: 10px;
-    text-align: center; /* 텍스트 수평 정렬 */
-    letter-spacing: 1px; /* 글자 사이 간격 조절 */
-    /*src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');*/
-  }
-  
-  .custom_link_all {
-    display: flex;
-    justify-content: center; /* 모든 항목을 가로로 중앙 정렬 */
-    align-items: center; /* 모든 항목을 수직 중앙 정렬 */
-    gap: 20px; /* 각 항목 사이의 간격을 설정 */
-  }
-  .custom_link_all a {
-    text-decoration: none; /* 링크의 기본 밑줄을 제거 */
-    color: inherit; /* 부모 요소의 색상을 상속 */
-  }
-  .custom_link_all a p {
-    margin: 0;
-    padding-top: 0px;
-  }
-  
-  .footer-text {
-    text-align: center;
-    margin-top: 10px; /* margin-top 설정 */
-  }
+.big-title {
+  font-size: 200pt;
+  font-weight: 1000;
+  /* font-family: 'Roboto', sans-serif;  */
+  margin-bottom: 30px;
+  padding-top: 10px;
+  text-align: center; /* 텍스트 수평 정렬 */
+  letter-spacing: 1px; /* 글자 사이 간격 조절 */
+  /*src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');*/
+}
 
+.custom_link_all {
+  display: flex;
+  justify-content: center; /* 모든 항목을 가로로 중앙 정렬 */
+  align-items: center; /* 모든 항목을 수직 중앙 정렬 */
+  gap: 20px; /* 각 항목 사이의 간격을 설정 */
+}
+
+.custom_link_all a {
+  text-decoration: none; /* 링크의 기본 밑줄을 제거 */
+  color: inherit; /* 부모 요소의 색상을 상속 */
+}
+
+.custom_link_all a p {
+  margin: 0;
+  padding-top: 0px;
+}
+
+.footer-text {
+  text-align: center;
+  margin-top: 10px; /* margin-top 설정 */
+}

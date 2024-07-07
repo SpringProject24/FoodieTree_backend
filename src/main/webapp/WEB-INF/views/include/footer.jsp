@@ -6,15 +6,14 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
-<!-- CSS : 헤더, 푸터 공통-->
+<!-- CSS : header, footer 공통-->
 <link rel="stylesheet" href="/assets/css/common.css">
-
 
 <footer>
   <div class="container">
     <div class="big-title francois-one-regular">FOODIE TREE</div>
     <div class="custom_link_all">
-      <a href="#" title="Legal">
+      <a href="" title="Legal">
         <p>Legal</p>
       </a>
       <a href="#" title="Privacy Policy">

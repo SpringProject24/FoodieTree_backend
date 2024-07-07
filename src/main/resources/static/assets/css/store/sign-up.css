@@ -7,10 +7,10 @@
     display: none;
 }
 
-/* header .logo {
+header .logo {
     font-size: 24px;
     font-weight: bold;
-} */
+}
 
 .margarine-regular {
     font-family: "Margarine", sans-serif;
@@ -100,9 +100,9 @@ section.info .container .right .store-signup {
     cursor: pointer;
 }
 
-footer {
+/* footer {
     background-color: var(--white-color);
     color: var(--footer-font-color);
     text-align: center;
     padding: 20px 0;
-}
+} */

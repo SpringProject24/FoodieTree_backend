@@ -8,11 +8,14 @@
     <title>FoodieTree</title>
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/store/sign-up.css">
+    <!-- font url -->
+    <link href="https://fonts.googleapis.com/css2?family=Francois+One&family=Margarine&family=Nanum+Gothic&display=swap" rel="stylesheet">
+
 </head>
 <body>
   <header>
       <div class="container">
-          <div class="logo margarine-regular">FoodieTree</div>
+          <div a href="/" class="logo margarine-regular">FoodieTree</div></a>
           <div class="logo-img">
               <img src="/assets/img/img_2.png" alt="Logo">
           </div>
