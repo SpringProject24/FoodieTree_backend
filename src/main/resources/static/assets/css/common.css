@@ -26,7 +26,6 @@ a {
 
 body {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    font-size: 14px;
     margin: 0;
     padding: 0;
 }
@@ -43,6 +42,7 @@ header {
     border-bottom-style: solid;
     border-color: #FFF;
     border-width: 2px;
+
     
 
     color: var(--header-font-color);
@@ -70,16 +70,16 @@ header .logo {
     font-size: 30px;
     font-weight :900;
     color: #eef2e3;
-    /*src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');*/
+    padding: 0px 55px 0px 0px;
+    src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');
 }
 
 .margarine-regular {
-    font-family: "Margarine", sans-serif;
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Margarine", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
-
-
+    
 header .logo-img {
     width: 70px;
     height: 70px;
@@ -101,7 +101,6 @@ header .logo-img img {
 }
 
 a.button {
-
   display: block;
   position: relative;
   float: left;

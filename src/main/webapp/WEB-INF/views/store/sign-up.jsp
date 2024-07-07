@@ -15,9 +15,9 @@
 <%@ include file="../include/spinner.jsp" %>
 <header>
     <div class="container">
-        <div class="logo">FoodieTree</div>
+        <div class="logo margarine-regula">FoodieTree</div>
         <div class="logo-img">
-            <img src="/assets/img/img_2.png" alt="">
+            <img src="/assets/img/img_2.png" alt="Logo">
         </div>
     </div>
 </header>
@@ -65,5 +65,8 @@
     const newUrl = window.location.origin + window.location.pathname;
     history.replaceState(null, null, newUrl);
 </script>
+
+  <!-- 공통푸터 -->
+  <%@ include file="../include/footer.jsp" %>
 </body>
 </html>

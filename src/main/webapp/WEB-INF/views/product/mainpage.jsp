@@ -13,7 +13,7 @@
     <header>
         <nav>
             <button class="menu-button">☰</button>
-            <span class="title">FOODIE TREE</span>
+            <span class="title margarine-regular">Foodie Tree</span>
             <input type="text" class="search-bar" placeholder="주소 or 음식 검색">
             <button class="profile-button">프사</button>
             <button class="sign-out-button">sign out</button>
