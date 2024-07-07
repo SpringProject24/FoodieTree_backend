@@ -63,7 +63,7 @@ async function updateCalendar(year, month) {
         dayElement.classList.add('calendar-day');
         if (year === today.getFullYear() && month === today.getMonth() && i === today.getDate()) {
             dayElement.classList.add('today');
-            dayElement.innerHTML = `<span class="circle">${i}</span>`; // Circle today's date
+            // dayElement.innerHTML = `<span class="circle">${i}</span>`; // Circle today's date
         }
         if (new Date(year, month, i).getDay() === 0) {
             dayElement.classList.add('sunday'); // Highlight Sundays in red
@@ -436,14 +436,14 @@ async function updateProductCount() {
         const $todayReadyPickedUp = document.getElementById('today-ready-picked-up');
         const $remain = document.getElementById('remain');
 
-        $count.textContent = `${data.todayProductCnt}개 업데이트 되어있습니다`;
-        $todayPickedUp.textContent = `${data.todayPickedUpCnt}개 픽업완료 되었습니다`;
-        $todayReadyPickedUp.textContent = `${data.readyToPickUpCnt}개 픽업 예정입니다`;
+        $count.textContent = `${data.todayProductCnt}개 등록되었어요`;
+        $todayPickedUp.textContent = `${data.todayPickedUpCnt}개 픽업완료`;
+        $todayReadyPickedUp.textContent = `${data.readyToPickUpCnt}개 픽업하러 오는 중`;
 
         if (data.remainCnt === 0) {
-            $remain.textContent = '모두 팔렸어요';
+            $remain.textContent = '남은 랜덤박스가 없어요';
         } else {
-            $remain.textContent = `${data.remainCnt}개 아직 안팔렸어요`;
+            $remain.textContent = `${data.remainCnt}개 예약 기다리는 중`;
         }
     } catch (error) {
         console.error('Error updating product count:', error);

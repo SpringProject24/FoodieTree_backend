@@ -33,3 +33,27 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+.reservation-item.canceled{
+    border: solid 2px #E68a8c;
+    border-radius: 15px;
+}
+
+.reservation-list .reservation-item.reserved{
+    border: solid 2px #89b449;
+    border-radius: 15px;
+
+}
+
+.reservation-list .reservation-item.pickedup{
+    border: solid 2px #407f3e;
+    border-radius: 15px;
+
+}
+
+.reservation-list .reservation-item.noshow{
+    border: solid 2px gray;
+    border-radius: 15px;
+}
+
+
