@@ -26,7 +26,6 @@ a {
 
 body {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    font-size: 14px;
     margin: 0;
     padding: 0;
 }
@@ -43,6 +42,7 @@ header {
     border-bottom-style: solid;
     border-color: #FFF;
     border-width: 2px;
+
     
 
     color: var(--header-font-color);
@@ -79,7 +79,6 @@ header .logo {
     font-style: normal;
 }
 
-
 header .logo-img {
     width: 70px;
     height: 70px;
@@ -101,7 +100,6 @@ header .logo-img img {
 }
 
 a.button {
-
   display: block;
   position: relative;
   float: left;
