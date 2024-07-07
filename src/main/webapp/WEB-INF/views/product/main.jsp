@@ -565,13 +565,18 @@
     if (!e.target.matches('.swiper-slide *')) {
       return;
     }
+    const $parent = e.target.closest('.item');
     const $modalBody = document.querySelector('.modal-content .modal-body');
     const gradient = 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5))';
-    const getImgSrc = e.target.closest('.item').querySelector('.store-img-box img').src;
+    const getImgSrc = $parent.querySelector('.store-img-box img').src;
     const imageUrl = `url('\${getImgSrc}')`;
     document.querySelector(
         '.modal-content .modal-header').style.background = `\${gradient}, \${imageUrl} no-repeat center center / cover`; // productImg
     document.getElementById('store-img').src = getImgSrc; // storeImg
+    const $target = $parent.querySelector('.store-info h3');
+    document.getElementById('store-name').textContent = $target.textContent;
+    const $target1 = $parent.querySelector('.store-info p');
+    document.getElementById('pickup-time').textContent = $target.textContent;
     
   });
 
