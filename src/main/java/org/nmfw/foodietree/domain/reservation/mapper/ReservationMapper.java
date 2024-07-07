@@ -7,6 +7,7 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ReservationMapper {
@@ -25,5 +26,7 @@ public interface ReservationMapper {
 
     ReservationModalDetailDto findModalDetailByReservationId(@Param("reservationId") int reservationId);
 
-    boolean createReservation(@Param("customerId") String customerId, @Param("productId") Long productId);
+    boolean createReservation(@Param("customerId") String customerId, @Param("productId") int productId);
+
+    List<Map<String, String>> findByStoreIdLimit(@Param("storeId") String storeId, @Param("cnt") int cnt);
 }

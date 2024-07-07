@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.reservation.service;
 
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -107,7 +108,13 @@ public class ReservationService {
 
     public boolean createReservation(String customerId, Map<String, String> data) {
         int cnt = Integer.parseInt(data.get("cnt"));
-
-        return reservationMapper.createReservation(customerId, productId);
+        String storeId = data.get("storeId");
+        List<Map<String, String>> list = reservationMapper.findByStoreIdLimit(storeId, cnt);
+        for (Map<String, String> tar : list) {
+            int productId = Integer.parseInt(tar.get("product_id").toString());
+            boolean flag = reservationMapper.createReservation(customerId, productId);
+            if (!flag) return flag;
+        }
+        return true;
     }
 }
