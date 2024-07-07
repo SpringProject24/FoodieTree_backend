@@ -1,11 +1,14 @@
 package org.nmfw.foodietree.domain.reservation.service;
 
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
 import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
@@ -102,5 +105,17 @@ public class ReservationService {
         dto.setStatus(pickUpStatus);
 
         return dto;
+    }
+
+    public boolean createReservation(String customerId, Map<String, String> data) {
+        int cnt = Integer.parseInt(data.get("cnt"));
+        String storeId = data.get("storeId");
+        List<ReservationFoundStoreIdDto> list = reservationMapper.findByStoreIdLimit(storeId, cnt);
+        for (ReservationFoundStoreIdDto tar : list) {
+            long productId = tar.getProductId();
+            boolean flag = reservationMapper.createReservation(customerId, productId);
+            if (!flag) return flag;
+        }
+        return true;
     }
 }

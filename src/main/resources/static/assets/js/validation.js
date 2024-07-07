@@ -4,20 +4,20 @@ const infoChk = {
 
 /**
  * 아이디 입력값 검증
- * @param $idInput 검증할 input 태그
+ * @param value 검증할 값
  * @param $idChk 메시지 표시할 태그
  */
-const checkIdInput = ($idInput, $idChk) => {
-  $idInput.addEventListener("keyup", async function (e) {
-    const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/;
-    const value = e.target.value;
+const checkIdInput = (value, $idChk) => {
+  const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9_\.\-]+\.[A-Za-z0-9\-]+$/;
 
-    if (value.trim() === "") {
-      $idChk.innerHTML = '<b class="warning">[아이디를 입력해주세요]</b>';
-    } else if (!idPattern.test(value)) {
-      $idChk.innerHTML = '<b class="warning">[아이디는 4~14자의 영문 대소문자와 숫자로만 입력해주세요]</b>';
-    }
-  });
+  if (value.trim() === "") {
+    $idChk.innerHTML = '<b class="warning">[이메일을 입력해주세요]</b>';
+    return false;
+  } else if (!idPattern.test(value)) {
+    $idChk.innerHTML = '<b class="warning">[이메일 형식을 지켜주세요]</b>';
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -42,6 +42,7 @@ const checkPwInput = ($pwInput, $pwChkInput, $pwChk, $submitBtn) => {
       $pwChk.innerHTML = '<b class="success">[사용 가능한 비밀번호입니다.]</b>';
     }
     checkInfo($submitBtn);
+
   });
 }
 
