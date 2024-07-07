@@ -103,4 +103,8 @@ public class ReservationService {
 
         return dto;
     }
+
+    public boolean createReservation(String customerId, Long productId) {
+        return reservationMapper.createReservation(customerId, productId);
+    }
 }

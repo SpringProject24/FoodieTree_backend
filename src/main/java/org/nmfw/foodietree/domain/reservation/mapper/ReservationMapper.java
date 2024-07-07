@@ -24,4 +24,6 @@ public interface ReservationMapper {
     void completePickup(@Param("reservationId") int reservationId);
 
     ReservationModalDetailDto findModalDetailByReservationId(@Param("reservationId") int reservationId);
+
+    boolean createReservation(@Param("customerId") String customerId, @Param("productId") Long productId);
 }

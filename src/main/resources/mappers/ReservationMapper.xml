@@ -52,4 +52,10 @@
     JOIN tbl_customer c ON r.customer_id = c.customer_id
     WHERE r.reservation_id = #{reservationId}
     </select>
+
+    <insert id="createReservation">
+        INSERT INTO tbl_reservation
+            (customer_id, product_id)
+        VALUES (#{customerId}, #{productId})
+    </insert>
 </mapper>

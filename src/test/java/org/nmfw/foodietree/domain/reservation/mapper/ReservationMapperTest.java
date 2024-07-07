@@ -6,10 +6,12 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class ReservationMapperTest {
     @Autowired
     private ReservationMapper reservationMapper;
@@ -36,5 +38,17 @@ class ReservationMapperTest {
         ReservationModalDetailDto dto = reservationMapper.findModalDetailByReservationId(reservationId);
         //then
         System.out.println("dto = " + dto);
+    }
+
+    @Test
+    @DisplayName("예약 생성")
+    void createReservation() {
+        // given
+        String customerId = "thdghtjd115@gmail.com";
+        long productId = 83;
+        // when
+        boolean reservation = reservationMapper.createReservation(customerId, productId);
+        // then
+		assertTrue(reservation);
     }
 }
