@@ -58,14 +58,14 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <div class="container">
       <h1>업체 등록</h1>
       <form
-        action="/storeMyPage/storeApproval-result"
+        action="/store/approval"
         method="post"
         enctype="multipart/form-data"
       >
       <!-- <label for="storeId">회원 아이디:</label>
       <input type="text" id="storeId" name="storeId" required /> -->
 
-        <label for="businessName">상호명:</label>
+        <label for="storeName">상호명:</label>
         <input type="text" id="storeName" name="storeName" required />
 
         <label for="address">주소:</label>
@@ -107,7 +107,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     </script>
 
         <!-- 공통푸터 -->
-        <%@ include file="include/footer.jsp" %> 
+        <%@ include file="../include/footer.jsp" %>
     
   </body>
 </html>
