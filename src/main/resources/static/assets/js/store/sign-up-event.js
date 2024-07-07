@@ -47,12 +47,13 @@ document.getElementById('id-verify-btn').addEventListener("click", async (e) => 
   const code = document.getElementById('id-verify-code').value;
   const result = await sendVerifyCode($inputId.value, code);
 
-  if(result){
+  if(result.ok){
     alert("인증되었습니다!")
     stopCountdown();
     $idWrapper.classList.add('none');
     $passWrapper.classList.remove('none');
   } else{
+    alert("인증번호를 확인해주세요");
     console.error('Failed to verify code');
   }
 });
@@ -86,6 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
+    document.getElementById('pass-btn').classList.remove('disable');
+    document.getElementById('pass-btn').disabled = false;
     document.querySelector('form').submit();
   });
 });

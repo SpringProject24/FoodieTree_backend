@@ -79,7 +79,8 @@ function checkInfo($submitBtn) {
     }
   }
   $submitBtn.disabled = false;
-  $submitBtn.style.backgroundColor = "orange";
+  $submitBtn.style.backgroundColor = "#2a6f2b";
+  $submitBtn.classList.remove('disable');
 }
 
 export const checkPw = (value) => {

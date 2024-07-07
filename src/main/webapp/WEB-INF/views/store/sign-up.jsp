@@ -46,7 +46,7 @@
                     <input id="input-pw-chk" type="password" name="password-chk" placeholder="비밀번호를 확인해주세요">
                     <div class="wrapper">
                         <button id="prev-btn">이전</button>
-                        <button id="pass-btn">계속</button>
+                        <button id="pass-btn" class="disable" disabled>계속</button>
                     </div>
                 </div>
             </div>
@@ -55,5 +55,15 @@
 </section>
   <!-- 공통푸터 -->
   <%@ include file="../include/footer.jsp" %>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+
+    if (message === 'signup-fail') {
+        alert('잠시 후 다시 시도해주세요');
+    }
+    const newUrl = window.location.origin + window.location.pathname;
+    history.replaceState(null, null, newUrl);
+</script>
 </body>
 </html>
