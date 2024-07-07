@@ -37,17 +37,8 @@ public class StoreApprovalController {
                                       HttpSession session,
                                       Model model) {
 
-        // 세션에서 로그인된 사용자 ID 가져오기
-//        String storeId = (String) session.getAttribute("storeId");
-        String storeId = "qwer@qwer.com";
-
+        String storeId = LoginUtil.getLoggedInUser(session);
         StoreCategory storeCategory = null;
-        try {
-            storeCategory = StoreCategory.valueOf(category.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", "유효하지 않은 카테고리 값입니다.");
-            return "store/approval-form";
-        }
 
         // DTO를 사용하여 데이터 전달
         StoreApprovalDto storeApprovalDto = new StoreApprovalDto(storeId, storeName, address, storeCategory, businessNumber, storeLicenseNumber);

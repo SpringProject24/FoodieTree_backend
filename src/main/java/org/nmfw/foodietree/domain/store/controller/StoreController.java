@@ -11,7 +11,9 @@ import org.nmfw.foodietree.domain.store.dto.request.StoreSignUpDto;
 import org.nmfw.foodietree.domain.store.service.StoreLoginResult;
 import org.nmfw.foodietree.domain.store.service.StoreService;
 import org.nmfw.foodietree.domain.store.service.StoreSignUpService;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -67,9 +69,12 @@ public class StoreController {
      * @return StoreSignUpService에서 성공적으로 회원가입완료시 다음페이지로 이동
      */
     @PostMapping("/sign-up")
-    public String storeSignUp(@Validated StoreSignUpDto dto, HttpSession session) {
+    public String storeSignUp(@Validated StoreSignUpDto dto, HttpSession session, BindingResult result) {
         log.info("/store-sign-up POST");
         log.info("parameter:{}", dto);
+        if (result.hasErrors()) {
+            return "redirect:/store/sign-up?message=signup-fail";
+        }
 
         boolean flag = storeService.signUp(dto, session);
         if (!flag) {
