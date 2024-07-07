@@ -41,7 +41,7 @@ public class StoreController {
     }
 
     @PostMapping("/sign-in")
-    public String login(@RequestBody StoreLoginDto dto,
+    public String login(StoreLoginDto dto,
                         HttpSession session,
                         HttpServletResponse response) {
 
