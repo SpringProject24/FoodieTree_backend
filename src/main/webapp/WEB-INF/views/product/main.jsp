@@ -89,7 +89,7 @@
                         <div class="img-box">
                             <img id="store-img" alt="">   <!-- 가게 사진-->
                         </div>
-                        <h6 id="store-name">가게이름</h6>
+                        <h6 id="store-name">가게이름 </h6>
                     </div>
                 </div>
             </div>
@@ -261,7 +261,7 @@
         <div class="swiper-wrapper">
             <c:forEach var="item" items="${findByFood}">
                 <div class="swiper-slide">
-                    <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
                             <img src="/assets/img/western.jpg" alt="">
                         </div>
@@ -561,24 +561,40 @@
   });
 </script>
 <script>
-  document.querySelector('body').addEventListener('click', e => {
-    if (!e.target.matches('.swiper-slide *')) {
-      return;
-    }
-    const $parent = e.target.closest('.item');
-    const $modalBody = document.querySelector('.modal-content .modal-body');
-    const gradient = 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5))';
-    const getImgSrc = $parent.querySelector('.store-img-box img').src;
-    const imageUrl = `url('\${getImgSrc}')`;
-    document.querySelector(
-        '.modal-content .modal-header').style.background = `\${gradient}, \${imageUrl} no-repeat center center / cover`; // productImg
-    document.getElementById('store-img').src = getImgSrc; // storeImg
-    const $target = $parent.querySelector('.store-info h3');
-    document.getElementById('store-name').textContent = $target.textContent;
-    const $target1 = $parent.querySelector('.store-info p');
-    document.getElementById('pickup-time').textContent = $target.textContent;
+    document.addEventListener('DOMContentLoaded', function () {
+        const exampleModal = document.getElementById('exampleModal');
     
-  });
-
-</script>
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            console.log(button); // 디버깅용 로그
+            const productId = button.getAttribute('data-product-id'); // Extract product ID from data-* attribute
+            console.log('Product ID:', productId); // 디버깅용 로그
+    
+            if (productId) {
+                // Fetch product details using the product ID
+                fetch(`/product/details/\${productId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the modal content with fetched data
+                        document.getElementById('product-cnt').textContent = `${data.productCnt}개 남음`;
+                        document.getElementById('store-name').textContent = data.storeName;
+                        document.getElementById('prod-category').querySelector('span').textContent = data.category;
+                        document.getElementById('pickup-time').querySelector('span').textContent = data.pickupTime;
+                        document.getElementById('prod-price').textContent = `${data.price} 원`;
+                        document.getElementById('store-area').textContent = data.storeArea;
+    
+                        // Update the store image
+                        const storeImg = document.getElementById('store-img');
+                        storeImg.src = data.storeImg;
+                        storeImg.alt = data.storeName;
+    
+                        // If additional fields need to be updated dynamically, add them here
+                    })
+                    .catch(error => console.error('Error fetching product details:', error));
+            } else {
+                console.error('Product ID is not defined');
+            }
+        });
+    });
+    </script>
 </html>

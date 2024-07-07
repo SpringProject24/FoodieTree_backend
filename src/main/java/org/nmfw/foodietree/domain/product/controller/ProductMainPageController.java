@@ -53,6 +53,7 @@ public class ProductMainPageController {
             // 3. 선호 음식 기반 제품 조회
             List<ProductDto> productByFood = productMainPageService.findProductByFood(customerId, request, response);
             productByFood.forEach(e -> {
+                log.info("{}",e);
             });
             model.addAttribute("findByFood", productByFood);
 
@@ -83,8 +84,21 @@ public class ProductMainPageController {
 //        }
 
 
+
         // 6. JSP 파일로 이동
         return "product/main";
+    }
+
+    @GetMapping("/details/{productId}")
+    @ResponseBody
+    public ResponseEntity<ProductDto> getProductDetails(@PathVariable String productId) {
+        log.info("Fetching product details for productId: {}", productId);
+        ProductDto product = productMainPageService.getProductById(productId);
+        if (product != null) {
+            return ResponseEntity.ok(product);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

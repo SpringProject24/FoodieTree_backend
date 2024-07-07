@@ -17,6 +17,7 @@ public interface ProductMainPageMapper {
 
     List<ProductDto> findCategoryByLike(@Param("customerId") String customerId);
 
+    ProductDto findById(@Param("productId") String productId);
 
 
 //    List<ProductDto> modlaProduct();

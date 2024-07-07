@@ -112,9 +112,10 @@ public class ProductMainPageService {
         }
         return categoryByLike;
     }
-//    public List<ProductDto> modalProduct(String customerId, HttpServletRequest request, HttpServletResponse response) {
-//        customerMyPageService.getCustomerInfo()
-//    }
+
+    public ProductDto getProductById(String productId) {
+    return productMainPageMapper.findById(productId);
+    }
 
 
 }
