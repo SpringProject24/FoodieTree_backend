@@ -7,10 +7,10 @@ import org.nmfw.foodietree.domain.product.dto.response.ProductDto;
 import org.nmfw.foodietree.domain.product.dto.response.TotalInfoDto;
 import org.nmfw.foodietree.domain.product.service.ProductMainPageService;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,12 +56,17 @@ public class ProductMainPageController {
             });
             model.addAttribute("findByFood", productByFood);
 
+
             // 4. 선호 지역 기반 제품 조회
             List<ProductDto> productByArea = productMainPageService.findProductByArea(customerId, request, response);
+            productByArea.forEach(e -> {
+            });
             model.addAttribute("findByArea", productByArea);
+
 
             List<ProductDto> productByLike = productMainPageService.findProductByLike(customerId, request, response);
             model.addAttribute("findByLike",productByLike);
+
 
         // 5. 고객 정보 조회
             CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
@@ -77,7 +82,11 @@ public class ProductMainPageController {
 //            return "error";
 //        }
 
+
         // 6. JSP 파일로 이동
         return "product/main";
     }
+
+
+
 }

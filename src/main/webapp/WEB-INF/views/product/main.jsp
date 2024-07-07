@@ -305,7 +305,7 @@
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
-                            <p>픽업시간 : ${item.pickupTime}</p>
+                            <p>픽업시간 : ${item.formattedPickupTime}</p>
                             <div class="wrapper">
                                 <p>평점 / 거리</p>
                                 <p>가격 : ${item.price}</p>
@@ -371,7 +371,7 @@
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
-                            <p>픽업 시간 : ${item.pickupTime}</p>
+                            <p>픽업 시간 : ${item.formattedPickupTime}</p>
                             <div class="wrapper">
                                 <p>평점 / 거리</p>
                                 <p>가격 : ${item.price}</p>
@@ -572,6 +572,7 @@
     document.querySelector(
         '.modal-content .modal-header').style.background = `\${gradient}, \${imageUrl} no-repeat center center / cover`; // productImg
     document.getElementById('store-img').src = getImgSrc; // storeImg
+    
   });
 
 </script>
