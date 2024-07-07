@@ -35,7 +35,37 @@
             font-family: 'NIXGONM-Vb', 'Nanum Gothic', sans-serif;
             /*font-size: 25px;*/
         }
+        .my-page-area .container .profile ul li.nav-item a.nav-link.mypage-link{
+            position: relative;
+            top: 50px;
+        }
+        .my-page-area .container .profile ul li.nav-item a.nav-link.edit-link{
+            position: relative;
+            bottom: -90px;
+        }
 
+        .title{
+            padding: 15px 15px 0;
+            margin: 20px 20px 0;
+        }
+
+        .my-page-area .container .info .info-wrapper{
+            width: 979px;
+            margin-left: 36px;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .reservation-item{
+            border-radius: 15px;
+            flex-wrap: wrap;
+            height: 72px;
+            /*width: 90%;*/
+            margin: 0 7px 10px 7px;
+        }
+
+        .stats{
+            margin-top: 40px;
+        }
 
     </style>
 </head>
@@ -59,8 +89,8 @@
             <h2>${customerMyPageDto.nickname}</h2>
             <p>${customerMyPageDto.customerId}</p>
             <ul class="nav">
-                <li class="nav-item"><a class="nav-link" href="mypage">마이페이지</a></li>
-                <li class="nav-item"><a class="nav-link" href="mypage-edit">개인정보수정</a></li>
+                <li class="nav-item"><a class="nav-link mypage-link" href="mypage">마이페이지</a></li>
+                <li class="nav-item"><a class="nav-link edit-link" href="mypage-edit">개인정보수정</a></li>
             </ul>
             <div class="stats">
                 <div id="carbon" class="stats-box">
