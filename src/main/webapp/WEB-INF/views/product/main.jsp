@@ -263,7 +263,7 @@
         <div class="swiper-wrapper">
             <c:forEach var="item" items="${findByFood}">
                 <div class="swiper-slide">
-                    <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
                             <img src="/assets/img/western.jpg" alt="">
                         </div>
@@ -563,40 +563,46 @@
   });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const exampleModal = document.getElementById('exampleModal');
-    
-        exampleModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget; // Button that triggered the modal
-            console.log(button); // 디버깅용 로그
-            const productId = button.getAttribute('data-product-id'); // Extract product ID from data-* attribute
-            console.log('Product ID:', productId); // 디버깅용 로그
-    
-            if (productId) {
-                // Fetch product details using the product ID
-                fetch(`/product/details/\${productId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Update the modal content with fetched data
-                        document.getElementById('product-cnt').textContent = `${data.productCnt}개 남음`;
-                        document.getElementById('store-name').textContent = data.storeName;
-                        document.getElementById('prod-category').querySelector('span').textContent = data.category;
-                        document.getElementById('pickup-time').querySelector('span').textContent = data.pickupTime;
-                        document.getElementById('prod-price').textContent = `${data.price} 원`;
-                        document.getElementById('store-area').textContent = data.storeArea;
-    
-                        // Update the store image
-                        const storeImg = document.getElementById('store-img');
-                        storeImg.src = data.storeImg;
-                        storeImg.alt = data.storeName;
-    
-                        // If additional fields need to be updated dynamically, add them here
-                    })
-                    .catch(error => console.error('Error fetching product details:', error));
-            } else {
-                console.error('Product ID is not defined');
-            }
-        });
+  const BASE_URL = window.location.origin;
+  <%--const customerId = `${sessionScope.login.customerId}`;--%>
+  const customerId = "test@gmail.com";
+  document.querySelector('body').addEventListener('click', e => {
+    if (!e.target.matches('.swiper-slide *')) {
+      return;
+    }
+    const $parent = e.target.closest('.item');
+    const $modalBody = document.querySelector('.modal-content .modal-body');
+    const gradient = 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5))';
+    const getImgSrc = e.target.closest('.item').querySelector('.store-img-box img').src;
+    const imageUrl = `url('\${getImgSrc}')`;
+    document.querySelector(
+        '.modal-content .modal-header').style.background = `\${gradient}, \${imageUrl} no-repeat center center / cover`; // productImg
+    document.getElementById('store-img').src = getImgSrc; // storeImg
+    document.getElementById('store-name').dataset.storeId = $parent.getAttribute('data-store-id');
+  });
+</script>
+<script>
+  document.getElementById('reservation-btn').addEventListener('click', async (e) => {
+
+    const storeId = e.target.closest('.modal-content').querySelector('#store-name').getAttribute('data-store-id');
+    console.log(storeId);
+    const res = await fetch(`\${BASE_URL}/reservation/\${customerId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+
+        "prodId": null,
+        "storeId": storeId,
+        "cnt": 1
+      }),
     });
-    </script>
+    if (res.ok) {
+      alert("예약이 완료되었습니다.");
+    } else {
+      alert("예약할 수 있는 상품이 없습니다.");
+    }
+  });
+</script>
 </html>

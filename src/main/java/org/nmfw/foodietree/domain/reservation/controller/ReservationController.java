@@ -85,7 +85,7 @@ public class ReservationController {
      */
     @PostMapping("/{customerId}")
     @CrossOrigin
-    public ResponseEntity<?> createReservation(@PathVariable String customerId, Map<String, String> data) {
+    public ResponseEntity<?> createReservation(@PathVariable String customerId, @RequestBody  Map<String, String> data) {
         boolean flag = reservationService.createReservation(customerId, data);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }

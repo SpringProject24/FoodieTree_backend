@@ -125,6 +125,7 @@ public class ReservationService {
     }
 
     public boolean createReservation(String customerId, Map<String, String> data) {
+        log.info(data.get("cnt"), data.get("prodId"), data.get("storeId"));
         int cnt = Integer.parseInt(data.get("cnt"));
         String storeId = data.get("storeId");
         List<ReservationFoundStoreIdDto> list = reservationMapper.findByStoreIdLimit(storeId, cnt);
