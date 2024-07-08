@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage.css">
 <%--    <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">--%>
     <link rel="stylesheet" href="/assets/css/reservation/reservation-detail-modal.css">
+    <link rel="stylesheet" href="/assets/css/email-modal.css">
     <script defer src="/assets/js/reservation.js"></script>
     <style>
         @font-face {
@@ -113,6 +114,7 @@
         }
 
         .modal-content{
+            width: 500px;
             padding: 0;
         }
 

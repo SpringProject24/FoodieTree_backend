@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">
     <script type="module" src="/assets/js/customer/mypage-edit-event.js" defer></script>
+
     <style>
         .modal {
             display: none; /* 모달을 기본적으로 숨깁니다. */
@@ -44,6 +45,20 @@
             color: black;
             text-decoration: none;
             cursor: pointer;
+        }
+
+        .modal-content .close{
+            top: 304px;
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 769px;
+        }
+
+        .modal-content h2 {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -169,7 +184,7 @@
         <h2>비밀번호 재설정</h2>
         <div id="step-email">
             <p>인증번호를 받으세요.</p>
-            <button id="send-verification-code-btn">인증번호 받기</button>
+            <button id="send-verification-code-btn" class="yellow-click">인증번호 받기</button>
         </div>
         <div id="step-code" class="hidden">
             <p>인증번호를 입력하세요.</p>
