@@ -77,7 +77,6 @@ let loadedReservations = 0;
 //         isFetching = false;
 //     }
 // }
-
 function setupInfiniteScroll() {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 && !isFetching) {
         fetchReservations();
@@ -240,6 +239,7 @@ async function openModal(reservationId) {
         '    margin-top: 20px;\n' +
         '    margin-bottom: 15px;\n' +
         '    font-size: 20px;\n">픽업 확인 버튼</button>' : '<button style="background-color:gray;">수정 불가</button>'}
+
         </div>
     `;
 

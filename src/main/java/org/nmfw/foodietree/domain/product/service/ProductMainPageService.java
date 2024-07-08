@@ -72,7 +72,6 @@ public class ProductMainPageService {
 
             productDto.setFormattedPickupTime(formatted);
         }
-
         return categoryByFood;
     }
 

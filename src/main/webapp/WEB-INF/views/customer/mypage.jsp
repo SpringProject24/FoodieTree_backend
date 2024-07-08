@@ -62,6 +62,7 @@
         }
 
         .my-page-area .container .info .info-wrapper {
+
             border-radius: 0 0 15px 15px;
         }
 
@@ -85,6 +86,7 @@
 
         .modal .modal-content #modal-details{
             padding-bottom: 30px;
+
             text-align: center;
             font-size: 20px;
             line-height: 2;
@@ -141,6 +143,7 @@
 </head>
 <body>
  <%@ include file="../include/header.jsp" %>
+
 <section class="my-page-area">
     <div class="container">
         <div class="profile">
@@ -179,6 +182,7 @@
                     <ul class="reservation-list">
                         <c:forEach var="reservation" items="${reservations}" varStatus="status">
                             <li id="reservation-${status.index}" class="reservation-item ${reservation.status}" data-reservation-id="${reservation.reservationId}">
+
                                 <div class="item">
                                     <div class="img-wrapper">
                                         <div class="img-box">
@@ -210,6 +214,7 @@
                                         <span>픽업하러 가는 중이에요!</span>
                                         <span>${reservation.pickupTimeF}까지</span>
                                         <button class="reservation-cancel-btn calendar-button cancel-res">예약 취소하기</button>
+
                                     </c:if>
                                     <c:if test="${reservation.status == 'PICKEDUP'}">
                                         <span>픽업을 완료했어요</span>

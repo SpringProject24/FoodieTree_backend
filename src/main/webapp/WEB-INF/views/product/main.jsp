@@ -563,10 +563,14 @@
   });
 </script>
 <script>
+  const BASE_URL = window.location.origin;
+  <%--const customerId = `${sessionScope.login.customerId}`;--%>
+  const customerId = "test@gmail.com";
   document.querySelector('body').addEventListener('click', e => {
     if (!e.target.matches('.swiper-slide *')) {
       return;
     }
+    const $parent = e.target.closest('.item');
     const $modalBody = document.querySelector('.modal-content .modal-body');
     const gradient = 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5))';
     const getImgSrc = e.target.closest('.item').querySelector('.store-img-box img').src;
@@ -574,7 +578,31 @@
     document.querySelector(
         '.modal-content .modal-header').style.background = `\${gradient}, \${imageUrl} no-repeat center center / cover`; // productImg
     document.getElementById('store-img').src = getImgSrc; // storeImg
+    document.getElementById('store-name').dataset.storeId = $parent.getAttribute('data-store-id');
   });
+</script>
+<script>
+  document.getElementById('reservation-btn').addEventListener('click', async (e) => {
 
+    const storeId = e.target.closest('.modal-content').querySelector('#store-name').getAttribute('data-store-id');
+    console.log(storeId);
+    const res = await fetch(`\${BASE_URL}/reservation/\${customerId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+
+        "prodId": null,
+        "storeId": storeId,
+        "cnt": 1
+      }),
+    });
+    if (res.ok) {
+      alert("예약이 완료되었습니다.");
+    } else {
+      alert("예약할 수 있는 상품이 없습니다.");
+    }
+  });
 </script>
 </html>

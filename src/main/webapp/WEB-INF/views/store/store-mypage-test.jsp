@@ -75,6 +75,7 @@
         overflow-x: hidden;
     }
 
+
 </style>
 <header>
     <div class="container">
@@ -258,6 +259,7 @@
 <div id="product-add-modal" class="modal">
     <div class="modal-content">
         <span class="close"><i class="fas fa-times"></i></span>
+
         <div id="product-count-status">
 <%--            <h2>수량 변경 오늘 등록된 수량, 남은 수량 보여주고 몇개로 업데이트할건지 물어보고 받음</h2>--%>
             <div id="modal-product-count-details"></div>

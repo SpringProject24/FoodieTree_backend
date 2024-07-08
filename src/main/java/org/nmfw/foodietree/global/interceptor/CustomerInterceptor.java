@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.global.interceptor;
 
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
 import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.HandlerMapping;
 
 @Configuration
 @RequiredArgsConstructor
@@ -20,6 +22,14 @@ public class CustomerInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 		Object handler) throws Exception {
+		Map<String, String> attribute = (Map<String, String>) request
+			.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+
+		String found = attribute.get("customerId");
+		if (found != null) {
+			return true;
+		}
+
 		String loggedInUser = LoginUtil.getLoggedInUser(request.getSession());
 		if (loggedInUser == null) {
 			response.sendRedirect("/customer/sign-in?message=signin-required");

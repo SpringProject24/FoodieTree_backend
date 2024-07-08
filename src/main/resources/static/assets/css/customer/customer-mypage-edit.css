@@ -18,6 +18,12 @@ header .logo {
   font-weight: bold;
 }
 
+.margarine-regular {
+  font-family: "Margarine", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 header .logo-img {
   width: 70px;
   height: 70px;

@@ -146,3 +146,15 @@ footer {
     text-align: center;
     padding: 20px 0;
 }
+
+section.input-area .form-wrapper .auto-label{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+section.input-area .form-wrapper .auto-label span{
+    position: relative;
+    top: -7px;
+}
+
