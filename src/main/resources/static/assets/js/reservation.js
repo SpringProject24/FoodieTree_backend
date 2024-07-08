@@ -147,8 +147,8 @@ function cancelReservationClickEvent(reservationId) {
         const res = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
         const reservation = await res.json();
         let cancellationFee = reservation.price * 0.5;
-        let tagWithFee = `<p>픽업시간 기준 1시간 이내로 예약 취소시 취소 수수료 50%가 부과됩니다. 정말 취소하시겠습니까?</p>
-                <p>${cancellationFee} 취소수수료</p>
+        let tagWithFee = `<p style="text-align: center">픽업시간 기준 1시간 이내로 예약 취소시 <br> 취소 수수료 50%가 부과됩니다. <br>정말 취소하시겠습니까?</p>
+                <p style="font-family: 'jua'; font-size: 23px">취소수수료 : ${cancellationFee}</p>
                 <p>취소 수수료는 결제 금액에서 자동 차감됩니다.</p>`;
 
         let tagWithoutFee = `<p>정말 취소하시겠습니까?</p>
@@ -231,12 +231,15 @@ async function openModal(reservationId) {
 
     // 모달에 데이터 추가
     $modalDetails.innerHTML = `
+            <img src="${reservation.storeImg}" alt="Store Image"/>
         <div class="reservation-detail-item" data-reservation-id="${reservationId}">
             <p>가게 이름: ${reservation.storeName}</p>
             <p>상태: ${reservation.status}</p>
-            <p>${reservation.statusInfo}</p>
-            <img src="${reservation.storeImg}" alt="Store Image"/>
-            ${reservation.status === 'RESERVED' ? '<button class="picked-up-btn calendar-button">픽업 확인 버튼</button>' : '<button style="background-color:gray;">수정 불가</button>'}
+<!--            <p>${reservation.statusInfo}</p>-->
+            ${reservation.status === 'RESERVED' ? '<button class="picked-up-btn calendar-button modal-inside-confirm" id="modal-inside-confirm-btn" style="\n' +
+        '    margin-top: 20px;\n' +
+        '    margin-bottom: 15px;\n' +
+        '    font-size: 20px;\n">픽업 확인 버튼</button>' : '<button style="background-color:gray;">수정 불가</button>'}
         </div>
     `;
 
@@ -288,7 +291,7 @@ $reservationList.addEventListener('click', e => {
 
 // =========== 실행 코드 ================
 document.addEventListener('DOMContentLoaded', () => {
-    fetchReservations(); // 초기 예약 데이터 로드
+    // fetchReservations(); // 초기 예약 데이터 로드
     window.addEventListener('scroll', setupInfiniteScroll); // 무한 스크롤 설정
     cancelReservationClickEvent(); // 예약 취소 이벤트 설정
     pickUpClickEvent(); // 픽업 완료 이벤트 설정

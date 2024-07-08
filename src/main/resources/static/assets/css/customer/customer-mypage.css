@@ -201,7 +201,9 @@ header .logo-img img {
 .my-page-area .container .info {
     width: 70%;
 }
-
+.my-page-area .container .info>div {
+    margin: 40px 10px 30px 0px;
+}
 .my-page-area .container .info ul {
     display: flex;
 }
@@ -592,4 +594,19 @@ button.calendar-button:active {
     padding: 20px;
     background-color: #fafafa;
     border: 1px solid #ddd;
+}
+
+.modal-content #modal-cancel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    margin-top: 35px;
+    font-size: 22px;
+    line-height: 2;
+}
+
+.modal-content #modal-cancel #confirm-cancel-btn{
+    margin: 32px 0 20px 0;
+    font-size: 20px;
 }

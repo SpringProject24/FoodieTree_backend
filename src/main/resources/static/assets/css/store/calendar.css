@@ -143,3 +143,16 @@ button.yellow-click:active {
     right: 201px;
 }
 
+button.calendar-button.cancel-res.reservation-cancel-btn{
+    background-color: rgba(234, 97, 42, 0.7);
+}
+button.picked-up-btn.calendar-button.modal-inside-confirm#modal-inside-confirm-btn{
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+#modal-detail.reservation-detail-item{
+    margin-bottom: 40px;
+    font-size: 20px;
+}
+

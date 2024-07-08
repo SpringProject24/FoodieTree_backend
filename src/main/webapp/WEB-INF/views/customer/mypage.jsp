@@ -80,7 +80,7 @@
         }
 
         .modal .modal-content #modal-details{
-            padding: 30px;
+            padding-bottom: 30px;
             text-align: center;
             font-size: 20px;
             line-height: 2;
@@ -110,6 +110,26 @@
             transform: translateY(-5px);
             box-shadow: 0 5px 13px rgba(0, 0, 0, 0.2);
             font-size: 19px;
+        }
+
+        .modal-content{
+            padding: 0;
+        }
+
+        #reservation-modal #modal-details img{
+            width: 100%;
+            border-radius: 15px 15px 0 0;
+            height: 384px;
+        }
+
+        .modal-content .close{
+            top: 313px;
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 762px;
         }
 
     </style>
@@ -183,8 +203,8 @@
                                     </c:if>
                                     <c:if test="${reservation.status == 'RESERVED'}">
                                         <span>픽업하러 가는 중이에요!</span>
-                                        <span>${reservation.pickupTimeF}</span>
-                                        <button class="reservation-cancel-btn calendar-button">예약 취소하기</button>
+                                        <span>${reservation.pickupTimeF}까지</span>
+                                        <button class="reservation-cancel-btn calendar-button cancel-res">예약 취소하기</button>
                                     </c:if>
                                     <c:if test="${reservation.status == 'PICKEDUP'}">
                                         <span>픽업을 완료했어요</span>
