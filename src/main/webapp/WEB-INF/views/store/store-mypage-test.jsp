@@ -18,9 +18,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/assets/css/common.css">
-<%--    <link rel="stylesheet" href="/assets/css/customer/customer-mypage.css">--%>
+    <link rel="stylesheet" href="/assets/css/customer/customer-mypage.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">
-<%--    <link rel="stylesheet" href="/assets/css/store/calendar.css">--%>
+    <link rel="stylesheet" href="/assets/css/store/calendar.css">
     <link rel="stylesheet" href="/assets/css/reservation/reservation-detail-modal.css">
     <script defer src="/assets/js/store/store-mypage.js"></script>
 </head>
@@ -44,6 +44,20 @@
         /*font-size: 25px;*/
     }
 
+    .my-page-area .container .info .reservation-list{
+        margin-top: 0;
+    }
+
+    .my-page-area .container .profile ul li.nav-item a.nav-link{
+        margin-left: 123px;
+    }
+    .my-page-area .container .info .reservation-list{
+        margin: 0 7px 10px 0;
+    }
+
+    .info-wrapper{
+        padding: 0 10px 10px;
+    }
 </style>
 <header>
     <div class="container">

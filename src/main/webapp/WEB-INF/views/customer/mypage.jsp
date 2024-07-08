@@ -50,7 +50,7 @@
         }
 
         .my-page-area .container .info .info-wrapper{
-            width: 979px;
+            width: 1016px;
             margin-left: 36px;
             border-radius: 0 0 15px 15px;
         }
@@ -65,6 +65,12 @@
 
         .stats{
             margin-top: 40px;
+        }
+
+        .title .title-text span{
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: 700;
         }
 
     </style>
@@ -106,7 +112,11 @@
         <div class="info">
             <div class="info-box">
                 <div class="title">
-                    <h3 class="title-text">예약 내역</h3>
+                    <h3 class="title-text">
+                        <span>
+                            예약 내역
+                        </span>
+                    </h3>
                 </div>
 
                 <div class="info-wrapper reservation">
@@ -144,7 +154,11 @@
             </div>
             <div class="info-box">
                 <div class="title">
-                    <h3 class="title-text">선호 지역</h3>
+                    <h3 class="title-text">
+                        <span>
+                            선호 지역
+                        </span>
+                    </h3>
                 </div>
                 <div class="info-wrapper">
                     <ul class="info-list area">
@@ -156,7 +170,11 @@
             </div>
             <div class="info-box">
                 <div class="title">
-                    <h3 class="title-text">선호 음식</h3>
+                    <h3 class="title-text">
+                        <span>
+                        선호 음식
+                        </span>
+                    </h3>
                 </div>
                 <div class="info-wrapper">
                     <ul class="info-list food">
@@ -188,25 +206,25 @@
                     </ul>
                 </div>
             </div>
-            <div class="info-box">
-                <div class="title">
-                    <h3 class="title-text">이슈 내역</h3>
-                </div>
-                <div class="info-wrapper">
-                    <ul class="issue-list">
-                        <c:forEach var="issue" items="${issues}">
-                            <li class="issue-item">
-                                <span>${issue.issueCategory.issueName}</span>
-                                <span>${issue.issueText}</span>
-                                <span>${issue.issueStatus}</span>
-                                <span>${issue.cancelIssueAt}</span>
-                                <span>${issue.storeName}</span>
-                                <span>${issue.nickname}</span>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                </div>
-            </div>
+<%--            <div class="info-box">--%>
+<%--                <div class="title">--%>
+<%--                    <h3 class="title-text">이슈 내역</h3>--%>
+<%--                </div>--%>
+<%--                <div class="info-wrapper">--%>
+<%--                    <ul class="issue-list">--%>
+<%--                        <c:forEach var="issue" items="${issues}">--%>
+<%--                            <li class="issue-item">--%>
+<%--                                <span>${issue.issueCategory.issueName}</span>--%>
+<%--                                <span>${issue.issueText}</span>--%>
+<%--                                <span>${issue.issueStatus}</span>--%>
+<%--                                <span>${issue.cancelIssueAt}</span>--%>
+<%--                                <span>${issue.storeName}</span>--%>
+<%--                                <span>${issue.nickname}</span>--%>
+<%--                            </li>--%>
+<%--                        </c:forEach>--%>
+<%--                    </ul>--%>
+<%--                </div>--%>
+<%--            </div>--%>
         </div>
     </div>
 </section>

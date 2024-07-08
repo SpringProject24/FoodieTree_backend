@@ -130,12 +130,8 @@ header .logo-img img {
 .title {
   position: relative;
   display: block;
-  /* padding: 15px 38px 13px 18px; */
-  /*padding: 15px;*/
   border-radius: 15px 15px 0 0;
-  /* border: 1px solid #e3e9ed; */
   margin-top: 20px;
-  border: 1px solid #e3e9ed;
 }
 
 .title .title-text {
