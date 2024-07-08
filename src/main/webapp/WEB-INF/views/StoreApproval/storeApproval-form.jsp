@@ -10,7 +10,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <title>FoodieTree for 가게</title>
     <link rel="stylesheet" href="/assets/css/common.css" />
     <link rel="stylesheet" href="/assets/css/storeApproval-form.css" />
-    <script src="/js/storeApproval-form.js"></script>
+    <script src="/js/storeApproval.js"></script>
   </head>
   <body>
     <header>
@@ -28,11 +28,11 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     <main>
       <section class="registration">
-
+        
         <h2>푸디트리와 지구를 위한 한걸음 함께 해보아요!</h2>
 
         <form
-          action="/storeMyPage/storeApproval-result"
+          action="/storeMyPage/productApproval-form"
           method="post"
           enctype="multipart/form-data"
         >
@@ -98,35 +98,35 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <!-- 관련 이미지 자리는 태그 div -> img로 바꿔서 첨부할 것 -->
     <div class="info-container">
       <div class="related-images">
-        <div class="related-image1">관련 이미지</div>
-        <div class="related-image2">관련 이미지</div>
+        <img src="https://images.unsplash.com/photo-1460819739742-50e4486578f5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"class="related-image1">
+        <img src="https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="related-image2">
       </div>
       <div class="related-info">
         <h2>관련 설명</h2>
-        <p>ex) 우리 foodieTree는 지구를 지키기 위한 작은 움직임으로~</p>
+        <p>우리의 FoodieTree의 시스템을 통해 음식물 쓰레기를 줄이고, 자원을 보다 효율적으로 사용하며, 환경 보호에 기여하고자 합니다.</p>
+        <p>유통기한이 가까워지면 아직 먹을 수 있는 많은 음식들이 불필요하게 버려지는 현실을 바꾸기 위해, FoodieTree는 이러한 음식을 저렴한 가격에 제공하여 소비자들에게 경제적인 혜택을 주고 음식점에는 비용 절감의 기회를 제공합니다.</p>
+        <p>FoodieTree의 목표는 환경을 보호하고 음식물 낭비를 줄이며 지속 가능한 식문화를 조성하는 것입니다. 고객 여러분도 FoodieTree와 함께 환경 보호에 동참해 주세요.</p>
       </div>
     </div>
-
+    
     <div class="slide-container">
-        <button class="slide-button left" onclick="moveSlide(-1)">&#10094;</button>
         <div class="slides">
             <div class="slide">
-                <div class="slide-image">관련 이미지</div>
-                <h3>이점 1</h3>
-                <p>간단 설명</p>
+                <img src="https://images.unsplash.com/photo-1529003600303-bd51f39627fb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="slide-image">
+                <h3>폐기물 감소</h3>
+                <p>정확한 양의 음식을 제공하여 음식물 낭비를 최소화</p>
             </div>
             <div class="slide">
-                <div class="slide-image">관련 이미지</div>
-                <h3>이점 1</h3>
-                <p>간단 설명</p>
+                <img src="https://images.unsplash.com/photo-1512485800893-b08ec1ea59b1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="slide-image">
+                <h3>긍정적 이미지</h3>
+                <p>환경을 생각하는 가게로서 긍정적인 이미지를 구축하여 고객의 신뢰 향상.</p>
             </div>
             <div class="slide">
-                <div class="slide-image">관련 이미지</div>
-                <h3>이점 1</h3>
-                <p>간단 설명</p>
+                <img src="https://images.unsplash.com/photo-1519248200454-8f2590ed22b7?q=80&w=2075&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="slide-image">
+                <h3>잠재고객 유입</h3>
+                <p>시스템을 통해 부담없이 호기심으로 가게를 이용할 수 있어 잠재고객 유입 증가</p>
             </div>
         </div>
-        <button class="slide-button right" onclick="moveSlide(1)">&#10095;</button>
     </div>
 
     <footer>
