@@ -73,7 +73,11 @@
 
 <header>
     <div class="container">
-        <div class="logo margarine-regular"><h1>FoodieTree</h1></div>
+        <div class="logo margarine-regular">
+            <a href="/">
+                <h1>FoodieTree</h1>
+            </a>
+        </div>
         <div class="logo-img">
             <img src="/assets/img/img_2.png" alt="">
         </div>
