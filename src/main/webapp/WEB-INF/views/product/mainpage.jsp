@@ -13,12 +13,13 @@
     <header>
         <nav>
             <button class="menu-button">☰</button>
-            <span class="title margarine-regular">Foodie Tree</span>
+            <a href="/" class="title margarine-regular">Foodie Tree</a>
             <input type="text" class="search-bar" placeholder="주소 or 음식 검색">
             <button class="profile-button">프사</button>
             <button class="sign-out-button">sign out</button>
         </nav>
     </header>
+    
     <main>
         <section class="category">
             <h2>음식</h2>
