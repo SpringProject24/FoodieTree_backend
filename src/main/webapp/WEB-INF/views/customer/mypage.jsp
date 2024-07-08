@@ -35,6 +35,9 @@
             font-family: 'NIXGONM-Vb', 'Nanum Gothic', sans-serif;
             /*font-size: 25px;*/
         }
+        section.my-page-area{
+            font-family: 'NIXGONM-Vb', 'Nanum Gothic', sans-serif;
+        }
         .my-page-area .container .profile ul li.nav-item a.nav-link.mypage-link{
             position: relative;
             top: 50px;
