@@ -64,8 +64,6 @@
         </form>
       </section>
     </main>
-
-
     <footer>
       <div class="container">
         <p>&copy; 2024 FoodieTree. All rights reserved.</p>

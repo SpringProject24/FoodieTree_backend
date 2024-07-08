@@ -1,0 +1,387 @@
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+
+header .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+header .logo-img {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+header .logo-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+header .container .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header .container .wrapper .signin {
+  margin-right: 20px;
+}
+
+
+header nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+header nav ul li {
+  margin-left: 20px;
+}
+
+header nav ul li a {
+  color: var(--white-color);
+  text-decoration: none;
+}
+
+header .signup, .signin {
+  background-color: white;
+  color: var(--header-font-color);
+  padding: 10px 20px;
+  border: var(--header-font-color) 1px solid;
+  cursor: pointer;
+}
+
+footer .container {
+  margin: 130px auto 80px;
+  text-align: center;
+}
+
+.main-body{
+  padding: 0px;
+  margin: 0px;
+}
+
+.main-box{
+  position: relative;
+  max-width: 100%;
+  height: 865px;
+  overflow: hidden;
+  margin: 0px auto;
+  background-color:rgb(69 199 69);
+  /* background-image: url('https://images.unsplash.com/photo-1561016444-14f747499547?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); */
+}
+
+.main-box img{
+  width: 100%;
+}
+
+.main-box video{
+  width: 100%;
+}
+
+
+
+
+
+
+
+
+
+.main-box .soleham{
+  object-fit: cover;
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  bottom:0%;
+  right: -7%;
+  z-index: 3;
+}
+
+.main-box .cocojuice{
+  object-fit: cover;
+  position: absolute;
+  width: 500px;
+  height: 700px;
+  bottom:22%;
+  right: -11%;
+  z-index: 2;
+}
+
+.main-box .potato {
+  object-fit: cover;
+  position: absolute;
+  width: 600px;
+  height: 300px;
+  bottom: 0%;
+  right: 20%;
+  z-index: 1;
+}
+
+.main-box .tomato{
+  object-fit: cover;
+  position: absolute;
+  width: 500px;
+  height: 400px;
+  top: -9%;
+  left: 0%;
+}
+
+.main-box .coca {
+  object-fit: cover;
+  position: absolute;
+  width: 500px;
+  height: 300px;
+  transform: rotate(230deg);
+  top: -20%;
+  left: 50%;
+}
+
+.main-box .donut{
+  object-fit: cover;
+  position: absolute;
+  width: 400px;
+  height: 390px;
+  left: -5%;
+  bottom: 0%;
+  z-index: 5;
+}
+
+.main-box .strawberry{
+  object-fit: cover;
+  position: absolute;
+  width: 530px;
+  height: 700px;
+  left: 9%;
+  bottom: -4%;
+  z-index: 10;
+}
+
+.main-box .chocolate{
+  object-fit: cover;
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  left: 6%;
+  bottom: -3%;
+  z-index: 11;
+}
+
+.main-box .icecream {
+  object-fit: cover;
+  position: absolute;
+  width: 550px;
+  height: 900px;
+  left: -5%;
+  bottom: -35%;
+  transform: rotate(20deg);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.main-text{
+  position: absolute;
+  top: 30%;
+  padding-top: 30px;
+  width: 100%;
+  height: 300px;
+  line-height: 50px;
+  /* background-color: rgb(59 57 57 / 50%); */
+}
+
+.main-text h1{
+  text-align: center;
+  color: black;
+  font-weight: 1000;
+  font-size: 35px;
+  line-height:normal;
+  margin-bottom: 15px;
+  /* text-shadow: 0px 0px 20px black; */
+}
+
+.main-text input {
+  padding: 10px;
+  font-size: 1em;
+  border: 3px solid black;
+  border-radius: 5px 0 0 5px;
+  width: 500px;
+  margin-bottom: 10px;
+}
+
+.main-text button{
+  padding: 10px 20px;
+  font-size: 1em;
+  border: 3px solid black;
+  border-radius: 0 5px 5px 0;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+
+.main-box .sign-in-btn{
+  background-color: black;
+  color: white;
+  font-weight: 1000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+
+section {
+  padding: 50px 0;
+  text-align: center;
+}
+
+section.info .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px auto;
+  font-weight: bolder;
+}
+
+
+section.info .container .wrapper h2{
+  margin-bottom: 40px;
+  font-size: 2em;
+  width: 1500px;
+  height: 60px;
+  align-content: center;
+  text-shadow:0px 0px 20px black;
+}
+
+
+.info-section {
+  margin: 0px auto;
+  display: flex;
+  justify-content :space-evenly;
+  max-width: 100%;
+  margin-bottom: 100px;
+}
+
+.info-box {
+  background-color: white;
+  border-radius: 10px;
+  line-height: normal;
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); */
+}
+
+.info-box img {
+  width: 600px;
+  height: 400px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  object-fit: cover;
+}
+
+.info-box h2 {
+  font-size: 2em;
+  text-align: left;
+  font-weight: bolder;
+  margin-bottom: 15px;
+  text-decoration: underline;
+}
+
+.info-box p {
+  font-size: 1em;
+  font-weight: bolder;
+  text-align: left;
+}
+
+.store-signup .storeApproval{
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.food-info {
+  position: relative;
+  background-image: url('https://images.unsplash.com/photo-1584181854784-b8b3fd9d6c45?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  height: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.food-info-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.food-info-overlay h2 {
+  margin-bottom: 10px;
+  font-size:2.5rem;
+  font-weight: bolder;
+  text-shadow: 0px 0px 20px black;
+  width: 1200px;
+  line-height:180%;
+}
+
+.food-info-overlay p {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: normal;
+  margin-bottom: 50px;
+}
