@@ -97,7 +97,7 @@
                         </div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-phone"></i></div>
-                            <input type="text" id="customer-phone-number"
+                            <input type="text" id="customer_phone_number"
                                    value="${customerMyPageDto.customerPhoneNumber}">
                             <div class="icon" id="update-phone"><i class="fa-regular fa-square-check"
                                                                    style="color: #45a049; font-size: 25px; cursor: pointer"></i>

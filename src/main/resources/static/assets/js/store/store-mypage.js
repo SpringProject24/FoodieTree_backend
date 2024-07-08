@@ -1,5 +1,5 @@
 // ========= 전역 변수 =========
-const BASE_URL = 'http://localhost:8083';
+const BASE_URL = window.location.origin;
 
 const calendarElement = document.getElementById('calendar');
 const currentMonthElement = document.getElementById('current-month');

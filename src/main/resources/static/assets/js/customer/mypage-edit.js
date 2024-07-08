@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8083';
+const BASE_URL = window.location.origin;
 
 let type;
 let countdownInterval;
@@ -206,7 +206,7 @@ export async function updatePassword(newPassword, newPasswordCheck) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ type: 'password', value: newPassword })
+            body: JSON.stringify({ type: 'password', newPassword: newPassword })
         });
 
         if (response.ok) {

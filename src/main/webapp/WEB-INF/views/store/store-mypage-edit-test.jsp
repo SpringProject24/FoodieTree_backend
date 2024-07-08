@@ -239,6 +239,7 @@
 </div>
 
 <script>
+    const customerId = '${sessionScope.login.customerId}';
     const avatar = document.getElementById('avatar');
     const storeImg = document.getElementById('profileImage');
     const $ImgBtn = document.getElementById('profile_btn');
