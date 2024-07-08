@@ -89,6 +89,11 @@ section.input-area .container input {
     background-color: var(--white-color);
 }
 
+section.input-area .container input.hidden {
+    display: none;
+}
+
+
 section.input-area .container .wrapper {
     width: 100%;
     display: flex;

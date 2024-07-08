@@ -13,6 +13,6 @@ public class AutoLoginDto {
 
     private String sessionId; // 자동로그인 쿠키값
     private LocalDateTime limitTime; // 만료시간
-    private String customerId; // 계정명
+    private String id; // 계정명
 
 }

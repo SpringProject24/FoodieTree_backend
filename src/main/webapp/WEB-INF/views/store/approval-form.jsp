@@ -58,14 +58,14 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <div class="container">
       <h1>업체 등록</h1>
       <form
-        action="/storeMyPage/storeApproval-result"
+        action="/store/approval"
         method="post"
         enctype="multipart/form-data"
       >
       <!-- <label for="storeId">회원 아이디:</label>
       <input type="text" id="storeId" name="storeId" required /> -->
 
-        <label for="businessName">상호명:</label>
+        <label for="storeName">상호명:</label>
         <input type="text" id="storeName" name="storeName" required />
 
         <label for="address">주소:</label>
@@ -77,13 +77,13 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <label for="category">업종:</label>
         <select id="category" name="category" required>
           <option value="">업종을 선택하세요</option>
-          <option value="KOREAN">한식</option>
-          <option value="WESTERN">양식</option>
-          <option value="CHINESE">중식</option>
-          <option value="JAPANESE">일식</option>
-          <option value="CAFE">카페</option>
-          <option value="DESSERT">디저트</option>
-          <option value="ELSE">기타</option>
+          <option value="한식">한식</option>
+          <option value="양식">양식</option>
+          <option value="중식">중식</option>
+          <option value="일식">일식</option>
+          <option value="카페">카페</option>
+          <option value="디저트">디저트</option>
+          <option value="기타">기타</option>
         </select>
 
         <label for="storeLicenseNumber">사업자등록번호:</label>
@@ -106,8 +106,8 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     </script>
 
-    <!-- 공통푸터 -->
-    <%@ include file="../include/footer.jsp" %> 
+        <!-- 공통푸터 -->
+        <%@ include file="../include/footer.jsp" %>
     
   </body>
 </html>

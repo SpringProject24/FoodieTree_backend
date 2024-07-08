@@ -87,8 +87,10 @@
             <form action="#" method="post">
                 <div class="container">
                     <div class="input-wrapper">
-                        <input type="text" name="customerId" placeholder="아이디" required>
-                        <input type="password" name="customerPassword" placeholder="비밀번호" required>
+                        <input id="input-customer-id" type="text" name="customerId" placeholder="아이디" required>
+                        <input id="input-customer-pw" type="password" name="customerPassword" placeholder="비밀번호" required>
+                        <input id="input-store-id" type="text" class="hidden" name="storeId" placeholder="아이디" required>
+                        <input id="input-store-pw" type="password" class="hidden" name="password" placeholder="비밀번호" required>
                     </div>
                     <tr>
                         <td>
@@ -125,7 +127,12 @@
     const $formSignIn = document.querySelector('form[method=post]');
     const $btnWrapper = document.querySelector('.btn-wrapper');
     const $signInBtn = document.querySelector('#sign-in-btn');
-
+    const $inputCustomerId = document.getElementById("input-customer-id");
+    const $inputCustomerPw = document.getElementById("input-customer-pw");
+    const $inputStoreId = document.getElementById("input-store-id");
+    const $inputStorePw = document.getElementById("input-store-pw");
+    const $customerBtn = document.getElementById("customer-btn");
+    const $storeBtn = document.getElementById("store-btn");
 
     $btnWrapper.addEventListener('click', (e) => {
         if (e.target.tagName !== 'BUTTON') return;
@@ -133,11 +140,29 @@
         e.target.classList.add('checked');
     });
 
+    $customerBtn.addEventListener('click', e => {
+        e.preventDefault();
+        $inputCustomerId.classList.remove("hidden");
+        $inputCustomerPw.classList.remove("hidden");
+        $inputStoreId.classList.add("hidden");
+        $inputStorePw.classList.add("hidden");
+    });
+
+    $storeBtn.addEventListener('click', e => {
+        e.preventDefault();
+        $inputCustomerId.classList.add("hidden");
+        $inputCustomerPw.classList.add("hidden");
+        $inputStoreId.classList.remove("hidden");
+        $inputStorePw.classList.remove("hidden");
+    });
+
     $signInBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         if ($btnWrapper.querySelector('.checked').id === 'store-btn') {
+
             $formSignIn.action = '/store/sign-in';
         } else if ($btnWrapper.querySelector('.checked').id === 'customer-btn') {
+
             $formSignIn.action = '/customer/sign-in';
         }
         $formSignIn.submit();

@@ -29,14 +29,14 @@ const checkIdInput = (value, $idChk) => {
  */
 const checkPwInput = ($pwInput, $pwChkInput, $pwChk, $submitBtn) => {
   $pwInput.addEventListener("keyup", function (e) {
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$/;
+    const passwordPattern = /^[a-zA-Z0-9]{8,20}$/;
     const value = e.target.value;
 
     $pwChkInput.disabled = true;
     if (value.trim() === "") {
       $pwChk.innerHTML = '<b class="warning">[비밀번호를 입력해주세요]</b>';
     } else if (!passwordPattern.test(value)) {
-      $pwChk.innerHTML = '<b class="warning">[비밀번호는 8~20자의 영문 대소문자, 숫자, 특수문자를 포함해주세요]</b>';
+      $pwChk.innerHTML = '<b class="warning">[비밀번호는 8~20자의 영문 대소문자, 숫자를 포함해주세요]</b>';
     } else {
       $pwChkInput.disabled = false;
       $pwChk.innerHTML = '<b class="success">[사용 가능한 비밀번호입니다.]</b>';
@@ -79,7 +79,8 @@ function checkInfo($submitBtn) {
     }
   }
   $submitBtn.disabled = false;
-  $submitBtn.style.backgroundColor = "orange";
+  $submitBtn.style.backgroundColor = "#2a6f2b";
+  $submitBtn.classList.remove('disable');
 }
 
 export const checkPw = (value) => {
