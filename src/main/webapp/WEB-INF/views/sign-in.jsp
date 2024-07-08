@@ -97,7 +97,7 @@
                     <tr>
                         <td>
                             <label class="auto-label" for="auto-login">
-                                <span><i class="fas fa-sign-in-alt"></i>자동 로그인</span>
+                                <span></i>자동 로그인</span>
                                 <input type="checkbox" id="auto-login" name="autoLogin">
                             </label>
                         </td>
