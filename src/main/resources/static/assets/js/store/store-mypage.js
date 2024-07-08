@@ -47,7 +47,7 @@ async function updateCalendar(year, month) {
     const date = new Date(year, month);
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    currentMonthElement.textContent = date.toLocaleDateString('default', { year: 'numeric', month: 'long' });
+    currentMonthElement.textContent = date.toLocaleDateString('default', {year: 'numeric', month: 'long'});
 
     // 빈 칸 추가
     for (let i = 0; i < firstDay; i++) {
@@ -89,7 +89,7 @@ async function checkHoliday(dateString) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ date: dateString }) // dateString을 JSON 형식으로 변환하여 보냄
+            body: JSON.stringify({date: dateString}) // dateString을 JSON 형식으로 변환하여 보냄
         });
         console.log(response);
         if (!response.ok) {
@@ -142,18 +142,18 @@ async function showModal(year, month, day) {
         }
         let normalTag = `<div class="today-date">${dateStringKr}</div>` + tag + $storeCloseButton + '<br>';
 
-        let holidayTag = `<div class="today-date">${dateStringKr}</div>`+'<div>휴무일로 지정되었습니다.</div>' + '<br>' + $cancelStoreCloseButton;
+        let holidayTag = `<div class="today-date">${dateStringKr}</div>` + '<div>휴무일로 지정되었습니다.</div>' + '<br>' + $cancelStoreCloseButton;
 
-        let passedTag = `<div class="today-date">${dateStringKr}</div>` + tag+ tag2 + '<br>';
+        let passedTag = `<div class="today-date">${dateStringKr}</div>` + tag + tag2 + '<br>';
 
         let tags = ``;
-        if(isHoliday){
+        if (isHoliday) {
             tags = holidayTag;
         }
-        if(!isHoliday &&selectedDate <= today){
+        if (!isHoliday && selectedDate <= today) {
             tags = passedTag;
         }
-        if(!isHoliday && selectedDate > today){
+        if (!isHoliday && selectedDate > today) {
             tags = normalTag;
         }
         modalDetailsElement.innerHTML = tags;
@@ -162,7 +162,7 @@ async function showModal(year, month, day) {
         const undoHolidayButton = modalDetailsElement.querySelector('#undo-holiday-btn');
         if (undoHolidayButton) {
             undoHolidayButton.addEventListener('click', async () => {
-                try{
+                try {
                     console.log('휴무일 지정 취소하기 버튼 클릭');
                     console.log(dateString);
                     const response = await fetch(`${BASE_URL}/store/mypage/main/calendar/undoHoliday`, {
@@ -176,14 +176,14 @@ async function showModal(year, month, day) {
                     });
 
                     const result = await response.json();
-                    if (result === true){
+                    if (result === true) {
                         console.log('휴무일 지정이 취소되었습니다.');
-                        alert('휴무일 지정이 취소되었습니다.')?closeModal(scheduleModal):closeModal(scheduleModal)
+                        alert('휴무일 지정이 취소되었습니다.') ? closeModal(scheduleModal) : closeModal(scheduleModal)
                         // modalDetailsElement.innerHTML = normalTag;
                         // 여기에 필요한 UI 업데이트 로직 추가
                         updateCalendar(currentYear, currentMonth); // 예시로 달력 업데이트
                     }
-                }catch (error) {
+                } catch (error) {
                     console.error('Error setting holiday:', error);
                     // 에러 처리 로직 추가
                 }
@@ -209,7 +209,7 @@ async function showModal(year, month, day) {
                     if (result === true) {
                         console.log('휴무일로 지정되었습니다.');
                         // 여기에 필요한 UI 업데이트 로직 추가
-                        alert('휴무일로 지정되었습니다.')?closeModal(scheduleModal):closeModal(scheduleModal);
+                        alert('휴무일로 지정되었습니다.') ? closeModal(scheduleModal) : closeModal(scheduleModal);
                         // modalDetailsElement.innerHTML = holidayTag;
                         // 예를 들어, 달력에서 휴무일로 지정된 날짜에 표시 변경 등
                         updateCalendar(currentYear, currentMonth); // 예시로 달력 업데이트
@@ -315,12 +315,14 @@ $addProductButton.addEventListener('click', async e => {
                 <img src="/assets/img/caution2.png" alt="경고 이미지">
                 <div>수량 추가 후 되돌리기 불가합니다.</div>
                 <div>신중히 선택해주세요</div>
-                <button id="decrease-btn" class="yellow-click" disabled><i class="fas fa-minus"></i></button>
-                <p id="product-update-count">${initialCount}</p>
-                <button id="increase-btn" class="yellow-click"><i class="fas fa-plus"></i></button>
+                <div id="product-amount-adjust-btn">
+                    <button id="decrease-btn" class="yellow-click" disabled><i class="fas fa-minus"></i></button>
+                    <p id="product-update-count">${initialCount}</p>
+                    <button id="increase-btn" class="yellow-click"><i class="fas fa-plus"></i></button>
+                </div>
                 <div>오늘 남은 수량</div>
                 <div>추가되는 상품 수: <span id="product-update-amount">${updateCount}</span></div>
-                <button id="update-btn" disabled>업데이트하기</button>
+                <button id="update-btn" class="yellow-click" disabled>추가 확인</button>
             </div>
         `;
 
@@ -375,7 +377,7 @@ $addProductButton.addEventListener('click', async e => {
                 const result = await response.json();
                 if (result === true) {
                     $updateBtn.disabled = true; // 업데이트 버튼 비활성화
-                    alert('수량이 업데이트되었습니다.')?closeModal($productAddModal):closeModal($productAddModal);
+                    alert('수량이 업데이트되었습니다.') ? closeModal($productAddModal) : closeModal($productAddModal);
 
                     await updateProductCount();
                     // 여기에 필요한 UI 업데이트 로직 추가
@@ -396,7 +398,6 @@ $addProductButton.addEventListener('click', async e => {
 });
 
 
-
 // 예약 내역 모달 열기
 // 모달 열기
 async function openModal(reservationId) {
@@ -414,7 +415,7 @@ async function openModal(reservationId) {
     }
 
     let tag = '';
-    if(reservationR.status === 'CANCELED'){
+    if (reservationR.status === 'CANCELED') {
         tag = `
         <div class="reservation-detail-item" data-reservation-id="${reservationId}">
         <img src="/assets/img/cancel-stress.png" alt="취소 이미지">
@@ -423,31 +424,31 @@ async function openModal(reservationId) {
         </div>
         `;
     }
-    if(reservationR.status === 'RESERVED'){
+    if (reservationR.status === 'RESERVED') {
         tag = `
         <div class="reservation-detail-item" data-reservation-id="${reservationId}">
             <img src="/assets/img/caution2.png" alt="경고 이미지">
             <p class="caution">픽업 닉네임을 확인 해주세요</p>
-            <img src="${reservationR.profileImage}" alt="Customer profile image">
+<!--            <img src="${reservationR.profileImage}" alt="Customer profile image">-->
             <p class="pickup-nickname">닉네임: <span>${reservationR.nickname}</span></p>
             <p class="modal-reservation-status"> 픽업 대기 중 </p>
             <p class="pickup-time">픽업 마감 시간: <span>${reservationR.pickupTimeF}</span></p>
         </div>
         `;
     }
-    if(reservationR.status === 'PICKEDUP'){
+    if (reservationR.status === 'PICKEDUP') {
         tag = `
         <div class="reservation-detail-item" data-reservation-id="${reservationId}">
             <img src="/assets/img/pickedup-happy.png" alt="체크 이미지">
             <p></p>
-            <img src="${reservationR.profileImage}" alt="고객 이미지">
-            <p><span>픽업 닉네임: </span>${reservationR.nickname}</p>
+<!--            <img src="${reservationR.profileImage}" alt="고객 이미지">-->
+            <p>픽업 닉네임: <span style="font-family: 'jua'; font-size: 25px">${reservationR.nickname}<span></p>
             <p>픽업이 완료되었습니다.</p>
             <p>픽업 시간: ${reservationR.pickedUpAtF}</p>
         </div>
         `;
     }
-    if(reservationR.status === 'NOSHOW'){
+    if (reservationR.status === 'NOSHOW') {
         tag = `
         <div class="reservation-detail-item" data-reservation-id="${reservationId}">
             <img src="/assets/img/noshow-sad.png" alt="노쇼 이미지">

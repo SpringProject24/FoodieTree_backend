@@ -43,14 +43,21 @@
             bottom: -90px;
         }
 
-        .title{
-            padding: 15px 15px 0;
-            margin: 20px 20px 0;
+        .info .info-box .title {
+            padding: 0;
+            margin: 0;
         }
 
-        .my-page-area .container .info .info-wrapper{
-            width: 1016px;
-            margin-left: 36px;
+        .title .title-text {
+            margin-bottom: 0;
+        }
+
+        .my-page-area .container .info ul li {
+            padding: 0;
+            margin: 0;
+        }
+
+        .my-page-area .container .info .info-wrapper {
             border-radius: 0 0 15px 15px;
         }
 

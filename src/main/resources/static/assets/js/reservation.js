@@ -19,64 +19,64 @@ let totalReservations = 0;
 let loadedReservations = 0;
 
 // =========== 함수 정의 ================
-function appendReservations(reservations) {
-    let tag = '';
-    let statusInfo = '';
+// function appendReservations(reservations) {
+//     let tag = '';
+//     let statusInfo = '';
+//
+//     if(reservations && reservations.length > 0){
+//         reservations.forEach(({reservationId , storeImg, storeName, status, pickupTime, pickedUpAt, cancelReservationAt, reservationTime}) => {
+//
+//             let t1 = formatDate(pickupTime);
+//             let t2 = formatDate(pickedUpAt);
+//             let t3 = formatDate(cancelReservationAt);
+//             let t4 = formatDate(reservationTime);
+//
+//             if (status === 'RESERVED') {
+//                 statusInfo = `${t1}까지 픽업해주세요`;
+//             }
+//             if (status === 'PICKEDUP') {
+//                 statusInfo = `${t2}에 픽업하셨습니다`;
+//             }
+//             if (status === 'CANCELED') {
+//                 statusInfo = `${t3}에 취소하셨습니다`;
+//             }
+//             if (status === 'NOSHOW'){
+//                 statusInfo = `${t1}에 미방문으로 취소되었습니다`;
+//             }
+//             tag += `
+//             <div class="reservation-item" data-reservation-id="${reservationId}">
+//                 <img src="${storeImg}" alt="Store Image"/>
+//                 <span>${storeName}</span>
+//                 <span>${status}</span>
+//                 <button>${statusInfo}</button>
+//                 ${status === 'RESERVED' ? '<button class="reservation-cancel-btn calendar-button">예약 취소</button>' : ''}
+//             </div>
+//             `;
+//         });
+//     } else {
+//         tag = `<div class='reservation-list'>예약 내역이 없습니다.</div>`;
+//     }
+//
+//     $reservationList.innerHTML = tag;
+//     console.log('appendReservations() 실행');
+// }
 
-    if(reservations && reservations.length > 0){
-        reservations.forEach(({reservationId , storeImg, storeName, status, pickupTime, pickedUpAt, cancelReservationAt, reservationTime}) => {
-
-            let t1 = formatDate(pickupTime);
-            let t2 = formatDate(pickedUpAt);
-            let t3 = formatDate(cancelReservationAt);
-            let t4 = formatDate(reservationTime);
-
-            if (status === 'RESERVED') {
-                statusInfo = `${t1}까지 픽업해주세요`;
-            }
-            if (status === 'PICKEDUP') {
-                statusInfo = `${t2}에 픽업하셨습니다`;
-            }
-            if (status === 'CANCELED') {
-                statusInfo = `${t3}에 취소하셨습니다`;
-            }
-            if (status === 'NOSHOW'){
-                statusInfo = `${t1}에 미방문으로 취소되었습니다`;
-            }
-            tag += `
-            <div class="reservation-item" data-reservation-id="${reservationId}">
-                <img src="${storeImg}" alt="Store Image"/>
-                <span>${storeName}</span>
-                <span>${status}</span>
-                <button>${statusInfo}</button>
-                ${status === 'RESERVED' ? '<button class="reservation-cancel-btn calendar-button">예약 취소</button>' : ''}
-            </div>
-            `;
-        });
-    } else {
-        tag = `<div class='reservation-list'>예약 내역이 없습니다.</div>`;
-    }
-
-    $reservationList.innerHTML = tag;
-    console.log('appendReservations() 실행');
-}
-
-async function fetchReservations() {
-    if (isFetching) return;
-    isFetching = true;
-
-    try {
-        const res = await fetch(`${BASE_URL}/reservation/${customerId}`);
-        const reservations = await res.json();
-        console.log(reservations);
-        appendReservations(reservations);
-
-    } catch (error) {
-        console.error('Error fetching reservations:', error);
-    } finally {
-        isFetching = false;
-    }
-}
+// async function fetchReservations() {
+//     if (isFetching) return;
+//     isFetching = true;
+//
+//     try {
+//         const res = await fetch(`${BASE_URL}/reservation/${customerId}`);
+//         const reservations = await res.json();
+//         console.log(reservations);
+//         appendReservations(reservations);
+//
+//     } catch (error) {
+//         console.error('Error fetching reservations:', error);
+//     } finally {
+//         isFetching = false;
+//     }
+// }
 
 function setupInfiniteScroll() {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 && !isFetching) {
