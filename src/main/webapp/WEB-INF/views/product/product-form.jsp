@@ -1,26 +1,36 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8" %> <%@ taglib prefix="c"
+uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FoodieTree for 가게</title>
+    <title>FoodieTree</title>
+    <!-- <link rel="stylesheet" href="/assets/css/common.css"> -->
     <link rel="stylesheet" href="/assets/css/common.css" />
     <link rel="stylesheet" href="/assets/css/product/productApproval-form.css" />
-    <script src="/assets/js/product/productApproval-form.js"></script>
+    <!-- 구글폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- 구글폰트2 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap"
+      rel="stylesheet"
+    />
+    <!-- 아이콘 -->
+    <!-- Add the following <link> to the <head> of your HTML. -->
+    <!-- <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css"> -->
   </head>
   <body>
-    <header>
-      <div class="container">
-        <h1>FoodieTree <span>for 상품</span></h1>
-        <div class="logo-img">
-          <img src="/assets/img/img_2.png" alt="" />
-        </div>
-        <div class="wrapper">
-          <div class="signin"><a href="/sign-in">로그인</a></div>
-          <div class="signup"><a href="/customer/sign-up">회원가입</a></div>
-        </div>
-      </div>
-    </header>
+    <!-- 공통헤더 -->
+    <%@ include file="../include/header.jsp" %>
 
     <main>
       <section class="registration">
@@ -66,11 +76,66 @@
         </form>
       </section>
     </main>
-    <footer>
-      <div class="container">
-        <p>&copy; 2024 FoodieTree. All rights reserved.</p>
-      </div>
-    </footer>
+    <!-- 공통 푸터 -->
+    <%@ include file="../include/footer.jsp" %>
+
+    <script>
+      const $productApproval = document.querySelector(".btn-approval");
+      $productApproval.addEventListener("click", () => {
+        location.href = "/store/mypage/main";
+      });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const imageInput = document.getElementById("proImage");
+    const imagePreview = document.getElementById("image-preview");
+    const imageUploadLabel = document.querySelector('.image-upload label');
+    const imageUpload = document.querySelector('.image-upload');
+    
+  
+    imageInput.addEventListener("change", handleFiles);
+    
+  
+    imageUpload.addEventListener("dragover", function(event) {
+        event.preventDefault();
+        imageUpload.classList.add("dragover");
+    });
+  
+    imageUpload.addEventListener("dragleave", function() {
+        imageUpload.classList.remove("dragover");
+    });
+  
+    imageUpload.addEventListener("drop", function(event) {
+        event.preventDefault();
+        imageUpload.classList.remove("dragover");
+        const files = event.dataTransfer.files;
+        handleFiles({ target: { files: files } });
+    });
+  
+    function handleFiles(event) {
+        const files = event.target.files;
+        imagePreview.innerHTML = "";
+        
+        for (const file of files) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const imgElement = document.createElement("img");
+                imgElement.src = e.target.result;
+                imagePreview.appendChild(imgElement);
+            };
+  
+            reader.readAsDataURL(file);
+        }
+  
+        if (files.length > 0) {
+            imageUploadLabel.style.display = 'none';
+        } else {
+            imageUploadLabel.style.display = 'flex';
+        }
+    }
+  });
+  
+    </script>
     
   </body>
 </html>
