@@ -312,10 +312,13 @@ $addProductButton.addEventListener('click', async e => {
         let initialCount = products.remainCnt;
         let tag = `
             <div class="product-add-item">
-                <div>아직 안팔린 상품 수: <span id="product-update-count">${initialCount}</span></div>
-                <button id="decrease-btn" disabled>-</button>
-                <button id="increase-btn">+</button>
-                <div>되될릴 수 없으니 신중히 선택하세요!!</div>
+                <img src="/assets/img/caution2.png" alt="경고 이미지">
+                <div>수량 추가 후 되돌리기 불가합니다.</div>
+                <div>신중히 선택해주세요</div>
+                <button id="decrease-btn" class="yellow-click" disabled><i class="fas fa-minus"></i></button>
+                <p id="product-update-count">${initialCount}</p>
+                <button id="increase-btn" class="yellow-click"><i class="fas fa-plus"></i></button>
+                <div>오늘 남은 수량</div>
                 <div>추가되는 상품 수: <span id="product-update-amount">${updateCount}</span></div>
                 <button id="update-btn" disabled>업데이트하기</button>
             </div>

@@ -35,7 +35,7 @@
     cursor: pointer;
 }
 
-.reservation-item.canceled{
+.reservation-list .reservation-item.canceled{
     border: solid 2px #E68a8c;
     border-radius: 15px;
 }
