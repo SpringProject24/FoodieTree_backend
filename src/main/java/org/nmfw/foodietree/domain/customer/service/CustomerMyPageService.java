@@ -8,12 +8,14 @@ import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.IssueStatus;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +49,7 @@ public class CustomerMyPageService {
                 .build();
     }
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH시mm분");
     /**
      *
      * @param customerId: 회원아이디를 전달받아
@@ -56,20 +59,50 @@ public class CustomerMyPageService {
 
         List<ReservationDetail> reservations = customerMyPageMapper.findReservations(customerId);
 
-        return reservations.stream().map(reservation -> MyPageReservationDetailDto.builder()
-                .reservationId(reservation.getReservationId())
-                .customerId(reservation.getCustomerId())
-                .nickname(reservation.getNickname())
-                .reservationTime(reservation.getReservationTime())
-                .cancelReservationAt(reservation.getCancelReservationAt())
-                .pickedUpAt(reservation.getPickedUpAt())
-                .status(determinePickUpStatus(reservation))
-                .pickupTime(reservation.getPickupTime())
-                .storeName(reservation.getStoreName())
-                .storeImg(reservation.getStoreImg())
-                .price(reservation.getPrice())
-                .build()
-        ).collect(Collectors.toList());
+
+//        List<MyPageReservationDetailDto> collect = reservations.stream().map(reservation -> {
+//                    MyPageReservationDetailDto dto = new MyPageReservationDetailDto(reservation);
+//                    dto.setStatus(determinePickUpStatus(reservation));
+//                    return dto;
+//                });
+        List<MyPageReservationDetailDto> collect1 = reservations.stream()
+                .map(reservation -> {
+                    MyPageReservationDetailDto dto = new MyPageReservationDetailDto(reservation);
+                    dto.setStatus(determinePickUpStatus(reservation));
+                    return dto;
+                }).collect(Collectors.toList());
+
+        List<MyPageReservationDetailDto> collect = reservations.stream()
+                .map(reservation -> MyPageReservationDetailDto.builder().status(determinePickUpStatus(reservation))
+                        .reservationId(reservation.getReservationId())
+                        .customerId(reservation.getCustomerId())
+                        .nickname(reservation.getNickname())
+                        .reservationTime(reservation.getReservationTime())
+                        .cancelReservationAt(reservation.getCancelReservationAt())
+                        .pickedUpAt(reservation.getPickedUpAt())
+                        .pickupTime(reservation.getPickupTime())
+                        .storeName(reservation.getStoreName())
+                        .storeImg(reservation.getStoreImg())
+                        .price(reservation.getPrice())
+                        .build()).collect(Collectors.toList());
+
+
+        for (MyPageReservationDetailDto reservation : collect) {
+            log.info(reservation.toString());
+            if (reservation.getReservationTime() != null) {
+                reservation.setReservationTimeF(reservation.getReservationTime().format(formatter));
+            }
+            if (reservation.getCancelReservationAt() != null) {
+                reservation.setCancelReservationAtF(reservation.getCancelReservationAt().format(formatter));
+            }
+            if (reservation.getPickedUpAt() != null) {
+                reservation.setPickedUpAtF(reservation.getPickedUpAt().format(formatter));
+            }
+            if (reservation.getPickupTime() != null) {
+                reservation.setPickupTimeF(reservation.getPickupTime().format(formatter));
+            }
+        }
+        return collect;
     }
 
     public PickUpStatus determinePickUpStatus(ReservationDetail reservation) {

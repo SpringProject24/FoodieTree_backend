@@ -44,6 +44,20 @@
         /*font-size: 25px;*/
     }
 
+    .my-page-area .container .info .reservation-list{
+        margin-top: 0;
+    }
+
+    .my-page-area .container .profile ul li.nav-item a.nav-link{
+        margin-left: 123px;
+    }
+    .my-page-area .container .info .reservation-list{
+        margin: 0 7px 10px 0;
+    }
+
+    .info-wrapper{
+        padding: 0 10px 10px;
+    }
 </style>
 <header>
     <div class="container">
@@ -226,7 +240,7 @@
 <!-- 수량 추가 모달 창 -->
 <div id="product-add-modal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close">&times<i class="fas fa-times"></i></span>
         <div id="product-count-status">
             <h2>수량 변경 오늘 등록된 수량, 남은 수량 보여주고 몇개로 업데이트할건지 물어보고 받음</h2>
             <div id="modal-product-count-details"></div>

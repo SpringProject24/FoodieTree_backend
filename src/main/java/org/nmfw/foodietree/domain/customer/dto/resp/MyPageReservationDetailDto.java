@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.customer.dto.resp;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 
 import java.time.LocalDateTime;
@@ -25,4 +26,22 @@ public class MyPageReservationDetailDto {
     private String storeName;
     private String storeImg;
     private int price;
+
+    private String reservationTimeF;
+    private String cancelReservationAtF;
+    private String pickedUpAtF;
+    private String pickupTimeF;
+
+    public MyPageReservationDetailDto(ReservationDetail dto) {
+        this.reservationId = dto.getReservationId();
+        this.customerId = dto.getCustomerId();
+        this.nickname = dto.getNickname();
+        this.reservationTime = dto.getReservationTime();
+        this.cancelReservationAt = dto.getCancelReservationAt();
+        this.pickedUpAt = dto.getPickedUpAt();
+        this.pickupTime = dto.getPickupTime();
+        this.storeName = dto.getStoreName();
+        this.storeImg = dto.getStoreImg();
+        this.price = dto.getPrice();
+    }
 }
