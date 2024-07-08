@@ -91,7 +91,7 @@
                         <div class="img-box">
                             <img id="store-img" alt="">   <!-- 가게 사진-->
                         </div>
-                        <h6 id="store-name">가게이름 </h6>
+                        <h6 id="store-name">가게이름</h6>
                     </div>
                 </div>
             </div>
@@ -373,7 +373,7 @@
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
-                            <p>픽업 시간 : ${item.formattedPickupTime}</p>
+                            <p>픽업 시간 : ${item.pickupTime}</p>
                             <div class="wrapper">
                                 <p>평점 / 거리</p>
                                 <p>가격 : ${item.price}</p>
