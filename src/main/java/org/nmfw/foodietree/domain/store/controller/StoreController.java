@@ -10,8 +10,6 @@ import org.nmfw.foodietree.domain.store.dto.request.StoreLoginDto;
 import org.nmfw.foodietree.domain.store.dto.request.StoreSignUpDto;
 import org.nmfw.foodietree.domain.store.service.StoreLoginResult;
 import org.nmfw.foodietree.domain.store.service.StoreService;
-import org.nmfw.foodietree.domain.store.service.StoreSignUpService;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -20,10 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static org.nmfw.foodietree.domain.store.service.StoreLoginResult.SUCCESS;
 

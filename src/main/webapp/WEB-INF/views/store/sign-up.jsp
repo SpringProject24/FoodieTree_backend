@@ -9,9 +9,12 @@
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/store/sign-up.css">
     <link href="https://fonts.googleapis.com/css2?family=Francois+One&family=Margarine&family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <script defer src="/assets/js/utils/lodash.js"></script>
+    <script defer type="module" src="/assets/js/store/sign-up-event.js"></script>
 
 </head>
 <body>
+<%@ include file="../include/spinner.jsp" %>
   <header>
       <div class="container">
           <div a href="/" class="logo margarine-regular">FoodieTree</div></a>
@@ -64,8 +67,5 @@
     const newUrl = window.location.origin + window.location.pathname;
     history.replaceState(null, null, newUrl);
 </script>
-
-  <!-- 공통푸터 -->
-  <%@ include file="../include/footer.jsp" %>
 </body>
 </html>

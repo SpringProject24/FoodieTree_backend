@@ -28,6 +28,6 @@
   <update id="updateAutoLogin">
     UPDATE tbl_store
     SET session_id = #{sessionId}, limit_time = #{limitTime}
-    WHERE customer_id = #{id}
+    WHERE store_id = #{id}
   </update>
 </mapper>

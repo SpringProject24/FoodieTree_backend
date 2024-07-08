@@ -108,7 +108,7 @@
     </style>
 </head>
 <body>
- <%@ include file="../include/header.jsp" %>
+<%@ include file="../include/header.jsp" %>
 <section class="my-page-area">
     <div class="container">
         <div class="profile">
