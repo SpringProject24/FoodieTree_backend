@@ -26,7 +26,6 @@
         s.price,
         s.store_img,
         s.category,
-        p.product_id,
         p.pickup_time
         FROM
         tbl_product p
@@ -100,27 +99,6 @@
         GROUP BY
         s.store_name;
 
-    </select>
-
-    <select id="findById" parameterType="string" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
-        SELECT
-        p.product_id,
-        p.store_id,
-        p.product_upload_date,
-        s.store_img,
-        s.store_name,
-        s.category,
-        s.address,
-        s.price,
-        p.product_cnt,
-        p.pro_image,
-        p.pickup_time
-        FROM
-        tbl_product p
-        JOIN
-        tbl_store s ON p.store_id = s.store_id
-        WHERE
-        p.product_id = #{productId}
     </select>
 
 </mapper>

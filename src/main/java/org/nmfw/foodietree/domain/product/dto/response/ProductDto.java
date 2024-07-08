@@ -29,4 +29,14 @@ public class ProductDto {
     private LocalDateTime pickupTime;
     private String formattedPickupTime;
 
+
+
+    // Method to get formatted pickup time
+//    public String setFormattedPickupTime(LocalDateTime pickupTime) {
+//        if (pickupTime == null) {
+//            return "";
+//        }
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
+//        return pickupTime.format(formatter);
+//    }
 }
