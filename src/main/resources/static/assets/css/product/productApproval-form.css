@@ -137,7 +137,7 @@ main {
 }
 
 .form-group {
-  margin-bottom: 31px;
+  margin-bottom: 30px;
 }
 
 .form-group label {
@@ -150,6 +150,10 @@ main {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+.form-group #price{
+  width: 100%;
 }
 
 .btn-approval {
