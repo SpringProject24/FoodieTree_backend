@@ -2,80 +2,79 @@
 prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>업체 등록</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        padding: 0;
-      }
-      .container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      h1 {
-        text-align: center;
-      }
-      label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
-      }
-      input[type="text"],
-      input[type="tel"],
-      select {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 16px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
-      input[type="file"] {
-        margin-bottom: 16px;
-      }
-      input[type="submit"] {
-        width: 100%;
-        padding: 10px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      input[type="submit"]:hover {
-        background-color: #45a049;
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodieTree for 가게</title>
+    <link rel="stylesheet" href="/assets/css/common.css" />
+    <link rel="stylesheet" href="/assets/css/productApproval-form.css" />
+    <script src="../../../../resources/static/assets/js/product/productApproval.js"></script>
   </head>
   <body>
-    <div class="container">
-      <h1>업체 등록</h1>
-      <form
-        action="/store/product"
-        method="post"
-        enctype="multipart/form-data"
-      >
+    <header>
+      <div class="container">
+        <h1>FoodieTree <span>for 상품</span></h1>
+        <div class="logo-img">
+          <img src="/assets/img/img_2.png" alt="" />
+        </div>
+        <div class="wrapper">
+          <div class="signin"><a href="/sign-in">로그인</a></div>
+          <div class="signup"><a href="/customer/sign-up">회원가입</a></div>
+        </div>
+      </div>
+    </header>
 
-        <label for="proImage">상품 사진:</label>
-        <input type="file" id="proImage" name="proImage" multiple required />
+    <main>
+      <section class="registration">
+        
+        <h2>푸디트리와 지구를 위한 한걸음 함께 해보아요!</h2>
 
-        <label for="productCnt">수량:</label>
-        <input type="text" id="productCnt" name="productCnt" required />
+        <form
+          action="/store/mypage/main"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group">
+            <div class="image-upload">
+              <input type="file" id="proImage" name="proImage" accept="image/*" multiple required>
+              <label for="proImage">상품 사진 업로드 (Drag & Drop)</label>
+              <div id="image-preview"></div>
+             </div>
+          </div>
+          <div class="form-group">
+            <label for="productCnt">상품 수량 :</label>
+            <input
+              type="text"
+              id="productCnt"
+              name="productCnt"
+              placeholder="수량은 필수 입력 값입니다."
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="price">상품 가격 :</label>
+            <input
+              type="text"
+              id="price"
+              name="price"
+              placeholder="가게 주소는 필수 입력 값입니다."
+              required
+            />
+          </div>
+                    
 
-        <label for="price">가격:</label>
-        <input type="text" id="price" name="price" required />
+          <button class="btn-approval" type="submit">상품 등록하기</button>
+        </form>
+      </section>
+    </main>
 
-        <input type="submit" value="상품 등록" />
-      </form>
-    </div>
-    <!-- 공통푸터 -->
-    <%@ include file="../include/footer.jsp" %>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2024 FoodieTree. All rights reserved.</p>
+      </div>
+    </footer>
+    
   </body>
 </html>
