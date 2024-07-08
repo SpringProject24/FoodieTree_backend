@@ -64,6 +64,13 @@
     font-size: 20px;
     line-height: 2;
 }
+
+#reservation-modal #reservation-detail-item #modal-detail{
+    padding: 30px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 2;
+}
 #reservation-modal #modal-store-reservation-details .reservation-detail-item img{
     padding: 20px;
 }

@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage.css">
 <%--    <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">--%>
-
     <link rel="stylesheet" href="/assets/css/reservation/reservation-detail-modal.css">
     <script defer src="/assets/js/reservation.js"></script>
     <style>
@@ -73,18 +72,43 @@
             font-weight: 700;
         }
 
+        .modal .modal-content #modal-details{
+            padding: 30px;
+            text-align: center;
+            font-size: 20px;
+            line-height: 2;
+        }
+
+        button.calendar-button {
+            color: #090909;
+            padding: 0.5em 1.3em;
+            font-size: 14px;
+            border-radius: 0.5em;
+            background: rgba(230, 234, 220, 0.84);
+            cursor: pointer;
+            border: 1px solid #e8e8e8;
+            transition: all 0.3s;
+            box-shadow: 3px 3px 7px #c5c5c5, -3px -3px 7px #ffffff;
+        }
+        button.calendar-button:active {
+            color: #666;
+            box-shadow: inset 4px 4px 3px #c5c5c5, inset -4px -4px 3px #ffffff;
+        }
+
+        .info-box .img-box img{
+            border-radius: 13px;
+        }
+
+        .info-box .info-wrapper img{
+            transform: translateY(-5px);
+            box-shadow: 0 5px 13px rgba(0, 0, 0, 0.2);
+            font-size: 19px;
+        }
+
     </style>
 </head>
 <body>
-
-<header>
-    <div class="container">
-        <div class="logo margarine-regular"><h1>FoodieTree</h1></div>
-        <div class="logo-img">
-            <img src="/assets/img/img_2.png" alt="">
-        </div>
-    </div>
-</header>
+ <%@ include file="../include/header.jsp" %>
 <section class="my-page-area">
     <div class="container">
         <div class="profile">
@@ -122,7 +146,7 @@
                 <div class="info-wrapper reservation">
                     <ul class="reservation-list">
                         <c:forEach var="reservation" items="${reservations}" varStatus="status">
-                            <li id="reservation-${status.index}" class="reservation-item">
+                            <li id="reservation-${status.index}" class="reservation-item" data-reservation-id="${reservation.reservationId}">
                                 <div class="item">
                                     <div class="img-wrapper">
                                         <div class="img-box">
@@ -141,11 +165,24 @@
                                     </div>
                                     <span>${reservation.storeName}</span>
                                 </div>
-                                <div class="item">
-                                    <span>${reservation.status}</span>
-                                </div>
-                                <div class="item">
-                                    <span>${reservation.pickupTime}</span>
+                                <div class="item reservation-status">
+                                    <c:if test="${reservation.status == 'CANCELED'}">
+                                        <span>예약을 취소했어요</span>
+                                        <span>${reservation.cancelReservationAtF}</span>
+                                    </c:if>
+                                    <c:if test="${reservation.status == 'NOSHOW'}">
+                                        <span>미방문하여 예약이 취소됐어요</span>
+                                        <span>${reservation.pickupTimeF}</span>
+                                    </c:if>
+                                    <c:if test="${reservation.status == 'RESERVED'}">
+                                        <span>픽업하러 가는 중이에요!</span>
+                                        <span>${reservation.pickupTimeF}</span>
+                                        <button class="reservation-cancel-btn calendar-button">예약 취소하기</button>
+                                    </c:if>
+                                    <c:if test="${reservation.status == 'PICKEDUP'}">
+                                        <span>픽업을 완료했어요</span>
+                                        <span>${reservation.pickedUpAtF}</span>
+                                    </c:if>
                                 </div>
                             </li>
                         </c:forEach>
@@ -232,18 +269,20 @@
 <!-- 모달 창 -->
 <div id="reservation-modal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>예약 상세 내역</h2>
-        <div id="modal-details"></div>
+        <span class="close"><i class="fas fa-times"></i></span>
+        <div>
+            <div id="modal-details"></div>
+        </div>
     </div>
 </div>
 
 <!-- 모달 창 -->
 <div id="cancel-modal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>취소 수수료 고지</h2>
+        <span class="close"><i class="fas fa-times"></i></span>
+        <div>
         <div id="modal-cancel"></div>
+        </div>
     </div>
 </div>
 

@@ -1,5 +1,6 @@
 // =========== 전역 변수 ==============
 const BASE_URL = "http://localhost:8083";
+// const BASE_URL = window.location.origin;
 
 const $reservationList = document.querySelector('.reservation-list');
 
@@ -47,8 +48,8 @@ function appendReservations(reservations) {
                 <img src="${storeImg}" alt="Store Image"/>
                 <span>${storeName}</span>
                 <span>${status}</span>
-                <span>${statusInfo}</span>
-                ${status === 'RESERVED' ? '<button class="reservation-cancel-btn">예약 취소</button>' : ''}
+                <button>${statusInfo}</button>
+                ${status === 'RESERVED' ? '<button class="reservation-cancel-btn calendar-button">예약 취소</button>' : ''}
             </div>
             `;
         });
@@ -156,7 +157,7 @@ function cancelReservationClickEvent(reservationId) {
                 `;
         // 픽업시간이 1시간 이내라면 취소 수수료 모달 열기
         if (!isCancelAllowed) {
-            document.getElementById('modal-cancel').innerHTML = tagWithFee + `<button id="confirm-cancel-btn">확인</button>`;
+            document.getElementById('modal-cancel').innerHTML = tagWithFee + `<button class="calendar-button" id="confirm-cancel-btn">확인</button>`;
             openModalver2($cancelModal);
 
             document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
@@ -165,7 +166,7 @@ function cancelReservationClickEvent(reservationId) {
             }, { once: true }); // 이벤트가 한 번만 발생하도록 설정
         } else {
             // 그 외에는 바로 취소
-            document.getElementById('modal-cancel').innerHTML = tagWithoutFee + `<button id="confirm-cancel-btn">확인</button>`;
+            document.getElementById('modal-cancel').innerHTML = tagWithoutFee + `<button class="calendar-button" id="confirm-cancel-btn">확인</button>`;
             openModalver2($cancelModal);
 
             document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
@@ -216,7 +217,6 @@ function openModalver2(modal) {
 
 // 모달 열기
 async function openModal(reservationId) {
-
     const res = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
     const reservation = await res.json();
     console.log(reservation);
@@ -236,7 +236,7 @@ async function openModal(reservationId) {
             <p>상태: ${reservation.status}</p>
             <p>${reservation.statusInfo}</p>
             <img src="${reservation.storeImg}" alt="Store Image"/>
-            ${reservation.status === 'RESERVED' ? '<button class="picked-up-btn">픽업 확인 버튼</button>' : '<button style="background-color:gray;">수정 불가</button>'}
+            ${reservation.status === 'RESERVED' ? '<button class="picked-up-btn calendar-button">픽업 확인 버튼</button>' : '<button style="background-color:gray;">수정 불가</button>'}
         </div>
     `;
 
