@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", function() {
           reader.readAsDataURL(file);
       }
 
+
+
       if (files.length > 0) {
           imageUploadLabel.style.display = 'none';
       } else {

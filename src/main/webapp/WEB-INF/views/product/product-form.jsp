@@ -58,6 +58,8 @@
               <option value="7900">7900</option>
             </select>
           </div>
+
+
                     
 
           <button class="btn-approval" type="submit">상품 등록하기</button>
