@@ -133,12 +133,12 @@ main {
   margin-bottom: 100px;
 }
 .btn-approval:hover {
-   background:linear-gradient(to bottom, #77a809 5%, #89c403 100%);
-   background-color:#77a809;
+	background:linear-gradient(to bottom, #77a809 5%, #89c403 100%);
+	background-color:#77a809;
 }
 .btn-approval:active {
-   position:relative;
-   top:1px;
+	position:relative;
+	top:1px;
 }
 
 .info-container{
@@ -152,7 +152,6 @@ main {
   display: flex;
   padding: 20px;
   position: relative;
-  
 }
 
 .related-image1 {
@@ -204,7 +203,6 @@ main {
   border-radius: 10px;
   background-color: #fff;
   border-radius: 10px;
-  
 }
 
 .slides {
@@ -247,3 +245,4 @@ main {
   font-weight: bolder;
   text-align: left;
 }
+

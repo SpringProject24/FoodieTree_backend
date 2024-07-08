@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodieTree</title>
@@ -12,14 +13,67 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage.css">
+<%--    <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">--%>
+
     <link rel="stylesheet" href="/assets/css/reservation/reservation-detail-modal.css">
     <script defer src="/assets/js/reservation.js"></script>
+    <style>
+        @font-face {
+            font-family: 'NIXGONM-Vb';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/NIXGONM-Vb.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /*@font-face {*/
+        /*    font-family: 'Ownglyph_noocar-Rg';*/
+        /*    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-2@1.0/Ownglyph_noocar-Rg.woff2') format('woff2');*/
+        /*    font-weight: normal;*/
+        /*    font-style: normal;*/
+        /*}*/
+        body {
+            font-family: 'NIXGONM-Vb', 'Nanum Gothic', sans-serif;
+            /*font-size: 25px;*/
+        }
+        .my-page-area .container .profile ul li.nav-item a.nav-link.mypage-link{
+            position: relative;
+            top: 50px;
+        }
+        .my-page-area .container .profile ul li.nav-item a.nav-link.edit-link{
+            position: relative;
+            bottom: -90px;
+        }
+
+        .title{
+            padding: 15px 15px 0;
+            margin: 20px 20px 0;
+        }
+
+        .my-page-area .container .info .info-wrapper{
+            width: 979px;
+            margin-left: 36px;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .reservation-item{
+            border-radius: 15px;
+            flex-wrap: wrap;
+            height: 72px;
+            /*width: 90%;*/
+            margin: 0 7px 10px 7px;
+        }
+
+        .stats{
+            margin-top: 40px;
+        }
+
+    </style>
 </head>
 <body>
 
 <header>
     <div class="container">
-        <div class="logo"><h1>FoodieTree</h1></div>
+        <div class="logo margarine-regular"><h1>FoodieTree</h1></div>
         <div class="logo-img">
             <img src="/assets/img/img_2.png" alt="">
         </div>
@@ -29,15 +83,25 @@
     <div class="container">
         <div class="profile">
             <a href="#" id="avatar">
-                <img src="${customerMyPageDto.profileImage ? customerMyPageDto.profileImage : '/assets/img/western.jpg'}"
+                <img src="${customerMyPageDto.profileImage !=null ? customerMyPageDto.profileImage : '/assets/img/western.jpg'}"
                      alt="Customer profile image">
             </a>
             <h2>${customerMyPageDto.nickname}</h2>
             <p>${customerMyPageDto.customerId}</p>
             <ul class="nav">
-                <li class="nav-item"><a class="nav-link" href="mypage">마이페이지</a></li>
-                <li class="nav-item"><a class="nav-link" href="mypage-edit">개인정보수정</a></li>
+                <li class="nav-item"><a class="nav-link mypage-link" href="mypage">마이페이지</a></li>
+                <li class="nav-item"><a class="nav-link edit-link" href="mypage-edit">개인정보수정</a></li>
             </ul>
+            <div class="stats">
+                <div id="carbon" class="stats-box">
+                    <img src="/assets/img/mypage-carbon.png" alt="leaf">
+                    <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
+                </div>
+                <div id="community" class="stats-box">
+                    <img src="/assets/img/mypage-pigbank.png" alt="community">
+                    <div>지금까지 ${stats.money}원을 아꼈어요</div>
+                </div>
+            </div>
         </div>
         <div class="info">
             <div class="info-box">
@@ -143,10 +207,6 @@
                     </ul>
                 </div>
             </div>
-            <div class="stats">
-                <div>${stats.coTwo}kg의 음쓰를 줄였습니다</div>
-                <div>지금까지 ${stats.money}원을 아꼈어요</div>
-            </div>
         </div>
     </div>
 </section>
@@ -168,6 +228,12 @@
         <div id="modal-cancel"></div>
     </div>
 </div>
+
+<script>
+    const customerId = '${sessionScope.login.customerId}';
+</script>
+
+<!-- <%@ include file="../include/footer.jsp" %> -->
 
 </body>
 </html>

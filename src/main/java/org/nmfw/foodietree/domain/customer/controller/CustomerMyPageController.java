@@ -2,10 +2,9 @@ package org.nmfw.foodietree.domain.customer.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Update;
 import org.nmfw.foodietree.domain.customer.dto.resp.*;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,13 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/customer")
 public class CustomerMyPageController {
-    String customerId = "test@gmail.com";
     private final CustomerMyPageService customerMyPageService;
 
     @GetMapping("/mypage")
@@ -30,9 +29,7 @@ public class CustomerMyPageController {
                             , HttpServletRequest request
                             , HttpServletResponse response){
         log.info("/customer/mypage GET");
-
-        // 1. 로그인 되어있는 회원 아이디 가져오기
-//        String customerId = "sji4205@naver.com";
+        String customerId = LoginUtil.getLoggedInUser(session);
         // 2. 데이터베이스에서 해당 회원 데이터 조회하기
         CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
 
@@ -50,12 +47,13 @@ public class CustomerMyPageController {
         return "customer/mypage";
     }
 
-    @GetMapping("/customer-mypage-edit")
+    @GetMapping("/mypage-edit")
     public String editCustomerInfo(HttpSession session,
                                    Model model,
                                    HttpServletRequest request,
                                    HttpServletResponse response) {
         log.info("/customer/customer-mypage-edit-test GET");
+        String customerId = LoginUtil.getLoggedInUser(session);
 
         CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
 
@@ -74,18 +72,19 @@ public class CustomerMyPageController {
     public ResponseEntity<?> updateCustomerInfo(@PathVariable String customerId, @RequestBody List<UpdateDto> updates) {
 
         boolean flag = customerMyPageService.updateCustomerInfo(customerId, updates);
-        return flag? ResponseEntity.ok("Update successful"): ResponseEntity.status(400).body("Update fail");
+        return flag? ResponseEntity.ok(true): ResponseEntity.status(400).body(false);
     }
 
     @PatchMapping("/{customerId}/delete")
     public ResponseEntity<?> deleteCustomerInfo(@PathVariable String customerId, @RequestBody List<UpdateDto> dtos) {
         boolean flag = customerMyPageService.deleteCustomerInfo(customerId, dtos);
-        return flag? ResponseEntity.ok("Delete successful"): ResponseEntity.status(400).body("Delete fail");
+        return flag? ResponseEntity.ok(true): ResponseEntity.status(400).body(false);
     }
 
     @PatchMapping("/{customerId}/update/password")
-    public ResponseEntity<?> updateCustomerPw(@PathVariable String customerId, @RequestBody String newPassword) {
+    public ResponseEntity<?> updateCustomerPw(@PathVariable String customerId, @RequestBody Map<String, String> map) {
+        String newPassword = map.get("newPassword");
         boolean flag = customerMyPageService.updateCustomerPw(customerId, newPassword);
-        return flag? ResponseEntity.ok("password reset successful"): ResponseEntity.status(400).body("reset fail");
+        return flag? ResponseEntity.ok(true): ResponseEntity.status(400).body(false);
     }
 }

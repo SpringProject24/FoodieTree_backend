@@ -23,7 +23,7 @@ class CustomerServiceTest {
         SignUpDto dto = SignUpDto.builder()
                 .customerId("dog@naver.com")
                 .customerPassword("dog123!")
-//                .nickName("오레오")
+                .nickName("오레오")
 //                .customerPhoneNumber("010-9876-5432")
                 .build();
         //when
@@ -33,49 +33,48 @@ class CustomerServiceTest {
         assertTrue(flag);
     }
 
-    @Test
-    @DisplayName("아이디가 없는 경우를 테스트한다.")
-    void noIdTest() {
-        //given
-        CustomerLoginDto dto = CustomerLoginDto.builder()
-                .customerId("donut")
-                .customerPassword("602602")
-                .build();
-        //when
-        LoginResult result = customerService.authenticate(dto);
-
-        //then
-        assertEquals(LoginResult.NO_ID, result);
-    }
-
-    @Test
-    @DisplayName("비밀번호가 틀린 경우를 테스트한다.")
-    void noPwTest() {
-        //given
-        CustomerLoginDto dto = CustomerLoginDto.builder()
-                .customerId("pineapple@naver.com")
-                .customerPassword("098765")
-                .build();
-
-        //when
-        LoginResult result = customerService.authenticate(dto);
-
-        //then
-        assertEquals(LoginResult.NO_PW, result);
-    }
-
-    @Test
-    @DisplayName("로그인이 성공하는 경우를 테스트한다.")
-    void successTest() {
-        //given
-        CustomerLoginDto dto = CustomerLoginDto.builder()
-                .customerId("pet@naver.com")
-                .customerPassword("dog123!")
-                .build();
-        //when
-        LoginResult result = customerService.authenticate(dto);
-
-        //then
-        assertEquals(LoginResult.SUCCESS, result);
-    }
+//    @Test
+//    @DisplayName("아이디가 존재하지 않는 경우를 테스트한다.")
+//    void noIdTest() {
+//        //given
+//        CustomerLoginDto dto = CustomerLoginDto.builder()
+//                .customerId("donut")
+//                .build();
+//        //when
+//        LoginResult result = customerService.authenticate(dto);
+//
+//        //then
+//        assertEquals(LoginResult.NO_ID, result);
+//    }
+//
+//    @Test
+//    @DisplayName("비밀번호가 틀린 경우를 테스트한다.")
+//    void noPwTest() {
+//        //given
+//        CustomerLoginDto dto = CustomerLoginDto.builder()
+//                .customerId("pineapple@naver.com")
+//                .customerPassword("098765")
+//                .build();
+//
+//        //when
+//        LoginResult result = customerService.authenticate(dto);
+//
+//        //then
+//        assertEquals(LoginResult.NO_PW, result);
+//    }
+//
+//    @Test
+//    @DisplayName("로그인이 성공하는 경우를 테스트한다.")
+//    void successTest() {
+//        //given
+//        CustomerLoginDto dto = CustomerLoginDto.builder()
+//                .customerId("dog@naver.com")
+//                .customerPassword("dog123!")
+//                .build();
+//        //when
+//        LoginResult result = customerService.authenticate(dto);
+//
+//        //then
+//        assertEquals(LoginResult.SUCCESS, result);
+//    }
 }

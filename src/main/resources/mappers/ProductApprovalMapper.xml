@@ -8,9 +8,9 @@
     <!-- 상품 컬럼 정보 삽입 -->
     <insert id="productColumn">
         INSERT INTO tbl_product
-        (product_id, store_id, pro_image)
+        (store_id, pro_image)
         VALUES
-        (#{productId}, #{storeId}, #{proImage})
+        (#{storeId}, #{proImage})
     </insert>
 
     <!-- 업체 컬럼 정보 삽입 -->

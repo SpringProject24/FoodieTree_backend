@@ -8,13 +8,15 @@ import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.nmfw.foodietree.domain.customer.service.LoginResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -22,9 +24,11 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @RequiredArgsConstructor
 public class CustomerController {
+
     @Value("${env.kakao.api.key:default}")
     private String kakaoApiKey;
     private final CustomerService customerService;
+
 
     //회원가입 양식 열기
     @GetMapping("/sign-up")
@@ -34,64 +38,95 @@ public class CustomerController {
         return "/customer/sign-up";
     }
 
-    //회원가입 요청 처리
+    // 회원가입 요청 처리
     @PostMapping("/sign-up")
-    public String signUp(@Validated SignUpDto dto) {
-        log.info("/customer/sing-up POST ");
-        log.debug("parameter: {}", dto);
+    public String signUp(@Validated SignUpDto dto, BindingResult result) {
+        if (result.hasErrors()) {
+            log.info("{}", result);
+            return "redirect:/customer/sign-up";
+        }
 
         boolean flag = customerService.join(dto);
-
-        return flag ? "redirect:/product/mainpage" : "redirect:/customer/sign-up";
-        //회원가입 성공시 가게 주소 입력하는 소비자 메인창으로 이동
+        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
     }
 
-    // 아이디(이메일) 중복 검사
+    // 아이디 중복검사
     @GetMapping("/check")
     @ResponseBody
     public ResponseEntity<?> check(String keyword) {
+        log.info("keyword : {}", keyword);
         boolean flag = customerService.checkIdentifier(keyword);
         log.debug("중복체크 결과? {}", flag);
-        return ResponseEntity
-                .ok()
-                .body(flag);
+        return ResponseEntity.ok().body(flag);
     }
 
+    // 로그인 양식 열기
+    @GetMapping("/sign-in")
+    public String signIn(HttpSession session) {
 
-//    //로그인 양식 열기(조회)
-//    @GetMapping("/sign-in")
-//    public String signIn() {
-//        log.info("customer/sign-in GET : forwarding to sign-in.jsp");
-//        return "sign-in";
-//    }
+       if(LoginUtil.isLoggedIn(session)) {
+           return"redirect:/";
+       }
+
+        log.info("/customer/sign-in GET : forwarding to sign-in.jsp");
+        return "/sign-in";
+    }
+
+    //로그인 요청 처리
+    @PostMapping("/sign-in")
+    public String signIn(CustomerLoginDto dto,
+                         RedirectAttributes ra,
+                         HttpServletRequest request,
+                         HttpServletResponse response) {
+        log.info("/customer/sign-in POST");
+        log.debug("parameter: {}", dto);
 
 
-//    //로그인 요청 처리
-//    @PostMapping("/sign-in")
-//    public String signIn(CustomerLoginDto dto,
-//                         RedirectAttributes ra, //리다이렉트 후에도 메시지 유지
-//                         HttpServletRequest request) { //HTTP 요청 정보 담고 있는 객체(세션)
-//        log.info("/customer/sign-in POST");
-//
-//        // dto가 null일 경우에 대한 예외 처리
-//        if (dto == null) {
-//            log.warn("CustomerLoginDto is null");
-//            ra.addFlashAttribute("error", "Invalid login details");
-//            return "redirect:/customer/sign-in";
-//        }
-//
-//        log.debug("parameter: {}", dto);
-//
-//        HttpSession session = request.getSession();
-//        LoginResult result = customerService.authenticate(dto, session);
-//
-//        ra.addFlashAttribute("result", result);
-//
-//        //로그인 성공 시 가게 주소 입력하는 소비자 메인창으로 이동
-//        if(result == LoginResult.SUCCESS) {
-//            return "redirect:/";
-//        }
-//        //로그인 실패시 다시 로그인 페이지 랜더링
-//        return "redirect:/customer/sign-in";
-//    }
+        // 세션 얻기
+        HttpSession session = request.getSession();
+        System.out.println("\nsession = " + session);
+
+        LoginResult result = customerService.authenticate(dto, session, response);
+        System.out.println("\nresult = " + result);
+
+
+        ra.addFlashAttribute("result", result);
+
+        if (result == LoginResult.SUCCESS) { //참
+            // 혹시 세션에 리다이렉트 URL이 있다면
+            String redirect = (String) session.getAttribute("redirect");
+            System.out.println("\nredirect = " + redirect);
+
+            if (redirect != null) {
+                session.removeAttribute("redirect");
+                return "redirect:" + redirect;
+            }
+            return "redirect:/"; // 로그인 성공시
+        }
+        return "redirect:/customer/sign-in?message=signin-fail";
+    }
+
+    @GetMapping("/sign-out")
+    public String signOut(HttpServletRequest request,
+                          HttpServletResponse response) {
+        // 세션 구하기
+       HttpSession session = request.getSession();
+
+        // 자동로그인 상태인지 확인
+        if(LoginUtil.isAutoLogin(request)) {
+            // 쿠키를 제거하고, DB에도 자동로그인 관련데이터를 원래대로 해놓음
+            customerService.autoLoginClear(request, response);
+
+        }
+
+        // 세션에서 로그인 기록 삭제
+        session.removeAttribute("login");
+
+        // 세션을 초기화 (reset)
+        session.invalidate();
+
+        // 홈으로 보내기
+        return "redirect:/";
+    }
+
 }
