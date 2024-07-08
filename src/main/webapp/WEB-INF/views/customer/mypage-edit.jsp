@@ -98,7 +98,7 @@
                         <a href="#" id="avatar" class="before">
                             <i class="fa-solid fa-pen-to-square"></i>
                             <img
-                                    src="${customerMyPageDto.profileImage ? customerMyPageDto.profileImage : '/assets/img/western.jpg'}"
+                                    src="${customerMyPageDto.profileImage !=null? customerMyPageDto.profileImage : '/assets/img/western.jpg'}"
                                     alt="Customer profile image">
                         </a>
                         <button id="profile_btn" class="btn calendar-button" type="submit" value="프로필 변경"
@@ -200,6 +200,7 @@
 </div>
 
 <script>
+    const BASE_URL = "http://localhost:8083";
     const customerId = "${sessionScope.login.customerId}";
     const avatar = document.getElementById('avatar');
     const profileImage = document.getElementById('profileImage');
@@ -221,9 +222,9 @@
 
     const requestProfileImg = async () => {
         const formData = new FormData();
-        formData.append('profileImage', profileImage.files[0]);
+        formData.append('storeImg', profileImage.files[0]);
         //   비동기 요청
-        const response = await fetch('/customer/mypage-edit', {
+        const response = await fetch(`\${BASE_URL}/customer/update/img`, {
             method: 'POST',
             body: formData
         });

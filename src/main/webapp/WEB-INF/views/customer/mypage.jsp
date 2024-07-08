@@ -146,7 +146,7 @@
                 <div class="info-wrapper reservation">
                     <ul class="reservation-list">
                         <c:forEach var="reservation" items="${reservations}" varStatus="status">
-                            <li id="reservation-${status.index}" class="reservation-item" data-reservation-id="${reservation.reservationId}">
+                            <li id="reservation-${status.index}" class="reservation-item ${reservation.status}" data-reservation-id="${reservation.reservationId}">
                                 <div class="item">
                                     <div class="img-wrapper">
                                         <div class="img-box">

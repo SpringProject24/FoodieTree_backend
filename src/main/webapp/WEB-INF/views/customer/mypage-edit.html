@@ -164,6 +164,7 @@
   const profileImage = document.getElementById('profileImage');
   const $profileBtn = document.getElementById('profile_btn');
 
+
   avatar.addEventListener('click', () => {
     profileImage.click();
   });
@@ -182,7 +183,7 @@
     const formData = new FormData();
     formData.append('profileImage', profileImage.files[0]);
     //   비동기 요청
-    const response = await fetch('/customer/mypage-edit', {
+    const response = await fetch('/customer/mypage/update/img', {
       method: 'POST',
       body: formData
     });
