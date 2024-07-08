@@ -1,3 +1,6 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %> <%@ taglib
+prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -5,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FoodieTree for 가게</title>
     <link rel="stylesheet" href="/assets/css/common.css" />
-    <link rel="stylesheet" href="/assets/css/product/productApproval-form.css" />
-    <script src="/assets/js/product/productApproval-form.js"></script>
+    <link rel="stylesheet" href="/assets/css/productApproval-form.css" />
+    <script src="../../../../resources/static/assets/js/product/productApproval.js"></script>
   </head>
   <body>
     <header>
@@ -24,11 +27,11 @@
 
     <main>
       <section class="registration">
-
+        
         <h2>푸디트리와 지구를 위한 한걸음 함께 해보아요!</h2>
 
         <form
-          action="/store/product"
+          action="/store/mypage/main"
           method="post"
           enctype="multipart/form-data"
         >
@@ -51,12 +54,13 @@
           </div>
           <div class="form-group">
             <label for="price">상품 가격 :</label>
-            <select id="price" name="price" required>
-              <option value="">상품 가격을 선택하세요</option>
-              <option value="3900">3900</option>
-              <option value="5900">5900</option>
-              <option value="7900">7900</option>
-            </select>
+            <input
+              type="text"
+              id="price"
+              name="price"
+              placeholder="가게 주소는 필수 입력 값입니다."
+              required
+            />
           </div>
                     
 
@@ -64,6 +68,8 @@
         </form>
       </section>
     </main>
+
+
     <footer>
       <div class="container">
         <p>&copy; 2024 FoodieTree. All rights reserved.</p>
