@@ -17,6 +17,7 @@
         tbl_store s
         ON
         p.store_id = s.store_id
+        GROUP BY s.store_id
     </select>
 
     <!-- 선호 음식 카테고리별 제품 조회 -->

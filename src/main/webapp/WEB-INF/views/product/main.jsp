@@ -459,7 +459,7 @@
 <script>
     const BASE_URL = window.location.origin;
   <%--const customerId = `${sessionScope.login.customerId}`;--%>
-  const customerId = "test@gmail.com";
+  const customerId = `${sessionScope.login.customerId}`;
   document.querySelector('body').addEventListener('click', e => {
     if (!e.target.matches('.swiper-slide *')) {
       return;
