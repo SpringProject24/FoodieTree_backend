@@ -89,7 +89,7 @@
     <div class="container">
         <div class="profile">
             <a href="#" id="avatar">
-                <img src="${storeInfo.storeImg != null? storeInfo.storeImg : '/assets/img/western.jpg'}"
+                <img src="${storeInfo.storeImg != null? storeInfo.storeImg : '/assets/img/defaultImage.jpg'}"
                      alt="store image">
             </a>
             <h2>${storeInfo.storeName}</h2>
@@ -126,7 +126,7 @@
                                     <div class="item">
                                         <div class="img-wrapper">
                                             <div class="img-box">
-                                                <img src="${reservation.profileImage != null ? reservation.profileImage : "/assets/img/western.jpg"}"
+                                                <img src="${reservation.profileImage != null ? reservation.profileImage : "/assets/img/defaultImage.jpg"}"
                                                      alt="profile Image"/>
                                             </div>
                                             <c:if test="${reservation.status == 'CANCELED'}">

@@ -148,7 +148,7 @@
     <div class="container">
         <div class="profile">
             <a href="#" id="avatar">
-                <img src="${customerMyPageDto.profileImage !=null ? customerMyPageDto.profileImage : '/assets/img/western.jpg'}"
+                <img src="${customerMyPageDto.profileImage !=null ? customerMyPageDto.profileImage : '/assets/img/defaultImage.jpg'}"
                      alt="Customer profile image">
             </a>
             <h2>${customerMyPageDto.nickname}</h2>
@@ -186,7 +186,7 @@
                                 <div class="item">
                                     <div class="img-wrapper">
                                         <div class="img-box">
-                                            <img src="${reservation.storeImg != null ? reservation.storeImg : "/assets/img/western.jpg"}"
+                                            <img src="${reservation.storeImg != null ? reservation.storeImg : "/assets/img/defaultImage.jpg"}"
                                                  alt="Store Image"/>
                                         </div>
                                         <c:if test="${reservation.status == 'CANCELED'}">

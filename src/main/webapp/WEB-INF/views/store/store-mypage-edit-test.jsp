@@ -187,7 +187,7 @@
                         <a href="#" id="avatar" class="before">
                             <i class="fa-solid fa-pen-to-square"></i>
                             <img
-                                    src="${storeInfo.storeImg != null ? storeInfo.storeImg : '/assets/img/western.jpg'}"
+                                    src="${storeInfo.storeImg != null ? storeInfo.storeImg : '/assets/img/defaultImage.jpg'}"
                                     alt="Customer profile image">
                         </a>
                         <button id="profile_btn" class="btn calendar-button" type="submit" value="프로필 변경"
