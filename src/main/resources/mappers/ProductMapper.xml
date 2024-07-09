@@ -112,7 +112,7 @@
         s.category,
         s.address,
         s.price,
-        p.product_cnt,
+
         p.pro_image,
         p.pickup_time
         FROM

@@ -299,9 +299,9 @@
 
             <c:forEach var="item" items="${findByArea}">
                 <div class="swiper-slide">
-                    <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
-                            <img src="/assets/img/western.jpg" alt="">
+                            <img src="/assets/img/western.jpg" alt="fcvgyhhyjzxgtx">
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
@@ -315,33 +315,7 @@
                 </div>
             </c:forEach>
 
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
+            
         </div>
     </div>
 </section>
@@ -364,14 +338,13 @@
 
             <c:forEach var="item" items="${findByLike}">
                 <div class="swiper-slide">
-                    <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
-                            <img src="
-                /assets/img/western.jpg" alt="">
+                            <img src="/assets/img/western.jpg" alt="fcvgyhhyjzxgtx">
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
-                            <p>픽업 시간 : ${item.formattedPickupTime}</p>
+                            <p>픽업시간 : ${item.formattedPickupTime}</p>
                             <div class="wrapper">
                                 <p>평점 / 거리</p>
                                 <p>가격 : ${item.price}</p>
@@ -575,16 +548,19 @@
                 fetch(`/product/details/\${productId}`)
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
                         // Update the modal content with fetched data
                         document.getElementById('product-cnt').textContent = `${data.productCnt}개 남음`;
                         document.getElementById('store-name').textContent = data.storeName;
                         document.getElementById('prod-category').querySelector('span').textContent = data.category;
                         document.getElementById('pickup-time').querySelector('span').textContent = data.pickupTime;
-                        document.getElementById('prod-price').textContent = `${data.price} 원`;
-                        document.getElementById('store-area').textContent = data.storeArea;
+                        document.getElementById('prod-discount').textContent = data.price ;
+                        document.getElementById('store-area').textContent = data.address;
     
                         // Update the store image
+                        const imgs = document.getElementsByClassName('store-img-box').querySelector('img');
                         const storeImg = document.getElementById('store-img');
+                        imgs.src = data.storeImg;
                         storeImg.src = data.storeImg;
                         storeImg.alt = data.storeName;
     

@@ -94,6 +94,8 @@ public class ProductMainPageController {
     public ResponseEntity<ProductDto> getProductDetails(@PathVariable String productId) {
         log.info("Fetching product details for productId: {}", productId);
         ProductDto product = productMainPageService.getProductById(productId);
+        log.info("\n\n\n\n 널인가? :{}", product.getStoreImg());
+
         if (product != null) {
             return ResponseEntity.ok(product);
         } else {
