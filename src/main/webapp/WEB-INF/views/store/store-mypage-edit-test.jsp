@@ -10,11 +10,25 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">
-    <script defer src="/assets/js/store/store-mypage-edit.js"></script>
-
+    <script defer type="module" src="/assets/js/store/store-mypage-edit.js"></script>
+    <link rel="stylesheet" href="/assets/css/store/store-mypage-edit.css">
     <style>
+
+        @font-face {
+            font-family: 'NIXGONM-Vb';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/NIXGONM-Vb.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'NIXGONM-Vb', 'Nanum Gothic', sans-serif;
+            /*font-size: 25px;*/
+        }
 
         .modal {
             display: none; /* 모달을 기본적으로 숨깁니다. */
@@ -61,24 +75,41 @@
 <section class="my-page-area">
     <div class="container">
         <div class="profile">
-            <h2>${customerMyPageDto.customerId}</h2>
-            <li class="nav-item"><a class="nav-link" href="/store/mypage/main">마이페이지</a></li>
-            <li class="nav-item"><a class="nav-link" href="/store/mypage/edit/main">개인정보수정</a></li>
+            <ul class="nav">
+                <li class="nav-item"><a class="nav-link mypage" href="/store/mypage/main">마이페이지</a></li>
+                <li class="nav-item"><a class="nav-link edit" href="/store/mypage/edit/main">개인정보수정</a></li>
+            </ul>
             <div class="stats">
-                <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
-                <div>지금까지 ${stats.customerCnt}명의 손님을 만났어요</div>
+                <div id="carbon" class="stats-box">
+                    <img src="/assets/img/mypage-carbon.png" alt="leaf">
+                    <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
+                </div>
+                <div id="community" class="stats-box">
+                    <img src="/assets/img/mypage-community.png" alt="community">
+                    <div>지금까지 ${stats.customerCnt}명의 손님을 만났어요</div>
+                </div>
             </div>
         </div>
         <div class="edit">
             <div class="edit-box">
                 <div class="title">
-                    <h3 class="title-text">내프로필</h3>
+                    <h3 class="title-text">
+                        <span>
+                        내 프로필
+                        </span>
+                    </h3>
                 </div>
                 <div class="edit-wrapper">
                     <div class="input-area">
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-user"></i></div>
-                            <div>${storeInfo.storeName}</div>
+                            <div>상호명</div>
+                            <div id="store-name-mypage-edit">${storeInfo.storeName}</div>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="icon"><i class="fa-solid fa-user"></i></div>
+                            <div>이메일</div>
+                            <div id="store-id-mypage-edit">${storeInfo.storeId}</div>
                         </div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="far fa-clock"></i></div>
@@ -104,53 +135,62 @@
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-user"></i></div>
                             <div>기본 수량 값
-                                <label>
-                                    <input id="product-cnt-input" type="number" value="${storeInfo.productCnt}" min="1"/>
-                                </label>
-                                <i class="product-cnt fa-regular fa-square-check"
-                                   style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                                <span id="product-count-move">
+                                    <label >
+                                        <input id="product-cnt-input" type="number" value="${storeInfo.productCnt}" min="1"/>
+                                    </label>
+                                    <i class="product-cnt fa-regular fa-square-check"
+                                       style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                                </span>
                             </div>
                         </div>
                         <div id="product-cnt-error-message" style="display: none; color: red;"></div>
 
                         <div class="input-wrapper">
-                            <i class="fas fa-phone-alt"></i>
+                            <i class="fas fa-phone-alt icon"></i>
                             <div>가게 전화번호
-                                <label>
-                                    <input id="business-number-input" value="${storeInfo.businessNumber}" min="1"/>
-                                </label>
-                                <i class="business-num fa-regular fa-square-check"
-                                   style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                                <span id="store-phone-number-move">
+                                    <label>
+                                        <input id="business-number-input" value="${storeInfo.businessNumber}" min="1"/>
+                                    </label>
+                                    <i class="business-num fa-regular fa-square-check"
+                                       style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                                </span>
                             </div>
                         </div>
                         <div id="business-num-error-message" style="display: none; color: red;"></div>
 
 
                         <div class="input-wrapper">
-                            <i class="fas fa-dollar-sign"></i>
-                            <select id="price">
-                                <option value="3900">3900</option>
-                                <option value="5900">5900</option>
-                                <option value="7900">7900</option>
-                            </select>
-                            <i class="price-update fa-regular fa-square-check"
-                                                 style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                            <i class="fas fa-dollar-sign icon"></i>
+                            <div id="special-box-price-des">
+                            스페셜박스 가격
+                            </div>
+                            <span id="special-box-price-move">
+                                <select id="price">
+                                    <option value="3900">3900</option>
+                                    <option value="5900">5900</option>
+                                    <option value="7900">7900</option>
+                                </select>
+                                <i class="price-update fa-regular fa-square-check"
+                                                     style="color: #45a049; font-size: 25px; cursor: pointer"></i>
+                            </span>
                         </div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-key"></i></div>
-                            <button class="btn" id="reset-pw-btn">비밀번호 재설정</button>
+                            <button class="btn calendar-button" id="reset-pw-btn">비밀번호 재설정</button>
                         </div>
                     </div>
-                    <div class="image-wrapper">
+                    <div id="store-mypage-image-edit" class="image-wrapper">
                         <input type="file" name="profileImage" id="profileImage" accept="image/*"
                                style="display: none;">
                         <a href="#" id="avatar" class="before">
                             <i class="fa-solid fa-pen-to-square"></i>
                             <img
-                                    src="${storeInfo.storeImg != null ? storeInfo.storeImg : '/assets/img/western.jpg'}"
+                                    src="${storeInfo.storeImg != null ? storeInfo.storeImg : '/assets/img/defaultImage.jpg'}"
                                     alt="Customer profile image">
                         </a>
-                        <button id="profile_btn" class="btn" type="submit" value="프로필 변경"
+                        <button id="profile_btn" class="btn calendar-button" type="submit" value="프로필 변경"
                                 style="display: none;">이미지 변경
                         </button>
                     </div>
@@ -167,12 +207,12 @@
         <h2>비밀번호 재설정</h2>
         <div id="emailStep">
             <p>인증번호를 받으세요.</p>
-            <button id="sendVerificationCodeBtn" onclick="sendVerificationCode()">인증번호 받기</button>
+            <button id="sendVerificationCodeBtn">인증번호 받기</button>
         </div>
         <div id="codeStep" class="hidden">
             <p>인증번호를 입력하세요.</p>
             <input type="text" id="verificationCode" maxlength="6">
-            <button onclick="verifyCode()">인증하기</button>
+            <button id="verifyCodeBtn">인증하기</button>
             <div id="verificationResult"></div>
         </div>
         <div id="countdown"></div>
@@ -185,12 +225,13 @@
         <span class="close" onclick="closeNewPwModal()">&times;</span> <!-- X 버튼 추가 -->
         <h2>새 비밀번호 설정</h2>
         <div class="pass">
-            <input id="new-password-input" type="password" name="password" placeholder="새 비밀번호를 입력해주세요" onkeyup="debounceCheckPassword()">
+            <input id="new-password-input" type="password" name="password" placeholder="새 비밀번호를 입력해주세요">
         </div>
         <div class="pass-check">
-            <input id="new-password-check" type="password" name="password-chk" placeholder="새 비밀번호를 다시 입력해주세요" onkeyup="debounceCheckPassword()">
+            <h2>입력하신 비밀번호를 재입력해주세요!</h2>
+            <input id="new-password-check" type="password" name="password-chk" placeholder="새 비밀번호를 다시 입력해주세요">
             <div class="wrapper">
-                <button id="submit-new-pw" onclick="updatePassword()" disabled>비밀번호 재설정하기</button>
+                <button id="submit-new-pw" disabled>비밀번호 재설정하기</button>
             </div>
         </div>
         <div id="password-match-status"></div> <!-- 비밀번호 일치 여부 표시 -->
@@ -198,6 +239,7 @@
 </div>
 
 <script>
+    const customerId = '${sessionScope.login.customerId}';
     const avatar = document.getElementById('avatar');
     const storeImg = document.getElementById('profileImage');
     const $ImgBtn = document.getElementById('profile_btn');

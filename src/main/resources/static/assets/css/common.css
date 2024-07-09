@@ -26,7 +26,6 @@ a {
 
 body {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    font-size: 14px;
     margin: 0;
     padding: 0;
 }
@@ -43,6 +42,7 @@ header {
     border-bottom-style: solid;
     border-color: #FFF;
     border-width: 2px;
+
     
 
     color: var(--header-font-color);
@@ -67,10 +67,17 @@ header .container {
 }
 
 header .logo {
-    font-size: 24px;
+    font-size: 30px;
     font-weight :900;
     color: #eef2e3;
-    src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');
+    /*src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');*/
+    padding: 0px 55px 0px 0px;
+  }
+
+.margarine-regular {
+    font-family: "Margarine", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 header .logo-img {
@@ -84,8 +91,6 @@ header .logo-img img {
     object-fit: cover;
 }
 
-/*
-/* 헤더시작 */
 
 .wrapper-header {
   display: flex;
@@ -94,7 +99,6 @@ header .logo-img img {
 }
 
 a.button {
-
   display: block;
   position: relative;
   float: left;
@@ -120,7 +124,6 @@ a.button {
 }
 
 
-
 header .signup, .signin {
   /* background-color: white; */
   color: var(--header-font-color);
@@ -130,10 +133,6 @@ header .signup, .signin {
 }
 
 /* 헤더 끝 */
-*/
-
-
-
 
 
 .img-box {
@@ -157,6 +156,16 @@ header .signup, .signin {
     transition: transform 0.5s;
 }
 
+.jua-regular {
+    font-family: "Jua", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.search span{
+    /*font-weight: 200;*/
+}
+
 
 
 /* 기존 푸터 (삭제예정) */
@@ -173,39 +182,46 @@ header .signup, .signin {
 
 /* 새로운 푸터 */
 footer {
-    height: 300px; /* 푸터의 고정된 높이를 설정 */
+    height: 400px; /* 푸터의 고정된 높이를 설정 */
     background-color: #2a6f2b;;
     color: beige;
   }
-  
-  .big-title {
-    font-size: 100pt;
-    font-weight: 1000;
-    /* font-family: 'Roboto', sans-serif;  */
-    margin-bottom: 30px;
-    padding-top: 10px;
-    text-align: center; /* 텍스트 수평 정렬 */
-    letter-spacing: 1px; /* 글자 사이 간격 조절 */
-    src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');
-  }
-  
-  .custom_link_all {
-    display: flex;
-    justify-content: center; /* 모든 항목을 가로로 중앙 정렬 */
-    align-items: center; /* 모든 항목을 수직 중앙 정렬 */
-    gap: 20px; /* 각 항목 사이의 간격을 설정 */
-  }
-  .custom_link_all a {
-    text-decoration: none; /* 링크의 기본 밑줄을 제거 */
-    color: inherit; /* 부모 요소의 색상을 상속 */
-  }
-  .custom_link_all a p {
-    margin: 0;
-    padding-top: 0px;
-  }
-  
-  .footer-text {
-    text-align: center;
-    margin-top: 10px; /* margin-top 설정 */
-  }
 
+.francois-one-regular {
+    font-family: "Francois One", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.big-title {
+  font-size: 150pt;
+  font-weight: 1000;
+  /* font-family: 'Roboto', sans-serif;  */
+  margin-bottom: 30px;
+  padding-top: 10px;
+  text-align: center; /* 텍스트 수평 정렬 */
+  letter-spacing: 1px; /* 글자 사이 간격 조절 */
+  /*src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');*/
+}
+
+.custom_link_all {
+  display: flex;
+  justify-content: center; /* 모든 항목을 가로로 중앙 정렬 */
+  align-items: center; /* 모든 항목을 수직 중앙 정렬 */
+  gap: 20px; /* 각 항목 사이의 간격을 설정 */
+}
+
+.custom_link_all a {
+  text-decoration: none; /* 링크의 기본 밑줄을 제거 */
+  color: inherit; /* 부모 요소의 색상을 상속 */
+}
+
+.custom_link_all a p {
+  margin: 0;
+  padding-top: 0px;
+}
+
+.footer-text {
+  text-align: center;
+  margin-top: 10px; /* margin-top 설정 */
+}

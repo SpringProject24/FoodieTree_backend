@@ -24,7 +24,7 @@ document.getElementById('update-nickname').addEventListener('click', async (e) =
 
 document.getElementById('update-phone').addEventListener('click', async (e) => {
     const $parent = e.target.closest('.input-wrapper');
-    const $id = $parent.querySelector('#customer-phone-number');
+    const $id = $parent.querySelector('#customer_phone_number');
     const res = await fetchUpdates($id.id, $id.value);
     if (res) {
         alert('휴대폰번호가 변경되었습니다.');

@@ -54,7 +54,7 @@
     <update id="updateAutoLogin">
         UPDATE tbl_customer
         SET session_id = #{sessionId}, limit_time = #{limitTime}
-        WHERE customer_id = #{customerId}
+        WHERE customer_id = #{id}
     </update>
     
     <select id="findCustomerBySession" resultType="customer">

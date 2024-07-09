@@ -10,9 +10,11 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://fonts.googleapis.com/css2?family=Francois+One&family=Margarine&family=Nanum+Gothic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">
     <script type="module" src="/assets/js/customer/mypage-edit-event.js" defer></script>
+
     <style>
         .modal {
             display: none; /* 모달을 기본적으로 숨깁니다. */
@@ -45,17 +47,31 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        .modal-content .close{
+            top: 304px;
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 769px;
+        }
+
+        .modal-content h2 {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-<header>
-    <div class="container">
-        <div class="logo"><h1>FoodieTree</h1></div>
-        <div class="logo-img">
-            <img src="/assets/img/img_2.png" alt="logo">
+    <header>
+        <div class="container">
+            <div a href="/" class="logo margarine-regular">FoodieTree</div></a>
+            <div class="logo-img">
+                <img src="/assets/img/img_2.png" alt="Logo">
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 <section class="my-page-area">
     <div class="container">
         <div class="profile">
@@ -81,7 +97,7 @@
                         </div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-phone"></i></div>
-                            <input type="text" id="customer-phone-number"
+                            <input type="text" id="customer_phone_number"
                                    value="${customerMyPageDto.customerPhoneNumber}">
                             <div class="icon" id="update-phone"><i class="fa-regular fa-square-check"
                                                                    style="color: #45a049; font-size: 25px; cursor: pointer"></i>
@@ -89,7 +105,7 @@
                         </div>
                         <div class="input-wrapper">
                             <div class="icon"><i class="fa-solid fa-key"></i></div>
-                            <button class="btn" id="update-pass-btn">비밀번호 재설정</button>
+                            <button class="btn calendar-button" id="update-pass-btn">비밀번호 재설정</button>
                         </div>
                     </div>
                     <div class="image-wrapper">
@@ -98,10 +114,10 @@
                         <a href="#" id="avatar" class="before">
                             <i class="fa-solid fa-pen-to-square"></i>
                             <img
-                                    src="${customerMyPageDto.profileImage ? customerMyPageDto.profileImage : '/assets/img/western.jpg'}"
+                                    src="${customerMyPageDto.profileImage !=null? customerMyPageDto.profileImage : '/assets/img/defaultImage.jpg'}"
                                     alt="Customer profile image">
                         </a>
-                        <button id="profile_btn" class="btn" type="submit" value="프로필 변경"
+                        <button id="profile_btn" class="btn calendar-button" type="submit" value="프로필 변경"
                                 style="display: none;">이미지 변경
                         </button>
                     </div>
@@ -169,7 +185,7 @@
         <h2>비밀번호 재설정</h2>
         <div id="step-email">
             <p>인증번호를 받으세요.</p>
-            <button id="send-verification-code-btn">인증번호 받기</button>
+            <button id="send-verification-code-btn" class="yellow-click">인증번호 받기</button>
         </div>
         <div id="step-code" class="hidden">
             <p>인증번호를 입력하세요.</p>
@@ -200,6 +216,7 @@
 </div>
 
 <script>
+    const BASE_URL = "http://localhost:8083";
     const customerId = "${sessionScope.login.customerId}";
     const avatar = document.getElementById('avatar');
     const profileImage = document.getElementById('profileImage');
@@ -221,9 +238,9 @@
 
     const requestProfileImg = async () => {
         const formData = new FormData();
-        formData.append('profileImage', profileImage.files[0]);
+        formData.append('storeImg', profileImage.files[0]);
         //   비동기 요청
-        const response = await fetch('/customer/mypage-edit', {
+        const response = await fetch(`\${BASE_URL}/customer/update/img`, {
             method: 'POST',
             body: formData
         });
@@ -246,6 +263,6 @@
     });
 </script>
 <!-- 공통푸터 -->
-<%@ include file="include/footer.jsp" %> 
+<%@ include file="../include/footer.jsp" %>
 </body>
 </html>

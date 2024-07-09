@@ -1,60 +1,158 @@
 #calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-}
-
-.calendar-header {
-    display: contents;
-}
-
-.calendar-day-header, .calendar-day, .calendar-day-empty {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-}
-
-.calendar-day-header {
-    font-weight: bold;
-}
-
-.today {
-    background-color: yellow;
-}
-
-#schedule {
+    margin: 0;
     font-size: 20px;
     width: 80%;
     text-align: center;
-    margin: auto;
     height: 80%;
     line-height: 2;
 }
 
-.calendar-day.holiday {
-    background-color: #a81313; /* 휴무일로 지정된 날짜의 배경색 */
-    border: 3px solid #c50a0a; /* 테두리 스타일 */
-    color: #a81313; /* 텍스트 색상 */
+.calendar-header {
+    display: contents;
+    line-height: 1;
+
+}
+
+.calendar-day-header, .calendar-day, .calendar-day-empty {
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+    height: 72px;
+    width: 90px;
+}
+
+.calendar-day-header {
+    font-weight: bold;
+    height: 50px;
+}
+
+
+
+#calendar .calendar-day.holiday {
+    background-color: rgba(234, 97, 42, 0.5); /* 휴무일로 지정된 날짜의 배경색 */
+    /*border: 3px solid #EA612A; !* 테두리 스타일 *!*/
+    color: #fdfaf6; /* 텍스트 색상 */
 }
 
 .sunday{
-    color: red;
+    color: #E43414;
 }
 
-.today {
-    background-color: #f0f0f0; /* Example background color for today's date */
-}
-
-.circle {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    border-radius: 50%;
-    background-color: rgba(128, 128, 0, 0.78); /* Example circle color */
+#calendar .calendar-day.today {
+    /*background-color: #f0f0f0; !* Example background color for today's date *!*/
+    background-color: rgba(55, 112, 49, 0.58); /* Example circle color */
     color: white;
 }
+
+/*.circle {*/
+/*    display: inline-block;*/
+/*    width: 35px;*/
+/*    height: 35px;*/
+/*    line-height: 30px;*/
+/*    text-align: center;*/
+/*    border-radius: 40%;*/
+/*    background-color: #276221; !* Example circle color *!*/
+/*    color: white;*/
+/*}*/
 
 .calendar-day-empty{
     opacity: 0.4;
 }
+
+#product-amount-adjust-btn{
+    display: flex;
+    justify-content: center;
+}
+
+#product-amount-adjust-btn button{
+
+    margin: 15px;
+}
+#modal-product-count-details{
+    font-size: 20px;
+}
+#product-update-count{
+    font-size: 25px;
+    font-weight: 700;
+    margin-top: 24px;
+}
+#modal-product-count-details .product-add-item>*{
+    padding: 10px;
+}
+
+#decrease-btn,#increase-btn{
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+}
+
+button.yellow-click {
+    border-radius: 8px;
+    height: 40px;
+    border: none;
+    background: #ffcc00;
+    /* Changed color to yellow */
+    color: #333;
+    /* Changed text color to dark gray */
+    padding: 15px;
+    box-shadow: 0 0.7065919983928324px 0.7065919983928324px -0.625px #00000026,
+    0 1.8065619053231785px 1.8065619053231785px -1.25px #00000025,
+    0 3.6217592146567767px 3.6217592146567767px -1.875px #00000023,
+    0 6.8655999097303715px 6.8655999097303715px -2.5px #00000020,
+    0 13.646761411524492px 13.646761411524492px -3.125px #0000001b,
+    0 30px 30px -3.75px #0000000d;
+    font-weight: bold;
+    font-family: Montserrat;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: 150ms ease-in-out;
+}
+
+button.yellow-click:active {
+    scale: 0.95;
+    background: #333;
+    /* Changed background color to dark gray */
+    color: #ffcc00;
+    /* Changed text color to yellow */
+    box-shadow: rgba(0, 0, 0, 0.26) 0px 0.637473px 1.14745px -1.125px,
+    rgba(0, 0, 0, 0.24) 0px 1.93094px 3.4757px -2.25px,
+    rgba(0, 0, 0, 0.192) 0px 5.10423px 9.18761px -3.375px,
+    rgba(0, 0, 0, 0.03) 0px 16px 28.8px -4.5px;
+}
+
+#update-btn.yellow-click{
+    font-size: 18px;
+    margin-top: 15px;
+    margin-left: 96px;
+    height: 50px;
+    padding: 20px;
+}
+
+#calendar-section .day-description #holiday-description {
+    top: 170px;
+    right: 200px;
+}
+#calendar-section .day-description #today-description{
+    top: 130px;
+    right: 201px;
+}
+
+button.calendar-button.cancel-res.reservation-cancel-btn{
+    background-color: rgba(234, 97, 42, 0.7);
+}
+button.picked-up-btn.calendar-button.modal-inside-confirm#modal-inside-confirm-btn{
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+#modal-detail.reservation-detail-item{
+    margin-bottom: 40px;
+    font-size: 20px;
+}
+

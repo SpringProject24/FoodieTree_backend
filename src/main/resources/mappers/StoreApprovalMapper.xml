@@ -5,7 +5,7 @@
 
 <mapper namespace="org.nmfw.foodietree.domain.store.mapper.StoreApprovalMapper">
 
-    <select id="selectStoreById" resultType="store">
+    <select id="selectStoreById" resultType="org.nmfw.foodietree.domain.store.dto.resp.StoreApprovalDto">
         SELECT *
         FROM tbl_store
         WHERE store_id = #{storeId}

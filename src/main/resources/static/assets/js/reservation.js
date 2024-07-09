@@ -1,5 +1,6 @@
 // =========== 전역 변수 ==============
-const BASE_URL = "http://localhost:8083";
+const BASE_URL = window.location.origin;
+// const BASE_URL = window.location.origin;
 
 const $reservationList = document.querySelector('.reservation-list');
 
@@ -18,65 +19,64 @@ let totalReservations = 0;
 let loadedReservations = 0;
 
 // =========== 함수 정의 ================
-function appendReservations(reservations) {
-    let tag = '';
-    let statusInfo = '';
+// function appendReservations(reservations) {
+//     let tag = '';
+//     let statusInfo = '';
+//
+//     if(reservations && reservations.length > 0){
+//         reservations.forEach(({reservationId , storeImg, storeName, status, pickupTime, pickedUpAt, cancelReservationAt, reservationTime}) => {
+//
+//             let t1 = formatDate(pickupTime);
+//             let t2 = formatDate(pickedUpAt);
+//             let t3 = formatDate(cancelReservationAt);
+//             let t4 = formatDate(reservationTime);
+//
+//             if (status === 'RESERVED') {
+//                 statusInfo = `${t1}까지 픽업해주세요`;
+//             }
+//             if (status === 'PICKEDUP') {
+//                 statusInfo = `${t2}에 픽업하셨습니다`;
+//             }
+//             if (status === 'CANCELED') {
+//                 statusInfo = `${t3}에 취소하셨습니다`;
+//             }
+//             if (status === 'NOSHOW'){
+//                 statusInfo = `${t1}에 미방문으로 취소되었습니다`;
+//             }
+//             tag += `
+//             <div class="reservation-item" data-reservation-id="${reservationId}">
+//                 <img src="${storeImg}" alt="Store Image"/>
+//                 <span>${storeName}</span>
+//                 <span>${status}</span>
+//                 <button>${statusInfo}</button>
+//                 ${status === 'RESERVED' ? '<button class="reservation-cancel-btn calendar-button">예약 취소</button>' : ''}
+//             </div>
+//             `;
+//         });
+//     } else {
+//         tag = `<div class='reservation-list'>예약 내역이 없습니다.</div>`;
+//     }
+//
+//     $reservationList.innerHTML = tag;
+//     console.log('appendReservations() 실행');
+// }
 
-    if(reservations && reservations.length > 0){
-        reservations.forEach(({reservationId , storeImg, storeName, status, pickupTime, pickedUpAt, cancelReservationAt, reservationTime}) => {
-
-            let t1 = formatDate(pickupTime);
-            let t2 = formatDate(pickedUpAt);
-            let t3 = formatDate(cancelReservationAt);
-            let t4 = formatDate(reservationTime);
-
-            if (status === 'RESERVED') {
-                statusInfo = `${t1}까지 픽업해주세요`;
-            }
-            if (status === 'PICKEDUP') {
-                statusInfo = `${t2}에 픽업하셨습니다`;
-            }
-            if (status === 'CANCELED') {
-                statusInfo = `${t3}에 취소하셨습니다`;
-            }
-            if (status === 'NOSHOW'){
-                statusInfo = `${t1}에 미방문으로 취소되었습니다`;
-            }
-            tag += `
-            <div class="reservation-item" data-reservation-id="${reservationId}">
-                <img src="${storeImg}" alt="Store Image"/>
-                <span>${storeName}</span>
-                <span>${status}</span>
-                <span>${statusInfo}</span>
-                ${status === 'RESERVED' ? '<button class="reservation-cancel-btn">예약 취소</button>' : ''}
-            </div>
-            `;
-        });
-    } else {
-        tag = `<div class='reservation-list'>예약 내역이 없습니다.</div>`;
-    }
-
-    $reservationList.innerHTML = tag;
-    console.log('appendReservations() 실행');
-}
-
-async function fetchReservations() {
-    if (isFetching) return;
-    isFetching = true;
-
-    try {
-        const res = await fetch(`${BASE_URL}/reservation/${customerId}`);
-        const reservations = await res.json();
-        console.log(reservations);
-        appendReservations(reservations);
-
-    } catch (error) {
-        console.error('Error fetching reservations:', error);
-    } finally {
-        isFetching = false;
-    }
-}
-
+// async function fetchReservations() {
+//     if (isFetching) return;
+//     isFetching = true;
+//
+//     try {
+//         const res = await fetch(`${BASE_URL}/reservation/${customerId}`);
+//         const reservations = await res.json();
+//         console.log(reservations);
+//         appendReservations(reservations);
+//
+//     } catch (error) {
+//         console.error('Error fetching reservations:', error);
+//     } finally {
+//         isFetching = false;
+//     }
+// }
 function setupInfiniteScroll() {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 && !isFetching) {
         fetchReservations();
@@ -146,8 +146,8 @@ function cancelReservationClickEvent(reservationId) {
         const res = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
         const reservation = await res.json();
         let cancellationFee = reservation.price * 0.5;
-        let tagWithFee = `<p>픽업시간 기준 1시간 이내로 예약 취소시 취소 수수료 50%가 부과됩니다. 정말 취소하시겠습니까?</p>
-                <p>${cancellationFee} 취소수수료</p>
+        let tagWithFee = `<p style="text-align: center">픽업시간 기준 1시간 이내로 예약 취소시 <br> 취소 수수료 50%가 부과됩니다. <br>정말 취소하시겠습니까?</p>
+                <p style="font-family: 'jua'; font-size: 23px">취소수수료 : ${cancellationFee}</p>
                 <p>취소 수수료는 결제 금액에서 자동 차감됩니다.</p>`;
 
         let tagWithoutFee = `<p>정말 취소하시겠습니까?</p>
@@ -156,7 +156,7 @@ function cancelReservationClickEvent(reservationId) {
                 `;
         // 픽업시간이 1시간 이내라면 취소 수수료 모달 열기
         if (!isCancelAllowed) {
-            document.getElementById('modal-cancel').innerHTML = tagWithFee + `<button id="confirm-cancel-btn">확인</button>`;
+            document.getElementById('modal-cancel').innerHTML = tagWithFee + `<button class="calendar-button" id="confirm-cancel-btn">확인</button>`;
             openModalver2($cancelModal);
 
             document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
@@ -165,7 +165,7 @@ function cancelReservationClickEvent(reservationId) {
             }, { once: true }); // 이벤트가 한 번만 발생하도록 설정
         } else {
             // 그 외에는 바로 취소
-            document.getElementById('modal-cancel').innerHTML = tagWithoutFee + `<button id="confirm-cancel-btn">확인</button>`;
+            document.getElementById('modal-cancel').innerHTML = tagWithoutFee + `<button class="calendar-button" id="confirm-cancel-btn">확인</button>`;
             openModalver2($cancelModal);
 
             document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
@@ -216,7 +216,6 @@ function openModalver2(modal) {
 
 // 모달 열기
 async function openModal(reservationId) {
-
     const res = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
     const reservation = await res.json();
     console.log(reservation);
@@ -231,12 +230,16 @@ async function openModal(reservationId) {
 
     // 모달에 데이터 추가
     $modalDetails.innerHTML = `
+            <img src="${reservation.storeImg}" alt="Store Image"/>
         <div class="reservation-detail-item" data-reservation-id="${reservationId}">
             <p>가게 이름: ${reservation.storeName}</p>
             <p>상태: ${reservation.status}</p>
-            <p>${reservation.statusInfo}</p>
-            <img src="${reservation.storeImg}" alt="Store Image"/>
-            ${reservation.status === 'RESERVED' ? '<button class="picked-up-btn">픽업 확인 버튼</button>' : '<button style="background-color:gray;">수정 불가</button>'}
+<!--            <p>${reservation.statusInfo}</p>-->
+            ${reservation.status === 'RESERVED' ? '<button class="picked-up-btn calendar-button modal-inside-confirm" id="modal-inside-confirm-btn" style="\n' +
+        '    margin-top: 20px;\n' +
+        '    margin-bottom: 15px;\n' +
+        '    font-size: 20px;\n">픽업 확인 버튼</button>' : '<button style="background-color:gray;">수정 불가</button>'}
+
         </div>
     `;
 
@@ -288,7 +291,7 @@ $reservationList.addEventListener('click', e => {
 
 // =========== 실행 코드 ================
 document.addEventListener('DOMContentLoaded', () => {
-    fetchReservations(); // 초기 예약 데이터 로드
+    // fetchReservations(); // 초기 예약 데이터 로드
     window.addEventListener('scroll', setupInfiniteScroll); // 무한 스크롤 설정
     cancelReservationClickEvent(); // 예약 취소 이벤트 설정
     pickUpClickEvent(); // 픽업 완료 이벤트 설정

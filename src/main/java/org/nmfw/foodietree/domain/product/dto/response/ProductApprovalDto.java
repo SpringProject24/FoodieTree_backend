@@ -21,7 +21,7 @@ public class ProductApprovalDto {
     private String storeId;
     private MultipartFile proImage;
     private String category;
-    private int price;
+    private String price;
     private int productCnt;
 
     public ProductApproval toEntity(){
@@ -29,10 +29,9 @@ public class ProductApprovalDto {
         Random random = new Random();
 
         return ProductApproval.builder()
-                .productId(random.nextInt())
                 .storeId(this.storeId)
                 .category(this.category)
-                .price(this.price)
+                .price(Integer.parseInt(this.price))
                 .productCnt(this.productCnt)
                 .build();
     }

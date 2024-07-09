@@ -22,6 +22,7 @@
     <!-- 선호 음식 카테고리별 제품 조회 -->
     <select id="findCategoryByFood" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
         SELECT
+        s.store_id,
         s.store_name,
         s.price,
         s.store_img,

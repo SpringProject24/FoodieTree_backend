@@ -1,7 +1,9 @@
 package org.nmfw.foodietree.domain.customer.util;
 
 
+import lombok.extern.java.Log;
 import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
+import org.nmfw.foodietree.domain.store.dto.request.LoginStoreInfoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.util.WebUtils;
@@ -29,8 +31,15 @@ public class LoginUtil {
 //    }
 
     public static String getLoggedInUser(HttpSession session) {
-        LoginUserInfoDto obj = (LoginUserInfoDto)session.getAttribute(LOGIN);
-        return obj.getCustomerId();
+        Object attribute = session.getAttribute(LOGIN);
+        if (attribute instanceof LoginUserInfoDto) {
+            LoginUserInfoDto obj = (LoginUserInfoDto) attribute;
+            return obj.getCustomerId();
+        } else if (attribute instanceof LoginStoreInfoDto) {
+            LoginStoreInfoDto obj = (LoginStoreInfoDto) attribute;
+            return obj.getStoreId();
+        }
+        return null;
     }
 
     public static boolean isAutoLogin(HttpServletRequest request) {

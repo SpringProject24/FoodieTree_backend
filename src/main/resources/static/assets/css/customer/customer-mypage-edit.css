@@ -18,6 +18,12 @@ header .logo {
   font-weight: bold;
 }
 
+.margarine-regular {
+  font-family: "Margarine", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 header .logo-img {
   width: 70px;
   height: 70px;
@@ -30,29 +36,31 @@ header .logo-img img {
 }
 
 .my-page-area .container {
+  border: 1px solid #ccc;
+  border-radius: 15px;
   margin-top: 20px;
   display: flex;
 }
 
 .my-page-area .container .profile, .info {
-  border: 1px solid #ccc;
+  /*border: 1px solid #ccc;*/
   padding: 10px;
 }
 
 .my-page-area .container .profile {
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 30%;
   padding: 0 17px;
-  border-radius: 12px;
-  box-shadow: 1px 1px 10px 0 rgba(72, 75, 108, .08);
-  border: solid 1px #e3e9ed;
+  /*border-radius: 12px 0px 0 12px;*/
+  /*box-shadow: 1px 1px 10px 0 rgba(72, 75, 108, .08);*/
+  /*border: solid 1px #e3e9ed;*/
   background-color: #fff;
   box-sizing: border-box;
-  margin-right: 20px;
+  /*margin-right: 20px;*/
 }
-
 .my-page-area .container .profile h2 {
   font-size: 20px;
   font-weight: bold;
@@ -64,7 +72,7 @@ header .logo-img img {
 }
 
 .my-page-area .container .profile ul {
-  margin-top: 20px;
+  margin-top: 40px;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -75,21 +83,27 @@ header .logo-img img {
 .my-page-area .container .profile ul li {
   margin: 5px 0;
   opacity: .9;
-  width: inherit;
+  /*width: inherit;*/
 }
-
+.my-page-area .container .profile .nav{
+  font-size: 21px;
+  text-align: center;
+  width: 335px;
+  margin-right: 10px;
+}
 .my-page-area .container .profile ul li.nav-item a.nav-link {
-  width: inherit;
+  width: 335px;
   padding-top: .6rem;
   padding-bottom: .6rem;
   border-radius: .75rem;
   font-weight: 600;
   display: flex;
   justify-content: center;
+  text-align: center;
 }
 
 .my-page-area .container .profile ul li.nav-item a.nav-link:hover {
-  background-color: rgb(223, 233, 241, 0.64);;
+  background-color: rgb(224, 238, 224);
 }
 
 @media (hover: hover) {
@@ -104,27 +118,44 @@ header .logo-img img {
 
 .edit {
   width: 70%;
+  padding: 10px;
 }
 
 .edit-wrapper {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  border: 1px solid rgba(204, 204, 204, 0.83);
+  border-top: none;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 1px 1px 10px 0 rgba(72, 75, 108, .08);
+  background-color: #fff;
+  box-sizing: border-box;
+  margin-bottom: 20px;
 }
 
 .title {
   position: relative;
   display: block;
-  padding: 15px 38px 13px 18px;
-  border-radius: 12px 12px 0 0;
-  border: 1px solid #e3e9ed;
+  border-radius: 15px 15px 0 0;
+  margin-top: 20px;
 }
 
 .title .title-text {
-  font-size: 18px;
+  height: 65px;
+  font-size: 19px;
   font-weight: 700;
   line-height: 20px;
-  letter-spacing: -.19px;
-    color: #1d1d1d;
+  color: #1d1d1d;
+  background: linear-gradient(135deg, #f6f9f4, #e4f3da);
+  border-radius: 15px 15px 0 0;
+  padding: 10px 15px;
+  display: flex;
+}
+
+.title .title-text span{
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .edit-wrapper {
@@ -175,8 +206,8 @@ header .logo-img img {
 }
 
 #avatar {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   overflow: hidden;
   box-shadow: white 0 0 0 2px;
@@ -192,7 +223,10 @@ header .logo-img img {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(29, 29, 29, 0.7);
+  box-shadow: rgba(38, 37, 37, 0.58) 2px 5px 10px 18px;
+  border-radius: 50%;
   font-size: 30px;
 }
 
@@ -257,7 +291,7 @@ p {
   top: -18px;
   right: -18px;
   font-size: 25px;
-  color: red;
+  color: #ee7676;
   cursor: pointer;
 }
 
@@ -294,10 +328,15 @@ p {
   display: flex;
   flex-wrap: wrap;
   margin-top: 10px;
+  font-size: 18px;
+  padding: 10px;
+  /* flex-direction: column; */
+  width: 100%;
+  justify-content: center;
 }
 
 .my-page-area .container .info ul li {
-  border: 1px solid #ccc;
+  /*border: 1px solid #ccc;*/
   padding: 10px;
   margin: 5px;
   width: 35%;
@@ -307,14 +346,99 @@ p {
   display: flex;
   justify-content: space-around;
   margin-top: 20px;
+  height: 200px;
+  font-size: 18px;
+  flex-direction: column;
 }
 
 .my-page-area .container .stats div {
-  border: 1px solid #ccc;
+  /*border: 1px solid #ccc;*/
   padding: 20px;
-  width: 45%;
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.my-page-area .container .stats div:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 13px rgba(0, 0, 0, 0.2);
+  font-size: 19px;
+}
+
+.my-page-area .container .stats div div {
+  font-size: 16px;
+  /*box-shadow: 0 4px 2px rgba(0, 0, 0, 0.1);*/
+  background: linear-gradient(135deg, #fdfcfc, #f1f8ee);
+  /*border: 2px solid #d4f593;*/
+  margin-top: 10px;
 }
 
 .hidden {
   display: none;
+}
+
+.edit-wrapper .input-area{
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 15px 0 30px 0;
+}
+
+.edit-wrapper .input-area .input-wrapper{
+  font-size: 18px;
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+.edit-wrapper .input-area .input-wrapper .icon{
+  margin-right: 10px;
+}
+
+#resetPasswordModal .modal-content{
+  width: 500px;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 2;
+  font-size: 22px;
+}
+
+button.yellow-click {
+  font-size: 23px;
+  border-radius: 8px;
+  height: 40px;
+  border: none;
+  background: #ffcc00;
+  /* Changed color to yellow */
+  color: #333;
+  /* Changed text color to dark gray */
+  padding: 15px;
+  box-shadow: 0 0.7065919983928324px 0.7065919983928324px -0.625px #00000026,
+  0 1.8065619053231785px 1.8065619053231785px -1.25px #00000025,
+  0 3.6217592146567767px 3.6217592146567767px -1.875px #00000023,
+  0 6.8655999097303715px 6.8655999097303715px -2.5px #00000020,
+  0 13.646761411524492px 13.646761411524492px -3.125px #0000001b,
+  0 30px 30px -3.75px #0000000d;
+  font-weight: bold;
+  font-family: Montserrat;
+  cursor: pointer;
+  /*display: flex;*/
+  align-items: center;
+  transition: 150ms ease-in-out;
+  margin: 20px 12px 20px 0;
+}
+
+button.yellow-click:active {
+  scale: 0.95;
+  background: #333;
+  /* Changed background color to dark gray */
+  color: #ffcc00;
+  /* Changed text color to yellow */
+  box-shadow: rgba(0, 0, 0, 0.26) 0px 0.637473px 1.14745px -1.125px,
+  rgba(0, 0, 0, 0.24) 0px 1.93094px 3.4757px -2.25px,
+  rgba(0, 0, 0, 0.192) 0px 5.10423px 9.18761px -3.375px,
+  rgba(0, 0, 0, 0.03) 0px 16px 28.8px -4.5px;
 }
