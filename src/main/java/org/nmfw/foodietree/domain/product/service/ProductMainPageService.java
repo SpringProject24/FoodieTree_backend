@@ -107,6 +107,7 @@ public class ProductMainPageService {
         for (ProductDto productDto : categoryByLike) {
             LocalDateTime pickupTime = productDto.getPickupTime();
             String formatted = setFormattedPickupTime(pickupTime);
+            log.info("리스트 이터레이션중: {}",productDto);
 
             productDto.setFormattedPickupTime(formatted);
         }

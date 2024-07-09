@@ -263,7 +263,7 @@
                 <div class="swiper-slide">
                     <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
-                            <img src="/assets/img/western.jpg" alt="">
+                            <img src="${item.storeImg}" alt="">
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
@@ -301,7 +301,7 @@
                 <div class="swiper-slide">
                     <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
-                            <img src="/assets/img/western.jpg" alt="fcvgyhhyjzxgtx">
+                            <img src="${item.storeImg}" alt="fcvgyhhyjzxgtx">
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
@@ -340,7 +340,7 @@
                 <div class="swiper-slide">
                     <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
-                            <img src="/assets/img/western.jpg" alt="fcvgyhhyjzxgtx">
+                            <img src="${item.storeImg}" alt="fcvgyhhyjzxgtx">
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
@@ -355,129 +355,10 @@
             </c:forEach>
 
 
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/cafe.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/dessert.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/japanese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/chinese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/korean.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/etc.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
+            
+            
+            
+    
         </div>
       </div>
     </section>
@@ -558,9 +439,9 @@
                         document.getElementById('store-area').textContent = data.address;
     
                         // Update the store image
-                        const imgs = document.getElementsByClassName('store-img-box').querySelector('img');
+                        const imgs = document.querySelector('.store-img-box img');
                         const storeImg = document.getElementById('store-img');
-                        imgs.src = data.storeImg;
+                        imgs.src = data.store_img;
                         storeImg.src = data.storeImg;
                         storeImg.alt = data.storeName;
     

@@ -77,8 +77,12 @@
     <!-- 선호 가게별 제품 조회 (LIKE) -->
     <select id="findCategoryByLike" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
         SELECT
+        p.product_id,
+        p.product_upload_date,
+        s.store_id,
         s.store_name,
         s.price,
+        s.address,
         s.store_img,
         s.category,
         p.pickup_time

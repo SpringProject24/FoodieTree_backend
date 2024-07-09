@@ -67,7 +67,7 @@ public class ProductMainPageController {
 
             List<ProductDto> productByLike = productMainPageService.findProductByLike(customerId, request, response);
             model.addAttribute("findByLike",productByLike);
-
+            log.info("\n\n\n adadasdsad : {}", productByLike);
 
         // 5. 고객 정보 조회
             CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
