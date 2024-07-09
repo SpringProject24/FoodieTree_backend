@@ -187,8 +187,8 @@
 </div>
 
 <script>
-    const BASE_URL = 'http://localhost:8083/customer';
-    const customerId = 'sji4205@naver.com'; // Replace this with the actual customer ID
+    const BASE_URL = window.location.origin +'/customer';
+    const customerId = '${sessionScope.login.customerId}'; // Replace this with the actual customer ID
 
     let type;
     let countdownInterval;

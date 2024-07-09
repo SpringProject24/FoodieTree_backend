@@ -6,6 +6,7 @@ import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.product.dto.response.ProductInfoDto;
+import org.nmfw.foodietree.domain.product.service.ProductMainPageService;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,11 +25,13 @@ public class StoreMyPageService {
 
     private final StoreMyPageMapper storeMyPageMapper;
     private final CustomerMyPageService customerMyPageService;
+    private final ProductMainPageService productMainPageService;
 
     public StoreMyPageDto getStoreMyPageInfo(String storeId) {
         log.info("store my page service");
         return storeMyPageMapper.getStoreMyPageInfo(storeId);
     }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH시mm분");
 
     public List<StoreReservationDto> findReservations(String storeId) {
         log.info("service get store reservations");
@@ -43,6 +47,26 @@ public class StoreMyPageService {
             PickUpStatus status = customerMyPageService.determinePickUpStatus(rdto);
             dto.setStatus(status);
         }
+
+        for (StoreReservationDto reservation : reservations) {
+            if (reservation.getReservationTime() != null) {
+                reservation.setReservationTimeF(reservation.getReservationTime().format(formatter));
+            }
+            if (reservation.getCancelReservationAt() != null) {
+                reservation.setCancelReservationAtF(reservation.getCancelReservationAt().format(formatter));
+            }
+            if (reservation.getPickedUpAt() != null) {
+                reservation.setPickedUpAtF(reservation.getPickedUpAt().format(formatter));
+            }
+            if (reservation.getPickupTime() != null) {
+                reservation.setPickupTimeF(reservation.getPickupTime().format(formatter));
+            }
+            if (reservation.getProductUploadDate() != null) {
+                reservation.setProductUploadDateF(reservation.getProductUploadDate().format(formatter));
+            }
+        }
+
+
         return reservations;
     }
 

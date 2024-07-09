@@ -1,17 +1,22 @@
 package org.nmfw.foodietree.domain.reservation.service;
 
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
 import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +93,8 @@ public class ReservationService {
         return now.isBefore(dto.getPickupTime().minusHours(1));
     }
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH시mm분");
+
     public ReservationModalDetailDto getReservationDetail(int reservationId) {
         ReservationModalDetailDto dto = reservationMapper.findModalDetailByReservationId(reservationId);
         ReservationDetail rd = ReservationDetail.builder()
@@ -101,6 +108,32 @@ public class ReservationService {
 
         dto.setStatus(pickUpStatus);
 
+            if (dto.getReservationTime() != null) {
+                dto.setReservationTimeF(dto.getReservationTime().format(formatter));
+            }
+            if (dto.getCancelReservationAt() != null) {
+                dto.setCancelReservationAtF(dto.getCancelReservationAt().format(formatter));
+            }
+            if (dto.getPickedUpAt() != null) {
+                dto.setPickedUpAtF(dto.getPickedUpAt().format(formatter));
+            }
+            if (dto.getPickupTime() != null) {
+                dto.setPickupTimeF(dto.getPickupTime().format(formatter));
+            }
+
         return dto;
+    }
+
+    public boolean createReservation(String customerId, Map<String, String> data) {
+        log.info(data.get("cnt"), data.get("prodId"), data.get("storeId"));
+        int cnt = Integer.parseInt(data.get("cnt"));
+        String storeId = data.get("storeId");
+        List<ReservationFoundStoreIdDto> list = reservationMapper.findByStoreIdLimit(storeId, cnt);
+        for (ReservationFoundStoreIdDto tar : list) {
+            long productId = tar.getProductId();
+            boolean flag = reservationMapper.createReservation(customerId, productId);
+            if (!flag) return flag;
+        }
+        return true;
     }
 }

@@ -4,6 +4,8 @@ import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
 import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
 import org.nmfw.foodietree.domain.auth.security.CodeGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,15 +15,20 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class EmailService {
 
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
     @Autowired
     private JavaMailSender javaMailSender;
 
     @Autowired
     private EmailMapper emailMapper;
+
+    private static final Map<String, EmailCodeDto> signUpList = new HashMap<>();
 
     public void sendResetVerificationCode(String to, String purpose) throws MessagingException {
         String code = CodeGenerator.generateCode();
@@ -31,7 +38,7 @@ public class EmailService {
         helper.setTo(to);
 
         String subject = "FoodieTree 비밀번호 재설정 인증코드";
-        if(purpose.equalsIgnoreCase("signup")) {
+        if (purpose.equalsIgnoreCase("signup")) {
             subject = "FoodieTree 회원가입 인증코드";
         }
         helper.setSubject(subject);
@@ -43,6 +50,16 @@ public class EmailService {
 
         javaMailSender.send(message);
 
+        if (purpose.equalsIgnoreCase("signup")) {
+            EmailCodeDto build = EmailCodeDto.builder()
+                    .code(code)
+                    .customerId(to)
+                    .expiryDate(LocalDateTime.now().plusMinutes(5)).build();
+            signUpList.put(to, build);
+            log.info("{}", build);
+            return;
+        }
+
         // 데이터베이스에 코드와 만료 날짜를 저장
         saveVerificationCode(to, code);
     }
@@ -50,7 +67,18 @@ public class EmailService {
     public boolean verifyCode(String email, String inputCode) {
         EmailCodeDto verificationCode = emailMapper.findByEmail(email);
 
-        if(verificationCode != null
+        if (verificationCode != null
+                && verificationCode.getCode().equals(inputCode)
+                && verificationCode.getExpiryDate().isAfter(LocalDateTime.now())) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean verifyCodeForSignUp(String email, String inputCode) {
+        EmailCodeDto verificationCode = signUpList.get(email);
+
+        if (verificationCode != null
                 && verificationCode.getCode().equals(inputCode)
                 && verificationCode.getExpiryDate().isAfter(LocalDateTime.now())) {
             return true;
@@ -60,7 +88,8 @@ public class EmailService {
 
     /**
      * 이메일 인증 코드를 생성하여 이메일로 전송
-     * @param code: 생성한 인증 코드
+     *
+     * @param code:   생성한 인증 코드
      * @param purpose : 이메일 인증 코드의 용도 (signup, reset)
      * @return
      */

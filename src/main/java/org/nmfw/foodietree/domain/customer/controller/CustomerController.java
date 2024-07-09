@@ -103,8 +103,7 @@ public class CustomerController {
             }
             return "redirect:/"; // 로그인 성공시
         }
-
-        return "redirect:/customer/sign-in";
+        return "redirect:/customer/sign-in?message=signin-fail";
     }
 
     @GetMapping("/sign-out")

@@ -7,6 +7,7 @@ import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 @Setter @Getter @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class StoreApprovalDto {
 

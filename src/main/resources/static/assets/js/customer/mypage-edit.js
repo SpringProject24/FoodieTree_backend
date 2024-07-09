@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8083';
+const BASE_URL = window.location.origin;
 
 let type;
 let countdownInterval;
@@ -146,7 +146,7 @@ export async function verifyCode(code) {
     }
 }
 
-function startCountdown(seconds) {
+export function startCountdown(seconds) {
     const countdownElement = document.getElementById('countdown');
     countdownElement.textContent = `남은 시간: ${seconds}초`;
 
@@ -162,7 +162,7 @@ function startCountdown(seconds) {
     }, 1000);
 }
 
-function stopCountdown() {
+export function stopCountdown() {
     clearInterval(countdownInterval);
 }
 
@@ -206,7 +206,7 @@ export async function updatePassword(newPassword, newPasswordCheck) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ type: 'password', value: newPassword })
+            body: JSON.stringify({ type: 'password', newPassword: newPassword })
         });
 
         if (response.ok) {

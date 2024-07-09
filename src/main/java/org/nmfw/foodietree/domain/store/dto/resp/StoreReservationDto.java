@@ -27,4 +27,10 @@ public class StoreReservationDto {
     private LocalDateTime productUploadDate;
     private int price;
     private PickUpStatus status;
+
+    private String reservationTimeF;
+    private String cancelReservationAtF;
+    private String pickedUpAtF;
+    private String pickupTimeF;
+    private String productUploadDateF;
 }

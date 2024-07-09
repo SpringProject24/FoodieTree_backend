@@ -4,20 +4,20 @@ const infoChk = {
 
 /**
  * 아이디 입력값 검증
- * @param $idInput 검증할 input 태그
+ * @param value 검증할 값
  * @param $idChk 메시지 표시할 태그
  */
-const checkIdInput = ($idInput, $idChk) => {
-  $idInput.addEventListener("keyup", async function (e) {
-    const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/;
-    const value = e.target.value;
+const checkIdInput = (value, $idChk) => {
+  const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9_\.\-]+\.[A-Za-z0-9\-]+$/;
 
-    if (value.trim() === "") {
-      $idChk.innerHTML = '<b class="warning">[아이디를 입력해주세요]</b>';
-    } else if (!idPattern.test(value)) {
-      $idChk.innerHTML = '<b class="warning">[아이디는 4~14자의 영문 대소문자와 숫자로만 입력해주세요]</b>';
-    }
-  });
+  if (value.trim() === "") {
+    $idChk.innerHTML = '<b class="warning">[이메일을 입력해주세요]</b>';
+    return false;
+  } else if (!idPattern.test(value)) {
+    $idChk.innerHTML = '<b class="warning">[이메일 형식을 지켜주세요]</b>';
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -29,19 +29,20 @@ const checkIdInput = ($idInput, $idChk) => {
  */
 const checkPwInput = ($pwInput, $pwChkInput, $pwChk, $submitBtn) => {
   $pwInput.addEventListener("keyup", function (e) {
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$/;
+    const passwordPattern = /^[a-zA-Z0-9]{8,20}$/;
     const value = e.target.value;
 
     $pwChkInput.disabled = true;
     if (value.trim() === "") {
       $pwChk.innerHTML = '<b class="warning">[비밀번호를 입력해주세요]</b>';
     } else if (!passwordPattern.test(value)) {
-      $pwChk.innerHTML = '<b class="warning">[비밀번호는 8~20자의 영문 대소문자, 숫자, 특수문자를 포함해주세요]</b>';
+      $pwChk.innerHTML = '<b class="warning">[비밀번호는 8~20자의 영문 대소문자, 숫자를 포함해주세요]</b>';
     } else {
       $pwChkInput.disabled = false;
       $pwChk.innerHTML = '<b class="success">[사용 가능한 비밀번호입니다.]</b>';
     }
     checkInfo($submitBtn);
+
   });
 }
 
@@ -78,7 +79,41 @@ function checkInfo($submitBtn) {
     }
   }
   $submitBtn.disabled = false;
-  $submitBtn.style.backgroundColor = "orange";
+  $submitBtn.style.backgroundColor = "#2a6f2b";
+  $submitBtn.classList.remove('disable');
+}
+
+export const checkPw = (value) => {
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$/;
+  const result = {
+    ok: false,
+    msg: "",
+  }
+
+  if (value.trim("") === "") {
+    result.msg = '<b class="warning">[비밀번호를 입력해주세요]</b>';
+  } else if (!passwordPattern.test(value)) {
+    result.msg = '<b class="warning">[비밀번호는 8~20자의 영문 대소문자, 숫자, 특수문자를 포함해주세요]</b>';
+  } else {
+    result.ok = true;
+    result.msg = '<b class="success">[사용 가능한 비밀번호입니다.]</b>';
+  }
+  return result;
+}
+
+export const checkPwChk = (v1, v2) => {
+  const result = {
+    ok: false,
+    msg: "",
+  }
+
+  if (v1 === v2) {
+    result.ok = true;
+    result.msg = '<b class="success">[비밀번호가 일치합니다.]</b>';
+  } else {
+    result.msg = '<b class="warning">[비밀번호가 일치하지 않습니다.]</b>';
+  }
+  return result;
 }
 
 export { checkIdInput, checkPwInput, checkPwChkInput };

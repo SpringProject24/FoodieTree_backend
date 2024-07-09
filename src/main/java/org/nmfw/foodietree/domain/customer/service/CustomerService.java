@@ -99,7 +99,7 @@ public class CustomerService {
 					AutoLoginDto.builder()
 							.sessionId(sessionId)
 							.limitTime(LocalDateTime.now().plusDays(90))
-							.customerId(customerId)
+							.id(customerId)
 							.build()
 			);
 		}
@@ -138,7 +138,7 @@ public class CustomerService {
 					AutoLoginDto.builder()
 							.sessionId("none")
 							.limitTime(LocalDateTime.now())
-							.customerId(LoginUtil.getLoggedInUser(request.getSession()))
+							.id(LoginUtil.getLoggedInUser(request.getSession()))
 							.build()
 			);
 		}

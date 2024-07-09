@@ -10,43 +10,72 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Francois+One&family=Margarine&family=Nanum+Gothic&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/assets/css/common.css">
     <link rel="stylesheet" href="/assets/css/customer/customer-mypage.css">
+    <link rel="stylesheet" href="/assets/css/customer/customer-mypage-edit.css">
     <link rel="stylesheet" href="/assets/css/store/calendar.css">
     <link rel="stylesheet" href="/assets/css/reservation/reservation-detail-modal.css">
     <script defer src="/assets/js/store/store-mypage.js"></script>
 </head>
 <body>
 <style>
-    #calendar {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 10px;
-        max-width: 600px;
-        margin: auto;
+    @font-face {
+        font-family: 'NIXGONM-Vb';
+        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/NIXGONM-Vb.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
     }
 
-    #calendar div {
-        padding: 20px;
-        background-color: #f0f0f0;
-        text-align: center;
-        cursor: pointer;
+    /*@font-face {*/
+    /*    font-family: 'Ownglyph_noocar-Rg';*/
+    /*    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-2@1.0/Ownglyph_noocar-Rg.woff2') format('woff2');*/
+    /*    font-weight: normal;*/
+    /*    font-style: normal;*/
+    /*}*/
+    body {
+        font-family: 'NIXGONM-Vb', 'Nanum Gothic', sans-serif;
+        /*font-size: 25px;*/
     }
 
-    #events {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #fafafa;
-        border: 1px solid #ddd;
+    .my-page-area .container .info .reservation-list{
+        margin-top: 0;
     }
 
-    .stats{
+    .my-page-area .container .profile ul li.nav-item a.nav-link{
+        margin-left: 123px;
+    }
+    .my-page-area .container .info .reservation-list{
+        margin: 0 7px 10px 0;
+    }
+
+    .info-wrapper{
+        padding: 0 10px 10px;
+    }
+
+    #modal-product-count-details{
+        padding: 40px;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 20px;
+        justify-content: center;
+        text-align: center;
     }
+
+    #modal-product-count-details .product-add-item div{
+        margin-bottomr: 10px;
+    }
+
+    .my-page-area .container .info .info-wrapper.reservation{
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+
 </style>
 <header>
     <div class="container">
@@ -60,35 +89,50 @@
     <div class="container">
         <div class="profile">
             <a href="#" id="avatar">
-                <img src="${storeInfo.storeImg ? storeInfo.storeImg : '/assets/img/western.jpg'}"
+                <img src="${storeInfo.storeImg != null? storeInfo.storeImg : '/assets/img/defaultImage.jpg'}"
                      alt="store image">
             </a>
             <h2>${storeInfo.storeName}</h2>
             <p>${storeInfo.storeId}</p>
             <ul class="nav">
-                <li class="nav-item"><a class="nav-link" href="/store/mypage/main">마이페이지</a></li>
-                <li class="nav-item"><a class="nav-link" href="/store/mypage/edit/main">개인정보수정</a></li>
-                <div class="stats">
+                <li class="nav-item"><a class="nav-link mypage" href="/store/mypage/main">마이페이지</a></li>
+                <li class="nav-item"><a class="nav-link edit" href="/store/mypage/edit/main">개인정보수정</a></li>
+            </ul>
+            <div class="stats">
+                <div id="carbon" class="stats-box">
+                    <img src="/assets/img/mypage-carbon.png" alt="leaf">
                     <div>${stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
+                </div>
+                <div id="community" class="stats-box">
+                    <img src="/assets/img/mypage-community.png" alt="community">
                     <div>지금까지 ${stats.customerCnt}명의 손님을 만났어요</div>
                 </div>
-            </ul>
+            </div>
         </div>
         <div class="info">
             <div class="info-box">
                 <div class="title">
-                    <h3 class="title-text">예약 내역</h3>
+                    <h3 class="title-text">
+                        <span>
+                        예약 내역
+                        </span>
+                    </h3>
                     <div class="info-wrapper reservation">
                         <ul class="reservation-list">
                             <c:forEach var="reservation" items="${reservations}" varStatus="status">
-                                <li id="reservation-${status.index}" class="reservation-item" data-reservation-id="${reservation.reservationId}">
+                                <li id="reservation-${status.index}" class="reservation-item ${reservation.status}"
+                                    data-reservation-id="${reservation.reservationId}"
+                                    data-reservation-status="${reservation.status}">
                                     <div class="item">
                                         <div class="img-wrapper">
                                             <div class="img-box">
-                                                <img src="${reservation.profileImage != null ? reservation.profileImage : "/assets/img/western.jpg"}"
+                                                <img src="${reservation.profileImage != null ? reservation.profileImage : "/assets/img/defaultImage.jpg"}"
                                                      alt="profile Image"/>
                                             </div>
                                             <c:if test="${reservation.status == 'CANCELED'}">
+                                                <i class="fa-solid fa-circle-xmark canceled"></i>
+                                            </c:if>
+                                            <c:if test="${reservation.status == 'NOSHOW'}">
                                                 <i class="fa-solid fa-circle-xmark canceled"></i>
                                             </c:if>
                                             <c:if test="${reservation.status == 'RESERVED'}">
@@ -98,13 +142,26 @@
                                                 <i class="fa-solid fa-circle-check done"></i>
                                             </c:if>
                                         </div>
-                                        <span>${reservation.nickname}님이 ${reservation.status}</span>
+                                        <span class="reservation-nickname"
+                                              style="font-size: 18px">${reservation.nickname}<span>님께서</span></span>
                                     </div>
-                                    <div class="item">
-                                        <span>${reservation.status}</span>
-                                    </div>
-                                    <div class="item">
-                                        <span>${reservation.pickupTime}</span>
+                                    <div class="item reservation-status">
+                                        <c:if test="${reservation.status == 'CANCELED'}">
+                                            <span>예약을 취소했어요</span>
+                                            <span>${reservation.cancelReservationAtF}</span>
+                                        </c:if>
+                                        <c:if test="${reservation.status == 'NOSHOW'}">
+                                            <span>미방문하여 예약이 취소됐어요</span>
+                                            <span>${reservation.pickupTimeF}</span>
+                                        </c:if>
+                                        <c:if test="${reservation.status == 'RESERVED'}">
+                                            <span>픽업하러 오는 중이에요!</span>
+                                            <span>${reservation.pickupTimeF}</span>
+                                        </c:if>
+                                        <c:if test="${reservation.status == 'PICKEDUP'}">
+                                            <span>픽업을 완료했어요</span>
+                                            <span>${reservation.pickedUpAtF}</span>
+                                        </c:if>
                                     </div>
                                 </li>
                             </c:forEach>
@@ -114,23 +171,61 @@
             </div>
             <div id="product-count">
                 <div class="title">
-                    <h3 class="title-text">오늘의 랜덤박스 현황</h3>
-                    <div id="count"></div>
-                    <div id="today-picked-up"></div>
-                    <div id="today-ready-picked-up"></div>
-                    <div id="remain"></div>
-                    <br>
-                    <button id="product-update-btn">수량업데이트 하기</button>
+                    <h3 class="title-text">
+                        <span id="randombox-stock">
+                            오늘의 랜덤박스 현황
+                        </span>
+                        <button id="product-update-btn">
+                            랜덤박스 추가
+                        </button>
+                    </h3>
+                    <div>
+
+                        <section id="product-count-status-with-img">
+                            <div class="status-img">
+                                <img src="/assets/img/mypage-foods.png" alt="픽업이미지">
+                                <div id="count"></div>
+                            </div>
+                            <div class="status-img">
+                                <img src="/assets/img/mypage-pickedUp.png" alt="픽업이미지">
+                                <div id="today-picked-up"></div>
+                            </div>
+                            <div class="status-img">
+                                <img src="/assets/img/mypage-omw.png" alt="픽업이미지">
+                                <div id="today-ready-picked-up"></div>
+                            </div>
+                            <div class="status-img">
+                                <img src="/assets/img/free-icon-in-stock.png" alt="픽업이미지">
+                                <div id="remain"></div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
 
             <div id="calendar-header">
                 <div class="title">
-                    <h3 class="title-text">가게 스케줄 조정</h3>
-                    <button id="prev-month">이전 달</button>
-                    <span id="current-month"></span>
-                    <button id="next-month">다음 달</button>
-                    <div id="calendar"></div>
+                    <h3 class="title-text">
+                        <span>
+                        가게 스케줄 조정
+                        </span>
+                    </h3>
+                    <div id="calendar-section">
+                        <div class="calendar-month">
+                            <button class="calendar-button" id="prev-month">
+                                이전 달
+                            </button>
+                            <span id="current-month"></span>
+                            <button class="calendar-button" id="next-month">
+                                다음 달
+                            </button>
+                            <div class="day-description">
+                                <span id="holiday-description">가게 쉬는 날</span>
+                                <span id="today-description">오늘</span>
+                            </div>
+                        </div>
+                        <div id="calendar"></div>
+                    </div>
                 </div>
             </div>
 
@@ -142,8 +237,7 @@
 <div id="reservation-modal" class="modal">
     <div class="modal-content">
         <div>
-            <span class="close">&times;</span>
-            <h2>예약 상세 내역</h2>
+            <span class="close"><i class="fas fa-times"></i></span>
             <div id="modal-store-reservation-details"></div>
         </div>
     </div>
@@ -153,9 +247,9 @@
 <!-- 캘린더 모달 창 -->
 <div id="store-calendar-modal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close"><i class="fas fa-times"></i></span>
         <div id="schedule">
-            <h2>가게 문 몇시에 열고 닫는지, 오늘 문 닫을건지</h2>
+<%--            <h2>가게 문 몇시에 열고 닫는지, 오늘 문 닫을건지</h2>--%>
             <div id="modal-schedule-details"></div>
         </div>
     </div>
@@ -164,16 +258,32 @@
 <!-- 수량 추가 모달 창 -->
 <div id="product-add-modal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close"><i class="fas fa-times"></i></span>
+
         <div id="product-count-status">
-            <h2>수량 변경 오늘 등록된 수량, 남은 수량 보여주고 몇개로 업데이트할건지 물어보고 받음</h2>
+<%--            <h2>수량 변경 오늘 등록된 수량, 남은 수량 보여주고 몇개로 업데이트할건지 물어보고 받음</h2>--%>
             <div id="modal-product-count-details"></div>
         </div>
     </div>
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const reservationItems = document.querySelectorAll('.reservation-item');
 
+        reservationItems.forEach(function (item) {
+            let status = item.getAttribute('data-reservation-status');
+            if (status === 'CANCELED') {
+                item.classList.add('canceled');
+            } else if (status === 'RESERVED') {
+                item.classList.add('reserved');
+            } else if (status === 'PICKEDUP') {
+                item.classList.add('pickedup');
+            } else {
+                item.classList.add('noshow');
+            }
+        });
+    });
 </script>
 </body>
 </html>
