@@ -1,9 +1,13 @@
 package org.nmfw.foodietree.domain.auth.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
 import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
 import org.nmfw.foodietree.domain.auth.security.CodeGenerator;
+import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
+import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class EmailService {
 
-    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
-    @Autowired
-    private JavaMailSender javaMailSender;
-
-    @Autowired
-    private EmailMapper emailMapper;
+    private final JavaMailSender javaMailSender;
+    private final EmailMapper emailMapper;
+    private final StoreMapper storeMapper;
+    private final CustomerMapper customerMapper;
 
     private static final Map<String, EmailCodeDto> signUpList = new HashMap<>();
 

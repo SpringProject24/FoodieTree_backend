@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class EmailCodeDto{
     private String customerId;
+    private String storeId;
     private String code;
     private LocalDateTime expiryDate;
 

@@ -12,4 +12,6 @@ public interface EmailMapper {
     void save(EmailCodeDto dto);
 
     EmailCodeDto findByEmail(String email);
+
+    void saveStore(EmailCodeDto dto);
 }
