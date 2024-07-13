@@ -161,31 +161,32 @@
         </div>
     </div>
 </div>
+<%@ include file="../include/header.jsp"%>
 
-<header>
-    <div class="container">
-        <div class="logo-wrapper">
-            <a href="/" class="logo margarine-regular"><h1>FoodieTree</h1></a>
-        </div>
-        <div class="input-wrapper">
-            <button><i class="fa-solid fa-search"></i></button>
-            <input type="text" placeholder="Search">
-        </div>
-        <ul class="profile-wrapper">
-            <li>
-                <a href="#" class="profile img-box">
-                    <img src="/assets/img/western.jpg" alt="">
-                </a>
-            </li>
-            <li>
-                <a href="/customer/mypage">마이페이지</a>
-            </li>
-            <li>
-                <a href="/customer/signout">로그아웃</a>
-            </li>
-        </ul>
-    </div>
-</header>
+<%--<header>--%>
+<%--    <div class="container">--%>
+<%--        <div class="logo-wrapper">--%>
+<%--            <a href="/" class="logo margarine-regular"><h1>FoodieTree</h1></a>--%>
+<%--        </div>--%>
+<%--        <div class="input-wrapper">--%>
+<%--            <button><i class="fa-solid fa-search"></i></button>--%>
+<%--            <input type="text" placeholder="Search">--%>
+<%--        </div>--%>
+<%--        <ul class="profile-wrapper">--%>
+<%--            <li>--%>
+<%--                <a href="#" class="profile img-box">--%>
+<%--                    <img src="/assets/img/western.jpg" alt="">--%>
+<%--                </a>--%>
+<%--            </li>--%>
+<%--            <li>--%>
+<%--                <a href="/customer/mypage">마이페이지</a>--%>
+<%--            </li>--%>
+<%--            <li>--%>
+<%--                <a href="/customer/sign-out">로그아웃</a>--%>
+<%--            </li>--%>
+<%--        </ul>--%>
+<%--    </div>--%>
+<%--</header>--%>
 
 <section class="container category">
     <div class="swiper category-list">
