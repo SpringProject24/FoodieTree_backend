@@ -30,22 +30,10 @@ public class TokenProvider {
     private String SECRET_KEY;
 
     public String createToken(EmailCodeDto emailCodeDto) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("email", emailCodeDto.getCustomerId());
-
-        // Base64로 인코딩된 비밀 키를 디코딩합니다.
-//        SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET_KEY));
-//        log.info("Secret Key: {}", key); // 키 값 로그 확인
-
 
         byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
         System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
         System.out.println("Decoded Key Length in Bits: " + (decodedKey.length * 8));
-
-// SecretKey 객체 생성
-//        SecretKey key = Keys.hmacShaKeyFor(decodedKey);
-//        System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
-//        System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
 
         byte[] keyBytes = SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
@@ -61,15 +49,6 @@ public class TokenProvider {
                 .setIssuedAt(new Date()) // iat
                 .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.HOURS))) // exp
                 .compact();
-
-//        return Jwts.builder()
-//                .signWith(key, SignatureAlgorithm.HS512)
-//                .setClaims(claims)
-//                .setIssuer("foodietree")
-//                .setIssuedAt(new Date())
-//                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)))
-//                .setSubject(emailCodeDto.getCustomerId())
-//                .compact();
     }
 
    public TokenUserInfo validateAndGetTokenInfo(String token) {

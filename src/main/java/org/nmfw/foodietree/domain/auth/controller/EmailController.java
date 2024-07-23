@@ -31,16 +31,9 @@ import java.util.Map;
 @RequestMapping("/email")
 public class EmailController {
 
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private CustomerMapper customerMapper;
-
-    @Autowired
+    private final EmailService emailService;
+    private final CustomerMapper customerMapper;
     private final EmailMapper emailMapper;
-
-
 
     @GetMapping("/send-reset-email")
     public String sendVerificationCode(@RequestParam String to) {
