@@ -16,7 +16,6 @@ public class Customer {
     private String customerId;
 
     //고객 비밀번호
-    @Setter
     private String customerPassword;
 
     //고객 이름

@@ -15,6 +15,7 @@ import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,8 @@ public class EmailController {
 
     @Autowired
     private final EmailMapper emailMapper;
+
+
 
     @GetMapping("/send-reset-email")
     public String sendVerificationCode(@RequestParam String to) {
@@ -90,7 +93,9 @@ public class EmailController {
     }
 
     // 인증 토큰 클라이언트측에서 확인하기
-    private final String secret = "your_jwt_secret";
+    @Value("${env.jwt.secret}")
+    private String SECRET_KEY;
+
     @PostMapping("/verifyEmail")
     public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
         // 서버 측에서 받은 요청 데이터를 로그로 출력합니다.
@@ -103,10 +108,12 @@ public class EmailController {
 
         try {
             Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(secret.getBytes())
+                    .setSigningKey(SECRET_KEY.getBytes())
                     .parseClaimsJws(token);
 
-            String email = claims.getBody().get("email", String.class);
+            String email = claims.getBody().get("sub", String.class);
+
+            log.info("secretKey claim : {}", claims);
 
             log.info("Email extracted from token: {}", email);
 
