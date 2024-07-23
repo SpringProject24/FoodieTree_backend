@@ -16,7 +16,7 @@
         VALUES
                 (
                     #{customerId},
-                    #{code},
+                    NULL,
                     #{expiryDate}
                 )
     </insert>

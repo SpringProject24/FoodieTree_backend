@@ -15,7 +15,11 @@ public class EmailCodeDto{
     private String customerId;
     private String storeId;
     private String code;
+    @Setter
     private LocalDateTime expiryDate;
+    @Setter
+    private boolean emailVerified;
+
 
     public EmailVerification toEntity() {
         return EmailVerification.builder()
@@ -24,4 +28,5 @@ public class EmailCodeDto{
                 .expiryDate(this.expiryDate)
                 .build();
     }
+
 }
