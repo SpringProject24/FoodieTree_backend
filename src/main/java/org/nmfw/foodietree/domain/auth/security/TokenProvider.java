@@ -1,18 +1,23 @@
 package org.nmfw.foodietree.domain.auth.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import nonapi.io.github.classgraph.json.JSONUtils;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,63 +26,72 @@ import java.util.Map;
 @Slf4j
 public class TokenProvider {
 
-    // 서명에 사용할 512비트의 랜덤 문자열 비밀키
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    /**
-     * JWT를 생성하는 메서드
-     * @param emailCodeDto - 토큰에 포함될 로그인한 유저의 정보
-     * @return - 생성된 JWT의 암호화된 문자열
-     */
     public String createToken(EmailCodeDto emailCodeDto) {
-
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", emailCodeDto.getCustomerId());
 
+        // Base64로 인코딩된 비밀 키를 디코딩합니다.
+//        SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET_KEY));
+//        log.info("Secret Key: {}", key); // 키 값 로그 확인
+
+
+        byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
+        System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
+        System.out.println("Decoded Key Length in Bits: " + (decodedKey.length * 8));
+
+// SecretKey 객체 생성
+//        SecretKey key = Keys.hmacShaKeyFor(decodedKey);
+//        System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
+//        System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
+
+        byte[] keyBytes = SECRET_KEY.getBytes();
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+        System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
+        System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
+
         return Jwts.builder()
-                // token에 들어갈 서명
-                .signWith(
-                        Keys.hmacShaKeyFor(SECRET_KEY.getBytes())
-                        , SignatureAlgorithm.HS512
-                )
-                // payload 에 들어갈 클레임 설정
-                .setClaims(claims) // 추가 클레임은 항상 가장 먼저 설정
-                .setIssuer("foodietree") // 발급자 정보
-                .setIssuedAt(new Date()) // 발급 시간
-                .setExpiration(Date.from(
-                        Instant.now().plus(1, ChronoUnit.DAYS)
-                )) // 토큰 만료 시간
-                .setSubject(emailCodeDto.getCustomerId())
+                // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
+                .signWith(key, SignatureAlgorithm.HS512)
+                // payload에 들어갈 내용
+                .setSubject(emailCodeDto.getCustomerId()) // sub
+                .setIssuer("demo app") // iss
+                .setIssuedAt(new Date()) // iat
+                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.HOURS))) // exp
                 .compact();
+
+//        return Jwts.builder()
+//                .signWith(key, SignatureAlgorithm.HS512)
+//                .setClaims(claims)
+//                .setIssuer("foodietree")
+//                .setIssuedAt(new Date())
+//                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)))
+//                .setSubject(emailCodeDto.getCustomerId())
+//                .compact();
     }
 
-    /**
-     * 클라이언트가 전송한 토큰을 디코딩하여 토큰의 서명 위조 여부를 확인
-     * 토큰을 JSON으로 파싱하여 안에 들어있는 클레임(토큰 정보)을 리턴
-     *
-     * @param token - 클라이언트가 보낸 토큰
-     * @return - 토큰에 들어있는 인증 정보들을 리턴 - 회원 식별 ID, 이메일, 권한정보
-     */
-    public TokenUserInfo validateAndGetTokenInfo(String token) {
+   public TokenUserInfo validateAndGetTokenInfo(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET_KEY));
 
-        Claims claims = Jwts.parserBuilder()
-                // 토큰 발급자의 발급 당시 서명 삽입
-                .setSigningKey(
-                        Keys.hmacShaKeyFor(SECRET_KEY.getBytes())
-                )
-                // 서명위조 검사 진행 : 위조된 경우 Exception이 발생
-                // 위조되지 않은 경우 클레임 리턴
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
 
-        log.info("claims: {}", claims);
+            log.info("Claims: {}", claims);
 
-        return TokenUserInfo.builder()
-                .userId(claims.getSubject())
-                .email(claims.get("email", String.class))
-                .build();
+            return TokenUserInfo.builder()
+                    .userId(claims.getSubject())
+                    .email(claims.get("email", String.class))
+                    .build();
+        } catch (JwtException e) {
+            log.error("Token validation error: {}", e.getMessage());
+            throw e; // 또는 적절한 예외 처리
+        }
     }
 
     @Getter

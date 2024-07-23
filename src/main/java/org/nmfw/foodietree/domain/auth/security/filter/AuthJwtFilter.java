@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.auth.security.filter;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;

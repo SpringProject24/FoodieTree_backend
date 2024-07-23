@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
 import org.nmfw.foodietree.domain.auth.service.EmailService;
@@ -19,13 +20,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/email")
 public class EmailController {
+
     @Autowired
     private EmailService emailService;
 
@@ -89,7 +93,13 @@ public class EmailController {
     private final String secret = "your_jwt_secret";
     @PostMapping("/verifyEmail")
     public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
+        // 서버 측에서 받은 요청 데이터를 로그로 출력합니다.
+        log.info("Request Data: {}", request);
         String token = request.get("token");
+
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Token is missing"));
+        }
 
         try {
             Jws<Claims> claims = Jwts.parser()
@@ -98,26 +108,38 @@ public class EmailController {
 
             String email = claims.getBody().get("email", String.class);
 
+            log.info("Email extracted from token: {}", email);
+
             // 이메일 인증 업데이트
-            //1. 인증테이블에서 인증번호 보낸 아이디 서치
+            // 1. 인증테이블에서 인증번호 보낸 아이디 서치
             EmailCodeDto emailCodeDto = emailMapper.findByEmail(email);
 
-            //2. customer에 저장할 데이터 빌드
+            log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
+
+            // 2. customer에 저장할 데이터 빌드
             Customer customer = Customer.builder()
                     .customerId(email)
                     .build();
 
+            log.info("Customer entity to be saved: {}", customer);
+
             if (emailCodeDto != null) {
                 emailCodeDto.setEmailVerified(true);
-                customerMapper.save(customer);
+                emailMapper.save(emailCodeDto); // EmailCodeDto 업데이트 호출
+                customerMapper.save(customer); // Customer 저장 호출
                 return ResponseEntity.ok(Map.of("success", true));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "User not found"));
             }
         } catch (JwtException e) {
+            log.error("JWT parsing error: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Invalid or expired token"));
+        } catch (Exception e) {
+            log.error("An unexpected error occurred: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
         }
     }
+
 
     @PostMapping("/verifyCode")
     public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> request, @RequestParam(required = false) String purpose) {
