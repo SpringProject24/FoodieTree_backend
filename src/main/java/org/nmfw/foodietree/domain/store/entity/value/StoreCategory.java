@@ -18,4 +18,12 @@ public enum StoreCategory {
     ELSE("기타");
 
     private final String foodType;
+
+    public static StoreCategory fromString(String category) {
+        try {
+            return StoreCategory.valueOf(category);
+        } catch (IllegalArgumentException e) {
+            return StoreCategory.ELSE; // 기본값
+        }
+    }
 }
