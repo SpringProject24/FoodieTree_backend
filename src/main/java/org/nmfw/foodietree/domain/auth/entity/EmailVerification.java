@@ -12,4 +12,5 @@ public class EmailVerification {
     private String customerId;
     private String code;
     private LocalDateTime expiryDate;
+    private boolean emailVerified;
 }

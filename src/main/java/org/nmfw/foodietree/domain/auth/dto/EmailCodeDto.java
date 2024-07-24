@@ -26,6 +26,7 @@ public class EmailCodeDto{
                 .customerId(this.customerId)
                 .code(this.code)
                 .expiryDate(this.expiryDate)
+                .emailVerified(this.emailVerified)
                 .build();
     }
 

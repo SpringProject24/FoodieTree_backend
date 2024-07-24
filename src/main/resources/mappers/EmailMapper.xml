@@ -11,13 +11,15 @@
                 (
                     customer_id,
                     code,
-                    expiry_date
+                    expiry_date,
+                    email_verified
                 )
         VALUES
                 (
                     #{customerId},
                     NULL,
-                    #{expiryDate}
+                    #{expiryDate},
+                    #{emailVerified}
                 )
     </insert>
 

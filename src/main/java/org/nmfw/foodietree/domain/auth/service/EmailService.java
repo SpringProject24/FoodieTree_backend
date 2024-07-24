@@ -33,8 +33,8 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final EmailMapper emailMapper;
-    private final StoreMapper storeMapper;
-    private final CustomerMapper customerMapper;
+//    private final StoreMapper storeMapper;
+//    private final CustomerMapper customerMapper;
 
     private final TokenProvider tokenProvider;
 

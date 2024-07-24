@@ -118,7 +118,7 @@ public class EmailController {
 
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
-            // 2. customer에 저장할 데이터 빌드
+            // 2. customer에 저장할 데이터 빌드 - 이미 저장이 되어있는 경우 체크하고 save
             Customer customer = Customer.builder()
                     .customerId(email)
                     .build();
