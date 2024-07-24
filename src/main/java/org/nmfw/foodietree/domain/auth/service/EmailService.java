@@ -200,7 +200,9 @@ public class EmailService {
         emailMapper.save(dto);
 
         // 이메일에 포함될 링크 생성
-        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token;
+//        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token;
+        String verificationLink = "/verifyEmail?token=" + token;
+
 
         // 메일 작성 및 전송
         MimeMessage message = javaMailSender.createMimeMessage();

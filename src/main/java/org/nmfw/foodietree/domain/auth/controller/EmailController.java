@@ -99,6 +99,8 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Token is missing"));
         }
 
+        // usertype이 store 인지 customer 인지 구분해서 저장하기
+
         try {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(SECRET_KEY.getBytes())
@@ -124,7 +126,9 @@ public class EmailController {
             log.info("Customer entity to be saved: {}", customer);
 
             if (emailCodeDto != null) {
+
                 emailCodeDto.setEmailVerified(true);
+
                 emailMapper.save(emailCodeDto); // EmailCodeDto 업데이트 호출
                 customerMapper.save(customer); // Customer 저장 호출
                 return ResponseEntity.ok(Map.of("success", true));
