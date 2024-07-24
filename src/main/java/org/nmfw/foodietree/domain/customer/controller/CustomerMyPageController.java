@@ -9,12 +9,9 @@ import org.nmfw.foodietree.domain.product.Util.FileUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.List;
@@ -28,52 +25,28 @@ public class CustomerMyPageController {
     @Value("${env.upload.path}")
     private String uploadDir;
     private final CustomerMyPageService customerMyPageService;
-
-    @GetMapping("/mypage")
-    public String myPageMain(HttpSession session
-                            , Model model
-                            , HttpServletRequest request
-                            , HttpServletResponse response){
-        log.info("/customer/mypage GET");
-//        String customerId = LoginUtil.getLoggedInUser(session);
-        String customerId = LoginUtil.getLoggedInUser(request.getSession());
-        // 2. 데이터베이스에서 해당 회원 데이터 조회하기
-        CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
-
-        List<MyPageReservationDetailDto> myPageReservationDetailDto = customerMyPageService.getReservationInfo(customerId);
-
-        List<CustomerIssueDetailDto> customerIssueDetailDto = customerMyPageService.getCustomerIssues(customerId);
-
-        statsDto stats = customerMyPageService.getStats(customerId);
-
-        // 3. JSP파일에 조회한 데이터 보내기
-        model.addAttribute("customerMyPageDto", customerMyPageDto);
-        model.addAttribute("reservations", myPageReservationDetailDto);
-        model.addAttribute("issues", customerIssueDetailDto);
-        model.addAttribute("stats", stats);
-        return "customer/mypage";
+    
+    /**
+     * 고객 정보를 가져오는 GET 요청 처리
+     * @return 고객 정보 DTO
+     */
+    @GetMapping("/info")
+    public ResponseEntity<CustomerMyPageDto> getUserInfo() {
+        String customerId = "test@gmail.com"; // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
+        CustomerMyPageDto customerInfo = customerMyPageService.getCustomerInfo(customerId);
+        return ResponseEntity.ok(customerInfo);
     }
 
-    @GetMapping("/mypage-edit")
-    public String editCustomerInfo(HttpSession session,
-                                   Model model,
-                                   HttpServletRequest request,
-                                   HttpServletResponse response) {
-        log.info("/customer/customer-mypage-edit-test GET");
-//        String customerId = LoginUtil.getLoggedInUser(session);
-        String customerId = LoginUtil.getLoggedInUser(session);
-        CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
-
-        List<MyPageReservationDetailDto> myPageReservationDetailDto = customerMyPageService.getReservationInfo(customerId);
-
-        List<CustomerIssueDetailDto> customerIssueDetailDto = customerMyPageService.getCustomerIssues(customerId);
-        // 3. JSP파일에 조회한 데이터 보내기
-        model.addAttribute("customerMyPageDto", customerMyPageDto);
-        model.addAttribute("reservations", myPageReservationDetailDto);
-        model.addAttribute("issues", customerIssueDetailDto);
-        return "customer/mypage-edit";
+    /**
+     * 고객 통계 정보를 가져오는 GET 요청 처리
+     * @return 고객 통계 정보 DTO
+     */
+    @GetMapping("/stats")
+    public ResponseEntity<StatsDto> getStats() {
+        String customerId = "test.gmail.com"; // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
+        StatsDto stats = customerMyPageService.getStats(customerId);
+        return ResponseEntity.ok(stats);
     }
-
 
     @PatchMapping("/{customerId}/update")
     public ResponseEntity<?> updateCustomerInfo(@PathVariable String customerId, @RequestBody List<UpdateDto> updates) {

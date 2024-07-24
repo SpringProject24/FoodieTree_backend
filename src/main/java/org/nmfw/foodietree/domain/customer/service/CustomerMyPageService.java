@@ -8,12 +8,9 @@ import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.IssueStatus;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
-import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,12 +27,15 @@ public class CustomerMyPageService {
     private final CustomerMyPageMapper customerMyPageMapper;
     private final PasswordEncoder encoder;
 
-    // customer 마이페이지 소비자 정보 조회 중간 처리
-    public CustomerMyPageDto getCustomerInfo(String customerId, HttpServletRequest request, HttpServletResponse response) {
-
+    /**
+     * 고객 정보를 가져오는 메서드
+     * @param customerId 고객 ID
+     * @return 고객 정보 DTO
+     */
+    public CustomerMyPageDto getCustomerInfo(String customerId) {
         CustomerMyPageDto customer = customerMyPageMapper.findOne(customerId);
         List<String> preferenceAreas = customerMyPageMapper.findPreferenceAreas(customerId);
-        List<String> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
+        List<PreferredFoodDto> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
         List<CustomerFavStoreDto> favStore = customerMyPageMapper.findFavStore(customerId);
 
         return CustomerMyPageDto.builder()
@@ -202,7 +202,7 @@ public class CustomerMyPageService {
         return true;
     }
 
-    public statsDto getStats(String customerId){
+    public StatsDto getStats(String customerId){
         List<ReservationDetail> reservations = customerMyPageMapper.findReservations(customerId);
 
         // 예약 내역 중 pickedUpAt이 null이 아닌 것들의 리스트
@@ -224,7 +224,7 @@ public class CustomerMyPageService {
         // money 계산
         int money = (int) (totalPrice * 0.7);
 
-        return statsDto.builder()
+        return StatsDto.builder()
                 .total(total)
                 .coTwo(coTwo)
                 .money(money)

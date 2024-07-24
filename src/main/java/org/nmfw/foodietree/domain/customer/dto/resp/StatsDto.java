@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 @Slf4j
 @Builder
-public class statsDto {
+public class StatsDto {
 
     private int total;
     private double coTwo;
