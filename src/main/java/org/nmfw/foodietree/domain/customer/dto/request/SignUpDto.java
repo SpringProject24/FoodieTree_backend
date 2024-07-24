@@ -23,26 +23,31 @@ public class SignUpDto {
     @Email(message = "유효한 이메일 주소를 입력해주세요")
     private String customerId; // 아이디
 
-    @NotBlank(message = "비밀번호를 입력해주세요")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
-            message = "비밀번호는 8자 이상이어야 하며, 영문자와 숫자를 포함해야 합니다")
-    private String customerPassword;
+    @Setter
+    private boolean emailVerified; // 이메일 인증 정도
 
-    @NotBlank(message = "비밀번호 확인을 입력해주세요")
-    private String customerPasswordChk;
+//    @NotBlank(message = "비밀번호를 입력해주세요")
+//    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+//            message = "비밀번호는 8자 이상이어야 하며, 영문자와 숫자를 포함해야 합니다")
+//    private String customerPassword;
+
+//    @NotBlank(message = "비밀번호 확인을 입력해주세요")
+//    private String customerPasswordChk;
 
 
-    @Size(min = 5, max = 10, message = "닉네임은 5자 이상 10자 이하이어야 합니다")
-    private String nickName;
+//    @Size(min = 5, max = 10, message = "닉네임은 5자 이상 10자 이하이어야 합니다")
+//    private String nickName;
 
-    private List<String> food;
+//    private List<String> food;
 
     // customer 객체 생성 및 반환
     public Customer toEntity() {
         return Customer.builder()
                 .customerId(this.customerId)
-                .customerPassword(this.customerPassword)
+//                .customerPassword(this.customerPassword)
 //                .nickName(this.nickName)
                 .build();
     }
+
 }
+

@@ -17,6 +17,7 @@
         tbl_store s
         ON
         p.store_id = s.store_id
+        GROUP BY s.store_id
     </select>
 
     <!-- 선호 음식 카테고리별 제품 조회 -->
@@ -27,6 +28,7 @@
         s.price,
         s.store_img,
         s.category,
+        p.product_id,
         p.pickup_time
         FROM
         tbl_product p
@@ -77,8 +79,12 @@
     <!-- 선호 가게별 제품 조회 (LIKE) -->
     <select id="findCategoryByLike" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
         SELECT
+        p.product_id,
+        p.product_upload_date,
+        s.store_id,
         s.store_name,
         s.price,
+        s.address,
         s.store_img,
         s.category,
         p.pickup_time
@@ -100,6 +106,27 @@
         GROUP BY
         s.store_name;
 
+    </select>
+
+    <select id="findById" parameterType="string" resultType="org.nmfw.foodietree.domain.product.dto.response.ProductDto">
+        SELECT
+        p.product_id,
+        p.store_id,
+        p.product_upload_date,
+        s.store_img,
+        s.store_name,
+        s.category,
+        s.address,
+        s.price,
+
+        p.pro_image,
+        p.pickup_time
+        FROM
+        tbl_product p
+        JOIN
+        tbl_store s ON p.store_id = s.store_id
+        WHERE
+        p.product_id = #{productId}
     </select>
 
 </mapper>

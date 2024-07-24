@@ -16,7 +16,7 @@
         VALUES
                 (
                     #{customerId},
-                    #{code},
+                    NULL,
                     #{expiryDate}
                 )
     </insert>
@@ -37,4 +37,20 @@
         expiry_date DESC
         LIMIT 1
     </select>
+
+    <insert id="saveStore">
+        INSERT INTO
+            tbl_verification_code
+                (
+                    store_id,
+                    code,
+                    expiry_date
+                )
+        VALUES
+                (
+                    #{storeId},
+                    #{code},
+                    #{expiryDate}
+                )
+    </insert>
 </mapper>

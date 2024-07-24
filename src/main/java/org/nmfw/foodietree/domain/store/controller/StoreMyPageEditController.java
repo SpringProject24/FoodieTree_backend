@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.store.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateDto;
+import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreStatsDto;
@@ -28,7 +29,6 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 @RequestMapping("/store/mypage/edit")
 public class StoreMyPageEditController {
-    String storeId = "sji4205@naver.com";
 
     @Value("${env.upload.path}")
     private String uploadDir;
@@ -42,6 +42,7 @@ public class StoreMyPageEditController {
             , HttpServletRequest request
             , HttpServletResponse response
     ) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         log.info("store my page edit main");
 
         StoreMyPageDto storeInfo = storeMyPageEditService.getStoreMyPageInfo(storeId);
@@ -54,19 +55,22 @@ public class StoreMyPageEditController {
     }
 
     @PatchMapping("/update/password")
-    public ResponseEntity<?> updateCustomerPw(@RequestBody String newPassword) {
+    public ResponseEntity<?> updateCustomerPw(@RequestBody String newPassword, HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         boolean flag = storeMyPageEditService.updateStorePw(storeId, newPassword);
         return flag? ResponseEntity.ok("password reset successful"): ResponseEntity.status(400).body("reset fail");
     }
 
     @PatchMapping("/update/info")
-    public ResponseEntity<?> updateStoreInfo(@RequestBody UpdateDto dto) {
+    public ResponseEntity<?> updateStoreInfo(@RequestBody UpdateDto dto, HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         storeMyPageEditService.updateStoreInfo(storeId, dto.getType(), dto.getValue());
         return ResponseEntity.ok().body("update store info");
     }
 
     @PostMapping("/update/img")
-    public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg) {
+    public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg, HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         try {
             // 예시로 파일 이름과 크기를 출력하는 코드
             String fileName = storeImg.getOriginalFilename();
@@ -93,25 +97,29 @@ public class StoreMyPageEditController {
     }
 
     @PatchMapping("/update/price")
-    public ResponseEntity<?> updatePrice(@RequestBody int price) {
+    public ResponseEntity<?> updatePrice(@RequestBody int price, HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         storeMyPageEditService.updatePrice(storeId, price);
         return ResponseEntity.ok().body("update price");
     }
 
     @PatchMapping("/update/openAt")
-    public ResponseEntity<?> updateOpenAt(@RequestBody String time) {
+    public ResponseEntity<?> updateOpenAt(@RequestBody String time, HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         storeMyPageEditService.updateOpenAt(storeId, time);
         return ResponseEntity.ok().body("update open at");
     }
 
     @PatchMapping("/update/closedAt")
-    public ResponseEntity<?> updateClosedAt(@RequestBody String time) {
+    public ResponseEntity<?> updateClosedAt(@RequestBody String time, HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         storeMyPageEditService.updateClosedAt(storeId, time);
         return ResponseEntity.ok().body("update closed at");
     }
 
     @PatchMapping("/update/productCnt")
-    public ResponseEntity<?> updateProductCnt(@RequestBody int cnt) {
+    public ResponseEntity<?> updateProductCnt(@RequestBody int cnt, HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         storeMyPageEditService.updateProductCnt(storeId, cnt);
         return ResponseEntity.ok().body("update product cnt");
     }

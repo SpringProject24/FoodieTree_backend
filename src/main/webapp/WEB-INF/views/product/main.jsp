@@ -91,7 +91,7 @@
                         <div class="img-box">
                             <img id="store-img" alt="">   <!-- 가게 사진-->
                         </div>
-                        <h6 id="store-name">가게이름</h6>
+                        <h6 id="store-name">가게이름 </h6>
                     </div>
                 </div>
             </div>
@@ -161,31 +161,32 @@
         </div>
     </div>
 </div>
+<%@ include file="../include/header.jsp"%>
 
-<header>
-    <div class="container">
-        <div class="logo-wrapper">
-            <a href="/" class="logo margarine-regular"><h1>FoodieTree</h1></a>
-        </div>
-        <div class="input-wrapper">
-            <button><i class="fa-solid fa-search"></i></button>
-            <input type="text" placeholder="Search">
-        </div>
-        <ul class="profile-wrapper">
-            <li>
-                <a href="#" class="profile img-box">
-                    <img src="/assets/img/western.jpg" alt="">
-                </a>
-            </li>
-            <li>
-                <a href="/customer/mypage">마이페이지</a>
-            </li>
-            <li>
-                <a href="/customer/signout">로그아웃</a>
-            </li>
-        </ul>
-    </div>
-</header>
+<%--<header>--%>
+<%--    <div class="container">--%>
+<%--        <div class="logo-wrapper">--%>
+<%--            <a href="/" class="logo margarine-regular"><h1>FoodieTree</h1></a>--%>
+<%--        </div>--%>
+<%--        <div class="input-wrapper">--%>
+<%--            <button><i class="fa-solid fa-search"></i></button>--%>
+<%--            <input type="text" placeholder="Search">--%>
+<%--        </div>--%>
+<%--        <ul class="profile-wrapper">--%>
+<%--            <li>--%>
+<%--                <a href="#" class="profile img-box">--%>
+<%--                    <img src="/assets/img/western.jpg" alt="">--%>
+<%--                </a>--%>
+<%--            </li>--%>
+<%--            <li>--%>
+<%--                <a href="/customer/mypage">마이페이지</a>--%>
+<%--            </li>--%>
+<%--            <li>--%>
+<%--                <a href="/customer/sign-out">로그아웃</a>--%>
+<%--            </li>--%>
+<%--        </ul>--%>
+<%--    </div>--%>
+<%--</header>--%>
 
 <section class="container category">
     <div class="swiper category-list">
@@ -263,9 +264,9 @@
         <div class="swiper-wrapper">
             <c:forEach var="item" items="${findByFood}">
                 <div class="swiper-slide">
-                    <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
-                            <img src="/assets/img/western.jpg" alt="">
+                            <img src="${item.storeImg}" alt="">
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
@@ -301,9 +302,9 @@
 
             <c:forEach var="item" items="${findByArea}">
                 <div class="swiper-slide">
-                    <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
-                            <img src="/assets/img/western.jpg" alt="">
+                            <img src="${item.storeImg}" alt="fcvgyhhyjzxgtx">
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
@@ -317,33 +318,7 @@
                 </div>
             </c:forEach>
 
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
+            
         </div>
     </div>
 </section>
@@ -366,14 +341,13 @@
 
             <c:forEach var="item" items="${findByLike}">
                 <div class="swiper-slide">
-                    <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="item" data-product-id="${item.productId}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <div class="store-img-box">
-                            <img src="
-                /assets/img/western.jpg" alt="">
+                            <img src="${item.storeImg}" alt="fcvgyhhyjzxgtx">
                         </div>
                         <div class="store-info">
                             <h3>가게 이름 : ${item.storeName}</h3>
-                            <p>픽업 시간 : ${item.pickupTime}</p>
+                            <p>픽업시간 : ${item.formattedPickupTime}</p>
                             <div class="wrapper">
                                 <p>평점 / 거리</p>
                                 <p>가격 : ${item.price}</p>
@@ -384,129 +358,10 @@
             </c:forEach>
 
 
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/cafe.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/dessert.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/japanese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/chinese.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/korean.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="store-img-box">
-                        <img src="
-            /assets/img/etc.jpg" alt="">
-                    </div>
-                    <div class="store-info">
-                        <h3>가게 이름</h3>
-                        <p>픽업 시간</p>
-                        <div class="wrapper">
-                            <p>평점 / 거리</p>
-                            <p>가격</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="rectangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="triangle"></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="circle"></div>
-            </div>
+            
+            
+            
+    
         </div>
       </div>
     </section>
@@ -563,9 +418,49 @@
   });
 </script>
 <script>
-  const BASE_URL = window.location.origin;
+    document.addEventListener('DOMContentLoaded', function () {
+        const exampleModal = document.getElementById('exampleModal');
+    
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            console.log(button); // 디버깅용 로그
+            const productId = button.getAttribute('data-product-id'); // Extract product ID from data-* attribute
+            console.log('Product ID:', productId); // 디버깅용 로그
+    
+            if (productId) {
+                // Fetch product details using the product ID
+                fetch(`/product/details/\${productId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        // Update the modal content with fetched data
+                        document.getElementById('product-cnt').textContent = `${data.productCnt}개 남음`;
+                        document.getElementById('store-name').textContent = data.storeName;
+                        document.getElementById('prod-category').querySelector('span').textContent = data.category;
+                        document.getElementById('pickup-time').querySelector('span').textContent = data.pickupTime;
+                        document.getElementById('prod-discount').textContent = data.price ;
+                        document.getElementById('store-area').textContent = data.address;
+    
+                        // Update the store image
+                        const imgs = document.querySelector('.store-img-box img');
+                        const storeImg = document.getElementById('store-img');
+                        imgs.src = data.store_img;
+                        storeImg.src = data.storeImg;
+                        storeImg.alt = data.storeName;
+    
+                        // If additional fields need to be updated dynamically, add them here
+                    })
+                    .catch(error => console.error('Error fetching product details:', error));
+            } else {
+                console.error('Product ID is not defined');
+            }
+        });
+    });
+</script>
+<script>
+    const BASE_URL = window.location.origin;
   <%--const customerId = `${sessionScope.login.customerId}`;--%>
-  const customerId = "test@gmail.com";
+  const customerId = `${sessionScope.login.customerId}`;
   document.querySelector('body').addEventListener('click', e => {
     if (!e.target.matches('.swiper-slide *')) {
       return;
@@ -580,8 +475,6 @@
     document.getElementById('store-img').src = getImgSrc; // storeImg
     document.getElementById('store-name').dataset.storeId = $parent.getAttribute('data-store-id');
   });
-</script>
-<script>
   document.getElementById('reservation-btn').addEventListener('click', async (e) => {
 
     const storeId = e.target.closest('.modal-content').querySelector('#store-name').getAttribute('data-store-id');
