@@ -20,7 +20,6 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom{
 
     @Override
     public List<Store> findStoresByCategory(String category) {
-
         //카테고리 별 분류
         return jpaQueryFactory
                 .selectFrom(QStore.store)
