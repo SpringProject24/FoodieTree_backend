@@ -22,25 +22,25 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry
-			.addInterceptor(afterLoginInterceptor)
-			.addPathPatterns("/customer/sign-up", "/customer/sign-in", "/store/sign-up",
-				"/store/sign-in", "/sign-in", "/sign-up")
-		;
-
-		// 자동로그인 인터셉터 등록
-		registry
-			.addInterceptor(autoLoginInterceptor)
-			.addPathPatterns("/**");
-
-		registry
-			.addInterceptor(customerInterceptor)
-			.addPathPatterns("/customer/**")
-			.excludePathPatterns("/customer/sign-in", "/customer/sign-up", "/customer/check");
-
-		registry
-			.addInterceptor(storeInterceptor)
-			.addPathPatterns("/store/**")
-			.excludePathPatterns("/store/sign-in", "/store/sign-up", "/store/check");
+//		registry
+//			.addInterceptor(afterLoginInterceptor)
+//			.addPathPatterns("/customer/sign-up", "/customer/sign-in", "/store/sign-up",
+//				"/store/sign-in", "/sign-in", "/sign-up")
+//		;
+//
+//		// 자동로그인 인터셉터 등록
+//		registry
+//			.addInterceptor(autoLoginInterceptor)
+//			.addPathPatterns("/**");
+//
+//		registry
+//			.addInterceptor(customerInterceptor)
+//			.addPathPatterns("/customer/**")
+//			.excludePathPatterns("/customer/sign-in", "/customer/sign-up", "/customer/check");
+//
+//		registry
+//			.addInterceptor(storeInterceptor)
+//			.addPathPatterns("/store/**")
+//			.excludePathPatterns("/store/sign-in", "/store/sign-up", "/store/check");
 	}
 }

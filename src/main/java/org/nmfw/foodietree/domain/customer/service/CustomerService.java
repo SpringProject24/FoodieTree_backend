@@ -37,17 +37,17 @@ public class CustomerService {
 		Customer customer = dto.toEntity();
 
 		// 비밀번호를 인코딩(암호화)
-		String encodedPassword = encoder.encode(dto.getCustomerPassword());
-		customer.setCustomerPassword(encodedPassword); //인코딩 된 비밀번호를 Customer에 주입
+//		String encodedPassword = encoder.encode(dto.getCustomerPassword());
+//		customer.setCustomerPassword(encodedPassword); //인코딩 된 비밀번호를 Customer에 주입
 
 		boolean saved = customerMapper.save(customer); //데이터에 저장
 
-		if (saved && dto.getFood() != null) {
-			customerMapper.savePreferredFoods(dto.getCustomerId(), dto.getFood());
-		}
+//		if (saved && dto.getFood() != null) {
+//			customerMapper.savePreferredFoods(dto.getCustomerId(), dto.getFood());
+//		}
 
-		System.out.println("\n save = " + saved);
-		System.out.println(dto.getFood());
+//		System.out.println("\n save = " + saved);
+//		System.out.println(dto.getFood());
 
 		return saved; // 데이터 저장 결과 반환
 	}

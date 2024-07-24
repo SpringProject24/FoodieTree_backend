@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.store.controller;
 
+import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -20,8 +21,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/store/mypage")
 public class StoreMyPageController {
-//    String storeId = "aaa@aaa.com";
-String storeId = "sji4205@naver.com";
 
     private final StoreMyPageService storeMyPageService;
 
@@ -32,7 +31,7 @@ String storeId = "sji4205@naver.com";
             , HttpServletResponse response){
 
         log.info("store my page main");
-
+        String storeId = LoginUtil.getLoggedInUser(session);
         StoreMyPageDto storeInfo = storeMyPageService.getStoreMyPageInfo(storeId);
         List<StoreReservationDto> reservations = storeMyPageService.findReservations(storeId);
         StoreStatsDto stats = storeMyPageService.getStats(storeId);
@@ -46,7 +45,8 @@ String storeId = "sji4205@naver.com";
     }
 
     @GetMapping("/main/getProductCount")
-    public ResponseEntity<StoreProductCountDto> getProductCount() {
+    public ResponseEntity<StoreProductCountDto> getProductCount(HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         log.info("store my page get product count");
         StoreProductCountDto dto = storeMyPageService.getStoreProductCnt(storeId);
         log.debug(dto.toString());
@@ -54,23 +54,25 @@ String storeId = "sji4205@naver.com";
     }
 
     @GetMapping("/main/calendar/{dateString}")
-    public ResponseEntity<?> getCalender(@RequestParam String dateString){
+    public ResponseEntity<?> getCalender(@RequestParam String dateString, HttpSession session){
+        String storeId = LoginUtil.getLoggedInUser(session);
         log.info("store my page calendar");
         StoreMyPageDto storeMyPageInfo = storeMyPageService.getStoreMyPageInfo(storeId);
         return ResponseEntity.ok().body(storeMyPageInfo);
     }
 
     @GetMapping("/main/calendar/modal/{dateString}")
-    public ResponseEntity<StoreMyPageCalendarModalDto> getCalenderModalDetail( @PathVariable String dateString){
+    public ResponseEntity<StoreMyPageCalendarModalDto> getCalenderModalDetail( @PathVariable String dateString, HttpSession session){
+        String storeId = LoginUtil.getLoggedInUser(session);
         log.info("store my page calendar modal");
-
         StoreMyPageCalendarModalDto dto = storeMyPageService.getStoreMyPageCalendarModalInfo(storeId, dateString);
         log.info(dto.toString());
         return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping("/main/calendar/setHoliday")
-    public ResponseEntity<?> closeStore(@RequestBody Map<String, String> requestBody){
+    public ResponseEntity<?> closeStore(@RequestBody Map<String, String> requestBody, HttpSession session){
+        String storeId = LoginUtil.getLoggedInUser(session);
         String holidayDate = requestBody.get("holidayDate");
         log.info("set holiday");
         boolean flag = storeMyPageService.setHoliday(storeId, holidayDate);
@@ -78,7 +80,8 @@ String storeId = "sji4205@naver.com";
     }
 
     @DeleteMapping("/main/calendar/undoHoliday")
-    public ResponseEntity<?> undoHoliday(@RequestBody Map<String, String> requestBody){
+    public ResponseEntity<?> undoHoliday(@RequestBody Map<String, String> requestBody, HttpSession session){
+        String storeId = LoginUtil.getLoggedInUser(session);
         String holidayDate = requestBody.get("holidayDate");
         log.info("set holiday");
         boolean flag = storeMyPageService.undoHoliday(storeId, holidayDate);
@@ -94,7 +97,8 @@ String storeId = "sji4205@naver.com";
 
     // 해당 날짜가 휴무일이면 true 반환
     @PostMapping("/main/calendar/check/holiday")
-    public ResponseEntity<?> checkHoliday(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<?> checkHoliday(@RequestBody Map<String, String> requestBody, HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         String date = requestBody.get("date");
         log.info("check holiday");
         boolean isHoliday = storeMyPageService.checkHoliday(storeId, date);
@@ -103,7 +107,8 @@ String storeId = "sji4205@naver.com";
     }
 
     @PostMapping("/main/calendar/setPickupTime")
-    public ResponseEntity<?> setPickupTime(@RequestBody Map<String, String> requestBody){
+    public ResponseEntity<?> setPickupTime(@RequestBody Map<String, String> requestBody, HttpSession session){
+        String storeId = LoginUtil.getLoggedInUser(session);
         String pickupTime = requestBody.get("pickupTime");
         String date = requestBody.get("date");
         log.info("set pickup time");
@@ -112,7 +117,8 @@ String storeId = "sji4205@naver.com";
     }
 
     @GetMapping("/main/getProductCnt")
-    public ResponseEntity<StoreProductCountDto> getStoreProductCnt() {
+    public ResponseEntity<StoreProductCountDto> getStoreProductCnt(HttpSession session) {
+        String storeId = LoginUtil.getLoggedInUser(session);
         log.info("store my page get product count");
         StoreProductCountDto dto = storeMyPageService.getStoreProductCnt(storeId);
         log.debug(dto.toString());
@@ -120,7 +126,8 @@ String storeId = "sji4205@naver.com";
     }
 
     @PostMapping("/main/updateProductCnt")
-    public ResponseEntity<?> updateProductCnt(@RequestBody Map<String, Integer> requestBody){
+    public ResponseEntity<?> updateProductCnt(@RequestBody Map<String, Integer> requestBody, HttpSession session){
+        String storeId = LoginUtil.getLoggedInUser(session);
         int productCnt = requestBody.get("newCount");
         log.info("update product count");
         boolean flag = storeMyPageService.updateProductCnt(storeId, productCnt);

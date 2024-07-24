@@ -261,7 +261,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
               type="text"
               id="businessNumber"
               name="businessNumber"
-              placeholder="사업자 번호를 필수 입력 값입니다."
+              placeholder="전화번호는 필수 입력 값입니다."
               required
             />
           </div>

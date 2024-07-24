@@ -36,7 +36,7 @@ public class CustomerMyPageController {
                             , HttpServletResponse response){
         log.info("/customer/mypage GET");
 //        String customerId = LoginUtil.getLoggedInUser(session);
-        String customerId = "test@gmail.com";
+        String customerId = LoginUtil.getLoggedInUser(request.getSession());
         // 2. 데이터베이스에서 해당 회원 데이터 조회하기
         CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
 
@@ -61,7 +61,7 @@ public class CustomerMyPageController {
                                    HttpServletResponse response) {
         log.info("/customer/customer-mypage-edit-test GET");
 //        String customerId = LoginUtil.getLoggedInUser(session);
-        String customerId = "test@gmail.com";
+        String customerId = LoginUtil.getLoggedInUser(session);
         CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
 
         List<MyPageReservationDetailDto> myPageReservationDetailDto = customerMyPageService.getReservationInfo(customerId);
@@ -96,8 +96,8 @@ public class CustomerMyPageController {
     }
 
     @PostMapping("/update/img")
-    public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg) {
-        String customerId = "test@gmail.com";
+    public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg, HttpSession session) {
+        String customerId = LoginUtil.getLoggedInUser(session);
         UpdateDto dto = new UpdateDto();
         try {
             // 예시로 파일 이름과 크기를 출력하는 코드
