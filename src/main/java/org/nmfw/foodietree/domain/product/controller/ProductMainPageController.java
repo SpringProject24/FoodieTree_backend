@@ -71,7 +71,7 @@ public class ProductMainPageController {
 //            log.info("\n\n\n adadasdsad : {}", productByLike);
 
         // 5. 고객 정보 조회
-            CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId, request, response);
+            CustomerMyPageDto customerMyPageDto = customerMyPageService.getCustomerInfo(customerId);
             if (customerMyPageDto != null) {
                 model.addAttribute("customerMyPageDto", customerMyPageDto);
             } else {

@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.product.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerFavStoreDto;
+import org.nmfw.foodietree.domain.customer.dto.resp.PreferredFoodDto;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.product.dto.response.ProductDto;
@@ -33,7 +34,7 @@ public class ProductMainPageService {
      * @return TotalInfoDto containing product information
      */
     public TotalInfoDto getProductInfo(HttpServletRequest request, HttpServletResponse response, String customerId) {
-        List<String> preferredFood = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredFood();
+        List<PreferredFoodDto> preferredFood = customerMyPageService.getCustomerInfo(customerId).getPreferredFood();
 
 //        if (preferredFood == null) {
 //            log.warn("Preferred food list is null for customerId: {}", customerId);
@@ -55,7 +56,7 @@ public class ProductMainPageService {
      * @return a list of TotalInfoDto containing filtered product information
      */
     public List<ProductDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response) {
-        List<String> preferredFood = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredFood();
+        List<PreferredFoodDto> preferredFood = customerMyPageService.getCustomerInfo(customerId).getPreferredFood();
 //        if (preferredFood == null) {
 //            log.warn("Preferred food list is null for customerId: {}", customerId);
 //            return null; // or handle the case accordingly
@@ -74,7 +75,7 @@ public class ProductMainPageService {
 
 
     public List<ProductDto> findProductByArea(String customerId, HttpServletRequest request, HttpServletResponse response) {
-        List<String> preferredArea = customerMyPageService.getCustomerInfo(customerId, request, response).getPreferredArea();
+        List<String> preferredArea = customerMyPageService.getCustomerInfo(customerId).getPreferredArea();
 //        if (preferredArea == null) {
 //            log.warn("Preferred area list is null for customerId: {}", customerId);
 //            return null; // or handle the case accordingly
@@ -101,7 +102,7 @@ public class ProductMainPageService {
     }
 
     public List<ProductDto> findProductByLike(String customerId, HttpServletRequest request, HttpServletResponse response) {
-        List<CustomerFavStoreDto> favStore = customerMyPageService.getCustomerInfo(customerId, request, response).getFavStore();
+        List<CustomerFavStoreDto> favStore = customerMyPageService.getCustomerInfo(customerId).getFavStore();
         List<ProductDto> categoryByLike = productMainPageMapper.findCategoryByLike(customerId);
         for (ProductDto productDto : categoryByLike) {
             LocalDateTime pickupTime = productDto.getPickupTime();
