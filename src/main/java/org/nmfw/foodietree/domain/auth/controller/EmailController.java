@@ -81,6 +81,7 @@ public class EmailController {
         try {
            EmailCodeDto emailCodeDto = EmailCodeDto.builder()
                    .customerId(email)
+                   .userType(userType)
                    .build();
 
             emailService.sendVerificationEmailLink(email, userType, emailCodeDto);
@@ -100,8 +101,6 @@ public class EmailController {
         // 서버 측에서 받은 요청 데이터를 로그로 출력합니다.
         log.info("Request Data: {}", request);
         String token = request.get("token");
-        String userType = request.get("userType");
-
         // 토큰이 없을 때
         if (token == null || token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Token is missing"));
@@ -114,19 +113,21 @@ public class EmailController {
                     .parseClaimsJws(token);
 
             String email = claims.getBody().get("sub", String.class);
+            String userRole = claims.getBody().get("role", String.class);
 
             log.info("secretKey claim : {}", claims);
 
             log.info("Email extracted from token: {}", email);
 
-            // 이메일 인증 업데이트
-            // 1. 인증테이블에서 현재 아이디 서치
+            log.info("user Role (type) extracted from token: {}", userRole);
+
             EmailCodeDto emailCodeDto = emailMapper.findByEmail(email);
+            emailCodeDto.setUserType(userRole);
 
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
             if (emailCodeDto != null) {
-
+                emailCodeDto.setUserType(userRole);
                 emailCodeDto.setEmailVerified(true);
 
                 emailMapper.save(emailCodeDto); // save가 아니라, update

@@ -7,8 +7,8 @@
 
     <insert id="signUpSaveCustomer">
         INSERT INTO tbl_Customer
-        (customer_id, refresh_token_expire_date)
-        VALUES (#{customerId},#{refreshTokenExpireDate})
+        (customer_id, refresh_token_expire_date, user_type)
+        VALUES (#{customerId},#{refreshTokenExpireDate}, #{userType})
     </insert>
 
     <!-- 새로운 고객 정보 저장-->

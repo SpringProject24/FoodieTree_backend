@@ -13,7 +13,8 @@
         store_id,
         code,
         expiry_date,
-        email_verified
+        email_verified,
+        user_type
         )
         VALUES
         (
@@ -38,21 +39,25 @@
         </choose>,
         NULL,
         #{expiryDate},
-        #{emailVerified}
+        #{emailVerified},
+        #{userType}
         )
     </insert>
 <!--      현재시간으로부터 유효한 코드 가져옴-->
+
     <select id="findByEmail" resultType="EmailCodeDto">
         SELECT
-            customer_id,
-            code,
-            expiry_date
+        customer_id,
+        store_id,
+        code,
+        expiry_date,
+        user_type
         FROM
-            tbl_verification_code
+        tbl_verification_code
         WHERE
-            customer_id = #{customerId}
+        (customer_id = #{customerId} OR (customer_id IS NULL AND store_id = #{storeId}))
         AND
-            expiry_date > NOW()
+        expiry_date > NOW()
         ORDER BY
         expiry_date DESC
         LIMIT 1

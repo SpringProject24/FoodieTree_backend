@@ -12,5 +12,6 @@ import java.util.Date;
 @Builder
 public class EmailCodeCustomerDto {
         private String customerId;
+        private String role;
         private Date refreshTokenExpireDate;
 }

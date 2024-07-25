@@ -12,5 +12,6 @@ import java.util.Date;
 @Builder
 public class EmailCodeStoreDto {
     private String storeId;
+    private String userType;
     private Date refreshTokenExpireDate;
 }

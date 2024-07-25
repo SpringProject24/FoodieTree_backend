@@ -31,6 +31,7 @@ public class UserService {
 
             EmailCodeStoreDto emailCodeStoreDto = EmailCodeStoreDto.builder()
                     .storeId(emailCodeDto.getStoreId())
+                    .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
                     .build();
             storeMapper.signUpSaveStore(emailCodeStoreDto);

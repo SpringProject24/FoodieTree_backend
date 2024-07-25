@@ -46,16 +46,18 @@ public class TokenProvider {
 
         // customerId와 storeId 중 null이 아닌 값을 선택
         String subject = emailCodeDto.getCustomerId() != null ? emailCodeDto.getCustomerId() : emailCodeDto.getStoreId();
+        String userType = emailCodeDto.getUserType();
 
         //추후 수정 : role 관리자 추가하기
         return Jwts.builder()
+                .claim("role", userType) // role 클레임에 userType 추가
                 // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
                 .signWith(key, SignatureAlgorithm.HS512)
                 // payload에 들어갈 내용
                 .setSubject(subject) // sub
                 .setIssuer("foodie tree") // iss
                 .setIssuedAt(new Date()) // iat
-                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.HOURS))) // exp
+                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES))) // exp
                 .compact();
     }
 
@@ -104,6 +106,7 @@ public class TokenProvider {
             return TokenUserInfo.builder()
                     .userId(claims.getSubject())
                     .email(claims.get("sub", String.class))
+                    .role(claims.get("role", String.class))
                     .build();
         } catch (JwtException e) {
             log.error("Token validation error: {}", e.getMessage());
@@ -119,6 +122,7 @@ public class TokenProvider {
     @Builder
     public static class TokenUserInfo {
         private String userId;
+        private String role;
         private String email;
     }
 }
