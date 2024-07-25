@@ -16,15 +16,13 @@ public class StoreListDto {
     private String category;
     private String address;
     private int price;
-    private String storeImage;
+    private String storeImg;
     private int productCnt;
     private LocalTime openAt;
     private LocalTime closedAt;
     private LocalDateTime limitTime;
 
     public static StoreListDto fromEntity(Store store) {
-//        StoreCategory storeCategory = StoreCategory.fromString(String.valueOf(store.getCategory()));
-
 
         return StoreListDto.builder()
                 .storeId(store.getStoreId())
@@ -32,7 +30,7 @@ public class StoreListDto {
                 .category(store.getCategory())
                 .address(store.getAddress())
                 .price(store.getPrice())
-                .storeImage(store.getStoreImage())
+                .storeImg(store.getStoreImg())
                 .productCnt(store.getProductCnt())
                 .openAt(store.getOpenAt())
                 .closedAt(store.getClosedAt())

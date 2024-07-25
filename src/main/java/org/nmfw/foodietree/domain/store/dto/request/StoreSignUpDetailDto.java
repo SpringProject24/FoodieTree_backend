@@ -59,7 +59,7 @@ public class StoreSignUpDetailDto {
                 .warningCount(this.warningCount)
                 .price(this.price)
                 .businessNumber(this.businessNumber)
-                .storeImage(this.storeImage)
+                .storeImg(this.storeImage)
                 .build();
     }
 }
