@@ -122,7 +122,6 @@ public class EmailController {
             log.info("user Role (type) extracted from token: {}", userRole);
 
             EmailCodeDto emailCodeDto = emailMapper.findByEmail(email);
-            emailCodeDto.setUserType(userRole);
 
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
