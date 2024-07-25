@@ -29,11 +29,11 @@ public class TokenProvider {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    // create access token : short term
+    // create access token : short term for access server DB and saved at local storage
     public String createToken(EmailCodeDto emailCodeDto) {
 
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("email", emailCodeDto.getCustomerId());
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("email", emailCodeDto.getCustomerId());
 
         byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
         System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
@@ -47,27 +47,29 @@ public class TokenProvider {
         // customerId와 storeId 중 null이 아닌 값을 선택
         String subject = emailCodeDto.getCustomerId() != null ? emailCodeDto.getCustomerId() : emailCodeDto.getStoreId();
 
+        //추후 수정 : role 관리자 추가하기
         return Jwts.builder()
                 // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
                 .signWith(key, SignatureAlgorithm.HS512)
                 // payload에 들어갈 내용
                 .setSubject(subject) // sub
-                .setIssuer("demo app") // iss
+                .setIssuer("foodie tree") // iss
                 .setIssuedAt(new Date()) // iat
                 .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.HOURS))) // exp
                 .compact();
     }
 
     // refresh token : for long term life cycle and did not need to verify email link
-    public String createRefreshToken(String userId) {
+    // save at user's DB
+    public String createRefreshToken(String email) {
         byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
         byte[] keyBytes = SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setSubject(userId)
-                .setIssuer("demo app")
+                .setSubject(email)
+                .setIssuer("foodie tree")
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS))) // 유효기간 30일로 설정
                 .compact();

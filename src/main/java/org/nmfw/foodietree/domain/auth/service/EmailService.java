@@ -203,6 +203,10 @@ public class EmailService {
 //        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token;
         String verificationLink = "/verifyEmail?token=" + token;
 
+        log.info("인증링크 {} :", verificationLink);
+
+        log.info("인증링크 {} :", verificationLink);
+
 
         // 메일 작성 및 전송
         MimeMessage message = javaMailSender.createMimeMessage();

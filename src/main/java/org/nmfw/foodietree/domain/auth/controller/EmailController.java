@@ -107,7 +107,7 @@ public class EmailController {
                     .setSigningKey(SECRET_KEY.getBytes())
                     .parseClaimsJws(token);
 
-            String email = claims.getBody().get("sub", String.class);
+            String email = claims.getBody().get("email", String.class);
 
             log.info("secretKey claim : {}", claims);
 
@@ -119,23 +119,11 @@ public class EmailController {
 
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
-            // 2. customer, store에 저장할 데이터 빌드 - 이미 저장이 되어있는 경우 체크하고 save ->
-            Customer customer = Customer.builder()
-                    .customerId(email)
-                    .build();
-
-//            Store store = Store.builder()
-//                    .store
-//                    .build();
-
-            log.info("Customer entity to be saved: {}", customer);
-
             if (emailCodeDto != null) {
 
                 emailCodeDto.setEmailVerified(true);
 
                 emailMapper.save(emailCodeDto); // EmailCodeDto 업데이트 호출
-                customerMapper.save(customer); // Customer 저장 호출
 //                storeMapper.save(store); //store 저장 호출
                 return ResponseEntity.ok(Map.of("success", true));
             } else {
