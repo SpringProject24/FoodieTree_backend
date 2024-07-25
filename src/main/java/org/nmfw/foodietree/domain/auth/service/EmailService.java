@@ -38,7 +38,7 @@ public class EmailService {
 
     private static final Map<String, EmailCodeDto> signUpList = new HashMap<>();
 
-    public void sendResetVerificationCode(String to, String purpose) throws MessagingException {
+    public void sendResetVerificationCode(String to, String userType,String purpose) throws MessagingException {
         String code = CodeGenerator.generateCode();
 
         MimeMessage message = javaMailSender.createMimeMessage();
@@ -69,7 +69,7 @@ public class EmailService {
         }
 
         // 데이터베이스에 코드와 만료 날짜를 저장
-        saveVerificationCode(to, code);
+        saveVerificationCode(to, userType,code);
     }
 
     public boolean verifyCode(String email, String inputCode) {
@@ -174,7 +174,7 @@ public class EmailService {
                 "</html>";
     }
 
-    private void saveVerificationCode(String email, String code) {
+    private void saveVerificationCode(String email, String userType,String code) {
         EmailCodeDto verificationCode = EmailCodeDto.builder()
                 .customerId(email)
                 .code(code)
@@ -185,13 +185,17 @@ public class EmailService {
     }
 
     // 이메일 인증 링크 전송 메서드
-    public void sendVerificationEmailLink(String email, EmailCodeDto emailCodeDto) throws MessagingException {
+    public void sendVerificationEmailLink(String email, String userType, EmailCodeDto emailCodeDto) throws MessagingException {
 
         // JWT 토큰 생성
         String token = tokenProvider.createToken(emailCodeDto);
 
+        log.info("전달받은 usertype : {}", userType);
+
         EmailCodeDto dto = EmailCodeDto.builder()
                 .customerId(email)
+                .storeId(email)
+                .userType(userType)
                 .expiryDate(LocalDateTime.now().plusMinutes(60))
                 .build();
 
@@ -202,9 +206,6 @@ public class EmailService {
 //        String verificationLink = "/verifyEmail?token=" + token;
 
         log.info("인증링크 {} :", verificationLink);
-
-        log.info("인증dto email {} :", dto.getCustomerId());
-
 
         // 메일 작성 및 전송
         MimeMessage message = javaMailSender.createMimeMessage();

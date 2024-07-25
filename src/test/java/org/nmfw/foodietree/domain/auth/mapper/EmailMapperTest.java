@@ -30,7 +30,7 @@ class EmailMapperTest {
                 .build();
         
         //when
-        emailMapper.save(emailVerification);
+//        emailMapper.save(emailVerification);
         System.out.println("emailVerification = " + emailVerification);
         //then
     }

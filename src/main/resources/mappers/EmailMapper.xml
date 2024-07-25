@@ -7,22 +7,40 @@
 
     <insert id="save">
         INSERT INTO
-            tbl_verification_code
-                (
-                    customer_id,
-                    code,
-                    expiry_date,
-                    email_verified
-                )
+        tbl_verification_code
+        (
+        customer_id,
+        store_id,
+        code,
+        expiry_date,
+        email_verified
+        )
         VALUES
-                (
-                    #{customerId},
-                    NULL,
-                    #{expiryDate},
-                    #{emailVerified}
-                )
+        (
+        <choose>
+            <when test="userType == 'customer'">
+                #{customerId}
+            </when>
+            <when test="userType == 'store'">
+                NULL
+            </when>
+            <otherwise>
+                NULL
+            </otherwise>
+        </choose>,
+        <choose>
+            <when test="userType == 'store'">
+                #{storeId}
+            </when>
+            <otherwise>
+                NULL
+            </otherwise>
+        </choose>,
+        NULL,
+        #{expiryDate},
+        #{emailVerified}
+        )
     </insert>
-
 <!--      현재시간으로부터 유효한 코드 가져옴-->
     <select id="findByEmail" resultType="EmailCodeDto">
         SELECT

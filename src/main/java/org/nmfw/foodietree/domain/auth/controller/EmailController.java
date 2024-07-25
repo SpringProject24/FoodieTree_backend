@@ -38,9 +38,9 @@ public class EmailController {
     private final EmailMapper emailMapper;
 
     @GetMapping("/send-reset-email")
-    public String sendVerificationCode(@RequestParam String to) {
+    public String sendVerificationCode(@RequestParam String to, String userType) {
         try {
-            emailService.sendResetVerificationCode(to, "reset");
+            emailService.sendResetVerificationCode(to, userType, "reset");
             return "Password reset email sent successfully";
         } catch (Exception e) {
             return "Failed to send password reset email: " + e.getMessage();
@@ -61,8 +61,9 @@ public class EmailController {
     public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         String purpose = request.get("purpose");
+        String userType = request.get("userType");
         try {
-            emailService.sendResetVerificationCode(email, purpose);
+            emailService.sendResetVerificationCode(email, purpose, userType);
             return ResponseEntity.ok("Verification code sent");
         } catch (MessagingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification code");
@@ -73,13 +74,16 @@ public class EmailController {
     @PostMapping("/sendVerificationLink")
     public ResponseEntity<?> sendVerificationLink(@RequestBody Map<String, String> request) {
         String email = request.get("email");
+        String userType = request.get("userType");
         String purpose = request.get("purpose");
+        log.info("usertype :{} ", userType);
+
         try {
            EmailCodeDto emailCodeDto = EmailCodeDto.builder()
                    .customerId(email)
                    .build();
 
-            emailService.sendVerificationEmailLink(email, emailCodeDto);
+            emailService.sendVerificationEmailLink(email, userType, emailCodeDto);
 
             return ResponseEntity.ok("Verification Link sent");
         } catch (MessagingException e) {
@@ -96,6 +100,7 @@ public class EmailController {
         // 서버 측에서 받은 요청 데이터를 로그로 출력합니다.
         log.info("Request Data: {}", request);
         String token = request.get("token");
+        String userType = request.get("userType");
 
         // 토큰이 없을 때
         if (token == null || token.isEmpty()) {
