@@ -34,4 +34,5 @@ public interface CustomerMapper {
     void updateAutoLogin(AutoLoginDto dto);
 
     Customer findCustomerBySession(String sessionId);
+
 }
