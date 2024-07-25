@@ -24,6 +24,7 @@ public class EmailCodeDto{
     public EmailVerification toEntity() {
         return EmailVerification.builder()
                 .customerId(this.customerId)
+                .storeId(this.storeId)
                 .code(this.code)
                 .expiryDate(this.expiryDate)
                 .emailVerified(this.emailVerified)

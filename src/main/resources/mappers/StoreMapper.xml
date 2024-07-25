@@ -5,6 +5,12 @@
 
 <mapper namespace="org.nmfw.foodietree.domain.store.mapper.StoreMapper">
 
+  <insert id="signUpSave">
+    INSERT INTO tbl_Store
+    (store_id, refresh_token_expire_date)
+    VALUES (#{storeId},#{refreshTokenExpireDate})
+  </insert>
+
   <insert id="save">
     INSERT INTO tbl_store
       (store_id, password, category, address, approve, warning_count, price, business_number)

@@ -27,16 +27,16 @@ public class StoreSignUpDto {
     @Size(min = 7, max = 50)
     private String account;
 
-    @NotBlank(message = "비밀번호는 필수 값입니다")
-//    @Size(min = 8, message = "비밀번호는 8글자 이상이어야합니다")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
-            message = "비밀번호는 8자 이상이어야 하며, 영문자와 숫자를 포함해야 합니다")
-    private String password;
+//    @NotBlank(message = "비밀번호는 필수 값입니다")
+////    @Size(min = 8, message = "비밀번호는 8글자 이상이어야합니다")
+//    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+//            message = "비밀번호는 8자 이상이어야 하며, 영문자와 숫자를 포함해야 합니다")
+//    private String password;
 
     public Store toEntity(){
         return Store.builder()
                 .storeId(this.account)
-                .password(this.password)
+//                .password(this.password) // - > refresh token expire date
                 .build();
     }
 }

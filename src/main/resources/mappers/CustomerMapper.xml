@@ -5,6 +5,11 @@
 
 <mapper namespace="org.nmfw.foodietree.domain.customer.mapper.CustomerMapper">
 
+    <insert id="signUpSaveCustomer">
+        INSERT INTO tbl_Customer
+        (customer_id, refresh_token_expire_date)
+        VALUES (#{customerId},#{refreshTokenExpireDate})
+    </insert>
 
     <!-- 새로운 고객 정보 저장-->
     <insert id="save">

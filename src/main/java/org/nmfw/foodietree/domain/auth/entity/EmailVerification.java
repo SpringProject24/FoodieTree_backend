@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 @Builder
 public class EmailVerification {
     private int id;
-    private String customerId;
+    private String customerId; //nullable
+    private String storeId; //nullable
     private String code;
     private LocalDateTime expiryDate;
     private boolean emailVerified;

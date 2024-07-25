@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
 import org.nmfw.foodietree.domain.auth.service.EmailService;
+import org.nmfw.foodietree.domain.auth.service.UserService;
 import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
@@ -33,7 +34,7 @@ import java.util.Map;
 public class EmailController {
 
     private final EmailService emailService;
-    private final CustomerMapper customerMapper;
+    private final UserService userService;
     private final EmailMapper emailMapper;
 
     @GetMapping("/send-reset-email")
@@ -68,7 +69,7 @@ public class EmailController {
         }
     }
 
-    // 인증 리다이렉션 링크 메일 전송 -> customer
+    // 인증 리다이렉션 링크 메일 전송
     @PostMapping("/sendVerificationLink")
     public ResponseEntity<?> sendVerificationLink(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -96,25 +97,25 @@ public class EmailController {
         log.info("Request Data: {}", request);
         String token = request.get("token");
 
+        // 토큰이 없을 때
         if (token == null || token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Token is missing"));
         }
 
-        // usertype이 store 인지 customer 인지 구분해서 저장하기
-
+        // usertype이 store 인지 customer 인지 구분해서 저장 -> 서비스레이어
         try {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(SECRET_KEY.getBytes())
                     .parseClaimsJws(token);
 
-            String email = claims.getBody().get("email", String.class);
+            String email = claims.getBody().get("sub", String.class);
 
             log.info("secretKey claim : {}", claims);
 
             log.info("Email extracted from token: {}", email);
 
             // 이메일 인증 업데이트
-            // 1. 인증테이블에서 인증번호 보낸 아이디 서치
+            // 1. 인증테이블에서 현재 아이디 서치
             EmailCodeDto emailCodeDto = emailMapper.findByEmail(email);
 
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
@@ -123,8 +124,10 @@ public class EmailController {
 
                 emailCodeDto.setEmailVerified(true);
 
-                emailMapper.save(emailCodeDto); // EmailCodeDto 업데이트 호출
-//                storeMapper.save(store); //store 저장 호출
+                emailMapper.save(emailCodeDto); // save가 아니라, update
+
+                userService.saveUserInfo(emailCodeDto); // 실제 usertype 에 맞게 저장
+
                 return ResponseEntity.ok(Map.of("success", true));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "User not found"));

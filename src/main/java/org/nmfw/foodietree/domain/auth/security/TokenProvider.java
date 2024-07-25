@@ -75,6 +75,18 @@ public class TokenProvider {
                 .compact();
     }
 
+    public Date getExpirationDateFromToken(String token) {
+        byte[] keyBytes = SECRET_KEY.getBytes();
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+    }
+
 
    public TokenUserInfo validateAndGetTokenInfo(String token) {
         SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET_KEY));
@@ -91,7 +103,7 @@ public class TokenProvider {
 
             return TokenUserInfo.builder()
                     .userId(claims.getSubject())
-                    .email(claims.get("email", String.class))
+                    .email(claims.get("sub", String.class))
                     .build();
         } catch (JwtException e) {
             log.error("Token validation error: {}", e.getMessage());

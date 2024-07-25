@@ -33,8 +33,6 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final EmailMapper emailMapper;
-//    private final StoreMapper storeMapper;
-//    private final CustomerMapper customerMapper;
 
     private final TokenProvider tokenProvider;
 
@@ -200,12 +198,12 @@ public class EmailService {
         emailMapper.save(dto);
 
         // 이메일에 포함될 링크 생성
-//        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token;
-        String verificationLink = "/verifyEmail?token=" + token;
+        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token;
+//        String verificationLink = "/verifyEmail?token=" + token;
 
         log.info("인증링크 {} :", verificationLink);
 
-        log.info("인증링크 {} :", verificationLink);
+        log.info("인증dto email {} :", dto.getCustomerId());
 
 
         // 메일 작성 및 전송
@@ -215,6 +213,8 @@ public class EmailService {
         helper.setSubject("FoodieTree 이메일 인증 링크");
 
         String htmlContent = generateEmailLinkHtml(verificationLink);
+
+        log.info("EMAIL!!!!! html content : {}",verificationLink);
 
         helper.setText(htmlContent, true);
 
@@ -277,4 +277,5 @@ public class EmailService {
                 "</body>\n" +
                 "</html>";
     }
+
 }
