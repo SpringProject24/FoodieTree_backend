@@ -10,7 +10,7 @@
   <typeAliases>
     <typeAlias type="org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto" alias="CustomerMyPageDto"/>
     <typeAlias type="org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto" alias="MyPageReservationDetailDto"/>
-    <typeAlias type="org.nmfw.foodietree.domain.customer.entity.ReservationDetail" alias="ReservationDetail"/>
+    <typeAlias type="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto" alias="ReservationDetail"/>
     <typeAlias type="org.nmfw.foodietree.domain.customer.entity.CustomerIssues" alias="CustomerIssues"/>
     <typeAlias type="org.nmfw.foodietree.domain.customer.dto.resp.CustomerFavStoreDto" alias="CustomerFavStoreDto"/>
     <typeAlias type="org.nmfw.foodietree.domain.customer.dto.resp.PreferredFoodDto" alias="PreferredFoodDto"/>

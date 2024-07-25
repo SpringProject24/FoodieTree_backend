@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerFavStoreDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
 import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
-import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,11 +79,11 @@ class CustomerMyPageMapperTest {
         //given
         String customerId = "test@gmail.com";
         //when
-        List<ReservationDetail> reservations = customerMyPageMapper.findReservations(customerId);
+        List<ReservationDetailDto> reservations = customerMyPageMapper.findReservations(customerId);
         //then
 //        System.out.println("reservations = " + reservations);
 
-        for (ReservationDetail reservation : reservations) {
+        for (ReservationDetailDto reservation : reservations) {
             System.out.println("reservation = " + reservation.getReservationId());
             System.out.println("reservation = " + reservation.getStoreName());
         }

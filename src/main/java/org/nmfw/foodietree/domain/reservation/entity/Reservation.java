@@ -16,4 +16,5 @@ public class Reservation {
     private LocalDateTime reservationTime;
     private LocalDateTime cancelReservationAt;
     private LocalDateTime pickedUpAt;
+    private ReservationStatus status;
 }

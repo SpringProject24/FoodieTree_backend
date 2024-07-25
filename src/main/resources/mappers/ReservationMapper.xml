@@ -5,31 +5,35 @@
 
 <mapper namespace="org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper">
 
+    <!--  예약 취소  -->
     <update id="cancelReservation">
         UPDATE tbl_reservation
         SET cancel_reservation_at = NOW()
         WHERE reservation_id = #{reservationId}
     </update>
 
+    <!--  픽업 완료  -->
     <update id="completePickup">
         UPDATE tbl_reservation
         SET picked_up_at = NOW()
         WHERE reservation_id = #{reservationId}
     </update>
 
+    <!--  예약 시간 조회  -->
     <select id="findByReservationId" resultType="ReservationStatusDto">
         SELECT
-            r.reservation_time,
-            r.cancel_reservation_at,
-            r.picked_up_at,
-            p.pickup_time
+        r.reservation_time,
+        r.cancel_reservation_at,
+        r.picked_up_at,
+        p.pickup_time
         FROM tbl_reservation r
         JOIN tbl_product p ON r.product_id = p.product_id
         WHERE reservation_id = #{reservationId}
     </select>
 
+    <!--  예약 상세 조회  -->
     <select id="findModalDetailByReservationId" resultType="ReservationModalDetailDto">
-    SELECT
+        SELECT
         r.reservation_id,
         r.product_id,
         r.customer_id,
@@ -45,27 +49,29 @@
         s.store_img,
         c.nickname,
         c.profile_image
-    FROM
+        FROM
         tbl_reservation r
-    JOIN tbl_product p ON r.product_id = p.product_id
-    JOIN tbl_store s ON p.store_id = s.store_id
-    JOIN tbl_customer c ON r.customer_id = c.customer_id
-    WHERE r.reservation_id = #{reservationId}
+        JOIN tbl_product p ON r.product_id = p.product_id
+        JOIN tbl_store s ON p.store_id = s.store_id
+        JOIN tbl_customer c ON r.customer_id = c.customer_id
+        WHERE r.reservation_id = #{reservationId}
     </select>
 
+    <!--  예약 생성  -->
     <insert id="createReservation">
         INSERT INTO tbl_reservation
-            (customer_id, product_id)
-        VALUES (#{customerId}, #{productId})
+        (customer_id, product_id)
+        VALUES (#{customerId}, #{ProductId})
     </insert>
 
+    <!--  예약 가능 제품 조회  -->
     <select id="findByStoreIdLimit" resultType="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto">
         SELECT
-            store_id,
-            product_id,
-            TIMESTAMPDIFF(SECOND, NOW(), pickup_time) as 'sec_left'
+        store_id,
+        product_id,
+        TIMESTAMPDIFF(SECOND, NOW(), pickup_time) as 'sec_left'
         FROM
-            tbl_product
+        tbl_product
         WHERE 1=1
         AND store_id = #{storeId}
         AND TIMESTAMPDIFF(SECOND, NOW(), pickup_time) > 0

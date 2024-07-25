@@ -2,7 +2,7 @@ package org.nmfw.foodietree.domain.reservation.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +23,11 @@ class ReservationServiceTest {
         //given
 
         //when
-        ReservationModalDetailDto reservationDetail = reservationService.getReservationDetail(3);
+        ReservationDetailDto dto = reservationService.getReservationDetail(3);
         //then
-        System.out.println("reservationDetail = " + reservationDetail.getStatus());
-        System.out.println("reservationDetail = " + reservationDetail.getPickedUpAt());
-        System.out.println("reservationDetail.getNickname() = " + reservationDetail.getNickname());
+        System.out.println("reservationDetail = " + dto.getStatus());
+        System.out.println("reservationDetail = " + dto.getPickedUpAt());
+        System.out.println("reservationDetail.getNickname() = " + dto.getNickname());
     }
 
     @Test

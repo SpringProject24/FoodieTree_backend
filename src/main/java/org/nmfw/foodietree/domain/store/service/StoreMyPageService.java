@@ -2,11 +2,10 @@ package org.nmfw.foodietree.domain.store.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
-import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
-import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.product.dto.response.ProductInfoDto;
-import org.nmfw.foodietree.domain.product.service.ProductMainPageService;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
+import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
+import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,7 @@ import java.util.stream.Collectors;
 public class StoreMyPageService {
 
     private final StoreMyPageMapper storeMyPageMapper;
-    private final CustomerMyPageService customerMyPageService;
-    private final ProductMainPageService productMainPageService;
+    private final ReservationService reservationService;
 
     public StoreMyPageDto getStoreMyPageInfo(String storeId) {
         log.info("store my page service");
@@ -38,13 +36,13 @@ public class StoreMyPageService {
         List<StoreReservationDto> reservations = storeMyPageMapper.findReservations(storeId);
 
         for (StoreReservationDto dto : reservations) {
-            ReservationDetail rdto = ReservationDetail.builder()
+            ReservationDetailDto rdto = ReservationDetailDto.builder()
                     .pickedUpAt(dto.getPickedUpAt())
                     .pickupTime(dto.getPickupTime())
                     .cancelReservationAt(dto.getCancelReservationAt())
                     .reservationTime(dto.getReservationTime())
                     .build();
-            PickUpStatus status = customerMyPageService.determinePickUpStatus(rdto);
+            ReservationStatus status = reservationService.determinePickUpStatus(rdto);
             dto.setStatus(status);
         }
 

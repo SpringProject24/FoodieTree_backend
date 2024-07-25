@@ -1,7 +1,7 @@
 package org.nmfw.foodietree.domain.reservation.dto.resp;
 
 import lombok.*;
-import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
+import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +29,7 @@ public class ReservationModalDetailDto {
     private String storeImg;
     private String nickname;
     private String profileImage;
-    private PickUpStatus status; // 고객이 예약을 픽업했는지, 픽업대기중인지, 픽업취소 했는지
+    private ReservationStatus status; // 고객이 예약을 픽업했는지, 픽업대기중인지, 픽업취소 했는지
 
     private String  reservationTimeF; // 고객이 예약한 시간
     private String cancelReservationAtF; // 고객이 얘약을 취소한 시간 null 가능, 값이 존재한다면 예약취소 된 것

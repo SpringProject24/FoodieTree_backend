@@ -2,7 +2,7 @@ package org.nmfw.foodietree.domain.store.dto.resp;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
+import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +26,7 @@ public class StoreReservationDto {
     private LocalDateTime pickupTime;
     private LocalDateTime productUploadDate;
     private int price;
-    private PickUpStatus status;
+    private ReservationStatus status;
 
     private String reservationTimeF;
     private String cancelReservationAtF;
