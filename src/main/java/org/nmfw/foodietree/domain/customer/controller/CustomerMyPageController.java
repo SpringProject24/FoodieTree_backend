@@ -25,14 +25,16 @@ public class CustomerMyPageController {
     @Value("${env.upload.path}")
     private String uploadDir;
     private final CustomerMyPageService customerMyPageService;
+
+    // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
+    String customerId = "test@gmail.com";
     
     /**
      * 고객 정보를 가져오는 GET 요청 처리
      * @return 고객 정보 DTO
      */
     @GetMapping("/info")
-    public ResponseEntity<CustomerMyPageDto> getUserInfo() {
-        String customerId = "test@gmail.com"; // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
+    public ResponseEntity<CustomerMyPageDto> getUserInfo(String customerId) {
         CustomerMyPageDto customerInfo = customerMyPageService.getCustomerInfo(customerId);
         return ResponseEntity.ok(customerInfo);
     }
@@ -42,8 +44,7 @@ public class CustomerMyPageController {
      * @return 고객 통계 정보 DTO
      */
     @GetMapping("/stats")
-    public ResponseEntity<StatsDto> getStats() {
-        String customerId = "test.gmail.com"; // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
+    public ResponseEntity<StatsDto> getStats(String customerId) {
         StatsDto stats = customerMyPageService.getStats(customerId);
         return ResponseEntity.ok(stats);
     }
@@ -53,8 +54,7 @@ public class CustomerMyPageController {
      * @return 고객 예약 목록 DTO 리스트
      */
     @GetMapping("/reservations")
-    public ResponseEntity<List<MyPageReservationDetailDto>> getReservations() {
-        String customerId = "test@gmail.com"; // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
+    public ResponseEntity<List<MyPageReservationDetailDto>> getReservations(String customerId) {
         List<MyPageReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok(reservations);
     }

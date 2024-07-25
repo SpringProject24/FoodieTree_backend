@@ -2,8 +2,8 @@ package org.nmfw.foodietree.domain.reservation.mapper;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
-import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationModalDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ class ReservationMapperTest {
         //given
         int reservationId = 3;
         //when
-        ReservationModalDetailDto dto = reservationMapper.findModalDetailByReservationId(reservationId);
+        ReservationDetailDto dto = reservationMapper.findReservationById(reservationId);
         //then
         System.out.println("dto = " + dto);
     }

@@ -32,7 +32,7 @@
     </select>
 
     <!--  예약 상세 조회  -->
-    <select id="findModalDetailByReservationId" resultType="ReservationModalDetailDto">
+    <select id="findReservationById" resultType="ReservationDetail">
         SELECT
         r.reservation_id,
         r.product_id,
