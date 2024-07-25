@@ -39,60 +39,61 @@ public class StoreMyPageEditService {
 		return storeMyPageService.getStats(storeId);
 	}
 
-	public void updateStoreInfo(String storeId, String type, String value) {
+	public boolean updateStoreInfo(String storeId, String type, String value) {
 		log.info("update store info");
+		boolean flag;
 		switch (type) {
 			case "price":
-				updatePrice(storeId, Integer.parseInt(value));
+				flag = updatePrice(storeId, Integer.parseInt(value));
 				break;
 			case "openAt":
-				updateOpenAt(storeId, value);
+				flag = updateOpenAt(storeId, value);
 				break;
 			case "closedAt":
-				updateClosedAt(storeId, value);
+				flag = updateClosedAt(storeId, value);
 				break;
 			case "productCnt":
-				updateProductCnt(storeId, Integer.parseInt(value));
+				flag = updateProductCnt(storeId, Integer.parseInt(value));
 				break;
 			default:
-				storeMyPageEditMapper.updateStoreInfo(storeId, type, value);
+				flag = storeMyPageEditMapper.updateStoreInfo(storeId, type, value);
 				break;
 		}
+		return flag;
 	}
 
-	public void updatePrice(String storeId, int price) {
+	public boolean updatePrice(String storeId, int price) {
 		log.info("update price");
-		storeMyPageEditMapper.updatePrice(storeId, price);
+		return storeMyPageEditMapper.updatePrice(storeId, price);
 	}
 
-	public void updateOpenAt(String storeId, String time) {
+	public boolean updateOpenAt(String storeId, String time) {
 		log.info("update open at");
 		time = time.replaceAll("\"", "");
 		LocalTime openAt = LocalTime.parse(time);
-		storeMyPageEditMapper.updateOpenAt(storeId, openAt);
+		return storeMyPageEditMapper.updateOpenAt(storeId, openAt);
 	}
 
-	public void updateClosedAt(String storeId, String time) {
+	public boolean updateClosedAt(String storeId, String time) {
 		log.info("update closed at");
 		// 시간 문자열에서 따옴표 등을 제거
 		time = time.replaceAll("\"", "");
-
 		try {
 			// 시간 문자열을 LocalTime으로 파싱
 			LocalTime closedAt = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
 
 			// Mapper를 통해 업데이트 실행
-			storeMyPageEditMapper.updateClosedAt(storeId, closedAt);
-
+			return storeMyPageEditMapper.updateClosedAt(storeId, closedAt);
 		} catch (DateTimeParseException e) {
 			log.error("Failed to parse time string: {}", time);
-			throw new IllegalArgumentException("Invalid time format. Use HH:mm format.", e);
+			e.printStackTrace();
 		}
+		return false;
 	}
 
-	public void updateProductCnt(String storeId, int cnt) {
+	public boolean updateProductCnt(String storeId, int cnt) {
 		log.info("update product cnt");
-		storeMyPageEditMapper.updateProductCnt(storeId, cnt);
+		return storeMyPageEditMapper.updateProductCnt(storeId, cnt);
 	}
 
 	public boolean updateProfileImg(String storeId, MultipartFile storeImg) {
@@ -103,8 +104,7 @@ public class StoreMyPageEditService {
 					dir.mkdirs();
 				}
 				String imagePath = FileUtil.uploadFile(uploadDir, storeImg);
-				updateStoreInfo(storeId, "store_img", imagePath);
-				return true;
+				return updateStoreInfo(storeId, "store_img", imagePath);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

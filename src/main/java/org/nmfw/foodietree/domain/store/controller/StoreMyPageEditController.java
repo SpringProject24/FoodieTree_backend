@@ -49,8 +49,10 @@ public class StoreMyPageEditController {
     @PatchMapping("/edit")
     public ResponseEntity<?> updateStoreInfo(@RequestBody UpdateDto dto) {
         String storeId = "thdghtjd115@naver.com";
-        storeMyPageEditService.updateStoreInfo(storeId, dto.getType(), dto.getValue());
-        return ResponseEntity.ok().body("update store info");
+        boolean flag = storeMyPageEditService.updateStoreInfo(storeId, dto.getType(), dto.getValue());
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
     }
 
     /**
