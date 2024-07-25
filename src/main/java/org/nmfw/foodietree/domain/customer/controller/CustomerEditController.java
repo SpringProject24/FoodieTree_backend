@@ -22,30 +22,24 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class CustomerEditController {
 
-	@Value("${env.upload.path}")
-	private String uploadDir;
+
 	private final CustomerMyPageService customerMyPageService;
 
+	/**
+	 *
+	 * @method   imageUpload
+	 * @param    customerImg
+	 * @return   ResponseEntity<?> type
+	 * @author   hoho
+	 * @date     2024 07 25 15:14
+	 *
+	 */
 	@PostMapping("/customer/edit/img")
 	public ResponseEntity<?> imageUpload(@RequestParam("customerImg") MultipartFile customerImg) {
 		String customerId = "test@gmail.com";
-		try {
-			if (!customerImg.isEmpty()) {
-				File dir = new File(uploadDir);
-				if (!dir.exists()) {
-					dir.mkdirs();
-				}
-				String imagePath = FileUtil.uploadFile(uploadDir, customerImg);
-				UpdateDto dto = UpdateDto.builder()
-					.type("profile_image")
-					.value(imagePath)
-					.build();
-				customerMyPageService.updateCustomerInfo(customerId, List.of(dto));
-				return ResponseEntity.ok().body(true);
-			}
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		boolean flag = customerMyPageService.updateProfileImg(customerId, customerImg);
+		if (flag)
+			return ResponseEntity.ok().body(true);
 		return ResponseEntity.badRequest().body(false);
 	}
 
@@ -61,7 +55,6 @@ public class CustomerEditController {
 	 *  	value: string
 	 * }
 	 */
-
 	@PostMapping("/customer/edit")
 	public ResponseEntity<?> insertPreferred(@RequestBody UpdateDto dto) {
 		String customerId = "test@gmail.com";
@@ -87,8 +80,10 @@ public class CustomerEditController {
 	@DeleteMapping("/customer/edit")
 	public ResponseEntity<?> deletePreferred(@RequestBody UpdateDto dto) {
 		String customerId = "test@gmail.com";
-		customerMyPageService.deleteCustomerInfo(customerId, List.of(dto));
-		return ResponseEntity.ok().body(true);
+		boolean flag = customerMyPageService.deleteCustomerInfo(customerId, List.of(dto));
+		if (flag)
+			return ResponseEntity.ok().body(true);
+		return ResponseEntity.badRequest().body(false);
 	}
 
 	/**
