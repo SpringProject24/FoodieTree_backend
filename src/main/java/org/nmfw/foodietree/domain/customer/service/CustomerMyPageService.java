@@ -50,44 +50,32 @@ public class CustomerMyPageService {
     }
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH시mm분");
-    /**
-     *
-     * @param customerId: 회원아이디를 전달받아
-     * @return MyPageReservationDetailDto List
-     */
-    public List<MyPageReservationDetailDto> getReservationInfo(String customerId) {
 
+    /**
+     * 고객의 예약 목록을 가져오는 메서드
+     * @param customerId 고객 ID
+     * @return 고객 예약 목록 DTO 리스트
+     */
+    public List<MyPageReservationDetailDto> getReservationList(String customerId) {
         List<ReservationDetail> reservations = customerMyPageMapper.findReservations(customerId);
 
-
-//        List<MyPageReservationDetailDto> collect = reservations.stream().map(reservation -> {
-//                    MyPageReservationDetailDto dto = new MyPageReservationDetailDto(reservation);
-//                    dto.setStatus(determinePickUpStatus(reservation));
-//                    return dto;
-//                });
-        List<MyPageReservationDetailDto> collect1 = reservations.stream()
-                .map(reservation -> {
-                    MyPageReservationDetailDto dto = new MyPageReservationDetailDto(reservation);
-                    dto.setStatus(determinePickUpStatus(reservation));
-                    return dto;
-                }).collect(Collectors.toList());
-
-        List<MyPageReservationDetailDto> collect = reservations.stream()
-                .map(reservation -> MyPageReservationDetailDto.builder().status(determinePickUpStatus(reservation))
+        List<MyPageReservationDetailDto> reservationList = reservations.stream()
+                .map(reservation -> MyPageReservationDetailDto.builder()
                         .reservationId(reservation.getReservationId())
-                        .customerId(reservation.getCustomerId())
-                        .nickname(reservation.getNickname())
-                        .reservationTime(reservation.getReservationTime())
-                        .cancelReservationAt(reservation.getCancelReservationAt())
-                        .pickedUpAt(reservation.getPickedUpAt())
-                        .pickupTime(reservation.getPickupTime())
-                        .storeName(reservation.getStoreName())
+                        .status(determinePickUpStatus(reservation))
                         .storeImg(reservation.getStoreImg())
+                        .storeName(reservation.getStoreName())
+                        .reservationTime(reservation.getReservationTime())
+                        .pickupTime(reservation.getPickupTime())
+                        .pickedUpAt(reservation.getPickedUpAt())
+                        .nickname(reservation.getNickname())
+                        .cancelReservationAt(reservation.getCancelReservationAt())
+                        .customerId(reservation.getCustomerId())
                         .price(reservation.getPrice())
-                        .build()).collect(Collectors.toList());
+                        .build())
+                .collect(Collectors.toList());
 
-
-        for (MyPageReservationDetailDto reservation : collect) {
+        for (MyPageReservationDetailDto reservation : reservationList) {
             log.info(reservation.toString());
             if (reservation.getReservationTime() != null) {
                 reservation.setReservationTimeF(reservation.getReservationTime().format(formatter));
@@ -102,7 +90,7 @@ public class CustomerMyPageService {
                 reservation.setPickupTimeF(reservation.getPickupTime().format(formatter));
             }
         }
-        return collect;
+        return reservationList;
     }
 
     public PickUpStatus determinePickUpStatus(ReservationDetail reservation) {

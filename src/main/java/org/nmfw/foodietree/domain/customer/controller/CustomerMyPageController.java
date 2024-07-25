@@ -48,6 +48,19 @@ public class CustomerMyPageController {
         return ResponseEntity.ok(stats);
     }
 
+    /**
+     * 고객 예약 목록을 가져오는 GET 요청 처리
+     * @return 고객 예약 목록 DTO 리스트
+     */
+    @GetMapping("/reservations")
+    public ResponseEntity<List<MyPageReservationDetailDto>> getReservations() {
+        String customerId = "test@gmail.com"; // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
+        List<MyPageReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
+        return ResponseEntity.ok(reservations);
+    }
+
+    // 여기까지 작업완료 - 한솔
+
     @PatchMapping("/{customerId}/update")
     public ResponseEntity<?> updateCustomerInfo(@PathVariable String customerId, @RequestBody List<UpdateDto> updates) {
 

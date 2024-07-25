@@ -27,7 +27,7 @@ public class ReservationController {
 
     @GetMapping("/{customerId}")
     public ResponseEntity<List<MyPageReservationDetailDto>> getReservationList(@PathVariable String customerId) {
-        List<MyPageReservationDetailDto> reservations = customerMyPageService.getReservationInfo(customerId);
+        List<MyPageReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok().body(reservations);
     }
 

@@ -4,13 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 class CustomerMyPageServiceTest {
@@ -23,7 +21,7 @@ class CustomerMyPageServiceTest {
         //given
         String customerId = "test@gmail.com";
         //when
-        List<MyPageReservationDetailDto> reservationInfo = customerMyPageService.getReservationInfo(customerId);
+        List<MyPageReservationDetailDto> reservationInfo = customerMyPageService.getReservationList(customerId);
         //then
         for (MyPageReservationDetailDto myPageReservationDetailDto : reservationInfo) {
             System.out.println("\n\n\n");
