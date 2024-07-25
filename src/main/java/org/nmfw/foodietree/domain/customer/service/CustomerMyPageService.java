@@ -122,37 +122,6 @@ public class CustomerMyPageService {
 		}
 	}
 
-
-	public List<CustomerIssueDetailDto> getCustomerIssues(String customerId) {
-		List<CustomerIssues> issues = customerMyPageMapper.findIssues(customerId);
-
-		return issues.stream().map(issue -> CustomerIssueDetailDto.builder()
-			.customerId(issue.getCustomerId())
-			.nickname(issue.getNickname())
-			.storeName(issue.getStoreName())
-			.issueCategory(fromString(issue.getIssueCategory()))
-			.issueStatus(checkIssueStatus(issue.getIssueCompleteAt()))
-			.issueCompleteAt(issue.getIssueCompleteAt())
-			.issueText(issue.getIssueText())
-			.cancelIssueAt(issue.getCancelIssueAt())
-			.build()
-		).collect(Collectors.toList());
-	}
-
-	/**
-	 * 이슈가 해결되어 시간이 있다면 -> Solved(해결완료) 접수된 시간이 있다면 -> INPROGRESS(진행중)
-	 *
-	 * @param issueCompleteAt : 이슈가 해결된 시간
-	 * @return Status enum
-	 */
-	private IssueStatus checkIssueStatus(LocalDateTime issueCompleteAt) {
-		if (issueCompleteAt == null) {
-			return INPROGRESS;
-		} else {
-			return SOLVED;
-		}
-	}
-
 	public boolean updateCustomerInfo(String customerId, List<UpdateDto> updates) {
 		for (UpdateDto update : updates) {
 			String type = update.getType();
