@@ -14,6 +14,7 @@ import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
+import org.nmfw.foodietree.domain.store.entity.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -118,10 +119,14 @@ public class EmailController {
 
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
-            // 2. customer에 저장할 데이터 빌드 - 이미 저장이 되어있는 경우 체크하고 save
+            // 2. customer, store에 저장할 데이터 빌드 - 이미 저장이 되어있는 경우 체크하고 save ->
             Customer customer = Customer.builder()
                     .customerId(email)
                     .build();
+
+//            Store store = Store.builder()
+//                    .store
+//                    .build();
 
             log.info("Customer entity to be saved: {}", customer);
 
@@ -131,6 +136,7 @@ public class EmailController {
 
                 emailMapper.save(emailCodeDto); // EmailCodeDto 업데이트 호출
                 customerMapper.save(customer); // Customer 저장 호출
+//                storeMapper.save(store); //store 저장 호출
                 return ResponseEntity.ok(Map.of("success", true));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "User not found"));
@@ -143,6 +149,7 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
         }
     }
+
 
 
     @PostMapping("/verifyCode")

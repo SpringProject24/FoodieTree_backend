@@ -29,7 +29,11 @@ public class TokenProvider {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
+    // create access token : short term
     public String createToken(EmailCodeDto emailCodeDto) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", emailCodeDto.getCustomerId());
 
         byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
         System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
@@ -40,21 +44,41 @@ public class TokenProvider {
         System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
         System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
 
+        // customerId와 storeId 중 null이 아닌 값을 선택
+        String subject = emailCodeDto.getCustomerId() != null ? emailCodeDto.getCustomerId() : emailCodeDto.getStoreId();
+
         return Jwts.builder()
                 // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
                 .signWith(key, SignatureAlgorithm.HS512)
                 // payload에 들어갈 내용
-                .setSubject(emailCodeDto.getCustomerId()) // sub
+                .setSubject(subject) // sub
                 .setIssuer("demo app") // iss
                 .setIssuedAt(new Date()) // iat
                 .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.HOURS))) // exp
                 .compact();
     }
 
+    // refresh token : for long term life cycle and did not need to verify email link
+    public String createRefreshToken(String userId) {
+        byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
+        byte[] keyBytes = SECRET_KEY.getBytes();
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
+        return Jwts.builder()
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setSubject(userId)
+                .setIssuer("demo app")
+                .setIssuedAt(new Date())
+                .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS))) // 유효기간 30일로 설정
+                .compact();
+    }
+
+
    public TokenUserInfo validateAndGetTokenInfo(String token) {
         SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET_KEY));
 
         try {
+            //토큰 발급 당시 서명 처리
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()

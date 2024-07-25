@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.customer.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.customer.dto.request.CustomerLoginDto;
 import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
 import org.nmfw.foodietree.domain.customer.service.CustomerService;
@@ -31,12 +32,12 @@ public class CustomerController {
 
 
     //회원가입 양식 열기
-    @GetMapping("/sign-up")
-    public String signUp(Model model) {
-        log.info("customer/sign-up GET : forwarding to sign-up.jsp");
-        model.addAttribute("kakaoApiKey", kakaoApiKey);
-        return "/customer/sign-up";
-    }
+//    @GetMapping("/sign-up")
+//    public String signUp(Model model) {
+//        log.info("customer/sign-up GET : forwarding to sign-up.jsp");
+//        model.addAttribute("kakaoApiKey", kakaoApiKey);
+//        return "/customer/sign-up";
+//    }
 
     // 회원가입 요청 처리
     @PostMapping("/sign-up")
