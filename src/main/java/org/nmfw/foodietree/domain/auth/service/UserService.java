@@ -25,10 +25,6 @@ public class UserService {
 
 
     public void saveUserInfo(EmailCodeDto emailCodeDto) {
-        // 최초 회원 정보 :
-        if((emailCodeDto.getCustomerId()) == null && (emailCodeDto.getStoreId() == null)) {
-
-        }
 
         // 최초 회원 정보 저장 로직 :  customer인지 store 인지 null 값으로 구분
         if (emailCodeDto.getCustomerId() == null) {
@@ -54,8 +50,32 @@ public class UserService {
         }
     }
 
+    // access token, refresh token resend
+    public void updateUserInfo(EmailCodeDto emailCodeDto) {
 
+        //store 일 경우
+        if (emailCodeDto.getCustomerId() == null) {
+            String token = tokenProvider.createRefreshToken(emailCodeDto.getStoreId());
+            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
+            EmailCodeStoreDto emailCodeStoreDto = EmailCodeStoreDto.builder()
+                    .storeId(emailCodeDto.getStoreId())
+                    .userType(emailCodeDto.getUserType())
+                    .refreshTokenExpireDate(expirationDate)
+                    .build();
+            storeMapper.signUpUpdateStore(emailCodeStoreDto);
 
+        } else {
 
+            //custmer 일 경우
+            String token = tokenProvider.createRefreshToken(emailCodeDto.getCustomerId());
+            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
+
+            EmailCodeCustomerDto emailCodeCustomerDto = EmailCodeCustomerDto.builder()
+                    .customerId(emailCodeDto.getCustomerId())
+                    .refreshTokenExpireDate(expirationDate)
+                    .build();
+            customerMapper.signUpUpdateCustomer(emailCodeCustomerDto);
+        }
+    }
 }

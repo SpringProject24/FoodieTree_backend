@@ -18,7 +18,7 @@ public class EmailCodeDto{
     @Setter
     private LocalDateTime expiryDate;
     @Setter
-    private boolean emailVerified; //email verified 대신 refresh token 으로 대체하기
+    private boolean emailVerified;
     private String userType;
 
 

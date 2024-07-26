@@ -5,6 +5,22 @@
 
 <mapper namespace="org.nmfw.foodietree.domain.auth.mapper.EmailMapper">
 
+<!--    usertype에 따라서 email 칼럼의 expiredate 업데이트-->
+    <update id="update">
+        UPDATE tbl_verification_code
+        SET expiry_date = #{expiryDate}
+        WHERE
+        <choose>
+            <when test="userType == 'customer'">
+                customer_id = #{customerId}
+            </when>
+            <when test="userType == 'store'">
+                store_id = #{storeId}
+            </when>
+        </choose>
+    </update>
+
+
     <insert id="save">
         INSERT INTO
         tbl_verification_code

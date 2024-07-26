@@ -96,11 +96,13 @@ public class EmailController {
         String token = request.get("token");
         String refreshToken = request.get("refreshToken");
 
+        // access token이 없을 경우 bad request 반환 - 로그인 페이지로 리다이렉션
         if (token == null || token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Token is missing"));
         }
 
         try {
+            // access token 유효성 검사
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(SECRET_KEY.getBytes())
                     .parseClaimsJws(token);
@@ -112,35 +114,68 @@ public class EmailController {
             log.info("Email extracted from token: {}", email);
             log.info("user Role (type) extracted from token: {}", userRole);
 
+            // 이메일 정보를 데이터베이스에서 조회
             EmailCodeDto emailCodeDto = emailMapper.findByEmail(email);
-
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
+            // 이메일 정보가 있을 경우
             if (emailCodeDto != null) {
                 emailCodeDto.setUserType(userRole);
                 emailCodeDto.setEmailVerified(true);
 
-                emailMapper.save(emailCodeDto);
-                userService.saveUserInfo(emailCodeDto);
+                // 이메일 인증이 완료되지 않은 경우 - 실제 회원가입이 되지 않은 경우
+                if (!emailCodeDto.isEmailVerified()) {
+                    // 이메일 재전송 페이지로 리다이렉션
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
+                } else {
+                    // 이메일 인증이 완료된 경우 (재로그인, 토큰 재부여)
+                    // 새로운 Access Token 발급
+                    String newAccessToken = Jwts.builder()
+                            .setSubject(email)
+                            .claim("role", userRole)
+                            .setIssuedAt(new Date())
+                            .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES)))
+                            .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
+                            .compact();
 
-                //프론트엔드에 결과값 반환하기
-                return ResponseEntity.ok(Map.of("success", true, "email", email, "role", userRole));
+                    // 새로운 Refresh Token 발급
+                    String newRefreshToken = Jwts.builder()
+                            .setSubject(email)
+                            .claim("role", userRole)
+                            .setIssuedAt(new Date())
+                            .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)))
+                            .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
+                            .compact();
+
+                    // 만료 기한 업데이트
+                    emailMapper.update(emailCodeDto);
+                    userService.updateUserInfo(emailCodeDto);
+
+                    return ResponseEntity.ok(Map.of(
+                            "success", true,
+                            "accessToken", newAccessToken,
+                            "refreshToken", newRefreshToken,
+                            "message", "Token reissued successfully."
+                    ));
+                }
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "User not found"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "User in verification tbl not found"));
             }
         } catch (JwtException e) {
             log.error("JWT parsing error: {}", e.getMessage());
 
+            // refresh token이 없을 경우 bad request 반환
             if (refreshToken == null || refreshToken.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Refresh token is missing"));
             }
-
             try {
+                // refresh token 유효성 검사
                 Jws<Claims> refreshClaims = Jwts.parser()
                         .setSigningKey(REFRESH_SECRET_KEY.getBytes())
                         .parseClaimsJws(refreshToken);
 
                 Date expiration = refreshClaims.getBody().getExpiration();
+                // refresh token이 만료된 경우
                 if (expiration.before(new Date())) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Refresh token expired"));
                 }
@@ -153,7 +188,7 @@ public class EmailController {
                         .setSubject(email)
                         .claim("role", userRole)
                         .setIssuedAt(new Date())
-                        .setExpiration(Date.from(Instant.now().plus(10, ChronoUnit.MINUTES)))
+                        .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES)))
                         .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
                         .compact();
 
@@ -162,7 +197,7 @@ public class EmailController {
                         .setSubject(email)
                         .claim("role", userRole)
                         .setIssuedAt(new Date())
-                        .setExpiration(Date.from(Instant.now().plus(7, ChronoUnit.DAYS)))
+                        .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)))
                         .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
                         .compact();
 
@@ -182,24 +217,20 @@ public class EmailController {
         }
     }
 
-
 //    @PostMapping("/verifyEmail")
 //    public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
-//        // 서버 측에서 받은 요청 데이터를 로그로 출력합니다.
 //        log.info("Request Data: {}", request);
 //        String token = request.get("token");
-//        // 토큰이 없을 때
+//        String refreshToken = request.get("refreshToken");
+//
+//        // access token 없을 경우 bad request
 //        if (token == null || token.isEmpty()) {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Token is missing"));
 //        }
 //
-//
-//        // 초기 발급한 access 토큰이 유효하다면 테이블에 회원 추가, refresh TOKEN 추가
-//        // (로그인 창 = 상세페이지) access 토큰이 만료되었거나 유효하지 않다면 -> refresh token 확인 후 재발급하여 재로그인 방지(10분)
-//        // 로그아웃 할 경우 localstorage에 있는 userData 삭제
-//
-//        // usertype이 store 인지 customer 인지 구분해서 저장 -> 서비스레이어
 //        try {
+//            // 있을 경우 access token 유효성 검사
+//            // 유효하지 않을 경우 return
 //            Jws<Claims> claims = Jwts.parser()
 //                    .setSigningKey(SECRET_KEY.getBytes())
 //                    .parseClaimsJws(token);
@@ -208,38 +239,111 @@ public class EmailController {
 //            String userRole = claims.getBody().get("role", String.class);
 //
 //            log.info("secretKey claim : {}", claims);
-//
 //            log.info("Email extracted from token: {}", email);
-//
 //            log.info("user Role (type) extracted from token: {}", userRole);
-//
 //
 //            EmailCodeDto emailCodeDto = emailMapper.findByEmail(email);
 //
 //            log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 //
+//            // email verified 이메일 정보가 있을 때
 //            if (emailCodeDto != null) {
 //                emailCodeDto.setUserType(userRole);
 //                emailCodeDto.setEmailVerified(true);
 //
-//                emailMapper.save(emailCodeDto); // save가 아니라, update
+//                    // 이미 emailmapper에  usertype을 분기로 이메일이 있고, emeail verified가 false라서 인증을 받지 않은 경우 (customer 지도 설정 안함, store 설정 안함)
+//                if (!emailCodeDto.isEmailVerified()) {
+//                    // 이메일 재전송 페이지 리다이렉션
+//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
 //
-//                userService.saveUserInfo(emailCodeDto); // 실제 usertype 에 맞게 저장
+//                } else {
+//                    // 이미 emailmapper에  usertype을 분기로 이메일이 있고, emeail verified가 true인 경우 (재로그인, 토큰 재부여)
+//                    // 인증 없이 바로 권한 접근 가능
+//                    // 새로운 Access Token 발급
+//                    String newAccessToken = Jwts.builder()
+//                            .setSubject(email)
+//                            .claim("role", userRole)
+//                            .setIssuedAt(new Date())
+//                            .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES)))
+//                            .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
+//                            .compact();
 //
-//                return ResponseEntity.ok(Map.of("success", true));
+//                    // 새로운 Refresh Token 발급
+//                    String newRefreshToken = Jwts.builder()
+//                            .setSubject(email)
+//                            .claim("role", userRole)
+//                            .setIssuedAt(new Date())
+//                            .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)))
+//                            .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
+//                            .compact();
+//
+//                    return ResponseEntity.ok(Map.of(
+//                            "success", true,
+//                            "accessToken", newAccessToken,
+//                            "refreshToken", newRefreshToken
+//
+//
+//                    emailMapper.update(emailCodeDto);
+//                    userService.updateUserInfo(emailCodeDto);
+//
+//                    return ResponseEntity.ok(Map.of("success", true, "message", "Token reissued successfully."));
+//                }
 //            } else {
 //                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "User not found"));
 //            }
 //        } catch (JwtException e) {
 //            log.error("JWT parsing error: {}", e.getMessage());
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Invalid or expired token"));
+//
+//            // refresh token이 없을 경우 return
+//            if (refreshToken == null || refreshToken.isEmpty()) {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Refresh token is missing"));
+//            }
+//            try {
+//                Jws<Claims> refreshClaims = Jwts.parser()
+//                        .setSigningKey(REFRESH_SECRET_KEY.getBytes())
+//                        .parseClaimsJws(refreshToken);
+//
+//                Date expiration = refreshClaims.getBody().getExpiration();
+//                if (expiration.before(new Date())) {
+//                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Refresh token expired"));
+//                }
+//
+//                String email = refreshClaims.getBody().get("sub", String.class);
+//                String userRole = refreshClaims.getBody().get("role", String.class);
+//
+//                // 새로운 Access Token 발급
+//                String newAccessToken = Jwts.builder()
+//                        .setSubject(email)
+//                        .claim("role", userRole)
+//                        .setIssuedAt(new Date())
+//                        .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES)))
+//                        .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
+//                        .compact();
+//
+//                // 새로운 Refresh Token 발급
+//                String newRefreshToken = Jwts.builder()
+//                        .setSubject(email)
+//                        .claim("role", userRole)
+//                        .setIssuedAt(new Date())
+//                        .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)))
+//                        .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
+//                        .compact();
+//
+//                return ResponseEntity.ok(Map.of(
+//                        "success", true,
+//                        "accessToken", newAccessToken,
+//                        "refreshToken", newRefreshToken
+//                ));
+//
+//            } catch (JwtException ex) {
+//                log.error("Refresh token parsing error: {}", ex.getMessage());
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid refresh token"));
+//            }
 //        } catch (Exception e) {
 //            log.error("An unexpected error occurred: {}", e.getMessage());
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
 //        }
 //    }
-
-
 
     @PostMapping("/verifyCode")
     public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> request, @RequestParam(required = false) String purpose) {

@@ -19,4 +19,7 @@ public interface StoreMapper {
     boolean storeSave(Store store);
 
     void updateAutoLogin(AutoLoginDto dto);
+
+    void signUpUpdateStore(EmailCodeStoreDto emailCodeStoreDto);
+
 }

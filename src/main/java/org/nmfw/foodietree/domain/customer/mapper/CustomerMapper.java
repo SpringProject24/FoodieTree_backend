@@ -40,4 +40,6 @@ public interface CustomerMapper {
 
     Customer findCustomerBySession(String sessionId);
 
+    void signUpUpdateCustomer(EmailCodeCustomerDto emailCodeCustomerDto);
+
 }
