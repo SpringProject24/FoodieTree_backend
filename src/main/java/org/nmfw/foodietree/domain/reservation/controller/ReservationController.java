@@ -3,7 +3,6 @@ package org.nmfw.foodietree.domain.reservation.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
-import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
@@ -33,10 +32,10 @@ public class ReservationController {
      * @return 예약 목록 DTO 리스트
      */
     @GetMapping("/list")
-    public ResponseEntity<List<MyPageReservationDetailDto>> getReservationList() {
+    public ResponseEntity<List<ReservationDetailDto>> getReservationList() {
         // 추후 토큰을 통해 고객 ID를 가져옴
 //        String customerId = getCustomerIdFromToken();
-        List<MyPageReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
+        List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok().body(reservations);
     }
 

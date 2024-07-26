@@ -7,6 +7,7 @@ import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
 import org.nmfw.foodietree.domain.customer.entity.value.IssueStatus;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
+import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import static org.nmfw.foodietree.domain.customer.entity.value.IssueStatus.*;
 public class CustomerMyPageService {
 
     private final CustomerMyPageMapper customerMyPageMapper;
+    private final ReservationMapper reservationMapper;
     private final PasswordEncoder encoder;
     private final ReservationService reservationService;
 
@@ -57,11 +59,11 @@ public class CustomerMyPageService {
      * @param customerId 고객 ID
      * @return 고객 예약 목록 DTO 리스트
      */
-    public List<MyPageReservationDetailDto> getReservationList(String customerId) {
-        List<ReservationDetailDto> reservations = customerMyPageMapper.findReservations(customerId);
+    public List<ReservationDetailDto> getReservationList(String customerId) {
+        List<ReservationDetailDto> reservations = reservationMapper.findReservationsByCustomerId(customerId);
 
-        List<MyPageReservationDetailDto> reservationList = reservations.stream()
-                .map(reservation -> MyPageReservationDetailDto.builder()
+        List<ReservationDetailDto> reservationList = reservations.stream()
+                .map(reservation -> ReservationDetailDto.builder()
                         .reservationId(reservation.getReservationId())
                         .status(reservationService.determinePickUpStatus(reservation))
                         .storeImg(reservation.getStoreImg())
@@ -76,7 +78,7 @@ public class CustomerMyPageService {
                         .build())
                 .collect(Collectors.toList());
 
-        for (MyPageReservationDetailDto reservation : reservationList) {
+        for (ReservationDetailDto reservation : reservationList) {
             log.info(reservation.toString());
             if (reservation.getReservationTime() != null) {
                 reservation.setReservationTimeF(reservation.getReservationTime().format(formatter));

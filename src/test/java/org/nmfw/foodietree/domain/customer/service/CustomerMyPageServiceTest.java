@@ -2,7 +2,7 @@ package org.nmfw.foodietree.domain.customer.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +21,9 @@ class CustomerMyPageServiceTest {
         //given
         String customerId = "test@gmail.com";
         //when
-        List<MyPageReservationDetailDto> reservationInfo = customerMyPageService.getReservationList(customerId);
+        List<ReservationDetailDto> reservationInfo = customerMyPageService.getReservationList(customerId);
         //then
-        for (MyPageReservationDetailDto myPageReservationDetailDto : reservationInfo) {
+        for (ReservationDetailDto myPageReservationDetailDto : reservationInfo) {
             System.out.println("\n\n\n");
             System.out.println("myPageReservationDetailDto = " + myPageReservationDetailDto.getStatus());
             System.out.println("myPageReservationDetailDto = " + myPageReservationDetailDto.getStoreName());

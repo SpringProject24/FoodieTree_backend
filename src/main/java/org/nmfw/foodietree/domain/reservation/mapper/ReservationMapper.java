@@ -2,7 +2,6 @@ package org.nmfw.foodietree.domain.reservation.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
@@ -13,7 +12,10 @@ import java.util.List;
 public interface ReservationMapper {
 
     //예약 목록 조회
-    List<MyPageReservationDetailDto> findAll(@Param("customerId") String customerId);
+    List<ReservationDetailDto> findReservationsByCustomerId(@Param("customerId") String customerId);
+
+    // 예약 상세 정보 조회
+    ReservationDetailDto findReservationByReservationId(@Param("reservationId") int reservationId);
 
     // 예약 시간 상세 조회
     ReservationStatusDto findByReservationId(@Param("reservationId") int reservationId);
@@ -23,9 +25,6 @@ public interface ReservationMapper {
 
     // 픽업 완료
     void completePickup(@Param("reservationId") int reservationId);
-
-    // 예약 상세 정보 조회
-    ReservationDetailDto findReservationById(@Param("reservationId") int reservationId);
 
     // 예약 새엇ㅇ
     boolean createReservation(@Param("customerId") String customerId, @Param("productId") long productId);

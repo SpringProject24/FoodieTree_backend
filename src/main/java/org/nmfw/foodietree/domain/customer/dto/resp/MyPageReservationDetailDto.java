@@ -27,7 +27,6 @@ public class MyPageReservationDetailDto {
     private String storeImg;
     private String storeId;
     private int price;
-//    private ReservationStatus status;
 
     private String reservationTimeF;
     private String cancelReservationAtF;

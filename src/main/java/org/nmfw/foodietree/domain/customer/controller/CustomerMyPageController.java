@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.*;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
-import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
+import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,16 +26,19 @@ public class CustomerMyPageController {
     @Value("${env.upload.path}")
     private String uploadDir;
     private final CustomerMyPageService customerMyPageService;
+    private final ReservationService reservationService;
 
     // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
     String customerId = "test@gmail.com";
-    
+
     /**
      * 고객 정보를 가져오는 GET 요청 처리
      * @return 고객 정보 DTO
      */
     @GetMapping("/info")
-    public ResponseEntity<CustomerMyPageDto> getUserInfo(String customerId) {
+    public ResponseEntity<CustomerMyPageDto> getUserInfo() {
+        // 추후 토큰을 통해 고객 ID를 가져옴
+        // String customerId = getCustomerIdFromToken();
         CustomerMyPageDto customerInfo = customerMyPageService.getCustomerInfo(customerId);
         return ResponseEntity.ok(customerInfo);
     }
@@ -44,7 +48,9 @@ public class CustomerMyPageController {
      * @return 고객 통계 정보 DTO
      */
     @GetMapping("/stats")
-    public ResponseEntity<StatsDto> getStats(String customerId) {
+    public ResponseEntity<StatsDto> getStats() {
+        // 추후 토큰을 통해 고객 ID를 가져옴
+        // String customerId = getCustomerIdFromToken();
         StatsDto stats = customerMyPageService.getStats(customerId);
         return ResponseEntity.ok(stats);
     }
@@ -54,10 +60,22 @@ public class CustomerMyPageController {
      * @return 고객 예약 목록 DTO 리스트
      */
     @GetMapping("/reservations")
-    public ResponseEntity<List<MyPageReservationDetailDto>> getReservations(String customerId) {
-        List<MyPageReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
+    public ResponseEntity<List<ReservationDetailDto>> getReservations() {
+        // 추후 토큰을 통해 고객 ID를 가져옴
+        // String customerId = getCustomerIdFromToken();
+        List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok(reservations);
     }
+
+    /**
+     * 현재 인증된 사용자로부터 고객 ID를 추출하는 메서드
+     * 추후 토큰 기반 인증으로 변경 예정
+     * @return 고객 ID
+     */
+    // private String getCustomerIdFromToken() {
+    //     TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    //     return tokenUserInfo.getUserId();
+    // }
 
     // 여기까지 작업완료 - 한솔
 
@@ -83,7 +101,7 @@ public class CustomerMyPageController {
 
     @PostMapping("/update/img")
     public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg, HttpSession session) {
-        String customerId = LoginUtil.getLoggedInUser(session);
+        String customerId = "test@gmail.com";
         UpdateDto dto = new UpdateDto();
         try {
             // 예시로 파일 이름과 크기를 출력하는 코드

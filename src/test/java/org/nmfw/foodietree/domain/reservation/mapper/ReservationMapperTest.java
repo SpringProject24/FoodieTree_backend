@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +41,7 @@ class ReservationMapperTest {
         //given
         int reservationId = 3;
         //when
-        ReservationDetailDto dto = reservationMapper.findReservationById(reservationId);
+        ReservationDetailDto dto = reservationMapper.findReservationByReservationId(reservationId);
         //then
         System.out.println("dto = " + dto);
     }

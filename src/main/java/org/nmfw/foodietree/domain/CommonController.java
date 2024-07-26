@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerIssueDetailDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
-import org.nmfw.foodietree.domain.customer.dto.resp.MyPageReservationDetailDto;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.customer.util.LoginUtil;

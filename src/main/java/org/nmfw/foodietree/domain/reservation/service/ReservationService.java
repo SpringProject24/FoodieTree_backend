@@ -26,7 +26,7 @@ public class ReservationService {
      */
     public boolean cancelReservation(int reservationId) {
         reservationMapper.cancelReservation(reservationId);
-        ReservationDetailDto reservation = reservationMapper.findReservationById(reservationId);
+        ReservationDetailDto reservation = reservationMapper.findReservationByReservationId(reservationId);
         if (reservation.getCancelReservationAt() != null) {
             reservation.setStatus(ReservationStatus.CANCELED);
             return true;
@@ -41,7 +41,7 @@ public class ReservationService {
      */
     public boolean completePickup(int reservationId) {
         reservationMapper.completePickup(reservationId);
-        ReservationDetailDto reservation = reservationMapper.findReservationById(reservationId);
+        ReservationDetailDto reservation = reservationMapper.findReservationByReservationId(reservationId);
         if (reservation.getPickedUpAt() != null) {
             reservation.setStatus(ReservationStatus.PICKEDUP);
             return true;
@@ -55,7 +55,7 @@ public class ReservationService {
      * @return 픽업 가능 여부
      */
     public boolean isPickupAllowed(int reservationId) {
-        ReservationDetailDto reservation = reservationMapper.findReservationById(reservationId);
+        ReservationDetailDto reservation = reservationMapper.findReservationByReservationId(reservationId);
         return LocalDateTime.now().isBefore(reservation.getPickupTime());
     }
 
@@ -65,7 +65,7 @@ public class ReservationService {
      * @return 취소 가능 여부
      */
     public boolean isCancelAllowed(int reservationId) {
-        ReservationDetailDto reservation = reservationMapper.findReservationById(reservationId);
+        ReservationDetailDto reservation = reservationMapper.findReservationByReservationId(reservationId);
         return LocalDateTime.now().isBefore(reservation.getPickupTime().minusHours(1));
     }
 
@@ -92,7 +92,7 @@ public class ReservationService {
      * @return 예약 상세 정보 DTO
      */
     public ReservationDetailDto getReservationDetail(int reservationId) {
-        ReservationDetailDto dto = reservationMapper.findReservationById(reservationId);
+        ReservationDetailDto dto = reservationMapper.findReservationByReservationId(reservationId);
         dto.setStatus(determinePickUpStatus(dto));
         dto.formatTimes(); // 시간 필드 포멧팅
         return dto;

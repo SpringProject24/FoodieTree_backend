@@ -5,6 +5,34 @@
 
 <mapper namespace="org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper">
 
+    <!--  customerId로 예약 목록 조회 -->
+    <select id="findReservationsByCustomerId" resultType="ReservationDetail">
+        SELECT
+        r.reservation_id,
+        r.customer_id,
+        r.product_id,
+        r.reservation_time,
+        r.cancel_reservation_at,
+        r.picked_up_at,
+        p.store_id,
+        p.pickup_time,
+        s.store_name,
+        s.category,
+        s.address,
+        s.price,
+        s.store_img,
+        c.nickname
+        FROM
+        tbl_reservation r
+        JOIN tbl_product p ON r.product_id = p.product_id
+        JOIN tbl_store s ON p.store_id = s.store_id
+        JOIN tbl_customer c ON r.customer_id = c.customer_id
+        WHERE
+        r.customer_id = #{customerId}
+        ORDER BY p.pickup_time DESC
+        ;
+    </select>
+
     <!--  예약 취소  -->
     <update id="cancelReservation">
         UPDATE tbl_reservation
@@ -32,7 +60,7 @@
     </select>
 
     <!--  예약 상세 조회  -->
-    <select id="findReservationById" resultType="ReservationDetail">
+    <select id="findReservationByReservationId" resultType="ReservationDetail">
         SELECT
         r.reservation_id,
         r.product_id,
