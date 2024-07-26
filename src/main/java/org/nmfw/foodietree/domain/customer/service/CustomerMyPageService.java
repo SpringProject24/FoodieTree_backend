@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.customer.service;
 
+import java.io.File;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.*;
@@ -8,13 +9,18 @@ import org.nmfw.foodietree.domain.customer.entity.ReservationDetail;
 import org.nmfw.foodietree.domain.customer.entity.value.IssueStatus;
 import org.nmfw.foodietree.domain.customer.entity.value.PickUpStatus;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
+import org.nmfw.foodietree.domain.product.Util.FileUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.nmfw.foodietree.domain.customer.entity.value.IssueCategory.fromString;
 import static org.nmfw.foodietree.domain.customer.entity.value.IssueStatus.*;
@@ -24,8 +30,10 @@ import static org.nmfw.foodietree.domain.customer.entity.value.IssueStatus.*;
 @Slf4j
 public class CustomerMyPageService {
 
-    private final CustomerMyPageMapper customerMyPageMapper;
-    private final PasswordEncoder encoder;
+	private final CustomerMyPageMapper customerMyPageMapper;
+	private final PasswordEncoder encoder;
+	@Value("${env.upload.path}")
+	private String uploadDir;
 
     /**
      * 고객 정보를 가져오는 메서드
@@ -212,10 +220,31 @@ public class CustomerMyPageService {
         // money 계산
         int money = (int) (totalPrice * 0.7);
 
-        return StatsDto.builder()
-                .total(total)
-                .coTwo(coTwo)
-                .money(money)
-                .build();
-    }
+		return StatsDto.builder()
+				.total(total)
+				.coTwo(coTwo)
+				.money(money)
+				.build();
+	}
+
+	public boolean updateProfileImg(String customerId, MultipartFile customerImg) {
+		try {
+			if (!customerImg.isEmpty()) {
+				File dir = new File(uploadDir);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+				String imagePath = FileUtil.uploadFile(uploadDir, customerImg);
+				UpdateDto dto = UpdateDto.builder()
+					.type("profile_image")
+					.value(imagePath)
+					.build();
+				updateCustomerInfo(customerId, List.of(dto));
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }
