@@ -7,9 +7,15 @@
 
   <update id="signUpUpdateStore">
     UPDATE tbl_Store
-    SET refresh_token_expire_date = #{emailCodeDto.refreshTokenExpireDate}
-    WHERE store_id = #{emailCodeDto.storeId}
+    SET refresh_token_expire_date = #{refreshTokenExpireDate}
+    WHERE store_id = #{storeId}
   </update>
+
+  <insert id="signUpSaveStore">
+    INSERT INTO tbl_Store
+    (store_id, refresh_token_expire_date, user_type)
+    VALUES (#{storeId},#{refreshTokenExpireDate}, #{userType})
+  </insert>
 
   <insert id="save">
     INSERT INTO tbl_store

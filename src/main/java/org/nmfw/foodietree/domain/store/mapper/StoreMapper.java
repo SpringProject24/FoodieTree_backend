@@ -9,8 +9,6 @@ import org.nmfw.foodietree.domain.store.entity.Store;
 @Mapper
 public interface StoreMapper {
 
-    //회원가입
-    void signUpSaveStore(EmailCodeStoreDto dto);
     boolean save(Store store);
 
     //회원 정보 개별 조회
@@ -21,5 +19,7 @@ public interface StoreMapper {
     void updateAutoLogin(AutoLoginDto dto);
 
     void signUpUpdateStore(EmailCodeStoreDto emailCodeStoreDto);
+
+    void signUpSaveStore(EmailCodeStoreDto dto);
 
 }

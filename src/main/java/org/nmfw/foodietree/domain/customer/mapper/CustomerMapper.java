@@ -12,9 +12,6 @@ import java.util.List;
 @Mapper
 public interface CustomerMapper {
 
-    //first sign up
-    void signUpSaveCustomer(EmailCodeCustomerDto dto);
-
     // 회원 가입
     boolean save(Customer customer);
 
@@ -41,5 +38,7 @@ public interface CustomerMapper {
     Customer findCustomerBySession(String sessionId);
 
     void signUpUpdateCustomer(EmailCodeCustomerDto emailCodeCustomerDto);
+
+    void signUpSaveCustomer(EmailCodeCustomerDto dto);
 
 }

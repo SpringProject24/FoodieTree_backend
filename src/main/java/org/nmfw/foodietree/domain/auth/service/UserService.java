@@ -23,7 +23,6 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
 
-
     public void saveUserInfo(EmailCodeDto emailCodeDto) {
 
         // 최초 회원 정보 저장 로직 :  customer인지 store 인지 null 값으로 구분
@@ -44,6 +43,7 @@ public class UserService {
 
             EmailCodeCustomerDto emailCodeCustomerDto = EmailCodeCustomerDto.builder()
                     .customerId(emailCodeDto.getCustomerId())
+                    .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
                     .build();
             customerMapper.signUpSaveCustomer(emailCodeCustomerDto);
@@ -77,5 +77,22 @@ public class UserService {
                     .build();
             customerMapper.signUpUpdateCustomer(emailCodeCustomerDto);
         }
+    }
+
+    // customer, store DB 에 회원이 존재하는지 여부 확인
+    public boolean findByEmail(EmailCodeDto emailCodeDto) {
+        boolean result = false;
+        if (emailCodeDto.getUserType() == "store") {
+            if (emailCodeDto.getStoreId() != null) {
+                result = true;    
+            }
+        } else if (emailCodeDto.getUserType() == "customer") {
+            if (emailCodeDto.getCustomerId() != null) {
+                result = true;
+            }
+        } else {
+            result = false;
+        }
+        return result;
     }
 }

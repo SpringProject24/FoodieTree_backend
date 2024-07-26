@@ -7,6 +7,7 @@ import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
 import org.nmfw.foodietree.domain.auth.service.EmailService;
 import org.nmfw.foodietree.domain.auth.service.UserService;
+import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -128,33 +129,43 @@ public class EmailController {
                     // 이메일 재전송 페이지로 리다이렉션
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
                 } else {
-                    // 이메일 인증이 완료된 경우 (재로그인, 토큰 재부여)
-                    // 새로운 Access Token 발급
-                    String newAccessToken = Jwts.builder()
-                            .setSubject(email)
-                            .claim("role", userRole)
-                            .setIssuedAt(new Date())
-                            .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES)))
-                            .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
-                            .compact();
 
-                    // 새로운 Refresh Token 발급
-                    String newRefreshToken = Jwts.builder()
-                            .setSubject(email)
-                            .claim("role", userRole)
-                            .setIssuedAt(new Date())
-                            .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)))
-                            .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
-                            .compact();
+                        // 이메일 인증이 완료된 경우 (재로그인, 토큰 재부여)
+                        // 새로운 Access Token 발급
+                        String newAccessToken = Jwts.builder()
+                                .setSubject(email)
+                                .claim("role", userRole)
+                                .setIssuedAt(new Date())
+                                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES)))
+                                .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
+                                .compact();
 
-                    // 만료 기한 업데이트
-                    emailMapper.update(emailCodeDto);
-                    userService.updateUserInfo(emailCodeDto);
+                        // 새로운 Refresh Token 발급
+                        String newRefreshToken = Jwts.builder()
+                                .setSubject(email)
+                                .claim("role", userRole)
+                                .setIssuedAt(new Date())
+                                .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)))
+                                .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
+                                .compact();
+
+                    //실제 테이블에 저장이 되지 않은 경우
+                    if(!(userService.findByEmail(emailCodeDto))) {
+                        emailMapper.save(emailCodeDto);
+                        userService.saveUserInfo(emailCodeDto);
+                    } else {
+                    // 실제 회원가입이 되어있는 경우
+                        // 만료 기한 업데이트
+                        emailMapper.update(emailCodeDto);
+                        userService.updateUserInfo(emailCodeDto);
+                    }
 
                     return ResponseEntity.ok(Map.of(
                             "success", true,
                             "accessToken", newAccessToken,
                             "refreshToken", newRefreshToken,
+                            "email", email,
+                            "role", userRole,
                             "message", "Token reissued successfully."
                     ));
                 }
@@ -204,7 +215,10 @@ public class EmailController {
                 return ResponseEntity.ok(Map.of(
                         "success", true,
                         "accessToken", newAccessToken,
-                        "refreshToken", newRefreshToken
+                        "refreshToken", newRefreshToken,
+                        "email", email,
+                        "role", userRole,
+                        "message", "Token reissued successfully."
                 ));
 
             } catch (JwtException ex) {
