@@ -123,7 +123,8 @@ public class EmailController {
                 emailMapper.save(emailCodeDto);
                 userService.saveUserInfo(emailCodeDto);
 
-                return ResponseEntity.ok(Map.of("success", true));
+                //프론트엔드에 결과값 반환하기
+                return ResponseEntity.ok(Map.of("success", true, "email", email, "role", userRole));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "User not found"));
             }
@@ -170,6 +171,7 @@ public class EmailController {
                         "accessToken", newAccessToken,
                         "refreshToken", newRefreshToken
                 ));
+
             } catch (JwtException ex) {
                 log.error("Refresh token parsing error: {}", ex.getMessage());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid refresh token"));

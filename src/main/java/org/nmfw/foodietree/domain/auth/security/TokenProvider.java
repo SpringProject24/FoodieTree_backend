@@ -42,16 +42,15 @@ public class TokenProvider {
         System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
 
         // customerId와 storeId 중 null이 아닌 값을 선택
-        String subject = emailCodeDto.getCustomerId() != null ? emailCodeDto.getCustomerId() : emailCodeDto.getStoreId();
+        String email = emailCodeDto.getCustomerId() != null ? emailCodeDto.getCustomerId() : emailCodeDto.getStoreId();
         String userType = emailCodeDto.getUserType();
 
-        //추후 수정 : role 관리자 추가하기
         return Jwts.builder()
                 .claim("role", userType) // role 클레임에 userType 추가
                 // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
                 .signWith(key, SignatureAlgorithm.HS512)
                 // payload에 들어갈 내용
-                .setSubject(subject) // sub
+                .setSubject(email) // sub
                 .setIssuer("foodie tree") // iss
                 .setIssuedAt(new Date()) // iat
                 .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))) // exp
