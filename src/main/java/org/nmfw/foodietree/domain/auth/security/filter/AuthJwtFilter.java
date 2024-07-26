@@ -68,7 +68,6 @@ public class AuthJwtFilter extends OncePerRequestFilter {
                 'Content-type' : 'application/json'
              }
          */
-
         String bearerToken = request.getHeader("Authorization");
 
         // remove string "Bearer"

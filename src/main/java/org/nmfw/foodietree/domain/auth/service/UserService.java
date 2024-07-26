@@ -22,9 +22,15 @@ public class UserService {
 
     private final TokenProvider tokenProvider;
 
-    public void saveUserInfo(EmailCodeDto emailCodeDto) {
 
-        // customer인지 store 인지 null 값으로 구분
+
+    public void saveUserInfo(EmailCodeDto emailCodeDto) {
+        // 최초 회원 정보 :
+        if((emailCodeDto.getCustomerId()) == null && (emailCodeDto.getStoreId() == null)) {
+
+        }
+
+        // 최초 회원 정보 저장 로직 :  customer인지 store 인지 null 값으로 구분
         if (emailCodeDto.getCustomerId() == null) {
             String token = tokenProvider.createRefreshToken(emailCodeDto.getStoreId());
             Date expirationDate = tokenProvider.getExpirationDateFromToken(token);

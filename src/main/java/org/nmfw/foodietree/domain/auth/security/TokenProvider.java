@@ -32,9 +32,6 @@ public class TokenProvider {
     // create access token : short term for access server DB and saved at local storage
     public String createToken(EmailCodeDto emailCodeDto) {
 
-//        Map<String, Object> claims = new HashMap<>();
-//        claims.put("email", emailCodeDto.getCustomerId());
-
         byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
         System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
         System.out.println("Decoded Key Length in Bits: " + (decodedKey.length * 8));
@@ -57,7 +54,7 @@ public class TokenProvider {
                 .setSubject(subject) // sub
                 .setIssuer("foodie tree") // iss
                 .setIssuedAt(new Date()) // iat
-                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES))) // exp
+                .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))) // exp
                 .compact();
     }
 
@@ -104,10 +101,11 @@ public class TokenProvider {
             log.info("Claims: {}", claims);
 
             return TokenUserInfo.builder()
-                    .userId(claims.getSubject())
+                    .userId(claims.getSubject()) // 이거 왜 추가하는거지?
                     .email(claims.get("sub", String.class))
                     .role(claims.get("role", String.class))
                     .build();
+
         } catch (JwtException e) {
             log.error("Token validation error: {}", e.getMessage());
             throw e; // 또는 적절한 예외 처리
@@ -121,7 +119,7 @@ public class TokenProvider {
     @AllArgsConstructor
     @Builder
     public static class TokenUserInfo {
-        private String userId;
+        private String userId; // 얘는 왜 있는건지 아직 파악 못함
         private String role;
         private String email;
     }
