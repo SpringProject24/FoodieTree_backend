@@ -8,12 +8,11 @@ public interface LoginIdCheckMapper {
 
     // 중복 확인 (아이디 = 이메일)
     /**
-     * @param type - 어떤걸 중복검사할지 (ex: account = email)
+     * @param type    - 어떤걸 중복검사할지 (ex: account = email)
      * @param keyword - 중복검사할 실제값
      * @return - 중복이면 true, 아니면 false
      */
     boolean existsById(
-            @Param("type") String type,
             @Param("keyword") String keyword
     );
 }

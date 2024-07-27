@@ -7,8 +7,6 @@
     <select id="existsById" resultType="boolean">
         SELECT COUNT(*)
         FROM tbl_store
-        <if test="type == 'account'">
-            WHERE store_id = #{keyword}
-        </if>
+        WHERE store_id = #{keyword}
     </select>
 </mapper>

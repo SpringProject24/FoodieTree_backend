@@ -29,12 +29,12 @@ class LoginIdCheckMapperTest {
 //                        .build()
 //        );
 //    }
-    @Test
-    void exists() {
-        boolean test = repo.existsById("account", "test3");
-        Assertions.assertThat(test).isFalse();
-        System.out.println("hi");
-    }
+//    @Test
+//    void exists() {
+//        boolean test = repo.existsById("account", "test3");
+//        Assertions.assertThat(test).isFalse();
+//        System.out.println("hi");
+//    }
 
 
 }

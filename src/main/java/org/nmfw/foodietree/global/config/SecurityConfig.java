@@ -1,6 +1,5 @@
 package org.nmfw.foodietree.global.config;
 import lombok.RequiredArgsConstructor;
-import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.auth.security.filter.AuthJwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/email/verifyEmail").authenticated() // 특정 경로에만 필터 적용
-                .antMatchers("/customer/**").authenticated() // 특정 경로에만 필터 적용
-                .antMatchers("/store/**").authenticated() // 특정 경로에만 필터 적용
                 .antMatchers("/reservation/**").authenticated() // 특정 경로에만 필터 적용
                 .anyRequest().permitAll(); // 나머지 경로는 인증 불필요
 

@@ -22,13 +22,20 @@ public class StoreSignInIdCheckController {
     @GetMapping("/check")
     @CrossOrigin
     @ResponseBody
-    public ResponseEntity<?> check(String type, String keyword) {
-        log.info("{} {}", type, keyword);
+    public ResponseEntity<?> check(
+//            String type,
+                                   String keyword) {
+        log.info("{}",  keyword);
 
-        boolean flag = loginIdCheckService.checkIdentifier(type, keyword);
+        boolean flag = loginIdCheckService.checkIdentifier(keyword);
         return ResponseEntity
                 .ok()
                 .body(flag);
+    }
+
+    @GetMapping("test")
+    public ResponseEntity<?> test() {
+        return ResponseEntity.ok().body(true);
     }
 
     @GetMapping("/check-form")

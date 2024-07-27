@@ -13,7 +13,7 @@ public class LoginIdCheckService {
     private final LoginIdCheckMapper loginIdCheckMapper;
 
     // 아이디, 이메일 중복검사
-    public boolean checkIdentifier(String type, String keyword) {
-        return loginIdCheckMapper.existsById(type, keyword);
+    public boolean checkIdentifier(String keyword) {
+        return loginIdCheckMapper.existsById(keyword);
     }
 }
