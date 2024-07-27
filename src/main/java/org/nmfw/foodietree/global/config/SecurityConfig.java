@@ -1,34 +1,44 @@
 package org.nmfw.foodietree.global.config;
-
+import lombok.RequiredArgsConstructor;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.auth.security.filter.AuthJwtFilter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableWebSecurity //시큐리티 설정 파일(애노테이션)
-public class SecurityConfig {
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //시큐리티 기본 설정(인증 인가 처리, 초기 로그인화면 없애기) 여기서 할 수 있음.
-    // 내가 안만든 객체, 클래스를 주입할 때 @Bean 사용
-    @Bean //@Component(@Contoller, @Service, @Repository, @Mapper)
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    private final AuthJwtFilter authJwtFilter;
 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()// csrf 토큰공격방지 기능 off
-                //모든 요청에 대해 인증하지 않겠다.
+                .csrf().disable() // CSRF 보호 비활성화
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안 함
+                .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/email/verifyEmail").authenticated() // 특정 경로에만 필터 적용
+                .antMatchers("/customer/**").authenticated() // 특정 경로에만 필터 적용
+                .antMatchers("/store/**").authenticated() // 특정 경로에만 필터 적용
+                .antMatchers("/reservation/**").authenticated() // 특정 경로에만 필터 적용
+                .anyRequest().permitAll(); // 나머지 경로는 인증 불필요
 
-        return  http.build();
+        // JwtAuthFilter를 UsernamePasswordAuthenticationFilter 전에 실행하도록 설정
+        http.addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-    //한가지 더 주입받고 싶은 객체 :
-    //비밀번호를 인코딩하는 객체를 스프링 컨테이너에 등록
+    // password filter
     @Bean
     public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder(); // 이 녀석을 주입받아 사용할 수 있다
+        return new BCryptPasswordEncoder();
     }
-
 }
