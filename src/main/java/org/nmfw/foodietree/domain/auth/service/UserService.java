@@ -35,6 +35,7 @@ public class UserService {
                     .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
                     .build();
+
             storeMapper.signUpSaveStore(emailCodeStoreDto);
 
         } else {
@@ -46,11 +47,12 @@ public class UserService {
                     .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
                     .build();
+
             customerMapper.signUpSaveCustomer(emailCodeCustomerDto);
         }
     }
 
-    // access token, refresh token resend
+    // access token, refresh token 재발급
     public void updateUserInfo(EmailCodeDto emailCodeDto) {
 
         //store 일 경우
@@ -65,14 +67,14 @@ public class UserService {
                     .build();
             storeMapper.signUpUpdateStore(emailCodeStoreDto);
 
-        } else {
-
-            //custmer 일 경우
+            // customer 일 경우
+        } else if(emailCodeDto.getStoreId() == null) {
             String token = tokenProvider.createRefreshToken(emailCodeDto.getCustomerId());
             Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
             EmailCodeCustomerDto emailCodeCustomerDto = EmailCodeCustomerDto.builder()
                     .customerId(emailCodeDto.getCustomerId())
+                    .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
                     .build();
             customerMapper.signUpUpdateCustomer(emailCodeCustomerDto);
@@ -80,19 +82,28 @@ public class UserService {
     }
 
     // customer, store DB 에 회원이 존재하는지 여부 확인
+    // 들어오는 dto role 에 따라서 테이블 조회 후 null 일 경우 false 반환
+    // 이미 회원가입(저장)인 경우 true 를 바환
+    //usage 에서 false일 경우 DB 저장
+    // true 일 경우 update
     public boolean findByEmail(EmailCodeDto emailCodeDto) {
-        boolean result = false;
+
+        log.info("로그인 로직 내 이메일이 회원가입 되어있는지 확인 !!! ");
+        boolean result = true;
         if (emailCodeDto.getUserType() == "store") {
+            log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
             if (emailCodeDto.getStoreId() != null) {
-                result = true;    
-            }
-        } else if (emailCodeDto.getUserType() == "customer") {
-            if (emailCodeDto.getCustomerId() != null) {
+                log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
-        } else {
-            result = false;
+        } else if (emailCodeDto.getUserType() == "customer") {
+            log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
         }
-        return result;
+            if (emailCodeDto.getCustomerId() != null) {
+                log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
+                result = true;
+            }
+            return result;
+        }
     }
-}
+
