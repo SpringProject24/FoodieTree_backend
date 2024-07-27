@@ -149,7 +149,7 @@ public class EmailController {
                                 .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
                                 .compact();
 
-                    //실제 회원가입(테이블에 저장)이 되지 않은 경우
+                    //실제 회원가입(테이블에 저장)이 되지 않은 경우 false
                     if(!(userService.findByEmail(emailCodeDto))) {
                         log.info("email이 회원가입저장되지 않은 경우 dto {}", emailCodeDto);
                         emailMapper.save(emailCodeDto);
@@ -157,6 +157,7 @@ public class EmailController {
                     } else {
                     // 실제 회원가입이 되어있는 경우, 로그인 하는데 access token 기간이 종료된 경우
                         // 만료 기한 access, refresh 업데이트
+                        log.info("email이 회원가입저장 되어있는 경우 dto {}", emailCodeDto);
                         emailMapper.update(emailCodeDto);
                         userService.updateUserInfo(emailCodeDto);
                     }

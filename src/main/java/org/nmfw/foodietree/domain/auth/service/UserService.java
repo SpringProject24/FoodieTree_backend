@@ -68,7 +68,7 @@ public class UserService {
             storeMapper.signUpUpdateStore(emailCodeStoreDto);
 
             // customer 일 경우
-        } else if(emailCodeDto.getStoreId() == null) {
+        } else if (emailCodeDto.getStoreId() == null) {
             String token = tokenProvider.createRefreshToken(emailCodeDto.getCustomerId());
             Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
@@ -89,21 +89,24 @@ public class UserService {
     public boolean findByEmail(EmailCodeDto emailCodeDto) {
 
         log.info("로그인 로직 내 이메일이 회원가입 되어있는지 확인 !!! ");
-        boolean result = true;
-        if (emailCodeDto.getUserType() == "store") {
+        boolean result = false; // 초기값을 false로 설정
+
+        // 문자열 비교시 equals 사용
+        if ("store".equals(emailCodeDto.getUserType())) {
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
-            if (emailCodeDto.getStoreId() != null) {
+            if (storeMapper.findOne(emailCodeDto.getStoreId()) != null) {
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
-        } else if (emailCodeDto.getUserType() == "customer") {
+        } else if ("customer".equals(emailCodeDto.getUserType())) {
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
-        }
-            if (emailCodeDto.getCustomerId() != null) {
+            if (storeMapper.findOne(emailCodeDto.getCustomerId()) != null) {
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
-            return result;
         }
+
+        return result;
     }
+}
 
