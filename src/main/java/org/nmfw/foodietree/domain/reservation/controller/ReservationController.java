@@ -34,7 +34,7 @@ public class ReservationController {
     @GetMapping("/list")
     public ResponseEntity<List<ReservationDetailDto>> getReservationList() {
         // 추후 토큰을 통해 고객 ID를 가져옴
-//        String customerId = getCustomerIdFromToken();
+        // String customerId = getCustomerIdFromToken();
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok().body(reservations);
     }
@@ -47,7 +47,7 @@ public class ReservationController {
     public ResponseEntity<?> cancelReservation() {
         log.info("cancel reservation");
         // 추후 토큰을 통해 예약 ID를 가져옴
-//        int reservationId = getReservationIdFromToken();
+        // int reservationId = getReservationIdFromToken();
         boolean flag = reservationService.cancelReservation(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -60,7 +60,7 @@ public class ReservationController {
     public ResponseEntity<?> completePickup() {
         log.info("complete pickup");
         // 추후 토큰을 통해 예약 ID를 가져옴
-//        int reservationId = getReservationIdFromToken();
+        // int reservationId = getReservationIdFromToken();
         boolean flag = reservationService.completePickup(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -73,7 +73,7 @@ public class ReservationController {
     public ResponseEntity<?> checkCancel() {
         log.info("check cancel is allowed without cancel fee");
         // 추후 토큰을 통해 예약 ID를 가져옴
-//        int reservationId = getReservationIdFromToken();
+        // int reservationId = getReservationIdFromToken();
         boolean flag = reservationService.isCancelAllowed(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -86,7 +86,7 @@ public class ReservationController {
     public ResponseEntity<?> checkPickup() {
         log.info("check pickup");
         // 추후 토큰을 통해 예약 ID를 가져옴
-//        int reservationId = getReservationIdFromToken();
+        // int reservationId = getReservationIdFromToken();
         boolean flag = reservationService.isPickupAllowed(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body("픽업 확인 실패");
     }

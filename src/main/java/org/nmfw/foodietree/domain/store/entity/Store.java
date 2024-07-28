@@ -50,8 +50,8 @@ public class Store {
     @Column(name = "store_name")
     private String storeName; // 가게 이름
 
-    @Column(name = "store_image")
-    private String storeImage; // 가게 사진
+    @Column(name = "store_img")
+    private String storeImg; // 가게 사진
 
     @Column(name = "store_license_number")
     private String storeLicenseNumber; // 사업자번호

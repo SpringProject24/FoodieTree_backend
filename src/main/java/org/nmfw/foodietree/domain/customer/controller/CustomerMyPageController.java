@@ -77,8 +77,6 @@ public class CustomerMyPageController {
     //     return tokenUserInfo.getUserId();
     // }
 
-    // 여기까지 작업완료 - 한솔
-
     @PatchMapping("/{customerId}/update")
     public ResponseEntity<?> updateCustomerInfo(@PathVariable String customerId, @RequestBody List<UpdateDto> updates) {
 

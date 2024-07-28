@@ -19,10 +19,20 @@ public class StoreListService {
 
     private final StoreListRepository storeListRepository;
 
+    // 모든 가게 리스트 출력
     public List<StoreListDto> getAllStores() {
         List<Store> stores = storeListRepository.findAll();
         return stores.stream()
                 .map(StoreListDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    // 해당 카테고리 별 리스트 출력
+    public List<StoreListDto> getStoresByCategory(String category) {
+        List<Store> stores = storeListRepository.findByCategory(category);
+        return stores.stream()
+                .map(StoreListDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 }

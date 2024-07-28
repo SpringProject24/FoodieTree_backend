@@ -24,103 +24,52 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
 
-@Controller
+@RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/store/mypage/edit")
+@RequestMapping("/store")
 public class StoreMyPageEditController {
-
-    @Value("${env.upload.path}")
-    private String uploadDir;
 
     private final StoreMyPageEditService storeMyPageEditService;
 
-    @GetMapping("/main")
-    public String main(
-            HttpSession session
-            , Model model
-            , HttpServletRequest request
-            , HttpServletResponse response
-    ) {
-        String storeId = LoginUtil.getLoggedInUser(session);
-        log.info("store my page edit main");
-
-        StoreMyPageDto storeInfo = storeMyPageEditService.getStoreMyPageInfo(storeId);
-        StoreStatsDto stats = storeMyPageEditService.getStats(storeId);
-
-        model.addAttribute("storeInfo", storeInfo);
-        model.addAttribute("stats", stats);
-
-        return "store/store-mypage-edit-test";
+    /**
+     *
+     * @method   updateStoreInfo
+     * @param    dto
+     * @return   ResponseEntity<?> type
+     * @author   hoho
+     * @date     2024 07 25 16:26
+     *
+     * {
+     *     type: price / openAt / closedAt / productCnt / business_number
+     *     value: String
+     * }
+     *
+     */
+    @PatchMapping("/edit")
+    public ResponseEntity<?> updateStoreInfo(@RequestBody UpdateDto dto) {
+        String storeId = "thdghtjd115@naver.com";
+        boolean flag = storeMyPageEditService.updateStoreInfo(storeId, dto.getType(), dto.getValue());
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
     }
 
-    @PatchMapping("/update/password")
-    public ResponseEntity<?> updateCustomerPw(@RequestBody String newPassword, HttpSession session) {
-        String storeId = LoginUtil.getLoggedInUser(session);
-        boolean flag = storeMyPageEditService.updateStorePw(storeId, newPassword);
-        return flag? ResponseEntity.ok("password reset successful"): ResponseEntity.status(400).body("reset fail");
-    }
-
-    @PatchMapping("/update/info")
-    public ResponseEntity<?> updateStoreInfo(@RequestBody UpdateDto dto, HttpSession session) {
-        String storeId = LoginUtil.getLoggedInUser(session);
-        storeMyPageEditService.updateStoreInfo(storeId, dto.getType(), dto.getValue());
-        return ResponseEntity.ok().body("update store info");
-    }
-
-    @PostMapping("/update/img")
-    public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg, HttpSession session) {
-        String storeId = LoginUtil.getLoggedInUser(session);
-        try {
-            // 예시로 파일 이름과 크기를 출력하는 코드
-            String fileName = storeImg.getOriginalFilename();
-            long fileSize = storeImg.getSize();
-            System.out.println("Received file: " + fileName + ", Size: " + fileSize + " bytes");
-            String imagePath = null;
-            if (!storeImg.isEmpty()) {
-                // 서버에 업로드 후 업로드 경로 반환
-                File dir = new File(uploadDir);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                imagePath = FileUtil.uploadFile(uploadDir, storeImg);
-                storeMyPageEditService.updateStoreInfo(storeId, "store_img", imagePath);
-                return ResponseEntity.ok().body(true);
-            }
-//            FileUtil.uploadFile(rootPath, storeImg);
-
-        } catch (Exception e) {
-            // 업로드 실패 시 예외 처리
-            return ResponseEntity.badRequest().body("Failed to upload file");
-        }
-        return ResponseEntity.badRequest().body("Failed to upload file");
-    }
-
-    @PatchMapping("/update/price")
-    public ResponseEntity<?> updatePrice(@RequestBody int price, HttpSession session) {
-        String storeId = LoginUtil.getLoggedInUser(session);
-        storeMyPageEditService.updatePrice(storeId, price);
-        return ResponseEntity.ok().body("update price");
-    }
-
-    @PatchMapping("/update/openAt")
-    public ResponseEntity<?> updateOpenAt(@RequestBody String time, HttpSession session) {
-        String storeId = LoginUtil.getLoggedInUser(session);
-        storeMyPageEditService.updateOpenAt(storeId, time);
-        return ResponseEntity.ok().body("update open at");
-    }
-
-    @PatchMapping("/update/closedAt")
-    public ResponseEntity<?> updateClosedAt(@RequestBody String time, HttpSession session) {
-        String storeId = LoginUtil.getLoggedInUser(session);
-        storeMyPageEditService.updateClosedAt(storeId, time);
-        return ResponseEntity.ok().body("update closed at");
-    }
-
-    @PatchMapping("/update/productCnt")
-    public ResponseEntity<?> updateProductCnt(@RequestBody int cnt, HttpSession session) {
-        String storeId = LoginUtil.getLoggedInUser(session);
-        storeMyPageEditService.updateProductCnt(storeId, cnt);
-        return ResponseEntity.ok().body("update product cnt");
+    /**
+     *
+     * @method   updateProfileImage
+     * @param    storeImg
+     * @return   ResponseEntity<?> type
+     * @author   hoho
+     * @date     2024 07 25 17:14
+     *
+     */
+    @PostMapping("/edit/img")
+    public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg) {
+        String storeId = "thdghtjd115@naver.com";
+        boolean flag = storeMyPageEditService.updateProfileImg(storeId, storeImg);
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
     }
 }

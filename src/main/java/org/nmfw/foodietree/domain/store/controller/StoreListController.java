@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,6 +26,13 @@ public class StoreListController {
     @GetMapping
     public ResponseEntity<List<StoreListDto>> getAllStores() {
         List<StoreListDto> storeListDto = storeListService.getAllStores();
+        return ResponseEntity.ok().body(storeListDto);
+    }
+
+    // 카테고리 별 Store 조회 요청!
+    @GetMapping("/category")
+    public ResponseEntity<List<StoreListDto>> getStoresByCategory(@RequestParam("category") String category) {
+        List<StoreListDto> storeListDto = storeListService.getStoresByCategory(category);
         return ResponseEntity.ok().body(storeListDto);
     }
 }
