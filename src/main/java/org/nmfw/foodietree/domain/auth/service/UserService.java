@@ -93,14 +93,16 @@ public class UserService {
 
         // 문자열 비교시 equals 사용
         if ("store".equals(emailCodeDto.getUserType())) {
+            log.info("store 타입 확인");
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
             if (storeMapper.findOne(emailCodeDto.getStoreId()) != null) {
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
         } else if ("customer".equals(emailCodeDto.getUserType())) {
+            log.info("customer 타입 확인");
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
-            if (storeMapper.findOne(emailCodeDto.getCustomerId()) != null) {
+            if (customerMapper.findOne(emailCodeDto.getCustomerId()) != null) {
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }

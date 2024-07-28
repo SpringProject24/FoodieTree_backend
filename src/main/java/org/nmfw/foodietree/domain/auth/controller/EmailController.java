@@ -96,9 +96,11 @@ public class EmailController {
         log.info("Request Data: {}", request);
         String token = request.get("token");
         String refreshToken = request.get("refreshToken");
+        log.info("토큰 있는지 확인 {}", token);
 
         // access token이 없을 경우 bad request 반환 - 로그인 페이지로 리다이렉션
         if (token == null || token.isEmpty()) {
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Token is missing"));
         }
 
