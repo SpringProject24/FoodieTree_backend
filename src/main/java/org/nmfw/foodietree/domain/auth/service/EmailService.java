@@ -189,6 +189,7 @@ public class EmailService {
 
         // JWT 토큰 생성
         String token = tokenProvider.createToken(emailCodeDto);
+        tokenProvider.createRefreshToken(email);
 
         log.info("전달받은 usertype : {}", userType);
 

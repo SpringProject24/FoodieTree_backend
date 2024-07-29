@@ -42,6 +42,8 @@ public class UserService {
             String token = tokenProvider.createRefreshToken(emailCodeDto.getCustomerId());
             Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
+            log.info("db에 refresh token 기간 추가 {}", expirationDate);
+
             EmailCodeCustomerDto emailCodeCustomerDto = EmailCodeCustomerDto.builder()
                     .customerId(emailCodeDto.getCustomerId())
                     .userType(emailCodeDto.getUserType())

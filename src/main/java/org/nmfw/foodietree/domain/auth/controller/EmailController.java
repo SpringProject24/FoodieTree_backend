@@ -95,12 +95,10 @@ public class EmailController {
     public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
         log.info("Request Data: {}", request);
         String token = request.get("token");
-        String refreshToken = request.get("refreshToken");
-        log.info("토큰 있는지 확인 {}", token);
+        log.info("access token 있는지 확인 {}", token);
 
         // access token이 없을 경우 bad request 반환 - 로그인 페이지로 리다이렉션
         if (token == null || token.isEmpty()) {
-
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Token is missing"));
         }
 
@@ -131,7 +129,6 @@ public class EmailController {
                     // 이메일 재전송 페이지로 리다이렉션
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
                 } else {
-
                         // 이메일 인증이 완료된 경우 (재로그인, 토큰 재부여)
                         // 새로운 Access Token 발급
                         String newAccessToken = Jwts.builder()
@@ -177,26 +174,29 @@ public class EmailController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "User in verification tbl not found"));
             }
         } catch (JwtException e) {
+            log.error("access token 의 기한이 만료되었거나 위조되었습니다.");
             log.error("JWT parsing error: {}", e.getMessage());
 
-            // refresh token이 없을 경우 bad request 반환
-            if (refreshToken == null || refreshToken.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Refresh token is missing"));
-            }
             try {
+                String refreshToken = request.get("refreshToken");
+                log.info("refresh token 값이 있니? {}",refreshToken);
                 // refresh token 유효성 검사
                 Jws<Claims> refreshClaims = Jwts.parser()
                         .setSigningKey(REFRESH_SECRET_KEY.getBytes())
                         .parseClaimsJws(refreshToken);
 
                 Date expiration = refreshClaims.getBody().getExpiration();
+                log.info("refresh 토큰의 기한 {}", expiration);
+
                 // refresh token이 만료된 경우
                 if (expiration.before(new Date())) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Refresh token expired"));
                 }
 
+                // 아직 refresh token 기한이 남아있는 경우
                 String email = refreshClaims.getBody().get("sub", String.class);
                 String userRole = refreshClaims.getBody().get("role", String.class);
+                log.info("refresh 토큰이 유효합니다 ! 이메일 : {}, role : {}", email, userRole);
 
                 // 새로운 Access Token 발급
                 String newAccessToken = Jwts.builder()
@@ -216,10 +216,11 @@ public class EmailController {
                         .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
                         .compact();
 
+                // token 값 반환
                 return ResponseEntity.ok(Map.of(
                         "success", true,
                         "accessToken", newAccessToken,
-                        "refreshToken", newRefreshToken,
+                        "c", newRefreshToken,
                         "email", email,
                         "role", userRole,
                         "message", "Token reissued successfully."
@@ -228,7 +229,7 @@ public class EmailController {
             } catch (JwtException ex) {
                 log.error("Refresh token parsing error: {}", ex.getMessage());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid refresh token"));
-            }
+                }
         } catch (Exception e) {
             log.error("An unexpected error occurred: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
