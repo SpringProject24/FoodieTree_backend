@@ -67,7 +67,7 @@ public class ProductApprovalService {
 
     // 요청 진행상황에 따라 status 처리 ex) PENDING -> APPROVED
 
-    // 요청 승인되면 각 테이블에 저장 (tbl_store, tbl_product)
+    // 요청 승인되면 각 테이블에 저장 (tbl_store)
     public void sendProductInfo(
             ProductApproval productApproval
     ) throws NotFoundException {
@@ -77,18 +77,16 @@ public class ProductApprovalService {
         if(storeId == null) {
             throw new NotFoundException("가입하지 않은 계정입니다.");
         }
-//        Store saved = storeRepository.save(store);
         Store store = storeRepository
             .findByStoreId(storeId)
             .orElseThrow(() -> new NoSuchElementException("가입하지 않은 계정입니다."));
+//        가격, 수량 저장
+            store.setPrice(productApproval.getPrice());
+            store.setProductCnt(productApproval.getProductCnt());
+            Store saved = storeRepository.save(store);
+            log.info("saved store at ProductApproval: {}", saved);
 
-        // store 저장 성공하면
-        // product 테이블에 proImage 저장, store 저장
-        productRepository.save(
-                Product.builder()
-                        .productImage(productApproval.getProImage())
-                        .store(store)
-                        .build());
+        // store 저장 성공하면...?
 
     }
 
