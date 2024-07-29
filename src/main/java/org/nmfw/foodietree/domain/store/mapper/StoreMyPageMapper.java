@@ -4,9 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.nmfw.foodietree.domain.product.dto.response.ProductInfoDto;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
-import org.springframework.security.core.parameters.P;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -15,16 +13,14 @@ public interface StoreMyPageMapper {
     // 가게 정보 조회
     StoreMyPageDto getStoreMyPageInfo(String storeId);
 
-    // 가게 예약리스트 조회
-    List<StoreReservationDto> findReservations(String storeId);
-
     /**
      * 가게 마이페이지 캘린더 모달 정보 조회
      * @param storeId : 가게 아이디
      * @param date  : 조회하고자 하는 날짜
      * @return StoreMyPageCalendarModalDto
      */
-    List<StoreMyPageCalendarModalDto> getStoreMyPageCalendarModalInfo(@Param("storeId") String storeId,@Param("date") String date);
+    List<StoreMyPageCalendarModalDto> getStoreMyPageCalendarModalInfo(@Param("storeId") String storeId, @Param("date") String date);
+
     /**
      * 상품 업데이트
      * @param storeId : 가게 아이디
@@ -48,4 +44,12 @@ public interface StoreMyPageMapper {
     List<StoreHolidayDto> getHolidays(@Param("storeId") String storeId);
 
     List<ProductInfoDto> getProductCntByDate(@Param("storeId") String storeId, @Param("date") String date);
+
+    /**
+     * 특정 일자의 픽업 완료된 랜덤박스 개수를 가져오는 메서드
+     * @param storeId 가게 ID
+     * @param date 특정 일자
+     * @return 픽업 완료된 랜덤박스 개수
+     */
+    int countPickedUpProductsByDate(@Param("storeId") String storeId, @Param("date") String date);
 }
