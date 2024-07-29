@@ -39,10 +39,10 @@ public class Store {
     private int warningCount; // 경고 누적 횟수
 
     @Column(name = "price")
-    private int price; // 가격
+    private Integer price; // 가격
 
     @Column(name = "product_cnt")
-    private int productCnt; // 상품갯수
+    private Integer productCnt; // 상품갯수
 
     @Column(name = "business_number")
     private String businessNumber; // 사업 연락처
