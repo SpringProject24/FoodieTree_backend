@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static org.nmfw.foodietree.domain.customer.entity.QFavArea.favArea;
+
 //@Getter @Setter
 //@ToString
 //@NoArgsConstructor
@@ -29,9 +31,6 @@ public class FavArea {
 
     @Column(name = "customer_id", nullable = false)
     private String customerId;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "customer_id")
-//    private Customer customer;
 
     @Column(name = "preferred_area")
     private String preferredArea;

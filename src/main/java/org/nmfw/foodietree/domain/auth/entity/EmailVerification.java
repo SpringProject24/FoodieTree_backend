@@ -3,6 +3,9 @@ package org.nmfw.foodietree.domain.auth.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.nmfw.foodietree.domain.customer.entity.Customer;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -34,8 +37,13 @@ public class EmailVerification {
     @Column(name = "user_type", nullable = true, length = 50)
     private String userType;
 
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idx_customer_id")
+    private Customer customer;
+
     @Builder
-    public EmailVerification(long id, String customerId, String storeId, String code, LocalDateTime expiryDate, boolean emailVerified, String userType) {
+    public EmailVerification(Long id, String customerId, String storeId, String code, LocalDateTime expiryDate, boolean emailVerified, String userType) {
         this.id = id;
         this.customerId = customerId;
         this.storeId = storeId;

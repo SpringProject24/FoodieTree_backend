@@ -4,6 +4,7 @@ import lombok.*;
 import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -49,11 +50,11 @@ public class Customer {
     private String userType;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EmailVerification> emailVerifications;
+    private List<EmailVerification> emailVerifications = new ArrayList<>();
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavFood> favFoods;
-
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavArea> favAreas;
+//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<FavFood> favFoods;
+//
+//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<FavArea> favAreas;
 }
