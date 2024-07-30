@@ -37,10 +37,10 @@ public class EmailVerification {
     @Column(name = "user_type", nullable = true, length = 50)
     private String userType;
 
-    @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idx_customer_id")
-    private Customer customer;
+//    @Setter
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "idx_customer_id")
+//    private Customer customer;
 
     @Builder
     public EmailVerification(Long id, String customerId, String storeId, String code, LocalDateTime expiryDate, boolean emailVerified, String userType) {

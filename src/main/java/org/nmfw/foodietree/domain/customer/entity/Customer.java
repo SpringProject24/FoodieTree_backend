@@ -49,8 +49,8 @@ public class Customer {
     @Column(name = "user_type")
     private String userType;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EmailVerification> emailVerifications = new ArrayList<>();
+//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<EmailVerification> emailVerifications = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<FavFood> favFoods;
