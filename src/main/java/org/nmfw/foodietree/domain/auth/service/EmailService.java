@@ -197,7 +197,7 @@ public class EmailService {
                 .customerId(email)
                 .storeId(email)
                 .userType(userType)
-                .expiryDate(LocalDateTime.now().plusMinutes(1))
+                .expiryDate(LocalDateTime.now().plusMinutes(5))
                 .build();
 
         emailMapper.save(dto);

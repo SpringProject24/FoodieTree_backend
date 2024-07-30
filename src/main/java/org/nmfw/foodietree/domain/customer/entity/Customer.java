@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
+
 @Entity
-@Table(name = "tbl_customer")
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "idxCustomerId")
+@Table(name = "tbl_customer")
 public class Customer {
 
     @Id
@@ -43,11 +44,15 @@ public class Customer {
     @Column(name = "limit_time")
     private LocalDateTime limitTime;
 
+    @Setter
     @Column(name = "refresh_token_expire_date")
     private LocalDateTime refreshTokenExpireDate;
 
     @Column(name = "user_type")
     private String userType;
+
+    @Column(name = "email_verified", nullable = true)
+    private boolean emailVerified;
 
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<EmailVerification> emailVerifications = new ArrayList<>();

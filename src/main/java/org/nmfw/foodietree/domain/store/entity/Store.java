@@ -14,7 +14,6 @@ import java.util.List;
 
 @Getter @Setter
 @ToString(exclude = {"products"})
-//@EqualsAndHashCode(of = "storeId")
 @EqualsAndHashCode(of = "idxStoreId")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -75,6 +74,15 @@ public class Store {
 
     @Column(name = "limit_time")
     private LocalDateTime limitTime; // 제한시간
+
+    @Column(name = "refresh_token_expire_date")
+    private LocalDateTime refreshTokenExpireDate;
+
+    @Column(name = "user_type")
+    private String userType;
+
+    @Column(name = "email_verified", nullable = true)
+    private boolean emailVerified;
   
     @OneToMany(mappedBy = "store",
             fetch = FetchType.LAZY,

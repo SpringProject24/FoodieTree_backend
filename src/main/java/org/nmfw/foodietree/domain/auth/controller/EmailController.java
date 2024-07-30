@@ -135,7 +135,7 @@ public class EmailController {
                                 .setSubject(email)
                                 .claim("role", userRole)
                                 .setIssuedAt(new Date())
-                                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES)))
+                                .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES)))
                                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
                                 .compact();
 
@@ -203,7 +203,7 @@ public class EmailController {
                         .setSubject(email)
                         .claim("role", userRole)
                         .setIssuedAt(new Date())
-                        .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES)))
+                        .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES)))
                         .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
                         .compact();
 
