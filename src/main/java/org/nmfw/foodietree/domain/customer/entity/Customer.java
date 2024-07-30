@@ -1,35 +1,56 @@
 package org.nmfw.foodietree.domain.customer.entity;
 
 import lombok.*;
+import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import javax.persistence.*;
 
-@Getter @ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "tbl_customer")
+@Getter
+@Setter
 @Builder
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
 
-    //고객 id
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idx_customer_id")
+    private Long id;
+
+    @Column(name = "customer_id", nullable = false, unique = true)
     private String customerId;
 
-    //고객 비밀번호
+    @Column(name = "customer_password")
     private String customerPassword;
 
-    //고객 이름
-    private String nickName;
+    @Column(name = "nickname")
+    private String nickname;
 
-    //고객 전화번호
+    @Column(name = "customer_phone_number")
     private String customerPhoneNumber;
 
-    //고객 프로필이미지
+    @Column(name = "profile_image")
     private String profileImage;
 
-    //고객 세션아이디
+    @Column(name = "session_id")
     private String sessionId;
 
+    @Column(name = "limit_time")
     private LocalDateTime limitTime;
 
+    @Column(name = "refresh_token_expire_date")
+    private LocalDateTime refreshTokenExpireDate;
+
+    @Column(name = "user_type")
+    private String userType;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmailVerification> emailVerifications;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavFood> favFoods;
 }
