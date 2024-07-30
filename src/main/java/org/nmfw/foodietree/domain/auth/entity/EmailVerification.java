@@ -14,7 +14,7 @@ public class EmailVerification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "customer_id", nullable = true, length = 50)
     private String customerId;
@@ -35,7 +35,7 @@ public class EmailVerification {
     private String userType;
 
     @Builder
-    public EmailVerification(int id, String customerId, String storeId, String code, LocalDateTime expiryDate, boolean emailVerified, String userType) {
+    public EmailVerification(long id, String customerId, String storeId, String code, LocalDateTime expiryDate, boolean emailVerified, String userType) {
         this.id = id;
         this.customerId = customerId;
         this.storeId = storeId;
