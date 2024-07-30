@@ -43,3 +43,4 @@ out/
 .idea/
 env.properties
 .DS_Store
+application-*.yml
