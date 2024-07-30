@@ -21,16 +21,16 @@ import java.time.LocalDateTime;
 // 예약 대기
 public class Waitlist {
 
-    @Id
+    @Id // auto increment
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "wait_id")
-    private Long waitId;
+    private Long waitId;            // 대기 id
 
     @Column(name = "customer_id")
-    private String customerId; // 고객 이메일 계정
+    private String customerId;      // 고객 이메일 계정
 
     @Column(name = "store_id")
-    private String storeId; // 가게 이메일 계정
+    private String storeId;         // 가게 이메일 계정
 
     @CreationTimestamp
     @Column(name = "wait_time")
@@ -38,7 +38,7 @@ public class Waitlist {
 
     @Size(max = 1)
     @Column(name = "wait_confirm")
-    private String waitConfirm; // T/F
+    private String waitConfirm;     //
 
     @Column(name="cancel_wait_at")
     private LocalDateTime cancelWaitAt; // 예약 대기 취소시간
