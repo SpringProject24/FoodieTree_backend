@@ -1,8 +1,6 @@
 package org.nmfw.foodietree.domain.store.entity;
 
 import lombok.*;
-import org.nmfw.foodietree.domain.store.entity.value.StoreApproveStatus;
-import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -64,4 +62,7 @@ public class Store {
 
     @Column(name = "limit_time")
     private LocalDateTime limitTime; // 제한시간
+
+    @Column(name = "store_contact")
+    private String storeContact; // 업체 전화번호
 }
