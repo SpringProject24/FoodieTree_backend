@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "waitId")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
