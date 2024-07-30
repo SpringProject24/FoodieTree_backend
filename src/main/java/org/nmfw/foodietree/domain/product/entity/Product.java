@@ -1,28 +1,38 @@
 package org.nmfw.foodietree.domain.product.entity;
 
 import lombok.*;
-
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter @ToString
+@Entity
+@Table(name = "product")
+@Getter
+@ToString
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
+    private Integer productId;
+
+    @Column(name = "store_id")
     private String storeId;
-    private String productId;
+
+    @Column(name = "pickup_time")
     private LocalDateTime pickupTime;
+
+    @Column(name = "product_upload_date")
     private LocalDateTime productUploadDate;
-    private String storeImg;
-    private String storeName;
-    private String category;
-    private String address;
-    private int price;
-    private int productCnt;
-    private String proImage;
-    private List<String> preferredArea;
-    private List<String> preferredFood;
+
+    @Column(name = "canceled_by_store_at")
+    private String cancelByStore;
+
+    @Column(name = "idx_store_id")
+    private String idxStoreId;
 
 }
