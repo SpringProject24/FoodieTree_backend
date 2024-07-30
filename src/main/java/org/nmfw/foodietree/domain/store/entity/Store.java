@@ -1,51 +1,62 @@
 package org.nmfw.foodietree.domain.store.entity;
 
 import lombok.*;
-import org.nmfw.foodietree.domain.store.entity.value.StoreApproveStatus;
+import org.hibernate.annotations.ColumnDefault;
+import org.nmfw.foodietree.domain.product.entity.Product;
+import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@ToString
-@Setter
+@Getter @Setter
+@ToString(exclude = {"products"})
+//@EqualsAndHashCode(of = "storeId")
+@EqualsAndHashCode(of = "idxStoreId")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 @Entity
-@Table(name = "tbl_store")
+@Table(name="tbl_store")
 public class Store {
-
-    @Id
+  
+    @Id // auto increment
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "store_id", nullable = false)
-    private String storeId; // 가게 아이디
+    @Column(name = "idx_store_id", nullable = false)
+    private Long idxStoreId;
 
-    @Column(name = "password", nullable = false)
-    private String password; // 비밀번호
+    // 가게 계정 == 이메일, (유니크)
+    @Column(name = "store_id", unique = true)
+    private String storeId;
 
-    @Column(name = "category", nullable = false)
-    private String category; // 업종 카테고리
+//    @Setter
+//    @Column(name = "password", nullable = false)
+//    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private StoreCategory category; // 업종 카테고리
+
+    @Enumerated(EnumType.STRING)
+    private ApproveStatus approve; // 승인여부
 
     @Column(name = "address")
     private String address; // 가게 주소
 
-    @Column(name = "approve")
-    private String approve; // 승인여부
-
     @Column(name = "warning_count")
-    private int warningCount; // 경고 누적 횟수
+    private Integer warningCount; // 경고 누적 횟수
 
     @Column(name = "price")
     private Integer price; // 가격
 
     @Column(name = "product_cnt")
     private Integer productCnt; // 상품갯수
-
-    @Column(name = "business_number")
-    private String businessNumber; // 사업 연락처
+    
+    @Column(name = "store_contact")
+    private String storeContact;  // 가게 연락처
 
     @Column(name = "store_name")
     private String storeName; // 가게 이름
@@ -64,4 +75,26 @@ public class Store {
 
     @Column(name = "limit_time")
     private LocalDateTime limitTime; // 제한시간
+  
+    @OneToMany(mappedBy = "store",
+            fetch = FetchType.LAZY,
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+    )
+    private List<Product> products = new ArrayList<>();  // products 연관관계
+
+    // 연관된 product 추가 메서드
+    public void addProduct(Product product) {
+        products.add(product);
+        product.setStore(this);
+    }
+
+    // 연관된 product 제거 메서드
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.setStore(null);
+    }
+
+  
 }
+

@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @Getter @ToString
 @AllArgsConstructor
-public enum StoreApproveStatus {
+public enum ApproveStatus {
     PENDING("승인 대기 중"),
     IN_PROGRESS("승인 진행 중"),
     APPROVED("승인 완료"),

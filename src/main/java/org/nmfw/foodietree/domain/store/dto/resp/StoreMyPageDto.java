@@ -24,6 +24,6 @@ public class StoreMyPageDto {
     private int productCnt;
     private LocalTime openAt;
     private LocalTime closedAt;
-    private String businessNumber;
+    private String storeContact;
 //    private <StoreReservationDto> storeReservationDto;
 }

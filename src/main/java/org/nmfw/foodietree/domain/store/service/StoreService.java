@@ -54,11 +54,11 @@ public class StoreService {
         }
 
         String inputPassword = dto.getPassword();
-        String originPassword = foundStore.getPassword();
-        if (!encoder.matches(inputPassword, originPassword)) {
-            log.info("비밀번호가 일치하지 않습니다");
-            return NO_PW;
-        }
+//        String originPassword = foundStore.getPassword();
+//        if (!encoder.matches(inputPassword, originPassword)) {
+//            log.info("비밀번호가 일치하지 않습니다");
+//            return NO_PW;
+//        }
 
         if (dto.isAutoLogin()) {
             String sessionId = session.getId();
