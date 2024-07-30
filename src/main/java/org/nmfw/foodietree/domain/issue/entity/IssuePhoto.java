@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Getter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "issuePhotoId")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
