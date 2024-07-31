@@ -3,6 +3,9 @@ package org.nmfw.foodietree.domain.store.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import org.nmfw.foodietree.domain.store.entity.value.StoreApproveStatus;
+import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
