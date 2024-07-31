@@ -22,5 +22,5 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> findByStoreIdIn(List<String> storeIds);
 
     // 제품 ID로 조회
-    Product findByProductId(String productId);
+    Product findByProductId(Integer productId);
 }
