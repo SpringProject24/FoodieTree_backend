@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
+import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
+import org.nmfw.foodietree.domain.customer.repository.CustomerRepository;
+import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +22,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -28,7 +33,9 @@ import java.util.List;
 public class AuthJwtFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
+    private final CustomerMapper customerMapper;
 
+    // access token 검증
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
@@ -38,10 +45,19 @@ public class AuthJwtFilter extends OncePerRequestFilter {
             if (token != null) {
                 TokenUserInfo tokenInfo = tokenProvider.validateAndGetTokenInfo(token);
 
+                Date refreshTokenExpireDateForCustomer = customerMapper.findRefreshDateById(tokenInfo.getEmail());
+
+                log.info("리프레시토큰검증이될까요??? 날짜임 : {}", refreshTokenExpireDateForCustomer);
+
+//                if(refreshTokenExpireDateForCustomer.after(LocalDateTime.now())) {
+//
+//                }
+
                 AbstractAuthenticationToken auth
                         = new UsernamePasswordAuthenticationToken(
                         tokenInfo,
                         null // password
+//                        authorities // 인가 목록
                 );
                 // when token verification operator is done
                 auth.setDetails(
@@ -60,14 +76,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
     }
 
     private String parseBearerToken(HttpServletRequest request) {
-        /*
-             -- request header
 
-             {
-                'Authorization' : 'Bearer dhfdlksfd67fdskjfhskfhkssadfasf',
-                'Content-type' : 'application/json'
-             }
-         */
         String bearerToken = request.getHeader("Authorization");
 
         // remove string "Bearer"

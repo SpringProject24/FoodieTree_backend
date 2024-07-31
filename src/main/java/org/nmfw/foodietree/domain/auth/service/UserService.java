@@ -2,7 +2,7 @@ package org.nmfw.foodietree.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.auth.dto.EmailCodeCustomerDto;
+import org.nmfw.foodietree.domain.auth.dto.EmailCustomerDto;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeStoreDto;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
@@ -44,7 +44,7 @@ public class UserService {
 
             log.info("db에 refresh token 기간 추가 {}", expirationDate);
 
-            EmailCodeCustomerDto emailCodeCustomerDto = EmailCodeCustomerDto.builder()
+            EmailCustomerDto emailCodeCustomerDto = EmailCustomerDto.builder()
                     .customerId(emailCodeDto.getCustomerId())
                     .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
@@ -72,12 +72,10 @@ public class UserService {
             // customer 일 경우
         } else if (emailCodeDto.getStoreId() == null) {
             String token = tokenProvider.createRefreshToken(emailCodeDto.getCustomerId());
-            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
-            EmailCodeCustomerDto emailCodeCustomerDto = EmailCodeCustomerDto.builder()
+            EmailCustomerDto emailCodeCustomerDto = EmailCustomerDto.builder()
                     .customerId(emailCodeDto.getCustomerId())
                     .userType(emailCodeDto.getUserType())
-                    .refreshTokenExpireDate(expirationDate)
                     .build();
             customerMapper.signUpUpdateCustomer(emailCodeCustomerDto);
         }

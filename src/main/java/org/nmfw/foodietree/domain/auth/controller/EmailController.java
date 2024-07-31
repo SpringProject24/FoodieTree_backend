@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
+import org.nmfw.foodietree.domain.auth.security.filter.AuthJwtFilter;
 import org.nmfw.foodietree.domain.auth.service.EmailService;
 import org.nmfw.foodietree.domain.auth.service.UserService;
 import org.nmfw.foodietree.domain.customer.service.CustomerService;
@@ -138,7 +139,7 @@ public class EmailController {
                                 .setSubject(email)
                                 .claim("role", userType)
                                 .setIssuedAt(new Date())
-                                .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES)))
+                                .setExpiration(Date.from(Instant.now().plus(10, ChronoUnit.MINUTES)))
                                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
                                 .compact();
 
