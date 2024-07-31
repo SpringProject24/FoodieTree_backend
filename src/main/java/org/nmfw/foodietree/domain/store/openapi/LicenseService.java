@@ -1,7 +1,6 @@
-package org.nmfw.foodietree.domain.store.service;
+package org.nmfw.foodietree.domain.store.openapi;
 
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.store.dto.resp.LicenseResDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

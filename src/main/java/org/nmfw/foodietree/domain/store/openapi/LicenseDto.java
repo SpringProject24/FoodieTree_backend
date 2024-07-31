@@ -1,6 +1,4 @@
-package org.nmfw.foodietree.domain.store.dto.resp;
-
-import java.util.List;
+package org.nmfw.foodietree.domain.store.openapi;
 
 public class LicenseDto {
     private String b_no;

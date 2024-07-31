@@ -1,4 +1,4 @@
-package org.nmfw.foodietree.domain.store.dto.resp;
+package org.nmfw.foodietree.domain.store.openapi;
 
 import java.util.List;
 
