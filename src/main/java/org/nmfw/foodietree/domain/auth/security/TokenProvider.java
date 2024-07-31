@@ -32,23 +32,17 @@ public class TokenProvider {
     // create access token : short term for access server DB and saved at local storage
     public String createToken(EmailCodeDto emailCodeDto) {
 
-        byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
-        System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
-        System.out.println("Decoded Key Length in Bits: " + (decodedKey.length * 8));
-
-        byte[] keyBytes = SECRET_KEY.getBytes();
-        Key key = Keys.hmacShaKeyFor(keyBytes);
-        System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
-        System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
-
         // customerId와 storeId 중 null이 아닌 값을 선택
         String email = emailCodeDto.getCustomerId() != null ? emailCodeDto.getCustomerId() : emailCodeDto.getStoreId();
         String userType = emailCodeDto.getUserType();
 
         return Jwts.builder()
-                .claim("role", userType) // role 클레임에 userType 추가
                 // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(
+                        Keys.hmacShaKeyFor(SECRET_KEY.getBytes())
+                        , SignatureAlgorithm.HS512
+                )
+                .claim("role", userType) // role 클레임에 userType 추가
                 // payload에 들어갈 내용
                 .setSubject(email) // sub
                 .setIssuer("foodie tree") // iss
@@ -60,20 +54,21 @@ public class TokenProvider {
     // refresh token : for long term life cycle and did not need to verify email link
     // save at user's DB
     public String createRefreshToken(String email) {
-        byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
-        Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.builder()
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(
+                        Keys.hmacShaKeyFor(REFRESH_SECRET_KEY.getBytes())
+                        , SignatureAlgorithm.HS512
+                )
                 .setSubject(email)
-                .setIssuer("foodie tree")
+                .setIssuer("foodie tree token refresher")
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS))) // 유효기간 30일로 설정
                 .compact();
     }
 
     public Date getExpirationDateFromToken(String token) {
-        byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
+        byte[] keyBytes = SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.parserBuilder()
@@ -86,8 +81,6 @@ public class TokenProvider {
 
 
    public TokenUserInfo validateAndGetTokenInfo(String token) {
-
-//        SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET_KEY));
 
         try {
             //토큰 발급 당시 서명 처리
@@ -104,10 +97,14 @@ public class TokenProvider {
 
             log.info("validateAndGetTokenInfo Claims: {}", claims);
 
-            return TokenUserInfo.builder()
+            TokenUserInfo build = TokenUserInfo.builder()
                     .email(claims.get("sub", String.class))
                     .role(claims.get("role", String.class))
                     .build();
+
+            log.info("검증 통과 후 토큰 유저 인포 정보 {},{}", build.email, build.role);
+
+            return build;
 
         } catch (JwtException e) {
             log.error("Token validation error: {}", e.getMessage());

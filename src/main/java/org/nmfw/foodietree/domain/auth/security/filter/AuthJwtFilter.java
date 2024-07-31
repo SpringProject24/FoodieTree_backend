@@ -45,9 +45,10 @@ public class AuthJwtFilter extends OncePerRequestFilter {
             if (token != null) {
                 TokenUserInfo tokenInfo = tokenProvider.validateAndGetTokenInfo(token);
 
-                Date refreshTokenExpireDateForCustomer = customerMapper.findRefreshDateById(tokenInfo.getEmail());
+                // 회원가입 제대로 되기 전엔 NULL 뜨는게 맞음... 그리고 여기 지나가면 refreshtoken 일정 뜸
+//                Date refreshTokenExpireDateForCustomer = customerMapper.findRefreshDateById(tokenInfo.getEmail());
 
-                log.info("리프레시토큰검증이될까요??? 날짜임 : {}", refreshTokenExpireDateForCustomer);
+//                log.info("리프레시토큰검증이될까요??? 날짜임 : {}", refreshTokenExpireDateForCustomer);
 
 //                if(refreshTokenExpireDateForCustomer.after(LocalDateTime.now())) {
 //
@@ -55,9 +56,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 
                 AbstractAuthenticationToken auth
                         = new UsernamePasswordAuthenticationToken(
-                        tokenInfo,
-                        null // password
-//                        authorities // 인가 목록
+                        tokenInfo, null
                 );
                 // when token verification operator is done
                 auth.setDetails(

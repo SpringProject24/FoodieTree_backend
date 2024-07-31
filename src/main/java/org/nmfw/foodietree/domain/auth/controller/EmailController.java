@@ -4,7 +4,9 @@ import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
+import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
 import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.auth.security.filter.AuthJwtFilter;
 import org.nmfw.foodietree.domain.auth.service.EmailService;
 import org.nmfw.foodietree.domain.auth.service.UserService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class EmailController {
     private final EmailService emailService;
     private final UserService userService;
     private final EmailMapper emailMapper;
+    private final TokenProvider tokenProvider;
 
     @GetMapping("/send-reset-email")
     public String sendVerificationCode(@RequestParam String to, String userType) {
@@ -101,11 +105,10 @@ public class EmailController {
         String token = request.get("token");
         log.info("access token 있는지 확인 {}", token);
 
-        // access token이 없을 경우 bad request 반환 - 로그인 페이지로 리다이렉션
+        // access token이 아예 없을 경우 bad request 반환 - 로그인 페이지로 리다이렉션
         if (token == null || token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Token is missing"));
         }
-
         try {
             // access token 유효성 검사
             Jws<Claims> claims = Jwts.parser()
@@ -123,7 +126,7 @@ public class EmailController {
             EmailCodeDto emailCodeDto = emailMapper.findByEmail(email, userType);
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
-            // 이메일 정보가 있을 경우
+            // 이메일 정보가 인증 테이블에 있을 경우
             if (emailCodeDto != null) {
                 emailCodeDto.setUserType(userType);
                 emailCodeDto.setEmailVerified(true);
@@ -132,114 +135,107 @@ public class EmailController {
                 if (!emailCodeDto.isEmailVerified()) {
                     // 이메일 재전송 페이지로 리다이렉션
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
-                } else {
-                        // 이메일 인증이 완료된 경우 (재로그인, 토큰 재부여)
-                        // 새로운 Access Token 발급
-                        String newAccessToken = Jwts.builder()
-                                .setSubject(email)
-                                .claim("role", userType)
-                                .setIssuedAt(new Date())
-                                .setExpiration(Date.from(Instant.now().plus(10, ChronoUnit.MINUTES)))
-                                .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
-                                .compact();
-
-                        // 새로운 Refresh Token 발급
-                        String newRefreshToken = Jwts.builder()
-                                .setSubject(email)
-                                .claim("role", userType)
-                                .setIssuedAt(new Date())
-                                .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)))
-                                .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
-                                .compact();
-
-                    //실제 회원가입(테이블에 저장)이 되지 않은 경우 false
-                    if(!(userService.findByEmail(emailCodeDto))) {
-                        log.info("email이 회원가입저장되지 않은 경우 dto {}", emailCodeDto);
-                        emailMapper.save(emailCodeDto);
-                        userService.saveUserInfo(emailCodeDto);
-                    } else {
-                    // 실제 회원가입이 되어있는 경우, 로그인 하는데 access token 기간이 종료된 경우
-                        // 만료 기한 access, refresh 업데이트
-                        log.info("email이 회원가입저장 되어있는 경우 dto {}", emailCodeDto);
-                        emailMapper.update(emailCodeDto);
-                        userService.updateUserInfo(emailCodeDto);
-                    }
-
-                    return ResponseEntity.ok(Map.of(
-                            "success", true,
-                            "accessToken", newAccessToken,
-                            "refreshToken", newRefreshToken,
-                            "email", email,
-                            "role", userType,
-                            "message", "Token reissued successfully."
-                    ));
                 }
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "User in verification tbl not found"));
+                // 이메일 인증이 완료된 경우 (재로그인, 토큰 재부여)
+                // 새로운 Access Token 발급
+                String newAccessToken = tokenProvider.createToken(emailCodeDto);
+                // 새로운 Refresh Token 발급
+                String newRefreshToken = tokenProvider.createRefreshToken(email);
+
+                //실제 회원가입(테이블에 저장)이 되지 않은 경우 false
+                if (!(userService.findByEmail(emailCodeDto))) {
+                    log.info("email이 회원가입저장되지 않은 경우 dto {}", emailCodeDto);
+                    emailMapper.save(emailCodeDto); // access token 정보 새로 저장
+                    userService.saveUserInfo(emailCodeDto);
+
+                } else {
+                    // 실제 회원가입이 되어있는 경우, 로그인 하는데 access token 기간이 종료된 경우
+                    // 만료 기한 access, refresh 업데이트
+                    log.info("email이 회원가입저장 되어있는 경우 dto {}", emailCodeDto);
+                    emailMapper.update(emailCodeDto);
+                    userService.updateUserInfo(emailCodeDto);
+                }
+                return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "accessToken", newAccessToken,
+                        "refreshToken", newRefreshToken,
+                        "email", email,
+                        "role", userType,
+                        "message", "Token reissued successfully."
+                ));
             }
+
+            // email table에 인증정보가 없을 경우 즉, access token이 만료되었을경우
+            // 인증 정보는 상관없이 access token이 만료되었을 경우
         } catch (JwtException e) {
             log.error("access token 의 기한이 만료되었거나 위조되었습니다.");
             log.error("JWT parsing error: {}", e.getMessage());
 
             try {
-                String refreshToken = request.get("refreshToken");
-                log.info("refresh token 값이 있니? {}",refreshToken);
+                // refresh token 기간 조사
+                Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
+                log.info("refresh 토큰의 기한 {}", expirationDate);
+
                 // refresh token 유효성 검사
-                Jws<Claims> refreshClaims = Jwts.parser()
+                Jws<Claims> claims = Jwts.parser()
                         .setSigningKey(REFRESH_SECRET_KEY.getBytes())
-                        .parseClaimsJws(refreshToken);
+                        .parseClaimsJws(token);
 
-                Date expiration = refreshClaims.getBody().getExpiration();
-                log.info("refresh 토큰의 기한 {}", expiration);
+                String email = claims.getBody().get("sub", String.class);
+                String userType = claims.getBody().get("role", String.class);
 
-                // refresh token이 만료된 경우
-                if (expiration.before(new Date())) {
+                // refresh token 만료일자가 오늘보다 이전일 경우
+                if (expirationDate.before(new Date())) {
+                    // 로그인창 리다이렉션
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Refresh token expired"));
                 }
-
                 // 아직 refresh token 기한이 남아있는 경우
-                String email = refreshClaims.getBody().get("sub", String.class);
-                String userRole = refreshClaims.getBody().get("role", String.class);
-                log.info("refresh 토큰이 유효합니다 ! 이메일 : {}, role : {}", email, userRole);
-
                 // 새로운 Access Token 발급
-                String newAccessToken = Jwts.builder()
-                        .setSubject(email)
-                        .claim("role", userRole)
-                        .setIssuedAt(new Date())
-                        .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES)))
-                        .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
-                        .compact();
-
+                EmailCodeDto reIssuedAccessToken = reIssueAccessToken(userType, email);
                 // 새로운 Refresh Token 발급
-                String newRefreshToken = Jwts.builder()
-                        .setSubject(email)
-                        .claim("role", userRole)
-                        .setIssuedAt(new Date())
-                        .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)))
-                        .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
-                        .compact();
+                String reIssuedRefreshToken = tokenProvider.createRefreshToken(email);
 
                 // token 값 반환
                 return ResponseEntity.ok(Map.of(
                         "success", true,
-                        "accessToken", newAccessToken,
-                        "c", newRefreshToken,
+                        "accessToken", reIssuedAccessToken,
+                        "c", reIssuedRefreshToken,
                         "email", email,
-                        "role", userRole,
+                        "role", userType,
                         "message", "Token reissued successfully."
                 ));
 
             } catch (JwtException ex) {
+                // refresh token problem 으로 로그인창 리다이렉션 해서 토큰 재부여
                 log.error("Refresh token parsing error: {}", ex.getMessage());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid refresh token"));
-                }
-        } catch (Exception e) {
-            log.error("An unexpected error occurred: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
+            }
         }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
     }
 
+    private static EmailCodeDto reIssueAccessToken(String userType, String email) {
+
+        EmailCodeDto emailCodeDto = new EmailCodeDto();
+
+        if(userType.equals("store")) {
+            EmailCodeDto.builder()
+                    .storeId(email)
+                    .emailVerified(true)
+                    .userType(userType)
+                    .expiryDate(LocalDateTime.now().plusMinutes(30))
+                    .build();
+
+        } else if (userType.equals("customer")) {
+            EmailCodeDto.builder()
+                    .customerId(email)
+                    .emailVerified(true)
+                    .userType(userType)
+                    .expiryDate(LocalDateTime.now().plusMinutes(30))
+                    .build();
+        }
+        return emailCodeDto;
+    }
 
     /*
     @PostMapping("/verifyCode")

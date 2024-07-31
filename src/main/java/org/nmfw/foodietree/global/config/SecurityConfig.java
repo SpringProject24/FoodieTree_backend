@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/reservation/**").authenticated()
-                .antMatchers("/email/verifyEmail").authenticated() // 특정경로설
+//                .antMatchers("/email/verifyEmail").authenticated() // 특정경로설
                 .anyRequest().permitAll();
 
 

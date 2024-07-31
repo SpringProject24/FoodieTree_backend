@@ -45,10 +45,10 @@ public class Customer {
     private LocalDateTime limitTime;
 
     @Setter
-    @Column(name = "refresh_token_expire_date")
+    @Column(name = "refresh_token_expire_date", nullable = true)
     private LocalDateTime refreshTokenExpireDate;
 
-    @Column(name = "user_type")
+    @Column(name = "user_type", nullable = true)
     private String userType;
 
     @Column(name = "email_verified", nullable = true)
