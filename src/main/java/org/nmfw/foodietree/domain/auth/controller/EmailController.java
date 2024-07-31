@@ -102,6 +102,7 @@ public class EmailController {
 
     @PostMapping("/verifyEmail")
     public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
+
         log.info("Request Data: {}", request);
         String token = request.get("token");
         log.info("access token 있는지 확인 {}", token);
@@ -172,60 +173,43 @@ public class EmailController {
             log.error("JWT parsing error: {}", e.getMessage());
 
             try {
-                // refresh token 기간 조사
-                Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
-                log.info("refresh 토큰의 기한 {}", expirationDate);
+                // 리프레시 토큰의 만료일자를 확인
+                TokenProvider.TokenUserInfo tokenUserInfo = tokenProvider.validateAndGetRefreshTokenInfo(token);
+                String email = tokenUserInfo.getEmail();
+                String userType = tokenUserInfo.getRole();
 
-                // refresh token 유효성 검사
-                Jws<Claims> claims = Jwts.parser()
-                        .setSigningKey(SECRET_KEY.getBytes())
-                        .parseClaimsJws(token);
+                LocalDateTime refreshTokenExpiryDate = userService.getRefreshTokenExpiryDate(email, userType);
 
-                String email = claims.getBody().get("sub", String.class);
-                String userType = claims.getBody().get("role", String.class);
+                log.info("리이이이이이이이이프레에에에에에시토오오오크크ㅡ으응으으응으ㅡㄴ!!! {}", refreshTokenExpiryDate);
 
-                // refresh token 만료일자가 오늘보다 이전일 경우
-                if (expirationDate.before(new Date())) {
-                    // 로그인창 리다이렉션
+                if (refreshTokenExpiryDate == null || refreshTokenExpiryDate.isBefore(LocalDateTime.now())) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Refresh token expired"));
                 }
-                // 아직 refresh token 기한이 남아있는 경우
-                // 새로운 Access Token 발급
-                EmailCodeDto reIssuedAccessToken = reIssueAccessToken(email, userType);
-                // 새로운 Refresh Token 발급
-                String reIssuedRefreshToken = tokenProvider.createRefreshToken(email, userType);
 
-                // token 값 반환
+                // 새로운 액세스 토큰 발급
+                EmailCodeDto emailCodeDto = EmailCodeDto.builder()
+                        .email(email)
+                        .userType(userType)
+                        .build();
+                String newAccessToken = tokenProvider.createToken(emailCodeDto);
+                String newRefreshToken = tokenProvider.createRefreshToken(email, userType);
+
                 return ResponseEntity.ok(Map.of(
                         "success", true,
-                        "accessToken", reIssuedAccessToken,
-                        "c", reIssuedRefreshToken,
+                        "accessToken", newAccessToken,
+                        "refreshToken", newRefreshToken,
                         "email", email,
                         "role", userType,
                         "message", "Token reissued successfully."
                 ));
 
             } catch (JwtException ex) {
-                // refresh token problem 으로 로그인창 리다이렉션 해서 토큰 재부여
                 log.error("Refresh token parsing error: {}", ex.getMessage());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid refresh token"));
             }
         }
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
-    }
-
-    private static EmailCodeDto reIssueAccessToken(String userType, String email) {
-
-        EmailCodeDto emailCodeDto = new EmailCodeDto();
-
-            EmailCodeDto.builder()
-                    .email(email)
-                    .emailVerified(true)
-                    .userType(userType)
-                    .expiryDate(LocalDateTime.now().plusMinutes(30))
-                    .build();
-
-        return emailCodeDto;
     }
 
     /*

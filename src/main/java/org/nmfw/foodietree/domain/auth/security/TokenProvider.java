@@ -26,11 +26,6 @@ public class TokenProvider {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    private Key getSigningKey(String key) {
-        byte[] keyBytes = Base64.getDecoder().decode(key);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
     @Value("${env.jwt.refresh}")
     private String REFRESH_SECRET_KEY;
 
@@ -57,7 +52,7 @@ public class TokenProvider {
                 .setSubject(email) // sub
                 .setIssuer("foodie tree") // iss
                 .setIssuedAt(new Date()) // iat
-                .setExpiration(Date.from(Instant.now().plus(10, ChronoUnit.MINUTES))) // exp
+                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES))) // exp
                 .compact();
     }
 
@@ -65,12 +60,18 @@ public class TokenProvider {
     // save at user's DB
     public String createRefreshToken(String email, String userType) {
 
+        byte[] decodedKey = Base64.getDecoder().decode(REFRESH_SECRET_KEY);
+        System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
+        System.out.println("Decoded Key Length in Bits: " + (decodedKey.length * 8));
+
+        byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+        System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
+        System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
+
         return Jwts.builder()
-                .signWith(
-                        Keys.hmacShaKeyFor(SECRET_KEY.getBytes())
-                        , SignatureAlgorithm.HS512
-                )
                 .claim("role", userType) // role 클레임에 userType 추가
+                .signWith(key, SignatureAlgorithm.HS512)
                 .setSubject(email)
                 .setIssuer("foodie tree token refresher")
                 .setIssuedAt(new Date())
@@ -79,7 +80,7 @@ public class TokenProvider {
     }
 
     public Date getExpirationDateFromToken(String token) {
-        byte[] keyBytes = SECRET_KEY.getBytes();
+        byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.parserBuilder()
@@ -113,7 +114,39 @@ public class TokenProvider {
                     .role(claims.get("role", String.class))
                     .build();
 
-            log.info("검증 통과 후 토큰 유저 인포 정보 {},{}", build.email, build.role);
+            log.info("검증 통과 후 엑세스토큰 유저 인포 정보 {},{}", build.email, build.role);
+
+            return build;
+
+        } catch (JwtException e) {
+            log.error("Token validation error: {}", e.getMessage());
+            throw e; // 또는 적절한 예외 처리
+        }
+    }
+
+    public TokenUserInfo validateAndGetRefreshTokenInfo(String token) {
+
+        try {
+            //토큰 발급 당시 서명 처리
+            Claims claims = Jwts.parserBuilder()
+                    // 토큰 발급자의 발급 당시 서명을 넣음
+                    .setSigningKey(
+                            Keys.hmacShaKeyFor(REFRESH_SECRET_KEY.getBytes())
+                    )
+                    // 서명위조 검사 진행 : 위조된 경우 Exception이 발생
+                    // 위조되지 않은 경우 클레임을 리턴
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            log.info("validateAndGetTokenInfo Claims: {}", claims);
+
+            TokenUserInfo build = TokenUserInfo.builder()
+                    .email(claims.get("sub", String.class))
+                    .role(claims.get("role", String.class))
+                    .build();
+
+            log.info("검증 통과 후 리프레시토큰 유저 인포 정보 {},{}", build.email, build.role);
 
             return build;
 

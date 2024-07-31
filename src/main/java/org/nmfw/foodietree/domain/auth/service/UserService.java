@@ -6,11 +6,14 @@ import org.nmfw.foodietree.domain.auth.dto.EmailCustomerDto;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeStoreDto;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
+import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -129,6 +132,18 @@ public class UserService {
         }
 
         return result;
+    }
+
+    public LocalDateTime getRefreshTokenExpiryDate(String email, String userType) {
+        if ("customer".equals(userType)) {
+            Customer customer = customerMapper.findOne(email);
+            return customer != null ? customer.getRefreshTokenExpireDate() : null;
+        } else if ("store".equals(userType)) {
+            Store store = storeMapper.findOne(email);
+            return store != null ? store.getRefreshTokenExpireDate() : null;
+        } else {
+            throw new IllegalArgumentException("Invalid user type");
+        }
     }
 }
 
