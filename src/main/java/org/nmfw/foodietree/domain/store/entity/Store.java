@@ -62,7 +62,4 @@ public class Store {
 
     @Column(name = "limit_time")
     private LocalDateTime limitTime; // 제한시간
-
-    @Column(name = "store_contact")
-    private String storeContact; // 업체 전화번호
 }
