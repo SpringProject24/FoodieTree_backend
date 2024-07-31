@@ -35,6 +35,7 @@ public class LicenseService {
 
         // StoreApproval PENDING 상태인 사업자등록번호 조회하도록 수정 필요
         String[] arr = {"1234567891", "1141916588", "2744700926", "8781302319"};
+        // 사업자등록번호 예시 중 첫번째를 제외하고 계속사업자로 조회되어야 정상
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("b_no", arr);
@@ -47,5 +48,42 @@ public class LicenseService {
                 .bodyToMono(LicenseResDto.class)
                 .block();
     }
+    /*
+        postLicense 응답 예시
+        {
+          "status_code": "OK",
+          "match_cnt": 3,
+          "request_cnt": 4,
+          "data": [
+            {
+              "b_no": 1234567891,
+              "b_stt": "",
+              "b_stt_cd": "",
+              "tax_type": "국세청에 등록되지 않은 사업자등록번호입니다.",
+              "tax_type_cd": "",
+              "end_dt": "",
+              "utcc_yn": "",
+              "tax_type_change_dt": "",
+              "invoice_apply_dt": "",
+              "rbf_tax_type": "",
+              "rbf_tax_type_cd": ""
+            },
+            {
+              "b_no": 1141916588,
+              "b_stt": "계속사업자",
+              "b_stt_cd": "01",
+              "tax_type": "부가가치세 간이과세자",
+              "tax_type_cd": "02",
+              "end_dt": "",
+              "utcc_yn": "N",
+              "tax_type_change_dt": "",
+              "invoice_apply_dt": "",
+              "rbf_tax_type": "해당없음",
+              "rbf_tax_type_cd": "99"
+            },
+            ...
+          ]
+        }
 
+     */
 }
