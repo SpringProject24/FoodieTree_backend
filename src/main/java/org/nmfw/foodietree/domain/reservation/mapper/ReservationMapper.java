@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 
 import java.util.List;
 
@@ -26,9 +27,12 @@ public interface ReservationMapper {
     // 픽업 완료
     void completePickup(@Param("reservationId") int reservationId);
 
-    // 예약 새엇ㅇ
+    // 예약 생성
     boolean createReservation(@Param("customerId") String customerId, @Param("productId") long productId);
 
     // 가게 ID와 제한 수에 따라 예약 가능 제품 조회
     List<ReservationFoundStoreIdDto> findByStoreIdLimit(@Param("storeId") String storeId, @Param("cnt") int cnt);
+
+    // 가게 예약리스트 조회
+    List<StoreReservationDto> findReservations(@Param("storeId") String storeId);
 }

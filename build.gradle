@@ -8,7 +8,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.10'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'org.nmfw'
@@ -82,6 +82,9 @@ dependencies {
 //    implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
 //    implementation 'org.springdoc:springdoc-openapi-data-rest:1.6.13'
 //    implementation 'org.springdoc:springdoc-openapi-security:1.6.13'
+
+    // WebClient
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {

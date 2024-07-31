@@ -4,32 +4,33 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static org.nmfw.foodietree.domain.customer.entity.QFavArea.favArea;
+
 //@Getter @Setter
 //@ToString
 //@NoArgsConstructor
 //@AllArgsConstructor
 //@Builder
 
-@Entity
-@Table(name = "tbl_fav_area")
-@Setter @Getter
+@Setter
+@Getter
 @ToString
-@EqualsAndHashCode(of = "id")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
+@Entity
+@Table(name = "tbl_fav_area")
 public class FavArea {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "customer_id", nullable = false)
     private String customerId;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "customer_id")
-//    private Customer customer;
 
     @Column(name = "preferred_area")
     private String preferredArea;

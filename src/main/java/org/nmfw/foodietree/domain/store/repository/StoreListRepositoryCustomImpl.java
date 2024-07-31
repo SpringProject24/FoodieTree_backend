@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.store.entity.Store;
+import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom{
         //카테고리 별 분류
         return jpaQueryFactory
                 .selectFrom(QStore.store)
-                .where(store.category.eq(category))
+                .where(store.category.eq(StoreCategory.valueOf(category)))
                 .fetch();
     }
 }

@@ -6,7 +6,7 @@
 <mapper namespace="org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper">
 
     <!--  customerId로 예약 목록 조회 -->
-    <select id="findReservationsByCustomerId" resultType="ReservationDetail">
+    <select id="findReservationsByCustomerId" resultType="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto">
         SELECT
         r.reservation_id,
         r.customer_id,
@@ -30,7 +30,6 @@
         WHERE
         r.customer_id = #{customerId}
         ORDER BY p.pickup_time DESC
-        ;
     </select>
 
     <!--  예약 취소  -->
@@ -48,7 +47,7 @@
     </update>
 
     <!--  예약 시간 조회  -->
-    <select id="findByReservationId" resultType="ReservationStatusDto">
+    <select id="findByReservationId" resultType="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto">
         SELECT
         r.reservation_time,
         r.cancel_reservation_at,
@@ -60,7 +59,7 @@
     </select>
 
     <!--  예약 상세 조회  -->
-    <select id="findReservationByReservationId" resultType="ReservationDetail">
+    <select id="findReservationByReservationId" resultType="org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto">
         SELECT
         r.reservation_id,
         r.product_id,
@@ -89,7 +88,7 @@
     <insert id="createReservation">
         INSERT INTO tbl_reservation
         (customer_id, product_id)
-        VALUES (#{customerId}, #{ProductId})
+        VALUES (#{customerId}, #{productId})
     </insert>
 
     <!--  예약 가능 제품 조회  -->
@@ -105,5 +104,35 @@
         AND TIMESTAMPDIFF(SECOND, NOW(), pickup_time) > 0
         AND canceled_by_store_at IS NULL
         LIMIT #{cnt}
+    </select>
+
+    <!-- 가게 예약리스트 조회 -->
+    <select id="findReservations" resultType="org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto">
+        SELECT
+            c.customer_id,
+            c.profile_image,
+            c.nickname,
+            c.customer_phone_number,
+            p.product_id,
+            r.reservation_id,
+            r.reservation_time,
+            r.cancel_reservation_at,
+            r.picked_up_at,
+            p.pickup_time,
+            p.product_upload_date,
+            s.price,
+            s.open_at,
+            s.closed_at
+        FROM
+            tbl_reservation r
+        JOIN
+            tbl_customer c ON r.customer_id = c.customer_id
+        JOIN
+            tbl_product p ON p.product_id = r.product_id
+        JOIN
+            tbl_store s ON s.store_id = p.store_id
+        WHERE
+            s.store_id = #{storeId}
+        ORDER BY p.pickup_time DESC
     </select>
 </mapper>

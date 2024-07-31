@@ -38,14 +38,15 @@ public class ReservationController {
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok().body(reservations);
     }
+    
 
     /**
      * 특정 예약을 취소
      * @return 취소 성공 여부
      */
     @PatchMapping("/cancel")
-    public ResponseEntity<?> cancelReservation() {
-        log.info("cancel reservation");
+    public ResponseEntity<?> cancelReservation(@RequestParam int reservationId) {
+        log.info("cancel reservation with ID: {}", reservationId);
         // 추후 토큰을 통해 예약 ID를 가져옴
         // int reservationId = getReservationIdFromToken();
         boolean flag = reservationService.cancelReservation(reservationId);
@@ -57,8 +58,8 @@ public class ReservationController {
      * @return 픽업 완료 성공 여부
      */
     @PatchMapping("/pickup")
-    public ResponseEntity<?> completePickup() {
-        log.info("complete pickup");
+    public ResponseEntity<?> completePickup(@RequestParam int reservationId) {
+        log.info("complete pickup with ID: {}", reservationId);
         // 추후 토큰을 통해 예약 ID를 가져옴
         // int reservationId = getReservationIdFromToken();
         boolean flag = reservationService.completePickup(reservationId);
@@ -70,10 +71,8 @@ public class ReservationController {
      * @return 취소 가능 여부
      */
     @GetMapping("/check-cancel")
-    public ResponseEntity<?> checkCancel() {
-        log.info("check cancel is allowed without cancel fee");
-        // 추후 토큰을 통해 예약 ID를 가져옴
-        // int reservationId = getReservationIdFromToken();
+    public ResponseEntity<?> checkCancel(@RequestParam int reservationId) {
+        log.info("check cancel is allowed without cancel fee for reservation ID: {}", reservationId);
         boolean flag = reservationService.isCancelAllowed(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -83,10 +82,8 @@ public class ReservationController {
      * @return 픽업 가능 여부
      */
     @GetMapping("/check-pickup")
-    public ResponseEntity<?> checkPickup() {
-        log.info("check pickup");
-        // 추후 토큰을 통해 예약 ID를 가져옴
-        // int reservationId = getReservationIdFromToken();
+    public ResponseEntity<?> checkPickup(@RequestParam int reservationId) {
+        log.info("check pickup for reservation ID: {}", reservationId);
         boolean flag = reservationService.isPickupAllowed(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body("픽업 확인 실패");
     }
@@ -98,7 +95,7 @@ public class ReservationController {
      */
     @GetMapping("/{reservationId}/modal/detail")
     public ResponseEntity<?> getReservationDetail(@PathVariable int reservationId) {
-        log.info("get reservation detail");
+        log.info("get reservation detail for reservation ID: {}", reservationId);
         ReservationDetailDto dto = reservationService.getReservationDetail(reservationId);
         return ResponseEntity.ok().body(dto);
     }
@@ -111,7 +108,7 @@ public class ReservationController {
      */
     @PostMapping("/create-reservation")
     @CrossOrigin
-    public ResponseEntity<?> createReservation(@PathVariable String customerId, @RequestBody Map<String, String> data) {
+    public ResponseEntity<?> createReservation(@RequestParam String customerId, @RequestBody Map<String, String> data) {
         boolean flag = reservationService.createReservation(customerId, data);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -121,10 +118,10 @@ public class ReservationController {
      * 고객 ID를 추출하는 메서드
      * @return 고객 ID
      */
-     private String getCustomerIdFromToken() {
-         TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-         return tokenUserInfo.getUserId();
-     }
+    private String getCustomerIdFromToken() {
+        TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return tokenUserInfo.getUserId();
+    }
 
     /**
      * 현재 인증된 사용자로부터
@@ -141,5 +138,4 @@ public class ReservationController {
             throw e;
         }
     }
-
 }

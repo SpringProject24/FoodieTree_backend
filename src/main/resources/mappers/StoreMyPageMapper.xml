@@ -24,35 +24,6 @@
             store_id = #{store_id}
     </select>
 
-    <select id="findReservations" resultType="StoreReservationDto">
-        SELECT
-            c.customer_id,
-            c.profile_image,
-            c.nickname,
-            c.customer_phone_number,
-            p.product_id,
-            r.reservation_id,
-            r.reservation_time,
-            r.cancel_reservation_at,
-            r.picked_up_at,
-            p.pickup_time,
-            p.product_upload_date,
-            s.price,
-            s.open_at,
-            s.closed_at
-        FROM
-            tbl_reservation r
-        JOIN
-            tbl_customer c ON r.customer_id = c.customer_id
-        JOIN
-            tbl_product p ON p.product_id = r.product_id
-        JOIN
-            tbl_store s ON s.store_id = p.store_id
-        WHERE
-            s.store_id = #{store_id}
-        ORDER BY p.pickup_time DESC
-    </select>
-
     <insert id="updateProductAuto">
         INSERT INTO tbl_product
             (store_id, pickup_time, product_upload_date)
@@ -134,5 +105,13 @@
         WHERE
             p.store_id = #{storeId}
         AND DATE(product_upload_date) = #{date}
+    </select>
+
+    <select id="countPickedUpProductsByDate" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM tbl_product p
+        JOIN tbl_reservation r ON p.product_id = r.product_id
+        WHERE p.store_id = #{storeId}
+        AND DATE(r.picked_up_at) = #{date}
     </select>
 </mapper>

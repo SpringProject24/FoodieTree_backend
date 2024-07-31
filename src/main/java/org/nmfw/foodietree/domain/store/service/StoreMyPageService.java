@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.product.dto.response.ProductInfoDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
+import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
@@ -24,16 +25,20 @@ public class StoreMyPageService {
 
     private final StoreMyPageMapper storeMyPageMapper;
     private final ReservationService reservationService;
+    private final ReservationMapper reservationMapper;
 
     public StoreMyPageDto getStoreMyPageInfo(String storeId) {
-        log.info("store my page service");
-        return storeMyPageMapper.getStoreMyPageInfo(storeId);
+        log.info("Fetching store my page info for storeId: {}", storeId);
+        StoreMyPageDto store = storeMyPageMapper.getStoreMyPageInfo(storeId);
+        if (store == null) {
+            throw new IllegalArgumentException("Store not found with ID: " + storeId);
+        }
+        return store;
     }
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH시mm분");
 
     public List<StoreReservationDto> findReservations(String storeId) {
         log.info("service get store reservations");
-        List<StoreReservationDto> reservations = storeMyPageMapper.findReservations(storeId);
+        List<StoreReservationDto> reservations = reservationMapper.findReservations(storeId);
 
         for (StoreReservationDto dto : reservations) {
             ReservationDetailDto rdto = ReservationDetailDto.builder()
@@ -45,6 +50,8 @@ public class StoreMyPageService {
             ReservationStatus status = reservationService.determinePickUpStatus(rdto);
             dto.setStatus(status);
         }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH시mm분");
 
         for (StoreReservationDto reservation : reservations) {
             if (reservation.getReservationTime() != null) {
@@ -64,13 +71,15 @@ public class StoreMyPageService {
             }
         }
 
-
         return reservations;
     }
 
     public StoreMyPageCalendarModalDto getStoreMyPageCalendarModalInfo(String storeId, String date) {
         log.info("service get store my page calendar modal info");
         List<StoreMyPageCalendarModalDto> list = storeMyPageMapper.getStoreMyPageCalendarModalInfo(storeId, date);
+        if (list.isEmpty()) {
+            throw new IllegalArgumentException("No calendar info found for storeId: " + storeId + " on date: " + date);
+        }
         StoreMyPageCalendarModalDto dto = list.get(0);
 
         List<ProductInfoDto> productCntByDate = storeMyPageMapper.getProductCntByDate(storeId, date);
@@ -86,9 +95,8 @@ public class StoreMyPageService {
         return dto;
     }
 
-
-    public StoreStatsDto getStats(String storeId){
-        List<StoreReservationDto> reservations = storeMyPageMapper.findReservations(storeId);
+    public StoreStatsDto getStats(String storeId) {
+        List<StoreReservationDto> reservations = reservationMapper.findReservations(storeId);
 
         // 예약 내역 중 pickedUpAt이 null이 아닌 것들의 리스트
         List<StoreReservationDto> pickedUpReservations = reservations.stream()
@@ -212,5 +220,15 @@ public class StoreMyPageService {
         List<ProductInfoDto> dto = storeMyPageMapper.getProductCntByDate(storeId, today.toString());
         // true false 뭐로 반환할지 생각좀...
         return true;
+    }
+
+    /**
+     * 특정 일자의 픽업 완료된 랜덤박스 개수를 가져오는 메서드
+     * @param storeId 가게 ID
+     * @param date 특정 일자
+     * @return 픽업 완료된 랜덤박스 개수
+     */
+    public int countPickedUpProductsByDate(String storeId, String date) {
+        return storeMyPageMapper.countPickedUpProductsByDate(storeId, date);
     }
 }

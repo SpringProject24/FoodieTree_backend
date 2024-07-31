@@ -9,13 +9,13 @@ import lombok.ToString;
 @AllArgsConstructor
 public enum StoreCategory {
     //    한식, 양식, 카페, 일식, 디저트, 중식, 기타
-    KOREAN("한식"),
-    WESTERN("양식"),
-    CAFE("카페"),
-    JAPANESE("일식"),
-    DESSERT("디저트"),
-    CHINESE("중식"),
-    ELSE("기타");
+    한식("한식"),
+    양식("양식"),
+    카페("카페"),
+    일식("일식"),
+    디저트("디저트"),
+    중식("중식"),
+    기타("기타");
 
     private final String foodType;
 
@@ -23,7 +23,7 @@ public enum StoreCategory {
         try {
             return StoreCategory.valueOf(category);
         } catch (IllegalArgumentException e) {
-            return StoreCategory.ELSE; // 기본값
+            return StoreCategory.기타; // 기본값
         }
     }
 }

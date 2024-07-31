@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.product.dto.response;
 
 import lombok.*;
 import org.nmfw.foodietree.domain.product.entity.ProductApproval;
+import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -20,19 +21,17 @@ public class ProductApprovalDto {
     private int productId;
     private String storeId;
     private MultipartFile proImage;
-    private String category;
+    private StoreCategory category;
     private String price;
     private int productCnt;
 
     public ProductApproval toEntity(){
 
-        Random random = new Random();
-
         return ProductApproval.builder()
-                .storeId(this.storeId)
-                .category(this.category)
+//                .id(this.storeId)
+//                .category(this.category)
                 .price(Integer.parseInt(this.price))
-                .productCnt(this.productCnt)
+//                .amount(this.productCnt)
                 .build();
     }
 

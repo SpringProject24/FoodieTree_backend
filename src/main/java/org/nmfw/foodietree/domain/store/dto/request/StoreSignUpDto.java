@@ -2,8 +2,6 @@ package org.nmfw.foodietree.domain.store.dto.request;
 
 import lombok.*;
 import org.nmfw.foodietree.domain.store.entity.Store;
-import org.nmfw.foodietree.domain.store.entity.value.StoreApproveStatus;
-import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

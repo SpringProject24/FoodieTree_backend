@@ -27,7 +27,7 @@ public class StoreListDto {
         return StoreListDto.builder()
                 .storeId(store.getStoreId())
                 .storeName(store.getStoreName())
-                .category(store.getCategory())
+                .category(store.getCategory().toString())
                 .address(store.getAddress())
                 .price(store.getPrice())
                 .storeImg(store.getStoreImg())

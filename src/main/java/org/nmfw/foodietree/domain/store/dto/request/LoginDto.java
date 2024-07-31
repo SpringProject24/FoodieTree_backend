@@ -23,7 +23,7 @@ public class LoginDto {
 
         return Store.builder()
                 .storeId(this.storeId)
-                .password(this.password)
+//                .password(this.password)
                 .build();
     }
 

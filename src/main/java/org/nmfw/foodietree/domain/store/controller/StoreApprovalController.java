@@ -2,50 +2,45 @@ package org.nmfw.foodietree.domain.store.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.customer.util.LoginUtil;
-import org.nmfw.foodietree.domain.store.dto.resp.StoreApprovalDto;
-import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
+import org.nmfw.foodietree.domain.product.controller.ProductApprovalController;
+import org.nmfw.foodietree.domain.store.dto.request.StoreApprovalReqDto;
 import org.nmfw.foodietree.domain.store.service.StoreApprovalService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.NoSuchElementException;
 
-@Controller
+@RestController
 @RequestMapping("/store")
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class StoreApprovalController {
 
     private final StoreApprovalService storeApprovalService;
 
-    @GetMapping("/approval")
-    public String storeApprovalForm() {
-        return "store/approval-form";
-    }
-
+    // 가게 등록 요청
     @PostMapping("/approval")
-    public String storeApprovalResult(@RequestParam("storeName") String storeName,
-                                      @RequestParam("address") String address,
-                                      @RequestParam("category") String category,
-                                      @RequestParam("businessNumber") String businessNumber,
-                                      @RequestParam("storeLicenseNumber") String storeLicenseNumber,
-                                      HttpSession session,
-                                      Model model) {
+    public ResponseEntity<?> approveStore(
+            @Valid @RequestBody StoreApprovalReqDto dto
+//        , @AuthenticationPrincipal TokenUserInfo userInfo
+    ) {
+        // Validation 예외처리는 ExceptionAdvisor.java
+        log.info("Request to approveStore : {}", dto.toString());
 
-        String storeId = LoginUtil.getLoggedInUser(session);
-        StoreCategory storeCategory = null;
+        // 가게 등록 요청 처리 (tbl_store_approval)
+        try {
+            storeApprovalService.askStoreApproval(
+                    dto
+    //                , userInfo
+            );
+        } catch (NoSuchElementException e) { // 등록 요청 실패
+//            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
-        // DTO를 사용하여 데이터 전달
-        StoreApprovalDto storeApprovalDto = new StoreApprovalDto(storeId, storeName, address, storeCategory, businessNumber, storeLicenseNumber);
-        storeApprovalService.registerStoreInfo(storeApprovalDto);
-
-        // 결과 페이지로 이동
-        model.addAttribute("message", "승인 완료");
-        return "redirect:/store/product";
+        // 등록 요청 성공
+        return ResponseEntity.ok().body("");
     }
 }
