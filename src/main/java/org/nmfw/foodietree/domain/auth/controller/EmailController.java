@@ -80,7 +80,7 @@ public class EmailController {
 
         try {
            EmailCodeDto emailCodeDto = EmailCodeDto.builder()
-                   .customerId(email)
+                   .email(email)
                    .userType(userType)
                    .build();
 
@@ -93,11 +93,12 @@ public class EmailController {
     }
 
     // 인증 토큰 클라이언트측에서 확인하기
-    @Value("${env.jwt.secret}")
+    @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    @Value("${env.jwt.refreshSecret}")
+    @Value("${env.jwt.refresh}")
     private String REFRESH_SECRET_KEY;
+
 
     @PostMapping("/verifyEmail")
     public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
@@ -123,7 +124,7 @@ public class EmailController {
             log.info("user Role (type) extracted from token: {}", userType);
 
             // 이메일 dto 정보를 데이터베이스에서 조회
-            EmailCodeDto emailCodeDto = emailMapper.findByEmail(email, userType);
+            EmailCodeDto emailCodeDto = emailMapper.findOneByEmail(email);
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
             // 이메일 정보가 인증 테이블에 있을 경우
@@ -140,19 +141,18 @@ public class EmailController {
                 // 새로운 Access Token 발급
                 String newAccessToken = tokenProvider.createToken(emailCodeDto);
                 // 새로운 Refresh Token 발급
-                String newRefreshToken = tokenProvider.createRefreshToken(email);
+                String newRefreshToken = tokenProvider.createRefreshToken(email, userType);
 
                 //실제 회원가입(테이블에 저장)이 되지 않은 경우 false
                 if (!(userService.findByEmail(emailCodeDto))) {
-                    log.info("email이 회원가입저장되지 않은 경우 dto {}", emailCodeDto);
-                    emailMapper.save(emailCodeDto); // access token 정보 새로 저장
+                    log.info("실제 회원가입(테이블에 저장)이 되지 않은 경우 {}", emailCodeDto);
+                    emailMapper.update(emailCodeDto); // 인증정보 true 업데이트
                     userService.saveUserInfo(emailCodeDto);
 
                 } else {
                     // 실제 회원가입이 되어있는 경우, 로그인 하는데 access token 기간이 종료된 경우
                     // 만료 기한 access, refresh 업데이트
-                    log.info("email이 회원가입저장 되어있는 경우 dto {}", emailCodeDto);
-                    emailMapper.update(emailCodeDto);
+                    log.info("email이 실제 회원가입 되어있는 경우 dto {}", emailCodeDto);
                     userService.updateUserInfo(emailCodeDto);
                 }
                 return ResponseEntity.ok(Map.of(
@@ -178,7 +178,7 @@ public class EmailController {
 
                 // refresh token 유효성 검사
                 Jws<Claims> claims = Jwts.parser()
-                        .setSigningKey(REFRESH_SECRET_KEY.getBytes())
+                        .setSigningKey(SECRET_KEY.getBytes())
                         .parseClaimsJws(token);
 
                 String email = claims.getBody().get("sub", String.class);
@@ -191,9 +191,9 @@ public class EmailController {
                 }
                 // 아직 refresh token 기한이 남아있는 경우
                 // 새로운 Access Token 발급
-                EmailCodeDto reIssuedAccessToken = reIssueAccessToken(userType, email);
+                EmailCodeDto reIssuedAccessToken = reIssueAccessToken(email, userType);
                 // 새로운 Refresh Token 발급
-                String reIssuedRefreshToken = tokenProvider.createRefreshToken(email);
+                String reIssuedRefreshToken = tokenProvider.createRefreshToken(email, userType);
 
                 // token 값 반환
                 return ResponseEntity.ok(Map.of(
@@ -218,22 +218,13 @@ public class EmailController {
 
         EmailCodeDto emailCodeDto = new EmailCodeDto();
 
-        if(userType.equals("store")) {
             EmailCodeDto.builder()
-                    .storeId(email)
+                    .email(email)
                     .emailVerified(true)
                     .userType(userType)
                     .expiryDate(LocalDateTime.now().plusMinutes(30))
                     .build();
 
-        } else if (userType.equals("customer")) {
-            EmailCodeDto.builder()
-                    .customerId(email)
-                    .emailVerified(true)
-                    .userType(userType)
-                    .expiryDate(LocalDateTime.now().plusMinutes(30))
-                    .build();
-        }
         return emailCodeDto;
     }
 

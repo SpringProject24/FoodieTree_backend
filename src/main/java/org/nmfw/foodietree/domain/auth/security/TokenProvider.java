@@ -26,40 +26,51 @@ public class TokenProvider {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    @Value("${env.jwt.refreshSecret}")
+    private Key getSigningKey(String key) {
+        byte[] keyBytes = Base64.getDecoder().decode(key);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    @Value("${env.jwt.refresh}")
     private String REFRESH_SECRET_KEY;
 
     // create access token : short term for access server DB and saved at local storage
     public String createToken(EmailCodeDto emailCodeDto) {
 
-        // customerId와 storeId 중 null이 아닌 값을 선택
-        String email = emailCodeDto.getCustomerId() != null ? emailCodeDto.getCustomerId() : emailCodeDto.getStoreId();
+        byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
+        System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
+        System.out.println("Decoded Key Length in Bits: " + (decodedKey.length * 8));
+
+        byte[] keyBytes = SECRET_KEY.getBytes();
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+        System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
+        System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
+
+        String email = emailCodeDto.getEmail();
         String userType = emailCodeDto.getUserType();
 
         return Jwts.builder()
-                // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
-                .signWith(
-                        Keys.hmacShaKeyFor(SECRET_KEY.getBytes())
-                        , SignatureAlgorithm.HS512
-                )
                 .claim("role", userType) // role 클레임에 userType 추가
+                // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
+                .signWith(key, SignatureAlgorithm.HS512)
                 // payload에 들어갈 내용
                 .setSubject(email) // sub
                 .setIssuer("foodie tree") // iss
                 .setIssuedAt(new Date()) // iat
-                .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))) // exp
+                .setExpiration(Date.from(Instant.now().plus(10, ChronoUnit.MINUTES))) // exp
                 .compact();
     }
 
     // refresh token : for long term life cycle and did not need to verify email link
     // save at user's DB
-    public String createRefreshToken(String email) {
+    public String createRefreshToken(String email, String userType) {
 
         return Jwts.builder()
                 .signWith(
-                        Keys.hmacShaKeyFor(REFRESH_SECRET_KEY.getBytes())
+                        Keys.hmacShaKeyFor(SECRET_KEY.getBytes())
                         , SignatureAlgorithm.HS512
                 )
+                .claim("role", userType) // role 클레임에 userType 추가
                 .setSubject(email)
                 .setIssuer("foodie tree token refresher")
                 .setIssuedAt(new Date())
