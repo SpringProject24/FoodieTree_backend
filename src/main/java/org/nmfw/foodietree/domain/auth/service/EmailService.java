@@ -72,6 +72,7 @@ public class EmailService {
         saveVerificationCode(to, userType,code);
     }
 
+    /*
     public boolean verifyCode(String email, String inputCode) {
         EmailCodeDto verificationCode = emailMapper.findByEmail(email);
 
@@ -82,6 +83,8 @@ public class EmailService {
         }
         return false;
     }
+
+     */
 
     public boolean verifyCodeForSignUp(String email, String inputCode) {
         EmailCodeDto verificationCode = signUpList.get(email);

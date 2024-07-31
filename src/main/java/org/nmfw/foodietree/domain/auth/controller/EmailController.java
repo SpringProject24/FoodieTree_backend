@@ -39,6 +39,7 @@ public class EmailController {
         }
     }
 
+    /*
     @GetMapping("/verify-reset-code")
     public String verifyResetCode(@RequestParam String email, @RequestParam String code) {
         if (emailService.verifyCode(email, code)) {
@@ -47,6 +48,8 @@ public class EmailController {
             return "Verification failed or code expired";
         }
     }
+
+     */
 
     // 인증 코드 전송
     @PostMapping("/sendVerificationCode")
@@ -109,19 +112,19 @@ public class EmailController {
                     .parseClaimsJws(token);
 
             String email = claims.getBody().get("sub", String.class);
-            String userRole = claims.getBody().get("role", String.class);
+            String userType = claims.getBody().get("role", String.class);
 
             log.info("secretKey claim : {}", claims);
             log.info("Email extracted from token: {}", email);
-            log.info("user Role (type) extracted from token: {}", userRole);
+            log.info("user Role (type) extracted from token: {}", userType);
 
-            // 이메일 정보를 데이터베이스에서 조회
-            EmailCodeDto emailCodeDto = emailMapper.findByEmail(email);
+            // 이메일 dto 정보를 데이터베이스에서 조회
+            EmailCodeDto emailCodeDto = emailMapper.findByEmail(email, userType);
             log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
             // 이메일 정보가 있을 경우
             if (emailCodeDto != null) {
-                emailCodeDto.setUserType(userRole);
+                emailCodeDto.setUserType(userType);
                 emailCodeDto.setEmailVerified(true);
 
                 // 이메일 인증이 완료되지 않은 경우 - 실제 회원가입이 되지 않은 경우
@@ -133,7 +136,7 @@ public class EmailController {
                         // 새로운 Access Token 발급
                         String newAccessToken = Jwts.builder()
                                 .setSubject(email)
-                                .claim("role", userRole)
+                                .claim("role", userType)
                                 .setIssuedAt(new Date())
                                 .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES)))
                                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes())
@@ -142,7 +145,7 @@ public class EmailController {
                         // 새로운 Refresh Token 발급
                         String newRefreshToken = Jwts.builder()
                                 .setSubject(email)
-                                .claim("role", userRole)
+                                .claim("role", userType)
                                 .setIssuedAt(new Date())
                                 .setExpiration(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)))
                                 .signWith(SignatureAlgorithm.HS512, REFRESH_SECRET_KEY.getBytes())
@@ -166,7 +169,7 @@ public class EmailController {
                             "accessToken", newAccessToken,
                             "refreshToken", newRefreshToken,
                             "email", email,
-                            "role", userRole,
+                            "role", userType,
                             "message", "Token reissued successfully."
                     ));
                 }
@@ -237,6 +240,7 @@ public class EmailController {
     }
 
 
+    /*
     @PostMapping("/verifyCode")
     public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> request, @RequestParam(required = false) String purpose) {
         String email = request.get("email");
@@ -253,4 +257,6 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("failure");
         }
     }
+
+     */
 }

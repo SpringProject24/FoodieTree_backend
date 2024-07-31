@@ -11,7 +11,7 @@ public interface EmailMapper {
 
     void save(EmailCodeDto dto);
 
-    EmailCodeDto findByEmail(String email);
+    EmailCodeDto findByEmail(String email, String userType);
 
     // refreh token update
     void update(EmailCodeDto emailCodeDto);

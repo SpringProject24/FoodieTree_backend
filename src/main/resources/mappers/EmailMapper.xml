@@ -59,7 +59,6 @@
         #{userType}
         )
     </insert>
-<!--      현재시간으로부터 유효한 코드 가져옴-->
 
     <select id="findByEmail" resultType="EmailCodeDto">
         SELECT
@@ -71,7 +70,14 @@
         FROM
         tbl_verification_code
         WHERE
-        (customer_id = #{customerId} OR (customer_id IS NULL AND store_id = #{storeId}))
+        <choose>
+            <when test="userType == 'customer'">
+                customer_id = #{email}
+            </when>
+            <when test="userType == 'store'">
+               store_id = #{email}
+            </when>
+        </choose>
         AND
         expiry_date > NOW()
         ORDER BY

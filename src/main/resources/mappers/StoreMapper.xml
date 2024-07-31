@@ -25,8 +25,7 @@
 
   <select id="findOne" resultType="store">
     SELECT
-      store_id,
-      password
+      store_id
     FROM tbl_store
     WHERE store_id = #{storeId}
   </select>

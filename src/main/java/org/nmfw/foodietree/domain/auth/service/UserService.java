@@ -38,7 +38,7 @@ public class UserService {
 
             storeMapper.signUpSaveStore(emailCodeStoreDto);
 
-        } else {
+        } else if(emailCodeDto.getStoreId() == null) {
             String token = tokenProvider.createRefreshToken(emailCodeDto.getCustomerId());
             Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
