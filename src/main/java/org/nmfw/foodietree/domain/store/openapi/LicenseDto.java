@@ -1,5 +1,13 @@
 package org.nmfw.foodietree.domain.store.openapi;
 
+import lombok.*;
+
+@Getter @Setter
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class LicenseDto {
     private String b_no;
     private String b_stt;

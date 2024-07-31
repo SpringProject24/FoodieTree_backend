@@ -1,7 +1,15 @@
 package org.nmfw.foodietree.domain.store.openapi;
 
+import lombok.*;
+
 import java.util.List;
 
+@Getter @Setter
+@EqualsAndHashCode
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class LicenseResDto {
 
     private String status_code;

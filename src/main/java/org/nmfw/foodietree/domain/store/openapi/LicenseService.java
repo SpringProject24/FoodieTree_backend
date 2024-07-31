@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,14 +19,20 @@ public class LicenseService {
 
     @Value("${license.enc}")
     private String licenseEncKey;
-    @Value("${license.dec}")
-    private String licenseDecKey;
 
     public LicenseResDto postLicense() {
-        WebClient webClient = WebClient.builder().build();
+
+        DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory();
+        factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE);
+
+        WebClient webClient = WebClient.builder()
+                .uriBuilderFactory(factory)
+                .build();
+
         String url =
                 "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey="
-                + licenseDecKey;
+                + licenseEncKey;
+
         // StoreApproval PENDING 상태인 사업자등록번호 조회하도록 수정 필요
         String[] arr = {"1234567891", "1141916588", "2744700926", "8781302319"};
 
