@@ -52,7 +52,7 @@ public class TokenProvider {
                 .setSubject(email) // sub
                 .setIssuer("foodie tree") // iss
                 .setIssuedAt(new Date()) // iat
-                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES))) // exp
+                .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))) // exp
                 .compact();
     }
 
