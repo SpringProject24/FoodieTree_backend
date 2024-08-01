@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/customer")
@@ -31,11 +32,14 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping("/myFavMap")
-    public String getMyLocation(String location) {
+    public ResponseEntity<Map<String, String>> getMyLocation(@RequestBody Map<String, String> payload) {
+        String location = payload.get("location");
         if (location != null) {
-            log.info(" my location test : {}", location);
+            log.info("My location test: {}", location);
+            return ResponseEntity.ok(Map.of("location", location));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("error", "Location is required"));
         }
-        return location;
     }
 
 
