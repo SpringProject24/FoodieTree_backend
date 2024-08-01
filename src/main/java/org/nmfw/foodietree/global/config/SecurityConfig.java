@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안 함
                 .and()
                 .authorizeRequests()
-                .antMatchers("/reservation/**").authenticated() // 특정 경로에만 필터 적용
+//                .antMatchers("/reservation/**").authenticated() // 특정 경로에만 필터 적용
                 .anyRequest().permitAll(); // 나머지 경로는 인증 불필요
 
         // JwtAuthFilter를 UsernamePasswordAuthenticationFilter 전에 실행하도록 설정

@@ -37,8 +37,8 @@ public class Product {
     @Column(name = "canceled_by_store_at")
     private String cancelByStore;
 
-    @Column(name = "idx_store_id")
-    private String idxStoreId;
+//    @Column(name = "idx_store_id")
+//    private String idxStoreId;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
