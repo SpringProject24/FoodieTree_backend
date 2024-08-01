@@ -16,13 +16,13 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
-    private int reservationId;
+    private Long reservationId;
 
     @Column(name = "customer_id", nullable = false)
     private String customerId;
 
     @Column(name = "product_id", nullable = false)
-    private int productId;
+    private Long productId;
 
     @Column(name = "reservation_time", nullable = false)
     private LocalDateTime reservationTime;
