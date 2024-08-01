@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequestMapping("/customer")
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +29,15 @@ public class CustomerController {
     @Value("${env.kakao.api.key:default}")
     private String kakaoApiKey;
     private final CustomerService customerService;
+
+    @PostMapping("/myFavMap")
+    public String getMyLocation(String location) {
+        if (location != null) {
+            log.info(" my location test : {}", location);
+        }
+        return location;
+    }
+
 
 
     //회원가입 양식 열기
