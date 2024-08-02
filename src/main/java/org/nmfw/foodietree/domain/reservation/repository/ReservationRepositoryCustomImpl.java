@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.reservation.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
@@ -92,7 +93,7 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                 .from(reservation)
 //                .join(reservation.product, product)
                 .join(product).on(reservation.productId.eq(product.productId))
-                .where(reservation.reservationId.eq(Math.toIntExact(reservationId)))
+                .where(reservation.reservationId.eq(reservationId))
                 .fetchOne();
     }
 
@@ -122,7 +123,7 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                 .join(product).on(reservation.productId.eq(product.productId))
                 .join(store).on(product.storeId.eq(store.storeId))
                 .join(customer).on(reservation.customerId.eq(customer.customerId))
-                .where(reservation.reservationId.eq(Math.toIntExact(reservationId)))
+                .where(reservation.reservationId.eq(reservationId))
                 .fetchOne();
     }
 
