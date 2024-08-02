@@ -27,13 +27,16 @@ public class Reservation {
     @Column(name = "reservation_time", nullable = false)
     private LocalDateTime reservationTime;
 
+    @Setter
     @Column(name = "cancel_reservation_at")
     private LocalDateTime cancelReservationAt;
 
+    @Setter
     @Column(name = "picked_up_at")
     private LocalDateTime pickedUpAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private ReservationStatus status;
+//    @Setter
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "status")
+//    private ReservationStatus status;
 }

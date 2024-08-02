@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, String> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
     // 모든 제품 정보 조회
     List<Product> findAll();
@@ -22,5 +22,5 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> findByStoreIdIn(List<String> storeIds);
 
     // 제품 ID로 조회
-    Product findByProductId(Integer productId);
+    Product findByProductId(Long productId);
 }

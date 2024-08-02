@@ -23,7 +23,8 @@ public class StoreReservationDto {
     private LocalDateTime reservationTime;
     private LocalDateTime cancelReservationAt;
     private LocalDateTime pickedUpAt;
-    private LocalDateTime pickupTime;
+    private LocalDateTime pickupStartTime;
+    private LocalDateTime pickupEndTime;
     private LocalDateTime productUploadDate;
     private int price;
     private ReservationStatus status;
