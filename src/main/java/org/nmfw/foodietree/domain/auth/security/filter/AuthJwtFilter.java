@@ -37,13 +37,13 @@ import java.util.List;
 public class AuthJwtFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
-    private final UserService userService; // Assuming this service provides methods to handle user data
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = parseBearerToken(request);
-            String refreshToken = request.getHeader("RefreshToken");
+            String refreshToken = request.getHeader("refreshToken");
 
             log.info("Token Forgery Verification Filter Operation!");
             if (token != null) {
@@ -74,7 +74,6 @@ public class AuthJwtFilter extends OncePerRequestFilter {
             e.printStackTrace();
         }
 
-        // filter chain
         filterChain.doFilter(request, response);
     }
 
@@ -101,7 +100,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 
         // Set new tokens in response headers
         response.setHeader("token", newAccessToken);
-        response.setHeader("RefreshToken", newRefreshToken);
+        response.setHeader("refreshToken", newRefreshToken);
 
         // Set authentication context
         TokenUserInfo newAccessTokenInfo = tokenProvider.validateAndGetTokenInfo(newAccessToken);

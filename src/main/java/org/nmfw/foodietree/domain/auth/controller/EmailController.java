@@ -136,13 +136,13 @@ public class EmailController {
 
                         log.info("실제 회원가입(테이블에 저장)이 되지 않은 경우 {}", emailCodeDto);
                         emailMapper.update(emailCodeDto); // 인증정보 true 업데이트
-                        userService.saveUserInfo(emailCodeDto);
+                        return userService.saveUserInfo(emailCodeDto);
 
                     } else {
                         // 실제 회원가입이 되어있는 경우, 로그인 하는데 access token 기간이 종료된 경우
                         // 만료 기한 access, refresh 업데이트
                         log.info("email이 실제 회원가입 되어있는 경우 dto {}", emailCodeDto);
-                        userService.updateUserInfo(emailCodeDto);
+                        return userService.updateUserInfo(emailCodeDto);
                     }
                 }
 
@@ -176,8 +176,8 @@ public class EmailController {
                             .build();
 
                     // Call updateUserInfo and capture its response
-                    ResponseEntity<Map<String, ? extends Serializable>> responseEntity = userService.updateUserInfo(emailCodeDto);
-                    return responseEntity;
+                    return userService.updateUserInfo(emailCodeDto);
+
 
                 } catch (Exception ex) {
                     log.error("Refresh token parsing error: {}", ex.getMessage());
