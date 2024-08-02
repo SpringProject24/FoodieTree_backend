@@ -7,6 +7,7 @@ import org.nmfw.foodietree.domain.store.dto.resp.StoreHolidayDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageCalendarModalDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreMyPageDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface StoreMyPageRepositoryCustom {
@@ -22,20 +23,22 @@ public interface StoreMyPageRepositoryCustom {
      * @return StoreMyPageCalendarModalDto
      */
     List<StoreMyPageCalendarModalDto> getStoreMyPageCalendarModalInfo(@Param("storeId") String storeId, @Param("date") String date);
+//
+//    /**
+//     * 상품 업데이트
+//     * @param storeId : 가게 아이디
+//     * @param pickupTime : 픽업 시간
+//     */
+//    void updateProductAuto(@Param("storeId") String storeId, @Param("closedAt") String pickupTime);
 
-    /**
-     * 상품 업데이트
-     * @param storeId : 가게 아이디
-     * @param pickupTime : 픽업 시간
-     */
-    void updateProductAuto(@Param("storeId") String storeId, @Param("closedAt") String pickupTime);
+//    /**
+//     * 상품 삭제 -> 문 닫는 날에 오전 00시에 업데이트된 상품에 대해 cancel_by_store_at 업데이트
+//     * @param storeId : 가게 아이디
+//     * @param pickupTime : 문닫는 날 LocalDate.now().toString() 로 전달하거나 "yyyy-MM-dd" 형식으로 전달
+//     */
+//    void cancelProductByStore(@Param("storeId") String storeId, @Param("pickupTime") String pickupTime);
 
-    /**
-     * 상품 삭제 -> 문 닫는 날에 오전 00시에 업데이트된 상품에 대해 cancel_by_store_at 업데이트
-     * @param storeId : 가게 아이디
-     * @param pickupTime : 문닫는 날 LocalDate.now().toString() 로 전달하거나 "yyyy-MM-dd" 형식으로 전달
-     */
-    void cancelProductByStore(@Param("storeId") String storeId, @Param("pickupTime") String pickupTime);
+//    List<StoreMyPageCalendarModalDto> getStoreMyPageCalendarModalInfo(String storeId, LocalDate date);
 
     List<StoreCheckDto> getAllStore();
 
@@ -45,7 +48,7 @@ public interface StoreMyPageRepositoryCustom {
 
     List<StoreHolidayDto> getHolidays(@Param("storeId") String storeId);
 
-    List<ProductInfoDto> getProductCntByDate(@Param("storeId") String storeId, @Param("date") String date);
+//    List<ProductInfoDto> getProductCntByDate(@Param("storeId") String storeId, @Param("date") String date);
 
     /**
      * 특정 일자의 픽업 완료된 랜덤박스 개수를 가져오는 메서드
@@ -53,6 +56,6 @@ public interface StoreMyPageRepositoryCustom {
      * @param date 특정 일자
      * @return 픽업 완료된 랜덤박스 개수
      */
-    int countPickedUpProductsByDate(@Param("storeId") String storeId, @Param("date") String date);
+//    int countPickedUpProductsByDate(@Param("storeId") String storeId, @Param("date") String date);
 
 }

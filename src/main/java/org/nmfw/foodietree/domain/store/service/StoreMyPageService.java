@@ -9,6 +9,8 @@ import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
+import org.nmfw.foodietree.domain.store.repository.StoreMyPageRepository;
+import org.nmfw.foodietree.domain.store.repository.StoreMyPageRepositoryCustomImpl;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,10 +28,11 @@ public class StoreMyPageService {
     private final StoreMyPageMapper storeMyPageMapper;
     private final ReservationService reservationService;
     private final ReservationMapper reservationMapper;
+    private final StoreMyPageRepository storeMyPageRepository;
 
     public StoreMyPageDto getStoreMyPageInfo(String storeId) {
         log.info("Fetching store my page info for storeId: {}", storeId);
-        StoreMyPageDto store = storeMyPageMapper.getStoreMyPageInfo(storeId);
+        StoreMyPageDto store = storeMyPageRepository.getStoreMyPageInfo(storeId);
         if (store == null) {
             throw new IllegalArgumentException("Store not found with ID: " + storeId);
         }
@@ -76,7 +79,7 @@ public class StoreMyPageService {
 
     public StoreMyPageCalendarModalDto getStoreMyPageCalendarModalInfo(String storeId, String date) {
         log.info("service get store my page calendar modal info");
-        List<StoreMyPageCalendarModalDto> list = storeMyPageMapper.getStoreMyPageCalendarModalInfo(storeId, date);
+        List<StoreMyPageCalendarModalDto> list = storeMyPageRepository.getStoreMyPageCalendarModalInfo(storeId, date);
         if (list.isEmpty()) {
             throw new IllegalArgumentException("No calendar info found for storeId: " + storeId + " on date: " + date);
         }
