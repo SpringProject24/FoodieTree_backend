@@ -94,6 +94,11 @@ public class TokenProvider {
 
 
    public TokenUserInfo validateAndGetTokenInfo(String token) {
+
+       if (token == null || token.isEmpty()) {
+           throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
+       }
+
         try {
             //토큰 발급 당시 서명 처리
             Claims claims = Jwts.parserBuilder()
@@ -131,6 +136,10 @@ public class TokenProvider {
     }
 
     public TokenUserInfo validateAndGetRefreshTokenInfo(String refreshToken) {
+
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
+        }
 
         try {
             //토큰 발급 당시 서명 처리
