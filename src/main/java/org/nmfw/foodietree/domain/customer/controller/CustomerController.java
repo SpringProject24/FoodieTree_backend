@@ -79,7 +79,7 @@ public class CustomerController {
      * @date     2024 07 25 15:14
      *
      */
-    @PostMapping("/customer/edit/img")
+    @PostMapping("/edit/img")
     public ResponseEntity<?> imageUpload(@RequestParam("customerImg") MultipartFile customerImg) {
         String customerId = "test@gmail.com";
         boolean flag = customerMyPageService.updateProfileImg(customerId, customerImg);
@@ -100,7 +100,7 @@ public class CustomerController {
      *  	value: string
      * }
      */
-    @PostMapping("/customer/edit")
+    @PostMapping("/edit")
     public ResponseEntity<?> insertPreferred(@RequestBody UpdateDto dto) {
         String customerId = "test@gmail.com";
         boolean flag = customerMyPageService.updateCustomerInfo(customerId, List.of(dto));
@@ -122,7 +122,7 @@ public class CustomerController {
      *     value : string
      * }
      */
-    @DeleteMapping("/customer/edit")
+    @DeleteMapping("/edit")
     public ResponseEntity<?> deletePreferred(@RequestBody UpdateDto dto) {
         String customerId = "test@gmail.com";
         boolean flag = customerMyPageService.deleteCustomerInfo(customerId, List.of(dto));
@@ -143,7 +143,7 @@ public class CustomerController {
      *     value: string
      * }
      */
-    @PatchMapping("/customer/edit")
+    @PatchMapping("/edit")
     public ResponseEntity<?> editInfo(@RequestBody UpdateDto dto) {
         String customerId = "test@gmail.com";
         boolean flag = customerMyPageService.updateCustomerInfo(customerId, List.of(dto));
