@@ -2,35 +2,55 @@ package org.nmfw.foodietree.domain.reservation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.product.entity.Product;
+import org.nmfw.foodietree.domain.product.repository.ProductRepository;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
+import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
+import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ReservationService {
     private final ReservationMapper reservationMapper;
+    private final ReservationRepository reservationRepository;
+    private final ProductRepository productRepository;
 
     /**
      * 예약을 취소하고 취소가 성공했는지 여부를 반환
      * @param reservationId 취소할 예약의 ID
      * @return 취소가 완료되었는지 여부
      */
-    public boolean cancelReservation(int reservationId) {
-        reservationMapper.cancelReservation(reservationId);
-        ReservationDetailDto reservation = reservationMapper.findReservationByReservationId(reservationId);
-        if (reservation.getCancelReservationAt() != null) {
-            reservation.setStatus(ReservationStatus.CANCELED);
+    public boolean cancelReservation(long reservationId) {
+
+        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
+        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
+
+        // 예약 상태인 경우 취소
+        ReservationStatus status = determinePickUpStatus(reservation);
+        if(status == ReservationStatus.RESERVED) {
+            // 결제 취소 로직 필요
+
+            // 취소시간 추가
+            reservation.setCancelReservationAt(LocalDateTime.now());
+
             return true;
         }
+
+        // 이미 취소했거나, 픽업했거나, 노쇼인 경우
         return false;
     }
 
@@ -39,13 +59,18 @@ public class ReservationService {
      * @param reservationId 픽업 완료할 예약의 ID
      * @return 픽업 완료가 성공했는지 여부
      */
-    public boolean completePickup(int reservationId) {
-        reservationMapper.completePickup(reservationId);
-        ReservationDetailDto reservation = reservationMapper.findReservationByReservationId(reservationId);
-        if (reservation.getPickedUpAt() != null) {
-            reservation.setStatus(ReservationStatus.PICKEDUP);
+    public boolean completePickup(long reservationId) {
+
+        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
+        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
+
+        // 취소시간, 픽업시간이 있는 경우 false
+        ReservationStatus status = determinePickUpStatus(reservation);
+        if(status == ReservationStatus.RESERVED) {
+            reservation.setPickedUpAt(LocalDateTime.now());
             return true;
         }
+
         return false;
     }
 
@@ -54,9 +79,9 @@ public class ReservationService {
      * @param reservationId 예약 ID
      * @return 픽업 가능 여부
      */
-    public boolean isPickupAllowed(int reservationId) {
-        ReservationDetailDto reservation = reservationMapper.findReservationByReservationId(reservationId);
-        return LocalDateTime.now().isBefore(reservation.getPickupTime());
+    public boolean isPickupAllowed(long reservationId) {
+        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
+        return LocalDateTime.now().isBefore(reservation.getPickupEndTime());
     }
 
     /**
@@ -64,9 +89,9 @@ public class ReservationService {
      * @param reservationId 예약 ID
      * @return 취소 가능 여부
      */
-    public boolean isCancelAllowed(int reservationId) {
-        ReservationDetailDto reservation = reservationMapper.findReservationByReservationId(reservationId);
-        return LocalDateTime.now().isBefore(reservation.getPickupTime().minusHours(1));
+    public boolean isCancelAllowed(long reservationId) {
+        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
+        return LocalDateTime.now().isBefore(reservation.getPickupEndTime().minusHours(1));
     }
 
     /**
@@ -79,7 +104,7 @@ public class ReservationService {
             return ReservationStatus.PICKEDUP;
         } else if (reservation.getCancelReservationAt() != null) {
             return ReservationStatus.CANCELED;
-        } else if (reservation.getPickupTime().isBefore(LocalDateTime.now())) {
+        } else if (reservation.getPickupEndTime().isBefore(LocalDateTime.now())) {
             return ReservationStatus.NOSHOW;
         } else {
             return ReservationStatus.RESERVED;
@@ -91,8 +116,8 @@ public class ReservationService {
      * @param reservationId 예약 ID
      * @return 예약 상세 정보 DTO
      */
-    public ReservationDetailDto getReservationDetail(int reservationId) {
-        ReservationDetailDto dto = reservationMapper.findReservationByReservationId(reservationId);
+    public ReservationDetailDto getReservationDetail(long reservationId) {
+        ReservationDetailDto dto = reservationRepository.findReservationByReservationId(reservationId);
         dto.setStatus(determinePickUpStatus(dto));
         dto.formatTimes(); // 시간 필드 포멧팅
         return dto;
@@ -108,11 +133,15 @@ public class ReservationService {
         log.info("Creating reservation for customer: {}, data: {}", customerId, data);
         int cnt = Integer.parseInt(data.get("cnt"));
         String storeId = data.get("storeId");
-        List<ReservationFoundStoreIdDto> list = reservationMapper.findByStoreIdLimit(storeId, cnt);
+        List<ReservationFoundStoreIdDto> list = reservationRepository.findByStoreIdLimit(storeId, cnt);
         for (ReservationFoundStoreIdDto tar : list) {
             long productId = tar.getProductId();
-            boolean flag = reservationMapper.createReservation(customerId, productId);
-            if (!flag) return false;
+            Reservation reservation = Reservation.builder()
+                    .customerId(customerId)
+                    .productId(productId)
+                    .build();
+            Reservation save = reservationRepository.save(reservation);
+            if (save == null) return false;
         }
         return true;
     }
