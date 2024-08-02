@@ -30,8 +30,6 @@ public interface CustomerMapper {
     boolean savePreferredFoods(@Param("customerId") String customerId,
                             @Param("preferredFoods") List<String> preferredFoods);
 
-
-
     // 자동로그인 쿠키값, 만료시간 업데이트
     void updateAutoLogin(AutoLoginDto dto);
 
@@ -40,7 +38,5 @@ public interface CustomerMapper {
     void signUpUpdateCustomer(EmailCustomerDto emailCodeCustomerDto);
 
     void signUpSaveCustomer(EmailCustomerDto dto);
-
-    Date findRefreshDateById(String email);
 
 }

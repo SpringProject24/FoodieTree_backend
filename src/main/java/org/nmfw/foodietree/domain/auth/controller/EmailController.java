@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -143,14 +144,6 @@ public class EmailController {
                         log.info("email이 실제 회원가입 되어있는 경우 dto {}", emailCodeDto);
                         userService.updateUserInfo(emailCodeDto);
                     }
-                    return ResponseEntity.ok(Map.of(
-                            "success", true,
-                            "token", token,
-                            "refreshToken", refreshToken,
-                            "email", email,
-                            "role", userType,
-                            "message", "Token reissued successfully."
-                    ));
                 }
 
                 // email table에 인증정보가 없을 경우 즉, access token이 만료되었을경우
@@ -181,17 +174,11 @@ public class EmailController {
                             .email(email)
                             .userType(userType)
                             .build();
-                    String newAccessToken = tokenProvider.createToken(emailCodeDto);
-                    String newRefreshToken = tokenProvider.createRefreshToken(email, userType);
 
-                    return ResponseEntity.ok(Map.of(
-                            "success", true,
-                            "accessToken", newAccessToken,
-                            "refreshToken", newRefreshToken,
-                            "email", email,
-                            "role", userType,
-                            "message", "Token reissued successfully."
-                    ));
+                    // Call updateUserInfo and capture its response
+                    ResponseEntity<Map<String, ? extends Serializable>> responseEntity = userService.updateUserInfo(emailCodeDto);
+                    return responseEntity;
+
                 } catch (Exception ex) {
                     log.error("Refresh token parsing error: {}", ex.getMessage());
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid refresh token"));

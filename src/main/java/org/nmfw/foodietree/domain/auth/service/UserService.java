@@ -13,6 +13,7 @@ import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
@@ -28,11 +29,12 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
 
-    public void saveUserInfo(EmailCodeDto emailCodeDto) {
+    public ResponseEntity<Map<String, ? extends Serializable>> saveUserInfo(EmailCodeDto emailCodeDto) {
 
         String emailCodeDtoUserType = emailCodeDto.getUserType();
         String emailCodeDtoEmail = emailCodeDto.getEmail();
 
+        String token = tokenProvider.createToken(emailCodeDto);
         String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
         Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
 
@@ -58,16 +60,28 @@ public class UserService {
             customerMapper.signUpSaveCustomer(emailCodeCustomerDto);
         }
 
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "token", token,
+                "refreshToken", refreshToken,
+                "email", emailCodeDtoUserType,
+                "role", emailCodeDtoEmail,
+                "message", "Token reissued successfully."
+        ));
+
     }
 
     // access token, refresh token 재발급
-    public void updateUserInfo(EmailCodeDto emailCodeDto) {
+    public ResponseEntity<Map<String, ? extends Serializable>> updateUserInfo(EmailCodeDto emailCodeDto) {
 
         String emailCodeDtoUserType = emailCodeDto.getUserType();
         String emailCodeDtoEmail = emailCodeDto.getEmail();
 
-        String token = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
-        Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(token);
+        String token = tokenProvider.createToken(emailCodeDto);
+        log.info(" 새로운 토큰 재발급 ! {}",token);
+        String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
+        log.info("새로운 리프레시 토큰 재발급 ! {} ",refreshToken);
+        Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
 
         if (emailCodeDtoUserType.equals("store")) {
 
@@ -89,6 +103,15 @@ public class UserService {
 
             customerMapper.signUpUpdateCustomer(emailCodeCustomerDto);
         }
+
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "token", token,
+                "refreshToken", refreshToken,
+                "email", emailCodeDtoEmail,
+                "role", emailCodeDtoUserType,
+                "message", "Token reissued successfully."
+        ));
     }
 
     // customer, store DB 에 회원이 존재하는지 여부 확인
