@@ -43,7 +43,7 @@ public class ReservationDetailDto {
     public ReservationDetailDto(int reservationId, int productId, String customerId, LocalDateTime reservationTime,
                                 LocalDateTime cancelReservationAt, LocalDateTime pickedUpAt, String storeId,
                                 LocalDateTime pickupTime, String storeName, String category, String address, int price,
-                                String storeImg, String nickname, String profileImage, ReservationStatus status) {
+                                String storeImg, String nickname, String profileImage) {
         this.reservationId = reservationId;
         this.productId = productId;
         this.customerId = customerId;
@@ -59,7 +59,6 @@ public class ReservationDetailDto {
         this.storeImg = storeImg;
         this.nickname = nickname;
         this.profileImage = profileImage;
-        this.status = status;
     }
 
     // 포멧팅 함수

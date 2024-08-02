@@ -1,6 +1,7 @@
 package org.nmfw.foodietree.domain.customer.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
@@ -9,6 +10,8 @@ import org.nmfw.foodietree.domain.customer.dto.resp.CustomerFavStoreDto;
 import org.nmfw.foodietree.domain.customer.entity.*;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
+import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
+import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.nmfw.foodietree.domain.store.entity.QFoodCategory;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
@@ -23,6 +26,7 @@ import java.util.List;
 public class CustomerMyPageRepositoryCustomImpl implements CustomerMyPageRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    private final ReservationService reservationService;
 
     @Override
     public CustomerMyPageDto findCustomerDetails(String customerId) {
@@ -94,7 +98,7 @@ public class CustomerMyPageRepositoryCustomImpl implements CustomerMyPageReposit
         QStore store = QStore.store;
         QCustomer customer = QCustomer.customer;
 
-        return queryFactory.select(
+        List<ReservationDetailDto> reservations = queryFactory.select(
                         Projections.constructor(ReservationDetailDto.class,
                                 reservation.reservationId,
                                 reservation.productId,
@@ -105,13 +109,12 @@ public class CustomerMyPageRepositoryCustomImpl implements CustomerMyPageReposit
                                 product.storeId,
                                 product.pickupTime,
                                 store.storeName,
-                                store.category,
+                                store.category.stringValue(),
                                 store.address,
                                 store.price,
                                 store.storeImg,
                                 customer.nickname,
-                                customer.profileImage,
-                                reservation.status
+                                customer.profileImage
                         ))
                 .from(reservation)
                 .join(product).on(reservation.productId.eq(product.productId))
@@ -120,5 +123,13 @@ public class CustomerMyPageRepositoryCustomImpl implements CustomerMyPageReposit
                 .where(reservation.customerId.eq(customerId))
                 .orderBy(product.pickupTime.desc())
                 .fetch();
+
+        reservations.forEach(reservationDetail -> {
+            ReservationStatus status = reservationService.determinePickUpStatus(reservationDetail);
+            reservationDetail.setStatus(status);
+        });
+
+        return reservations;
     }
+
 }
