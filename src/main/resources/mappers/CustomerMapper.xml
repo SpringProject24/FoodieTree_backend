@@ -41,13 +41,7 @@
 
     <!--  고객 1명의 정보를 조회 -->
     <select id="findOne" resultType="customer">
-        SELECT
-        customer_id
-            , customer_password
-            , nickName
-            , customer_phone_number
-            , profile_image
-            , session_id
+        SELECT *
         FROM tbl_customer
         WHERE customer_id = #{customerId}
     </select>

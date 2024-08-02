@@ -15,6 +15,7 @@ import javax.crypto.SecretKey;
 import java.security.Key;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
@@ -52,7 +53,7 @@ public class TokenProvider {
                 .setSubject(email) // sub
                 .setIssuer("foodie tree") // iss
                 .setIssuedAt(new Date()) // iat
-                .setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))) // exp
+                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES))) // exp
                 .compact();
     }
 
@@ -79,21 +80,20 @@ public class TokenProvider {
                 .compact();
     }
 
-    public Date getExpirationDateFromToken(String token) {
+    public Date getExpirationDateFromRefreshToken(String refreshToken) {
         byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(refreshToken)
                 .getBody()
-                .getExpiration();
+                .getExpiration(); // 리프레시 토큰 만료일자
     }
 
 
    public TokenUserInfo validateAndGetTokenInfo(String token) {
-
         try {
             //토큰 발급 당시 서명 처리
             Claims claims = Jwts.parserBuilder()
@@ -107,24 +107,30 @@ public class TokenProvider {
                     .parseClaimsJws(token)
                     .getBody();
 
-            log.info("validateAndGetTokenInfo Claims: {}", claims);
+            log.info(" ACCESS validateAndGetTokenInfo Claims: {}", claims);
+
+            Date exp = claims.getExpiration();
+            LocalDateTime tokenExpireDate = exp.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
 
             TokenUserInfo build = TokenUserInfo.builder()
                     .email(claims.get("sub", String.class))
                     .role(claims.get("role", String.class))
+                    .tokenExpireDate(tokenExpireDate)
                     .build();
 
-            log.info("검증 통과 후 엑세스토큰 유저 인포 정보 {},{}", build.email, build.role);
+            log.info("검증 통과 후 엑세스 토큰 유저 인포 정보 {},{}", build.email, build.role);
 
             return build;
 
         } catch (JwtException e) {
-            log.error("Token validation error: {}", e.getMessage());
+            log.error("ACCESS Token validation error: {}", e.getMessage());
             throw e; // 또는 적절한 예외 처리
         }
     }
 
-    public TokenUserInfo validateAndGetRefreshTokenInfo(String token) {
+    public TokenUserInfo validateAndGetRefreshTokenInfo(String refreshToken) {
 
         try {
             //토큰 발급 당시 서명 처리
@@ -136,14 +142,21 @@ public class TokenProvider {
                     // 서명위조 검사 진행 : 위조된 경우 Exception이 발생
                     // 위조되지 않은 경우 클레임을 리턴
                     .build()
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(refreshToken)
                     .getBody();
 
-            log.info("validateAndGetTokenInfo Claims: {}", claims);
+
+            log.info("REFRESH validateAndGetTokenInfo Claims: {}", claims);
+
+            Date exp = claims.getExpiration();
+            LocalDateTime tokenExpireDate = exp.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
 
             TokenUserInfo build = TokenUserInfo.builder()
                     .email(claims.get("sub", String.class))
                     .role(claims.get("role", String.class))
+                    .tokenExpireDate(tokenExpireDate)
                     .build();
 
             log.info("검증 통과 후 리프레시토큰 유저 인포 정보 {},{}", build.email, build.role);
@@ -151,7 +164,7 @@ public class TokenProvider {
             return build;
 
         } catch (JwtException e) {
-            log.error("Token validation error: {}", e.getMessage());
+            log.error("REFRESH Token validation error: {}", e.getMessage());
             throw e; // 또는 적절한 예외 처리
         }
     }
@@ -165,5 +178,7 @@ public class TokenProvider {
     public static class TokenUserInfo {
         private String role;
         private String email;
+        private LocalDateTime tokenExpireDate; // 두 토큰의 만료일자를 담음
     }
+
 }

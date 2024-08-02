@@ -33,16 +33,11 @@ public class UserService {
         String emailCodeDtoUserType = emailCodeDto.getUserType();
         String emailCodeDtoEmail = emailCodeDto.getEmail();
 
-//        // 이메일 인증이 완료된 경우 (재로그인, 토큰 재부여)
-//        // 새로운 Access Token 발급
-//        String newAccessToken = tokenProvider.createToken(emailCodeDto);
-//        // 새로운 Refresh Token 발급
-//        String newRefreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
+        String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
+        Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
 
         // 최초 회원 정보 저장 로직 :  customer인지 store 인지 null 값으로 구분
         if (emailCodeDtoUserType.equals("store")) {
-            String token = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
-            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
             EmailCodeStoreDto emailCodeStoreDto = EmailCodeStoreDto.builder()
                     .storeId(emailCodeDtoEmail)
@@ -53,10 +48,6 @@ public class UserService {
             storeMapper.signUpSaveStore(emailCodeStoreDto);
 
         } else if(emailCodeDtoUserType.equals("customer")) {
-            String token = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
-            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
-
-            log.info("db에 refresh token 기간 추가 {}", expirationDate);
 
             EmailCustomerDto emailCodeCustomerDto = EmailCustomerDto.builder()
                     .customerId(emailCodeDtoEmail)
@@ -72,14 +63,13 @@ public class UserService {
     // access token, refresh token 재발급
     public void updateUserInfo(EmailCodeDto emailCodeDto) {
 
-        //store 일 경우
         String emailCodeDtoUserType = emailCodeDto.getUserType();
         String emailCodeDtoEmail = emailCodeDto.getEmail();
 
-        if (emailCodeDtoUserType.equals("store")) {
+        String token = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
+        Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(token);
 
-            String token = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
-            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
+        if (emailCodeDtoUserType.equals("store")) {
 
             EmailCodeStoreDto emailCodeStoreDto = EmailCodeStoreDto.builder()
                     .storeId(emailCodeDtoEmail)
@@ -90,9 +80,6 @@ public class UserService {
 
             // customer 일 경우
         } else if (emailCodeDtoUserType.equals("customer")) {
-
-            String token = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
-            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
             EmailCustomerDto emailCodeCustomerDto = EmailCustomerDto.builder()
                     .customerId(emailCodeDtoEmail)
@@ -137,9 +124,11 @@ public class UserService {
     public LocalDateTime getRefreshTokenExpiryDate(String email, String userType) {
         if ("customer".equals(userType)) {
             Customer customer = customerMapper.findOne(email);
+            log.info("customer object : {},customer email : {}, customer 의 리프레시 만료일자 인 서버 : {}", customer,customer.getCustomerId(), customer.getRefreshTokenExpireDate());
             return customer != null ? customer.getRefreshTokenExpireDate() : null;
         } else if ("store".equals(userType)) {
             Store store = storeMapper.findOne(email);
+            log.info("store email : {}, store 의 리프레시 만료일자 인 서버 : {}", email, store.getRefreshTokenExpireDate());
             return store != null ? store.getRefreshTokenExpireDate() : null;
         } else {
             throw new IllegalArgumentException("Invalid user type");

@@ -191,14 +191,14 @@ public class EmailService {
     public void sendVerificationEmailLink(String email, String userType, EmailCodeDto emailCodeDto) throws MessagingException {
         // JWT 토큰 생성
         String token = tokenProvider.createToken(emailCodeDto);
-        tokenProvider.createRefreshToken(email, userType);
+        String refreshToken = tokenProvider.createRefreshToken(email, userType);
 
         log.info("전달받은 usertype : {}", userType);
 
         EmailCodeDto dto = EmailCodeDto.builder()
                 .email(email)
                 .userType(userType)
-                .expiryDate(LocalDateTime.now().plusMinutes(10))
+                .expiryDate(LocalDateTime.now().plusMinutes(5)) // 엑세스 토큰 만료 시간
                 .build();
 
         if(!emailMapper.isEmailExists(email)) {
@@ -206,7 +206,8 @@ public class EmailService {
         } else emailMapper.update(dto);
 
         // 이메일에 포함될 링크 생성
-        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token;
+        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token + "&refreshToken=" + refreshToken;
+
 
         log.info("인증링크 {} :", verificationLink);
 
