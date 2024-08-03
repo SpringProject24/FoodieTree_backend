@@ -8,7 +8,9 @@ import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
+import org.nmfw.foodietree.domain.store.entity.StoreHolidays;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
+import org.nmfw.foodietree.domain.store.repository.StoreHolidaysRepository;
 import org.nmfw.foodietree.domain.store.repository.StoreMyPageRepository;
 import org.nmfw.foodietree.domain.store.repository.StoreMyPageRepositoryCustomImpl;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class StoreMyPageService {
     private final ReservationService reservationService;
     private final ReservationMapper reservationMapper;
     private final StoreMyPageRepository storeMyPageRepository;
+    private final StoreHolidaysRepository storeHolidaysRepository;
 
     public StoreMyPageDto getStoreMyPageInfo(String storeId) {
         log.info("Fetching store my page info for storeId: {}", storeId);
@@ -127,8 +130,22 @@ public class StoreMyPageService {
 
     public boolean setHoliday(String storeId, String holidayDate) {
         log.info("service set holiday");
-        storeMyPageMapper.setHoliday(storeId, holidayDate);
-        List<StoreHolidayDto> holidays = storeMyPageMapper.getHolidays(storeId);
+
+        // 이미 휴무일로 지정이 되었던 것인지 확인
+        List<StoreHolidayDto> holidays = getHolidays(storeId);
+        for (StoreHolidayDto holiday : holidays) {
+            log.info("holiday = " + holiday.getHolidays());
+            if (holiday.getHolidays().equals(holidayDate)) {
+                log.info("이미 휴무일임");
+                return false;
+            }
+        }
+
+        storeHolidaysRepository.save(StoreHolidays.builder()
+                .storeId(storeId)
+                .holidays(LocalDate.parse(holidayDate))
+                .build());
+
         for (StoreHolidayDto holiday : holidays) {
             log.info("holiday = " + holiday.getHolidays());
             if (holiday.getHolidays().equals(holidayDate)) {
@@ -138,12 +155,20 @@ public class StoreMyPageService {
         return false;
     }
 
-    public boolean undoHoliday(String storeId, String holidayDate) {
+    public boolean undoHoliday(String storeId, String date) {
         log.info("service remove holiday");
-        storeMyPageMapper.undoHoliday(storeId, holidayDate);
-        List<StoreHolidayDto> holidays = storeMyPageMapper.getHolidays(storeId);
+
+        LocalDate holidayDate = LocalDate.parse(date);
+
+        storeHolidaysRepository.deleteByStoreIdAndHolidays(storeId, holidayDate);
+//        storeHolidaysRepository.deleteByStoreIdAndHolidays(StoreHolidays.builder()
+//                .storeId(storeId)
+//                .holidays(LocalDate.parse(date))
+//                .build());
+        List<StoreHolidayDto> holidays = getHolidays(storeId);
         for (StoreHolidayDto holiday : holidays) {
-            if (holiday.getHolidays().equals(holidayDate)) {
+            log.info("holiday = " + holiday.getHolidays());
+            if (holiday.getHolidays().equals(date)) {
                 return false;
             }
         }
@@ -152,12 +177,16 @@ public class StoreMyPageService {
 
     public List<StoreHolidayDto> getHolidays(String storeId) {
         log.info("service get holidays");
-        return storeMyPageMapper.getHolidays(storeId);
+        List<StoreHolidays> storeHolidaysList = storeHolidaysRepository.findByStoreId(storeId);
+
+        return storeHolidaysList.stream()
+                .map(holiday -> new StoreHolidayDto(holiday.getStoreId(), holiday.getHolidays()))
+                .collect(Collectors.toList());
     }
 
     public boolean checkHoliday(String storeId, String date) {
         log.info("service check holiday");
-        List<StoreHolidayDto> holidays = storeMyPageMapper.getHolidays(storeId);
+        List<StoreHolidayDto> holidays = getHolidays(storeId);
         for (StoreHolidayDto holiday : holidays) {
             if (holiday.getHolidays().equals(date)) {
                 return true;
