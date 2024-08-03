@@ -13,12 +13,12 @@ public interface ReservationRepositoryCustom {
 
     // 예약 생성 -> JPA save
 //    boolean createReservation(String customerId, Long productId);
-//
-//    // 예약 취소
-//    void cancelReservation(Long reservationId);
-//
-//    // 픽업 완료
-//    void completePickup(Long reservationId);
+
+    // 예약 취소
+    void cancelReservation(Long reservationId);
+
+    // 픽업 완료
+    void completePickup(Long reservationId);
 
     // customerId로 예약 목록 조회
     List<ReservationDetailDto> findReservationsByCustomerId(String customerId);

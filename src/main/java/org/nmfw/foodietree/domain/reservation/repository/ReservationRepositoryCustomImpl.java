@@ -26,28 +26,22 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
 
     private final JPAQueryFactory factory;
 
-    // 예약 생성
-//    @Override
-//    public boolean createReservation(String customerId, Long productId) {
-//
-//        return false;
-//    }
     // 예약 취소
-//    @Override
-//    public void cancelReservation(Long reservationId) {
-//        factory.update(reservation)
-//                .set(reservation.cancelReservationAt, LocalDateTime.now())
-//                .where(reservation.reservationId.eq(Math.toIntExact(reservationId)))
-//                .execute();
-//    }
-//    // 픽업 완료
-//    @Override
-//    public void completePickup(Long reservationId) {
-//        factory.update(reservation)
-//                .set(reservation.pickedUpAt, LocalDateTime.now())
-//                .where(reservation.reservationId.eq(Math.toIntExact(reservationId)))
-//                .execute();
-//    }
+    @Override
+    public void cancelReservation(Long reservationId) {
+        factory.update(reservation)
+                .set(reservation.cancelReservationAt, LocalDateTime.now())
+                .where(reservation.reservationId.eq(reservationId))
+                .execute();
+    }
+    // 픽업 완료
+    @Override
+    public void completePickup(Long reservationId) {
+        factory.update(reservation)
+                .set(reservation.pickedUpAt, LocalDateTime.now())
+                .where(reservation.reservationId.eq(reservationId))
+                .execute();
+    }
     // customerId로 예약 목록 조회
     @Override
     public List<ReservationDetailDto> findReservationsByCustomerId(String customerId) {
@@ -91,7 +85,6 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                         product.pickupEndTime
                 ))
                 .from(reservation)
-//                .join(reservation.product, product)
                 .join(product).on(reservation.productId.eq(product.productId))
                 .where(reservation.reservationId.eq(reservationId))
                 .fetchOne();

@@ -45,7 +45,7 @@ public class ReservationService {
             // 결제 취소 로직 필요
 
             // 취소시간 추가
-            reservation.setCancelReservationAt(LocalDateTime.now());
+            reservationRepository.cancelReservation(reservationId);
 
             return true;
         }
@@ -67,7 +67,7 @@ public class ReservationService {
         // 취소시간, 픽업시간이 있는 경우 false
         ReservationStatus status = determinePickUpStatus(reservation);
         if(status == ReservationStatus.RESERVED) {
-            reservation.setPickedUpAt(LocalDateTime.now());
+            reservationRepository.completePickup(reservationId);
             return true;
         }
 
