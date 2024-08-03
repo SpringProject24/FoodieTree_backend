@@ -18,6 +18,9 @@
                 <when test="type == 'business_number'">
                     business_number = #{value}
                 </when>
+                <when test="type == 'store_contact'">
+                    store_contact = #{value}
+                </when>
             </choose>
         </set>
         WHERE store_id = #{storeId}

@@ -39,6 +39,28 @@ public class ReservationDetailDto {
     private String pickedUpAtF;
     private String pickupTimeF;
 
+    // 명시적으로 모든 매개변수를 포함하는 생성자 추가
+    public ReservationDetailDto(int reservationId, int productId, String customerId, LocalDateTime reservationTime,
+                                LocalDateTime cancelReservationAt, LocalDateTime pickedUpAt, String storeId,
+                                LocalDateTime pickupTime, String storeName, String category, String address, int price,
+                                String storeImg, String nickname, String profileImage) {
+        this.reservationId = reservationId;
+        this.productId = productId;
+        this.customerId = customerId;
+        this.reservationTime = reservationTime;
+        this.cancelReservationAt = cancelReservationAt;
+        this.pickedUpAt = pickedUpAt;
+        this.storeId = storeId;
+        this.pickupTime = pickupTime;
+        this.storeName = storeName;
+        this.category = category;
+        this.address = address;
+        this.price = price;
+        this.storeImg = storeImg;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+    }
+
     // 포멧팅 함수
     public void formatTimes() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH시mm분");

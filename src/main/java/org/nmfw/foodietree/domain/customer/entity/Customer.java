@@ -57,6 +57,7 @@ public class Customer {
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<EmailVerification> emailVerifications = new ArrayList<>();
 
+
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<FavFood> favFoods;
 //
