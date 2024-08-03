@@ -3,10 +3,18 @@ package org.nmfw.foodietree.domain.customer.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.*;
+import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
+import org.nmfw.foodietree.domain.customer.entity.FavArea;
+import org.nmfw.foodietree.domain.customer.entity.FavFood;
+import org.nmfw.foodietree.domain.customer.entity.FavStore;
 import org.nmfw.foodietree.domain.customer.entity.value.IssueStatus;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
+import org.nmfw.foodietree.domain.customer.repository.CustomerEditRepository;
 import org.nmfw.foodietree.domain.customer.repository.CustomerMyPageRepository;
+import org.nmfw.foodietree.domain.customer.repository.FavAreaRepository;
+import org.nmfw.foodietree.domain.customer.repository.FavFoodRepository;
+import org.nmfw.foodietree.domain.customer.repository.FavStoreRepository;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
@@ -39,6 +47,10 @@ public class CustomerMyPageService {
     private final ReservationService reservationService;
 
     private final CustomerMyPageRepository customerMyPageRepository;
+    private final CustomerEditRepository customerEditRepository;
+    private final FavFoodRepository favFoodRepository;
+	private final FavAreaRepository favAreaRepository;
+	private final FavStoreRepository favStoreRepository;
 
     @Value("${env.upload.path}")
     private String uploadDir;
@@ -150,16 +162,28 @@ public class CustomerMyPageService {
             String type = update.getType();
             String value = update.getValue();
             log.info("update type: {}, value: {}", type, value);
-            if ("preferredFood".equals(type)) {
-                customerMyPageMapper.addPreferenceFood(customerId, value);
+            if ("food".equals(type)) {
+				FavFood build = FavFood.builder()
+					.customerId(customerId)
+					.preferredFood(value).build();
+                log.info("{}", build);
+				favFoodRepository.save(build);
                 return true;
             }
-            else if("preferredArea".equals(type)) {
-                customerMyPageMapper.addPreferenceArea(customerId, value);
+            else if("area".equals(type)) {
+				FavArea build = FavArea.builder()
+					.customerId(customerId)
+					.preferredArea(value)
+					.build();
+				favAreaRepository.save(build);
                 return true;
             }
-            else if("favStore".equals(type)) {
-                customerMyPageMapper.addFavStore(customerId, value);
+            else if("store".equals(type)) {
+				FavStore build = FavStore.builder()
+					.customerId(customerId)
+					.storeId(value)
+					.build();
+				favStoreRepository.save(build);
                 return true;
             }
             else{
