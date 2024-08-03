@@ -1,6 +1,8 @@
 package org.nmfw.foodietree.domain.reservation.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
@@ -13,6 +15,7 @@ import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.nmfw.foodietree.domain.customer.entity.QCustomer.customer;
@@ -123,7 +126,23 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
     // 예약 가능 제품 조회
     @Override
     public List<ReservationFoundStoreIdDto> findByStoreIdLimit(String storeId, int cnt) {
-        return null;
+
+        // TIMESTAMPDIFF(SECOND, NOW(), pickup_time)
+        NumberExpression<Long> secLeft = Expressions.numberTemplate(Long.class,
+                "TIMESTAMPDIFF(SECOND, {0}, {1})", Expressions.currentTimestamp(), product.pickupEndTime);
+
+        return factory
+                .select(Projections.constructor(
+                        ReservationFoundStoreIdDto.class,
+                        product.storeId,
+                        product.productId,
+                        secLeft))
+                .from(product)
+                .where(product.storeId.eq(storeId)
+                        .and(product.pickupEndTime.gt(LocalTime.now()))
+                        .and(product.cancelByStore.isNull()))
+                .limit(cnt)
+                .fetch();
     }
 
     // 가게 예약리스트 조회

@@ -36,21 +36,27 @@ public class ReservationService {
      */
     public boolean cancelReservation(long reservationId) {
 
-        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
+//        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
+//        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
+//
+//        ReservationStatus status = determinePickUpStatus(reservation);
+//        if(status == ReservationStatus.RESERVED) {
+//            reservationRepository.cancelReservation(reservationId);
+//
+//            return true;
+//        }
+//
+//        return false;
 
-        // 예약 상태인 경우 취소
-        ReservationStatus status = determinePickUpStatus(reservation);
-        if(status == ReservationStatus.RESERVED) {
-            // 결제 취소 로직 필요
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
 
-            // 취소시간 추가
-            reservationRepository.cancelReservation(reservationId);
-
+        // 취소한 적이 없으면 취소
+        if(reservation.getCancelReservationAt() == null) {
+            reservation.setCancelReservationAt(LocalDateTime.now());
             return true;
         }
-
-        // 이미 취소했거나, 픽업했거나, 노쇼인 경우
+        // 이미 픽업했거나, 노쇼인 경우를 확인하지 않아도 되는지?
         return false;
     }
 
@@ -61,13 +67,20 @@ public class ReservationService {
      */
     public boolean completePickup(long reservationId) {
 
-        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
+//        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
+//        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
+//
+//        // 취소시간, 픽업시간이 있는 경우 false
+//        ReservationStatus status = determinePickUpStatus(reservation);
+//        if(status == ReservationStatus.RESERVED) {
+//            reservationRepository.completePickup(reservationId);
+//            return true;
+//        }
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
 
-        // 취소시간, 픽업시간이 있는 경우 false
-        ReservationStatus status = determinePickUpStatus(reservation);
-        if(status == ReservationStatus.RESERVED) {
-            reservationRepository.completePickup(reservationId);
+        if(reservation.getPickedUpAt() == null) {
+            reservation.setPickedUpAt(LocalDateTime.now());
             return true;
         }
 
