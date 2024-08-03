@@ -42,9 +42,9 @@ public interface StoreMyPageRepositoryCustom {
 
     List<StoreCheckDto> getAllStore();
 
-    void setHoliday(@Param("storeId") String storeId, @Param("holidays") String holidays);
+//    void setHoliday(@Param("storeId") String storeId, @Param("holidays") String holidays);
 
-    void undoHoliday(@Param("storeId") String storeId, @Param("holidays") String holidays);
+//    void undoHoliday(@Param("storeId") String storeId, @Param("holidays") LocalDate holidays);
 
     List<StoreHolidayDto> getHolidays(@Param("storeId") String storeId);
 

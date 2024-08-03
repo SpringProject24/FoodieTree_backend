@@ -94,7 +94,7 @@ public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCus
                         qStore.productCnt
                 ))
                 .from(qStore)
-                .leftJoin(qProduct).on(qProduct.store.storeId.eq(qStore.storeId)
+                .leftJoin(qProduct).on(qProduct.storeId.eq(qStore.storeId)
                         .and(qProduct.pickupTime.eq(localDateTime))
                 )
                 .where(qStore.storeId.eq(storeId))
@@ -127,20 +127,20 @@ public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCus
                 .fetch();
     }
 
-    @Override
-    @Transactional
-    public void setHoliday(String storeId, String holidays) {
-        StoreHolidays storeHoliday = new StoreHolidays();
-        storeHoliday.setStoreId(storeId);
-        storeHoliday.setHolidays(holidays);
-        storeHolidaysRepository.save(storeHoliday);
-    }
+//    @Override
+//    @Transactional
+//    public void setHoliday(String storeId, String holidays) {
+//        StoreHolidays storeHoliday = new StoreHolidays();
+//        storeHoliday.setStoreId(storeId);
+//        storeHoliday.setHolidays(holidays);
+//        storeHolidaysRepository.save(storeHoliday);
+//    }
 
-    @Override
-    @Transactional
-    public void undoHoliday(String storeId, String holidays) {
-        storeHolidaysRepository.deleteByStoreIdAndHolidays(storeId, holidays);
-    }
+//    @Override
+//    @Transactional
+//    public void undoHoliday(String storeId, LocalDate holidays) {
+//        storeHolidaysRepository.deleteByStoreIdAndHolidays(storeId, holidays);
+//    }
 
 
     @Override

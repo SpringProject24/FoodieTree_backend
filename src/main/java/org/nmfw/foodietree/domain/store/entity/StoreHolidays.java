@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.store.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -26,5 +27,5 @@ public class StoreHolidays {
     private String storeId; // 가게 회원의 이메일
 
     @Column(name="holidays")
-    private String holidays; // 가게 휴무일
+    private LocalDate holidays; // 가게 휴무일
 }
