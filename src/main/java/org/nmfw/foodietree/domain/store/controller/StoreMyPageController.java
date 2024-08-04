@@ -203,7 +203,7 @@ public class StoreMyPageController {
     @PatchMapping("/edit")
     public ResponseEntity<?> updateStoreInfo(@RequestBody UpdateDto dto) {
         String storeId = "thdghtjd115@naver.com";
-        boolean flag = storeMyPageEditService.updateStoreInfo(storeId, dto.getType(), dto.getValue());
+        boolean flag = storeMyPageEditService.updateProfileInfo(storeId, dto);
         if (flag)
             return ResponseEntity.ok().body(true);
         return ResponseEntity.badRequest().body(false);
