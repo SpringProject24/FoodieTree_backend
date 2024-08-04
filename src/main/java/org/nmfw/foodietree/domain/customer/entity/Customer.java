@@ -50,6 +50,7 @@ public class Customer {
     private String userType;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<EmailVerification> emailVerifications = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)

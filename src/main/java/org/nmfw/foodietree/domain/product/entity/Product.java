@@ -29,13 +29,14 @@ public class Product {
     @Column(name = "store_id")
     private String storeId;
 
-//    @Column(name = "pickup_time")
-//    private LocalDateTime pickupTime;
-    @Column(name = "pickup_start_time")
-    private LocalTime pickupStartTime; // 픽업 시작 시간
+    @Column(name = "pickup_time")
+    private LocalDateTime pickupTime;
 
-    @Column(name = "pickup_end_time")
-    private LocalTime pickupEndTime; // 픽업 종료 시간
+//    @Column(name = "pickup_start_time")
+//    private LocalDateTime pickupStartTime; // 픽업 시작 시간
+//
+//    @Column(name = "pickup_end_time")
+//    private LocalDateTime pickupEndTime; // 픽업 종료 시간
 
     @Column(name = "product_upload_date")
     private LocalDateTime productUploadDate;
@@ -43,8 +44,8 @@ public class Product {
     @Column(name = "canceled_by_store_at")
     private String cancelByStore;
 
-    @Column(name = "idx_store_id")
-    private String idxStoreId;
+//    @Column(name = "idx_store_id")
+//    private String idxStoreId;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)

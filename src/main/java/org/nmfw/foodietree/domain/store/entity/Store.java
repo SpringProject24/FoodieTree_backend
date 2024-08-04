@@ -87,6 +87,7 @@ public class Store {
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
     )
+    @Builder.Default
     private List<Product> products = new ArrayList<>();  // products 연관관계
 
     // 연관된 product 추가 메서드

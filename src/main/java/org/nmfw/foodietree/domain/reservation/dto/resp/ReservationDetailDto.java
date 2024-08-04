@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.reservation.dto.resp;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
+import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,10 +24,11 @@ public class ReservationDetailDto {
     private LocalDateTime cancelReservationAt; // 고객이 얘약을 취소한 시간 null 가능, 값이 존재한다면 예약취소 된 것
     private LocalDateTime pickedUpAt; // 고객이 픽업한 시간
     private String storeId;
-    private LocalDateTime pickupStartTime; // 가게에서 지정한 픽업가능 시작시간
-    private LocalDateTime pickupEndTime; // 가게에서 지정한 픽업가능 마감시간
+    private LocalDateTime pickupTime; // 가게에서 지정한 픽업시간
+//    private LocalDateTime pickupStartTime; // 가게에서 지정한 픽업가능 시작시간
+//    private LocalDateTime pickupEndTime; // 가게에서 지정한 픽업가능 마감시간
     private String storeName;
-    private String category;
+    private StoreCategory category;
     private String address;
     private int price;
     private String storeImg;
@@ -38,6 +40,7 @@ public class ReservationDetailDto {
     private String reservationTimeF;
     private String cancelReservationAtF;
     private String pickedUpAtF;
+    private String pickupTimeF;
     private String pickupStartTimeF;
     private String pickupEndTimeF;
 
@@ -53,11 +56,14 @@ public class ReservationDetailDto {
         if (pickedUpAt != null) {
             this.pickedUpAtF = pickedUpAt.format(formatter);
         }
-        if (pickupStartTime != null) {
-            this.pickupStartTimeF = pickupStartTime.format(formatter);
+        if (pickupTime != null) {
+            this.pickupTimeF = pickupTime.format(formatter);
         }
-        if (pickupEndTime != null) {
-            this.pickupEndTimeF = pickupEndTime.format(formatter);
-        }
+//        if (pickupStartTime != null) {
+//            this.pickupStartTimeF = pickupStartTime.format(formatter);
+//        }
+//        if (pickupEndTime != null) {
+//            this.pickupEndTimeF = pickupEndTime.format(formatter);
+//        }
     }
 }
