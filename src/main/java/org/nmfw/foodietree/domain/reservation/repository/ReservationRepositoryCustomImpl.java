@@ -15,7 +15,7 @@ import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.List;
 
 import static org.nmfw.foodietree.domain.customer.entity.QCustomer.customer;
@@ -49,29 +49,29 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
     @Override
     public List<ReservationDetailDto> findReservationsByCustomerId(String customerId) {
         return factory
-                .select(Projections.constructor(
+                .select(Projections.bean(
                         ReservationDetailDto.class,
-                        reservation.reservationId,
-                        reservation.customerId,
-                        reservation.productId,
-                        reservation.reservationTime,
-                        reservation.cancelReservationAt,
-                        reservation.pickedUpAt,
-                        product.storeId,
-                        product.pickupStartTime,
-                        product.pickupEndTime,
-                        store.storeName,
-                        store.category,
-                        store.address,
-                        store.price,
-                        store.storeImg,
-                        customer.nickname))
+                        reservation.reservationId.as("reservationId"),
+                        reservation.customerId.as("customerId"),
+                        reservation.productId.as("productId"),
+                        reservation.reservationTime.as("reservationTime"),
+                        reservation.cancelReservationAt.as("cancelReservationAt"),
+                        reservation.pickedUpAt.as("pickedUpAt"),
+                        product.storeId.as("storeId"),
+                        product.pickupTime.as("pickupTime"),
+                        store.storeName.as("storeName"),
+                        store.category.as("category"),
+                        store.address.as("address"),
+                        store.price.as("price"),
+                        store.storeImg.as("storeImg"),
+                        customer.nickname.as("nickname")))
                 .from(reservation)
                 .join(product).on(reservation.productId.eq(product.productId))
                 .join(store).on(product.storeId.eq(store.storeId))
                 .join(customer).on(reservation.customerId.eq(customer.customerId))
                 .where(reservation.customerId.eq(customerId))
-                .orderBy(product.pickupEndTime.desc())
+//                .orderBy(product.pickupEndTime.desc())
+                .orderBy(product.pickupTime.desc())
                 .fetch();
     }
 
@@ -84,8 +84,9 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                         reservation.reservationTime,
                         reservation.cancelReservationAt,
                         reservation.pickedUpAt,
-                        product.pickupStartTime,
-                        product.pickupEndTime
+                        product.pickupTime
+//                        product.pickupStartTime,
+//                        product.pickupEndTime
                 ))
                 .from(reservation)
                 .join(product).on(reservation.productId.eq(product.productId))
@@ -97,24 +98,22 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
     @Override
     public ReservationDetailDto findReservationByReservationId(Long reservationId) {
         return factory
-                .select(Projections.constructor(
+                .select(Projections.bean(
                         ReservationDetailDto.class,
-                        reservation.reservationId,
-                        reservation.productId,
-                        reservation.customerId,
-                        reservation.reservationTime,
-                        reservation.cancelReservationAt,
-                        reservation.pickedUpAt,
-                        product.storeId,
-                        product.pickupStartTime,
-                        product.pickupEndTime,
-                        store.storeName,
-                        store.category,
-                        store.address,
-                        store.price,
-                        store.storeImg,
-                        customer.nickname,
-                        customer.profileImage))
+                        reservation.reservationId.as("reservationId"),
+                        reservation.customerId.as("customerId"),
+                        reservation.productId.as("productId"),
+                        reservation.reservationTime.as("reservationTime"),
+                        reservation.cancelReservationAt.as("cancelReservationAt"),
+                        reservation.pickedUpAt.as("pickedUpAt"),
+                        product.storeId.as("storeId"),
+                        product.pickupTime.as("pickupTime"),
+                        store.storeName.as("storeName"),
+                        store.category.as("category"),
+                        store.address.as("address"),
+                        store.price.as("price"),
+                        store.storeImg.as("storeImg"),
+                        customer.nickname.as("nickname")))
                 .from(reservation)
                 .join(product).on(reservation.productId.eq(product.productId))
                 .join(store).on(product.storeId.eq(store.storeId))
@@ -127,19 +126,20 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
     @Override
     public List<ReservationFoundStoreIdDto> findByStoreIdLimit(String storeId, int cnt) {
 
-        // TIMESTAMPDIFF(SECOND, NOW(), pickup_time)
-        NumberExpression<Long> secLeft = Expressions.numberTemplate(Long.class,
-                "TIMESTAMPDIFF(SECOND, {0}, {1})", Expressions.currentTimestamp(), product.pickupEndTime);
+//        LocalDateTime now = LocalDateTime.now();
+//
+//        // TIMESTAMPDIFF(SECOND, NOW(), pickup_time)
+//        NumberExpression<Long> secLeft = Expressions.numberTemplate(Long.class,
+//                "TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP, {0})", product.pickupTime);
 
         return factory
                 .select(Projections.constructor(
                         ReservationFoundStoreIdDto.class,
                         product.storeId,
-                        product.productId,
-                        secLeft))
+                        product.productId))
                 .from(product)
                 .where(product.storeId.eq(storeId)
-                        .and(product.pickupEndTime.gt(LocalTime.now()))
+                        .and(product.pickupTime.gt(LocalDateTime.now()))
                         .and(product.cancelByStore.isNull()))
                 .limit(cnt)
                 .fetch();
@@ -149,29 +149,32 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
     @Override
     public List<StoreReservationDto> findReservations(String storeId) {
         return factory
-                .select(Projections.constructor(
-                        StoreReservationDto.class,
-                        customer.customerId,
-                        customer.profileImage,
-                        customer.nickname,
-                        customer.customerPhoneNumber,
-                        product.productId,
-                        reservation.reservationId,
-                        reservation.reservationTime,
-                        reservation.cancelReservationAt,
-                        reservation.pickedUpAt,
-                        product.pickupStartTime,
-                        product.pickupEndTime,
-                        product.productUploadDate,
-                        store.price,
-                        store.openAt,
-                        store.closedAt))
+                .select(Projections.bean(
+                                StoreReservationDto.class,
+                                customer.customerId.as("customerId"),
+                                customer.profileImage.as("profileImage"),
+                                customer.nickname.as("nickname"),
+                                customer.customerPhoneNumber.as("customerPhoneNumber"),
+                                product.productId.as("productId"),
+                                reservation.reservationId.as("reservationId"),
+                                reservation.reservationTime.as("reservationTime"),
+                                reservation.cancelReservationAt.as("cancelReservationAt"),
+                                reservation.pickedUpAt.as("pickedUpAt"),
+                                product.pickupTime.as("pickupTime"),
+//                    product.pickupStartTime.as("pickupStartTime"),
+//                    product.pickupEndTime.as("pickupEndTime"),
+                                product.productUploadDate.as("productUploadDate"),
+                                store.price.as("price"),
+                                store.openAt.as("openAt"),
+                                store.closedAt.as("closedAt"))
+                )
                 .from(reservation)
                 .join(product).on(reservation.productId.eq(product.productId))
                 .join(store).on(product.storeId.eq(store.storeId))
                 .join(customer).on(reservation.customerId.eq(customer.customerId))
                 .where(store.storeId.eq(storeId))
-                .orderBy(product.pickupEndTime.desc())
+//                .orderBy(product.pickupEndTime.desc())
+                .orderBy(product.pickupTime.desc())
                 .fetch();
     }
 }

@@ -94,7 +94,8 @@ public class ReservationService {
      */
     public boolean isPickupAllowed(long reservationId) {
         ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-        return LocalDateTime.now().isBefore(reservation.getPickupEndTime());
+//        return LocalDateTime.now().isBefore(reservation.getPickupEndTime());
+        return LocalDateTime.now().isBefore(reservation.getPickupTime());
     }
 
     /**
@@ -104,7 +105,8 @@ public class ReservationService {
      */
     public boolean isCancelAllowed(long reservationId) {
         ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-        return LocalDateTime.now().isBefore(reservation.getPickupEndTime().minusHours(1));
+//        return LocalDateTime.now().isBefore(reservation.getPickupEndTime().minusHours(1));
+        return LocalDateTime.now().isBefore(reservation.getPickupTime().minusHours(1));
     }
 
     /**
@@ -117,7 +119,8 @@ public class ReservationService {
             return ReservationStatus.PICKEDUP;
         } else if (reservation.getCancelReservationAt() != null) {
             return ReservationStatus.CANCELED;
-        } else if (reservation.getPickupEndTime().isBefore(LocalDateTime.now())) {
+//        } else if (reservation.getPickupEndTime().isBefore(LocalDateTime.now())) {
+        } else if (reservation.getPickupTime().isBefore(LocalDateTime.now())) {
             return ReservationStatus.NOSHOW;
         } else {
             return ReservationStatus.RESERVED;
@@ -154,6 +157,7 @@ public class ReservationService {
                     .productId(productId)
                     .build();
             Reservation save = reservationRepository.save(reservation);
+            log.info("save 결과 출력: {}", save);
             if (save == null) return false;
         }
         return true;
