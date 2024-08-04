@@ -33,7 +33,6 @@ public class EmailController {
 
     private final EmailService emailService;
     private final UserService userService;
-    private final EmailMapper emailMapper;
     private final TokenProvider tokenProvider;
 
 //    @GetMapping("/send-reset-email")
@@ -135,7 +134,7 @@ public class EmailController {
                     if (!(userService.findByEmail(emailCodeDto))) {
 
                         log.info("실제 회원가입(테이블에 저장)이 되지 않은 경우 {}", emailCodeDto);
-                        emailMapper.update(emailCodeDto); // 인증정보 true 업데이트
+                        emailService.updateEmailVerification(emailCodeDto); // 인증정보 true 업데이트
                         return userService.saveUserInfo(emailCodeDto);
 
                     } else {

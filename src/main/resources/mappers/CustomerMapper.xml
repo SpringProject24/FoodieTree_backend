@@ -24,14 +24,6 @@
         VALUES (#{customerId},#{refreshTokenExpireDate}, #{userType})
     </insert>
 
-    <!-- 새로운 고객 정보 저장-->
-    <insert id="save">
-        INSERT INTO tbl_customer
-            (customer_id, customer_password, nickname, session_id)
-        VALUES
-            (#{customerId}, #{customerPassword}, #{nickName}, #{sessionId})
-    </insert>
-
     <!-- 아이디 중복 검사-->
     <select id="existsById" resultType="boolean">
         SELECT COUNT(*)
@@ -45,6 +37,18 @@
         FROM tbl_customer
         WHERE customer_id = #{customerId}
     </select>
+
+
+
+
+    <!-- 새로운 고객 정보 저장-->
+    <insert id="save">
+        INSERT INTO tbl_customer
+            (customer_id, customer_password, nickname, session_id)
+        VALUES
+            (#{customerId}, #{customerPassword}, #{nickName}, #{sessionId})
+    </insert>
+
 
     <!-- 선호하는 음식 저장하기 -->
     <insert id="savePreferredFoods">

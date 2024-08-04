@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.auth.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
@@ -10,9 +11,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EmailCustomerDto {
+public class EmailCodeCustomerDto {
         private String customerId;
         private String userType;
         @Setter
-        private Date refreshTokenExpireDate;
+        private LocalDateTime refreshTokenExpireDate;
 }

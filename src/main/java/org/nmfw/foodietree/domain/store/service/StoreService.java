@@ -1,11 +1,14 @@
 package org.nmfw.foodietree.domain.store.service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.dto.EmailCodeStoreDto;
 import org.nmfw.foodietree.domain.customer.dto.request.AutoLoginDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
@@ -20,6 +23,7 @@ import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +38,7 @@ import static org.nmfw.foodietree.domain.store.service.StoreLoginResult.*;
 @Slf4j
 public class StoreService {
     private final StoreMapper storeMapper;
-    private final PasswordEncoder encoder;
+    private final StoreRepository storeRepository;
 
     public boolean signUp(StoreSignUpDto dto, HttpSession session) {
         Store store = dto.toEntity();
@@ -104,10 +108,37 @@ public class StoreService {
         }
     }
 
-    @Autowired
-    private StoreRepository repository;
 
-    public Optional<Store> findByStoreId(String storeId) {
-        return repository.findByStoreId(storeId);
+
+    @Transactional
+    public void signUpUpdateStore(EmailCodeStoreDto emailCodeStoreDto) {
+
+        storeRepository.updateRefreshTokenExpireDate(
+                emailCodeStoreDto.getRefreshTokenExpireDate(),
+                emailCodeStoreDto.getStoreId()
+        );
     }
+
+    @Transactional
+    public void signUpSaveStore(EmailCodeStoreDto emailCodeStoreDto) {
+        Store store = Store.builder()
+                .storeId(emailCodeStoreDto.getStoreId())
+                .refreshTokenExpireDate(emailCodeStoreDto.getRefreshTokenExpireDate())
+                .userType(emailCodeStoreDto.getUserType())
+                .build();
+
+        storeRepository.save(store);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean findOne(String storeId) {
+        return true;
+    }
+
+    @Transactional(readOnly = true)
+    public Store getStoreById(String storeId) {
+        return storeRepository.findByStoreId(storeId)
+                .orElseThrow(() -> new RuntimeException("Store not found with id: " + storeId));
+    }
+
 }

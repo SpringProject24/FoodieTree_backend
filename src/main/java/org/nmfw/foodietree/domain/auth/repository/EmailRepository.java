@@ -16,12 +16,21 @@ public interface EmailRepository extends JpaRepository<EmailVerification, Intege
     @Modifying
     @Transactional
     @Query("UPDATE EmailVerification ev SET ev.expiryDate = :expiryDate, ev.emailVerified = :emailVerified WHERE ev.email = :email")
-    void updateEmailVerification(@Param("expiryDate") LocalDateTime expiryDate, @Param("emailVerified") boolean emailVerified, @Param("email") String email);
+    void updateEmailVerification(@Param("expiryDate") LocalDateTime expiryDate,
+                                 @Param("emailVerified") boolean emailVerified,
+                                 @Param("email") String email);
 
     @Modifying
     @Transactional
-    @Query("INSERT INTO EmailVerification (email, code, expiryDate, emailVerified, userType) VALUES (:email, NULL, :expiryDate, :emailVerified, :userType)")
-    void saveEmailVerification(@Param("email") String email, @Param("expiryDate") LocalDateTime expiryDate, @Param("emailVerified") boolean emailVerified, @Param("userType") String userType);
+    default void saveEmailVerification(String email, LocalDateTime expiryDate, boolean emailVerified, String userType) {
+        EmailVerification emailVerification = new EmailVerification();
+        emailVerification.setEmail(email);
+        emailVerification.setUserType(userType);
+        emailVerification.setExpiryDate(expiryDate);
+        emailVerification.setEmailVerified(emailVerified);
+
+        save(emailVerification);
+    }
 
     @Query("SELECT COUNT(ev) FROM EmailVerification ev WHERE ev.email = :email")
     int countByEmail(@Param("email") String email);
@@ -31,6 +40,6 @@ public interface EmailRepository extends JpaRepository<EmailVerification, Intege
 
     @Modifying
     @Transactional
-    @Query("INSERT INTO EmailVerification (storeId, code, expiryDate) VALUES (:storeId, :code, :expiryDate)")
+    @Query("INSERT INTO EmailVerification (storeId, code, expiryDate) SELECT :storeId, :code, :expiryDate")
     void saveStoreVerificationCode(@Param("storeId") Long storeId, @Param("code") String code, @Param("expiryDate") LocalDateTime expiryDate);
 }

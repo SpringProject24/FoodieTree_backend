@@ -80,16 +80,20 @@ public class TokenProvider {
                 .compact();
     }
 
-    public Date getExpirationDateFromRefreshToken(String refreshToken) {
+    public LocalDateTime getExpirationDateFromRefreshToken(String refreshToken) {
         byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
-        return Jwts.parserBuilder()
+        Date expiration = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(refreshToken)
                 .getBody()
-                .getExpiration(); // 리프레시 토큰 만료일자
+                .getExpiration();
+
+        return expiration.toInstant()
+                .atZone(ZoneId.systemDefault()) // 시스템 기본 시간대를 사용
+                .toLocalDateTime();
     }
 
 

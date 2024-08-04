@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @Configuration
 @RequiredArgsConstructor
 public class AutoLoginInterceptor implements HandlerInterceptor {
+    /*
 
     private final CustomerMapper customerMapper;
 
@@ -46,4 +47,6 @@ public class AutoLoginInterceptor implements HandlerInterceptor {
 
         return true;
     }
+
+     */
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -275,10 +276,13 @@ public class EmailService {
     @Autowired
     private EmailRepository repository;
 
-    public void updateEmailVerification(String email, LocalDateTime expiryDate, boolean emailVerified) {
-        repository.updateEmailVerification(expiryDate, emailVerified, email);
+    @Transactional
+    public void updateEmailVerification(EmailCodeDto emailCodeDto) {
+        repository.updateEmailVerification(
+                emailCodeDto.getExpiryDate(),
+                emailCodeDto.isEmailVerified(),
+                emailCodeDto.getEmail());
     }
-
     public void saveEmailVerification(String email, LocalDateTime expiryDate, boolean emailVerified, String userType) {
         repository.saveEmailVerification(email, expiryDate, emailVerified, userType);
     }

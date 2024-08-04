@@ -2,11 +2,10 @@ package org.nmfw.foodietree.domain.customer.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.nmfw.foodietree.domain.auth.dto.EmailCustomerDto;
+import org.nmfw.foodietree.domain.auth.dto.EmailCodeCustomerDto;
 import org.nmfw.foodietree.domain.customer.dto.request.AutoLoginDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 
-import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -35,8 +34,8 @@ public interface CustomerMapper {
 
     Customer findCustomerBySession(String sessionId);
 
-    void signUpUpdateCustomer(EmailCustomerDto emailCodeCustomerDto);
+    void signUpUpdateCustomer(EmailCodeCustomerDto emailCodeCustomerDto);
 
-    void signUpSaveCustomer(EmailCustomerDto dto);
+    void signUpSaveCustomer(EmailCodeCustomerDto dto);
 
 }
