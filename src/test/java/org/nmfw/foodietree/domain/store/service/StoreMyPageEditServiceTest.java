@@ -42,8 +42,8 @@ class StoreMyPageEditServiceTest {
 		// given
 		String storeId = "thdghtjd115@naver.com";
 		String price = "3900";
-		String open = "10:42:00";
-		String close = "22:42:00";
+		String open = "10:42";
+		String close = "22:42";
 		String productCnt = "6";
 		String phone = "01022221234";
 		// when
@@ -66,6 +66,6 @@ class StoreMyPageEditServiceTest {
 
 	private LocalTime parseTime(String time) {
 		time = time.replaceAll("\"", "");
-		return LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+		return LocalTime.parse(time);
 	}
 }
