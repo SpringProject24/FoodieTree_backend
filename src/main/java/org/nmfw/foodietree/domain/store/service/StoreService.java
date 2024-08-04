@@ -1,6 +1,7 @@
 package org.nmfw.foodietree.domain.store.service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import javax.servlet.http.Cookie;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.nmfw.foodietree.domain.store.dto.request.StoreLoginDto;
 import org.nmfw.foodietree.domain.store.dto.request.StoreSignUpDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
+import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
@@ -99,5 +102,12 @@ public class StoreService {
                             .build()
             );
         }
+    }
+
+    @Autowired
+    private StoreRepository repository;
+
+    public Optional<Store> findByStoreId(String storeId) {
+        return repository.findByStoreId(storeId);
     }
 }

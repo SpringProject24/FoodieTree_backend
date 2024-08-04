@@ -36,15 +36,15 @@ public class EmailController {
     private final EmailMapper emailMapper;
     private final TokenProvider tokenProvider;
 
-    @GetMapping("/send-reset-email")
-    public String sendVerificationCode(@RequestParam String to, String userType) {
-        try {
-            emailService.sendResetVerificationCode(to, userType, "reset");
-            return "Password reset email sent successfully";
-        } catch (Exception e) {
-            return "Failed to send password reset email: " + e.getMessage();
-        }
-    }
+//    @GetMapping("/send-reset-email")
+//    public String sendVerificationCode(@RequestParam String to, String userType) {
+//        try {
+//            emailService.sendResetVerificationCode(to, userType, "reset");
+//            return "Password reset email sent successfully";
+//        } catch (Exception e) {
+//            return "Failed to send password reset email: " + e.getMessage();
+//        }
+//    }
 
     /*
     @GetMapping("/verify-reset-code")
@@ -59,18 +59,18 @@ public class EmailController {
      */
 
     // 인증 코드 전송
-    @PostMapping("/sendVerificationCode")
-    public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        String purpose = request.get("purpose");
-        String userType = request.get("userType");
-        try {
-            emailService.sendResetVerificationCode(email, purpose, userType);
-            return ResponseEntity.ok("Verification code sent");
-        } catch (MessagingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification code");
-        }
-    }
+//    @PostMapping("/sendVerificationCode")
+//    public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
+//        String email = request.get("email");
+//        String purpose = request.get("purpose");
+//        String userType = request.get("userType");
+//        try {
+//            emailService.sendResetVerificationCode(email, purpose, userType);
+//            return ResponseEntity.ok("Verification code sent");
+//        } catch (MessagingException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification code");
+//        }
+//    }
 
     // 인증 리다이렉션 링크 메일 전송
     @PostMapping("/sendVerificationLink")
@@ -117,7 +117,7 @@ public class EmailController {
                 String userType = accessTokenUserInfo.getRole();
 
                 // 이메일 dto 정보를 데이터베이스에서 조회
-                EmailCodeDto emailCodeDto = emailMapper.findOneByEmail(email);
+                EmailCodeDto emailCodeDto = emailService.findOneByEmail(email);
                 log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
                 // 이메일 정보가 인증 테이블에 있을 경우

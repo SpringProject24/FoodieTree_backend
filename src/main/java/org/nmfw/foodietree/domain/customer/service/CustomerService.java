@@ -8,7 +8,9 @@ import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
+import org.nmfw.foodietree.domain.customer.repository.CustomerRepository;
 import org.nmfw.foodietree.domain.customer.util.LoginUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.nmfw.foodietree.domain.customer.util.LoginUtil.AUTO_LOGIN_COOKIE;
 
@@ -122,30 +125,32 @@ public class CustomerService {
 	}
 
 	// 아이디 중복 검사
-	public boolean checkIdentifier(String keyword) {
-		return customerMapper.existsById(keyword);
-	}
+//	public boolean checkIdentifier(String keyword) {
+//		return customerMapper.existsById(keyword);
+//	}
+//
+//	public void autoLoginClear(HttpServletRequest request,
+//							   HttpServletResponse response) {
+//
+//		Cookie c = WebUtils.getCookie(request, AUTO_LOGIN_COOKIE);
+//		if(c != null) {
+//			c.setPath("/");
+//			c.setMaxAge(0);
+//			response.addCookie(c);
+//			customerMapper.updateAutoLogin(
+//					AutoLoginDto.builder()
+//							.sessionId("none")
+//							.limitTime(LocalDateTime.now())
+//							.id(LoginUtil.getLoggedInUser(request.getSession()))
+//							.build()
+//			);
+//		}
+//	}
 
-	public void autoLoginClear(HttpServletRequest request,
-							   HttpServletResponse response) {
+	@Autowired
+	private CustomerRepository repository;
 
-		Cookie c = WebUtils.getCookie(request, AUTO_LOGIN_COOKIE);
-		if(c != null) {
-			c.setPath("/");
-			c.setMaxAge(0);
-			response.addCookie(c);
-			customerMapper.updateAutoLogin(
-					AutoLoginDto.builder()
-							.sessionId("none")
-							.limitTime(LocalDateTime.now())
-							.id(LoginUtil.getLoggedInUser(request.getSession()))
-							.build()
-			);
-		}
-
-
-
-
-
+	public Optional<Customer> findByCustomerId(String customerId) {
+		return repository.findByCustomerId(customerId);
 	}
 }
