@@ -166,7 +166,6 @@ public class CustomerMyPageService {
 				FavFood build = FavFood.builder()
 					.customerId(customerId)
 					.preferredFood(value).build();
-                log.info("{}", build);
 				favFoodRepository.save(build);
                 return true;
             }

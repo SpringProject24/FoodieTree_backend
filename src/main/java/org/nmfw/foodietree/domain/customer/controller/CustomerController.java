@@ -103,7 +103,7 @@ public class CustomerController {
     @PostMapping("/edit")
     public ResponseEntity<?> insertPreferred(@RequestBody UpdateDto dto) {
         String customerId = "test@gmail.com";
-        boolean flag = customerMyPageService.updateCustomerInfo(customerId, List.of(dto));
+        boolean flag = customerMyPageService.insertPreferredInfo(customerId, List.of(dto));
         if (flag)
             return ResponseEntity.ok().body(true);
         return ResponseEntity.badRequest().body(false);
@@ -139,7 +139,7 @@ public class CustomerController {
      * @author   hoho
      * @date     2024 07 24 15:03
      * {
-     *     type: string (nickname or phone_number)
+     *     type: string (nickname or customer_phone_number)
      *     value: string
      * }
      */
