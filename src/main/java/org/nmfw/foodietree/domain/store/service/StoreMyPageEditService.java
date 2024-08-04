@@ -65,7 +65,7 @@ public class StoreMyPageEditService {
 
 	private LocalTime parseTime(String time) {
 		time = time.replaceAll("\"", "");
-		return LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+		return LocalTime.parse(time);
 	}
 
 	public boolean updateProfileImg(String storeId, MultipartFile storeImg) {

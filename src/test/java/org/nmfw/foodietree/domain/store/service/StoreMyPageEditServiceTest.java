@@ -42,8 +42,8 @@ class StoreMyPageEditServiceTest {
 		// given
 		String storeId = "thdghtjd115@naver.com";
 		String price = "3900";
-		String open = "10:42";
-		String close = "22:42";
+		String open = "10:42:00";
+		String close = "22:42:00";
 		String productCnt = "6";
 		String phone = "01022221234";
 		// when
