@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FavAreaRepository extends JpaRepository<FavArea, Long> {
 
-
+    void deleteByCustomerIdAndPreferredArea(String customerId, String preferredArea);
 }

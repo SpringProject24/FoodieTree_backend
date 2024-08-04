@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.StatsDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateDto;
+import org.nmfw.foodietree.domain.customer.service.CustomerEditService;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerMyPageService customerMyPageService;
+    private final CustomerEditService customerEditService;
 
     // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
     String customerId = "test@gmail.com";
@@ -103,7 +105,8 @@ public class CustomerController {
     @PostMapping("/edit")
     public ResponseEntity<?> insertPreferred(@RequestBody UpdateDto dto) {
         String customerId = "test@gmail.com";
-        boolean flag = customerMyPageService.insertPreferredInfo(customerId, List.of(dto));
+        log.info("{}", dto);
+        boolean flag = customerEditService.insertPreferredInfo(customerId, dto);
         if (flag)
             return ResponseEntity.ok().body(true);
         return ResponseEntity.badRequest().body(false);
@@ -125,7 +128,7 @@ public class CustomerController {
     @DeleteMapping("/edit")
     public ResponseEntity<?> deletePreferred(@RequestBody UpdateDto dto) {
         String customerId = "test@gmail.com";
-        boolean flag = customerMyPageService.deleteCustomerInfo(customerId, List.of(dto));
+        boolean flag = customerEditService.deleteProfileInfo(customerId, dto);
         if (flag)
             return ResponseEntity.ok().body(true);
         return ResponseEntity.badRequest().body(false);
@@ -146,7 +149,7 @@ public class CustomerController {
     @PatchMapping("/edit")
     public ResponseEntity<?> editInfo(@RequestBody UpdateDto dto) {
         String customerId = "test@gmail.com";
-        boolean flag = customerMyPageService.updateCustomerInfo(customerId, List.of(dto));
+        boolean flag = customerEditService.updateProfileInfo(customerId, dto);
         if (flag)
             return ResponseEntity.ok().body(true);
         return ResponseEntity.badRequest().body(false);
