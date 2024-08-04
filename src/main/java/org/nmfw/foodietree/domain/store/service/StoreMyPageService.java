@@ -129,22 +129,13 @@ public class StoreMyPageService {
     }
 
     public boolean setHoliday(String storeId, String holidayDate) {
-        log.info("service set holiday");
-
-        // 이미 휴무일로 지정이 되었던 것인지 확인
-        List<StoreHolidayDto> holidays = getHolidays(storeId);
-        for (StoreHolidayDto holiday : holidays) {
-            log.info("holiday = " + holiday.getHolidays());
-            if (holiday.getHolidays().equals(holidayDate)) {
-                log.info("이미 휴무일임");
-                return false;
-            }
-        }
 
         storeHolidaysRepository.save(StoreHolidays.builder()
                 .storeId(storeId)
                 .holidays(LocalDate.parse(holidayDate))
                 .build());
+
+        List<StoreHolidayDto> holidays = getHolidays(storeId);
 
         for (StoreHolidayDto holiday : holidays) {
             log.info("holiday = " + holiday.getHolidays());
@@ -156,16 +147,13 @@ public class StoreMyPageService {
     }
 
     public boolean undoHoliday(String storeId, String date) {
-        log.info("service remove holiday");
 
         LocalDate holidayDate = LocalDate.parse(date);
-
+        log.info("holidayDate = " + holidayDate);
         storeHolidaysRepository.deleteByStoreIdAndHolidays(storeId, holidayDate);
-//        storeHolidaysRepository.deleteByStoreIdAndHolidays(StoreHolidays.builder()
-//                .storeId(storeId)
-//                .holidays(LocalDate.parse(date))
-//                .build());
+
         List<StoreHolidayDto> holidays = getHolidays(storeId);
+
         for (StoreHolidayDto holiday : holidays) {
             log.info("holiday = " + holiday.getHolidays());
             if (holiday.getHolidays().equals(date)) {
