@@ -33,17 +33,17 @@ import static org.nmfw.foodietree.domain.customer.util.LoginUtil.AUTO_LOGIN_COOK
 @Slf4j
 public class CustomerService {
 
-	private final CustomerMapper customerMapper;
+//	private final CustomerMapper customerMapper;
 	private final CustomerRepository customerRepository;
 
 	//회원 가입 중간 처리 (저장 성공 여부 boolean 값으로 반환)
-	public boolean join(SignUpDto dto) {
-		Customer customer = dto.toEntity();
-
-		boolean saved = customerMapper.save(customer); //데이터에 저장
-
-		return saved; // 데이터 저장 결과 반환
-	}
+//	public boolean join(SignUpDto dto) {
+//		Customer customer = dto.toEntity();
+//
+//		boolean saved = customerMapper.save(customer); //데이터에 저장
+//
+//		return saved; // 데이터 저장 결과 반환
+//	}
 
 
 //	//로그인 검증 처리

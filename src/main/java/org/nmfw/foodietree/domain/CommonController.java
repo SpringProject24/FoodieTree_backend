@@ -27,18 +27,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class CommonController {
 
-    private final CustomerMapper customerMapper;
-    private final StoreMapper storeMapper;
+//    private final CustomerMapper customerMapper;
+//    private final StoreMapper storeMapper;
 
-    @GetMapping
-    public String root(HttpSession session) {
-        String loggedInUser = LoginUtil.getLoggedInUser(session);
-        if (loggedInUser != null && customerMapper.findOne(loggedInUser) != null) {
-            return "redirect:/product/main";
-        }
-        if (loggedInUser != null && storeMapper.findOne(loggedInUser) != null) {
-            return "redirect:/store/mypage/main";
-        }
-        return "index";
-    }
+//    @GetMapping
+//    public String root(HttpSession session) {
+//        String loggedInUser = LoginUtil.getLoggedInUser(session);
+//        if (loggedInUser != null && customerMapper.findOne(loggedInUser) != null) {
+//            return "redirect:/product/main";
+//        }
+//        if (loggedInUser != null && storeMapper.findOne(loggedInUser) != null) {
+//            return "redirect:/store/mypage/main";
+//        }
+//        return "index";
+//    }
 }

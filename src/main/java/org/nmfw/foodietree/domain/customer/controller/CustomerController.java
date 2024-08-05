@@ -65,16 +65,16 @@ public class CustomerController {
 //    }
 
     // 회원가입 요청 처리
-    @PostMapping("/sign-up")
-    public String signUp(@Validated SignUpDto dto, BindingResult result) {
-        if (result.hasErrors()) {
-            log.info("{}", result);
-            return "redirect:/customer/sign-up";
-        }
-
-        boolean flag = customerService.join(dto);
-        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
-    }
+//    @PostMapping("/sign-up")
+//    public String signUp(@Validated SignUpDto dto, BindingResult result) {
+//        if (result.hasErrors()) {
+//            log.info("{}", result);
+//            return "redirect:/customer/sign-up";
+//        }
+//
+//        boolean flag = customerService.join(dto);
+//        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
+//    }
 
         private final CustomerMyPageService customerMyPageService;
 
