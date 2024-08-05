@@ -2,23 +2,16 @@ package org.nmfw.foodietree.domain.customer.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.auth.security.TokenProvider;
-import org.nmfw.foodietree.domain.customer.dto.request.CustomerLoginDto;
-import org.nmfw.foodietree.domain.customer.dto.request.SignUpDto;
-import org.nmfw.foodietree.domain.customer.service.CustomerService;
-import org.nmfw.foodietree.domain.customer.service.LoginResult;
-import org.springframework.beans.factory.annotation.Value;
+import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
+import org.nmfw.foodietree.domain.customer.dto.resp.StatsDto;
+import org.nmfw.foodietree.domain.customer.dto.resp.UpdateDto;
+import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.springframework.http.ResponseEntity;
-import org.nmfw.foodietree.domain.customer.util.LoginUtil;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 @Controller
 @RequestMapping("/customer")
@@ -26,108 +19,137 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 public class CustomerController {
 
-    @Value("${env.kakao.api.key:default}")
-    private String kakaoApiKey;
-    private final CustomerService customerService;
+    private final CustomerMyPageService customerMyPageService;
 
+    // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
+    String customerId = "test@gmail.com";
 
-    //회원가입 양식 열기
-//    @GetMapping("/sign-up")
-//    public String signUp(Model model) {
-//        log.info("customer/sign-up GET : forwarding to sign-up.jsp");
-//        model.addAttribute("kakaoApiKey", kakaoApiKey);
-//        return "/customer/sign-up";
-//    }
-
-    // 회원가입 요청 처리
-    @PostMapping("/sign-up")
-    public String signUp(@Validated SignUpDto dto, BindingResult result) {
-        if (result.hasErrors()) {
-            log.info("{}", result);
-            return "redirect:/customer/sign-up";
-        }
-
-        boolean flag = customerService.join(dto);
-        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
+    /**
+     * 고객 정보를 가져오는 GET 요청 처리
+     * @return 고객 정보 DTO
+     */
+    @GetMapping("/info")
+    public ResponseEntity<CustomerMyPageDto> getUserInfo() {
+        // 추후 토큰을 통해 고객 ID를 가져옴
+        // String customerId = getCustomerIdFromToken();
+        CustomerMyPageDto customerInfo = customerMyPageService.getCustomerInfo(customerId);
+        return ResponseEntity.ok(customerInfo);
     }
 
-    // 아이디 중복검사
-    @GetMapping("/check")
-    @ResponseBody
-    public ResponseEntity<?> check(String keyword) {
-        log.info("keyword : {}", keyword);
-        boolean flag = customerService.checkIdentifier(keyword);
-        log.debug("중복체크 결과? {}", flag);
-        return ResponseEntity.ok().body(flag);
+    /**
+     * 고객 통계 정보를 가져오는 GET 요청 처리
+     * @return 고객 통계 정보 DTO
+     */
+    @GetMapping("/stats")
+    public ResponseEntity<StatsDto> getStats() {
+        // 추후 토큰을 통해 고객 ID를 가져옴
+        // String customerId = getCustomerIdFromToken();
+        StatsDto stats = customerMyPageService.getStats(customerId);
+        return ResponseEntity.ok(stats);
     }
 
-    // 로그인 양식 열기
-    @GetMapping("/sign-in")
-    public String signIn(HttpSession session) {
-
-       if(LoginUtil.isLoggedIn(session)) {
-           return"redirect:/";
-       }
-
-        log.info("/customer/sign-in GET : forwarding to sign-in.jsp");
-        return "/sign-in";
+    /**
+     * 고객 예약 목록을 가져오는 GET 요청 처리
+     * @return 고객 예약 목록 DTO 리스트
+     */
+    @GetMapping("/reservations")
+    public ResponseEntity<List<ReservationDetailDto>> getReservations() {
+        // 추후 토큰을 통해 고객 ID를 가져옴
+        // String customerId = getCustomerIdFromToken();
+        List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
+        return ResponseEntity.ok(reservations);
     }
 
-    //로그인 요청 처리
-    @PostMapping("/sign-in")
-    public String signIn(CustomerLoginDto dto,
-                         RedirectAttributes ra,
-                         HttpServletRequest request,
-                         HttpServletResponse response) {
-        log.info("/customer/sign-in POST");
-        log.debug("parameter: {}", dto);
+    /**
+     * 현재 인증된 사용자로부터 고객 ID를 추출하는 메서드
+     * 추후 토큰 기반 인증으로 변경 예정
+     * @return 고객 ID
+     */
+//     private String getCustomerIdFromToken() {
+//         TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//         return tokenUserInfo.getUserId();
+//     }
 
-
-        // 세션 얻기
-        HttpSession session = request.getSession();
-        System.out.println("\nsession = " + session);
-
-        LoginResult result = customerService.authenticate(dto, session, response);
-        System.out.println("\nresult = " + result);
-
-
-        ra.addFlashAttribute("result", result);
-
-        if (result == LoginResult.SUCCESS) { //참
-            // 혹시 세션에 리다이렉트 URL이 있다면
-            String redirect = (String) session.getAttribute("redirect");
-            System.out.println("\nredirect = " + redirect);
-
-            if (redirect != null) {
-                session.removeAttribute("redirect");
-                return "redirect:" + redirect;
-            }
-            return "redirect:/"; // 로그인 성공시
-        }
-        return "redirect:/customer/sign-in?message=signin-fail";
+    /**
+     *
+     * @method   imageUpload
+     * @param    customerImg
+     * @return   ResponseEntity<?> type
+     * @author   hoho
+     * @date     2024 07 25 15:14
+     *
+     */
+    @PostMapping("/edit/img")
+    public ResponseEntity<?> imageUpload(@RequestParam("customerImg") MultipartFile customerImg) {
+        String customerId = "test@gmail.com";
+        boolean flag = customerMyPageService.updateProfileImg(customerId, customerImg);
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
     }
 
-    @GetMapping("/sign-out")
-    public String signOut(HttpServletRequest request,
-                          HttpServletResponse response) {
-        // 세션 구하기
-       HttpSession session = request.getSession();
+    /**
+     *
+     * @method   insertPreferred
+     * @return   ResponseEntity<?> type
+     * @author   hoho
+     * @date     2024 07 24 15:04
+     *
+     * {
+     *  	type: food or area or store
+     *  	value: string
+     * }
+     */
+    @PostMapping("/edit")
+    public ResponseEntity<?> insertPreferred(@RequestBody UpdateDto dto) {
+        String customerId = "test@gmail.com";
+        boolean flag = customerMyPageService.updateCustomerInfo(customerId, List.of(dto));
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
+    }
 
-        // 자동로그인 상태인지 확인
-        if(LoginUtil.isAutoLogin(request)) {
-            // 쿠키를 제거하고, DB에도 자동로그인 관련데이터를 원래대로 해놓음
-            customerService.autoLoginClear(request, response);
+    /**
+     *
+     * @method   deletePreferred
+     * @param    dto
+     * @return   ResponseEntity<?> type
+     * @author   hoho
+     * @date     2024 07 24 16:29
+     *
+     * {
+     *     type : food or area or store
+     *     value : string
+     * }
+     */
+    @DeleteMapping("/edit")
+    public ResponseEntity<?> deletePreferred(@RequestBody UpdateDto dto) {
+        String customerId = "test@gmail.com";
+        boolean flag = customerMyPageService.deleteCustomerInfo(customerId, List.of(dto));
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
+    }
 
-        }
-
-        // 세션에서 로그인 기록 삭제
-        session.removeAttribute("login");
-
-        // 세션을 초기화 (reset)
-        session.invalidate();
-
-        // 홈으로 보내기
-        return "redirect:/";
+    /**
+     *
+     * @method   editInfo
+     * @param    dto
+     * @return   ResponseEntity<?> type
+     * @author   hoho
+     * @date     2024 07 24 15:03
+     * {
+     *     type: string (nickname or phone_number)
+     *     value: string
+     * }
+     */
+    @PatchMapping("/edit")
+    public ResponseEntity<?> editInfo(@RequestBody UpdateDto dto) {
+        String customerId = "test@gmail.com";
+        boolean flag = customerMyPageService.updateCustomerInfo(customerId, List.of(dto));
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
     }
 
 }

@@ -15,4 +15,5 @@ public class StatsDto {
     private int total;
     private double coTwo;
     private int money;
+    private String customerId;
 }
