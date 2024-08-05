@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "idxCustomerId")
+@EqualsAndHashCode(of = "id")
 @Table(name = "tbl_customer")
 public class Customer {
 
@@ -52,7 +52,7 @@ public class Customer {
     private String userType;
 
     @Column(name = "email_verified", nullable = true)
-    private boolean emailVerified;
+    private Boolean emailVerified;
 
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<EmailVerification> emailVerifications = new ArrayList<>();
