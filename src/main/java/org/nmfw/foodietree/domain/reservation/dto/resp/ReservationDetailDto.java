@@ -45,7 +45,7 @@ public class ReservationDetailDto {
     private String pickupEndTimeF;
 
     // 명시적으로 모든 매개변수를 포함하는 생성자 추가
-    public ReservationDetailDto(int reservationId, int productId, String customerId, LocalDateTime reservationTime,
+    public ReservationDetailDto(long reservationId, long productId, String customerId, LocalDateTime reservationTime,
                                 LocalDateTime cancelReservationAt, LocalDateTime pickedUpAt, String storeId,
                                 LocalDateTime pickupTime, String storeName, String category, String address, int price,
                                 String storeImg, String nickname, String profileImage) {
@@ -58,7 +58,7 @@ public class ReservationDetailDto {
         this.storeId = storeId;
         this.pickupTime = pickupTime;
         this.storeName = storeName;
-        this.category = category;
+        this.category = StoreCategory.valueOf(category);
         this.address = address;
         this.price = price;
         this.storeImg = storeImg;
