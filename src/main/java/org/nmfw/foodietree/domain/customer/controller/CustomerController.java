@@ -156,12 +156,31 @@ public class CustomerController {
     @PostMapping("/edit/area")
     public ResponseEntity<?> insertArea(@RequestBody UpdateAreaDto dto) {
         String customerId = "test@gmail.com";
-        String preferredArea = dto.getPreferredArea();
-        String alias = dto.getAlias();
 
-        boolean flag = customerMyPageService.updateCustomerAreaInfo(customerId, List.of(dto));
+        boolean flag = customerMyPageService.updateCustomerAreaInfo(customerId, dto);
         if (flag)
             return ResponseEntity.ok().body(true);
         return ResponseEntity.badRequest().body(false);
+    }
+
+    @DeleteMapping("/edit/area")
+    public ResponseEntity<?> deleteArea(@RequestBody UpdateAreaDto dto) {
+        String customerId = "test@gmail.com";
+
+        boolean flag = customerMyPageService.deleteCustomerAreaInfo(customerId, dto);
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
+    }
+
+    @GetMapping("/info/area")
+    public ResponseEntity<?> getFavArea() {
+        String customerId = "test@gmail.com";
+        try{
+            List<UpdateAreaDto> favAreas = customerMyPageService.getFavArea(customerId);
+            return ResponseEntity.ok().body(favAreas);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(false);
+        }
     }
 }
