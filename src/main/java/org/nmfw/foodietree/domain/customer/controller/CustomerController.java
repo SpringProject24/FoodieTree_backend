@@ -6,6 +6,7 @@ import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.StatsDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateDto;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,25 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class CustomerController {
+
+    private final CustomerService customerService;
+
+    @GetMapping("/check")
+    @CrossOrigin
+    @ResponseBody
+    public ResponseEntity<?> check(
+//            String type,
+            String keyword) {
+        log.info("{}",  keyword);
+
+        boolean flag = customerService.checkIdentifier(keyword);
+        return ResponseEntity
+                .ok()
+                .body(flag);
+    }
+
+
+
 
 
 //    @Value("${env.kakao.api.key:default}")
