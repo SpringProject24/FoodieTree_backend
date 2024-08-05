@@ -8,6 +8,7 @@ import org.nmfw.foodietree.domain.customer.entity.Customer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -19,11 +20,8 @@ public class EmailVerification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "customer_id", nullable = true, length = 50)
-    private String customerId;
-
-    @Column(name = "store_id", nullable = true, length = 50)
-    private String storeId;
+    @Column(name = "email", nullable = true, length = 50, unique = true)
+    private String email;
 
     @Column(name = "code", nullable = true, length = 255)
     private String code;
@@ -37,16 +35,12 @@ public class EmailVerification {
     @Column(name = "user_type", nullable = true, length = 50)
     private String userType;
 
-    @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idx_customer_id")
-    private Customer customer;
 
     @Builder
-    public EmailVerification(Long id, String customerId, String storeId, String code, LocalDateTime expiryDate, boolean emailVerified, String userType) {
+    public EmailVerification(Long id, String email, String code, LocalDateTime expiryDate, boolean emailVerified, String userType) {
+
         this.id = id;
-        this.customerId = customerId;
-        this.storeId = storeId;
+        this.email = email;
         this.code = code;
         this.expiryDate = expiryDate;
         this.emailVerified = emailVerified;

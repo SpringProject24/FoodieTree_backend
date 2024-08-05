@@ -5,6 +5,13 @@
 
 <mapper namespace="org.nmfw.foodietree.domain.customer.mapper.CustomerMapper">
 
+    <select id="findRefreshDateById" resultType="Date">
+        SELECT
+        refresh_token_expire_date
+        FROM tbl_customer
+        WHERE customer_id = #{email}
+    </select>
+
     <update id="signUpUpdateCustomer">
         UPDATE tbl_Customer
         SET refresh_token_expire_date = #{refreshTokenExpireDate}
@@ -34,13 +41,7 @@
 
     <!--  고객 1명의 정보를 조회 -->
     <select id="findOne" resultType="customer">
-        SELECT
-        customer_id
-            , customer_password
-            , nickName
-            , customer_phone_number
-            , profile_image
-            , session_id
+        SELECT *
         FROM tbl_customer
         WHERE customer_id = #{customerId}
     </select>
@@ -53,20 +54,6 @@
             (#{customerId}, #{food})
         </foreach>
     </insert>
-
-<!--    <select id="findMemberBySessionId" resultType="member">-->
-<!--        SELECT-->
-<!--        account, name, email, auth, limit_time-->
-<!--        FROM tbl_member-->
-<!--        WHERE session_id = #{sessionId}-->
-<!--    </select>-->
-
-    <!--자동로그인-->
-    <update id="updateAutoLogin">
-        UPDATE tbl_customer
-        SET session_id = #{sessionId}, limit_time = #{limitTime}
-        WHERE customer_id = #{id}
-    </update>
     
     <select id="findCustomerBySession" resultType="customer">
         SELECT

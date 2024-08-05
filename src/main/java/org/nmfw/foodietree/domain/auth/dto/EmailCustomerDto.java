@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EmailCodeCustomerDto {
+public class EmailCustomerDto {
         private String customerId;
         private String userType;
         @Setter

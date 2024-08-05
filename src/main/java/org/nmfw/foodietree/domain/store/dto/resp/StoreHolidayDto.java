@@ -3,6 +3,8 @@ package org.nmfw.foodietree.domain.store.dto.resp;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @ToString
@@ -13,4 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 public class StoreHolidayDto {
     private String storeId;
     private String holidays;
+
+    public StoreHolidayDto(String storeId, LocalDate holidays) {
+        this.storeId = storeId;
+        this.holidays = holidays.toString();
+    }
 }
