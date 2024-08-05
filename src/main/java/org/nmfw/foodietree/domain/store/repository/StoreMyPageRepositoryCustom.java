@@ -38,13 +38,7 @@ public interface StoreMyPageRepositoryCustom {
 //     */
 //    void cancelProductByStore(@Param("storeId") String storeId, @Param("pickupTime") String pickupTime);
 
-//    List<StoreMyPageCalendarModalDto> getStoreMyPageCalendarModalInfo(String storeId, LocalDate date);
-
     List<StoreCheckDto> getAllStore();
-
-//    void setHoliday(@Param("storeId") String storeId, @Param("holidays") String holidays);
-
-//    void undoHoliday(@Param("storeId") String storeId, @Param("holidays") LocalDate holidays);
 
     List<StoreHolidayDto> getHolidays(@Param("storeId") String storeId);
 
