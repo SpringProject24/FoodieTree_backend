@@ -11,12 +11,10 @@ public interface EmailMapper {
 
     void save(EmailCodeDto dto);
 
-    int findByEmail(String email);
+    void update(EmailCodeDto emailCodeDto);
 
-    default boolean isEmailExists(String email) {
-        return findByEmail(email) > 0;
-    }
     EmailCodeDto findOneByEmail(String email);
 
-    void update(EmailCodeDto emailCodeDto);
+    Boolean existsByEmail(String email);
+
 }

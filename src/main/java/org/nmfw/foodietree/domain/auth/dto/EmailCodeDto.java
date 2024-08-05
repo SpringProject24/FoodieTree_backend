@@ -18,17 +18,7 @@ public class EmailCodeDto{
     @Setter
     private LocalDateTime expiryDate; // 인증번호 만료기간
     @Setter
-    private boolean emailVerified;
+    private Boolean emailVerified;
     private String userType;
-
-
-    public EmailVerification toEntity() {
-        return EmailVerification.builder()
-                .email(this.email)
-                .code(this.code)
-                .expiryDate(this.expiryDate)
-                .emailVerified(this.emailVerified)
-                .build();
-    }
 
 }

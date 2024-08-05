@@ -43,6 +43,18 @@ public class CustomerController {
         }
     }
 
+    @GetMapping("/check")
+    @CrossOrigin
+    @ResponseBody
+    public ResponseEntity<?> check(String keyword) {
+        log.info("{}",  keyword);
+        boolean flag = customerService.findOne(keyword);
+        return ResponseEntity
+                .ok()
+                .body(flag);
+    }
+
+
 
     //회원가입 양식 열기
 //    @GetMapping("/sign-up")

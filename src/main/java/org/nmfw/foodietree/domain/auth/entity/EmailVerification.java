@@ -24,8 +24,8 @@ public class EmailVerification {
     @Column(name = "email", nullable = true, length = 50, unique = true)
     private String email;
 
-    @Column(name = "code", nullable = true, length = 255)
-    private String code;
+//    @Column(name = "code", nullable = true, length = 255)
+//    private String code;
 
     @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;

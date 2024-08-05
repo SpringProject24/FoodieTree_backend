@@ -26,8 +26,8 @@ public class Customer {
     @Column(name = "customer_id", nullable = false, unique = true)
     private String customerId;
 
-    @Column(name = "customer_password")
-    private String customerPassword;
+//    @Column(name = "customer_password")
+//    private String customerPassword;
 
     @Column(name = "nickname")
     private String nickname;
@@ -52,7 +52,7 @@ public class Customer {
     private String userType;
 
     @Column(name = "email_verified", nullable = true)
-    private boolean emailVerified;
+    private Boolean emailVerified;
 
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<EmailVerification> emailVerifications = new ArrayList<>();

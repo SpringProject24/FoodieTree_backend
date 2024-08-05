@@ -13,21 +13,21 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface EmailRepository extends JpaRepository<EmailVerification, Integer>, EmailRepositoryCustom {
+
     @Modifying
     @Transactional
     @Query("UPDATE EmailVerification ev SET ev.expiryDate = :expiryDate, ev.emailVerified = :emailVerified WHERE ev.email = :email")
     void updateEmailVerification(@Param("expiryDate") LocalDateTime expiryDate,
-                                 @Param("emailVerified") boolean emailVerified,
+                                 @Param("emailVerified") Boolean emailVerified,
                                  @Param("email") String email);
 
-    @Modifying
     @Transactional
-    default void saveEmailVerification(String email, LocalDateTime expiryDate, boolean emailVerified, String userType) {
+    default void saveEmailVerification(EmailCodeDto dto) {
         EmailVerification emailVerification = new EmailVerification();
-        emailVerification.setEmail(email);
-        emailVerification.setUserType(userType);
-        emailVerification.setExpiryDate(expiryDate);
-        emailVerification.setEmailVerified(emailVerified);
+        emailVerification.setEmail(dto.getEmail());
+        emailVerification.setUserType(dto.getUserType());
+        emailVerification.setExpiryDate(dto.getExpiryDate());
+        emailVerification.setEmailVerified(dto.getEmailVerified() != null ? dto.getEmailVerified() : false);
 
         save(emailVerification);
     }
@@ -38,8 +38,11 @@ public interface EmailRepository extends JpaRepository<EmailVerification, Intege
     @Query("SELECT ev FROM EmailVerification ev WHERE ev.email = :email")
     EmailCodeDto findOneByEmail(@Param("email") String email);
 
-    @Modifying
-    @Transactional
-    @Query("INSERT INTO EmailVerification (storeId, code, expiryDate) SELECT :storeId, :code, :expiryDate")
-    void saveStoreVerificationCode(@Param("storeId") Long storeId, @Param("code") String code, @Param("expiryDate") LocalDateTime expiryDate);
+    @Query("SELECT COUNT(ev) > 0 FROM EmailVerification ev WHERE ev.email = :email")
+    Boolean existsByEmail(@Param("email") String email);
+
+//    @Modifying
+//    @Transactional
+//    @Query("INSERT INTO EmailVerification (storeId, code, expiryDate) SELECT :storeId, :code, :expiryDate")
+//    void saveStoreVerificationCode(@Param("storeId") Long storeId, @Param("code") String code, @Param("expiryDate") LocalDateTime expiryDate);
 }
