@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.CustomerMyPageDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.StatsDto;
+import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateDto;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
@@ -152,4 +153,15 @@ public class CustomerController {
         return ResponseEntity.badRequest().body(false);
     }
 
+    @PostMapping("/edit/area")
+    public ResponseEntity<?> insertArea(@RequestBody UpdateAreaDto dto) {
+        String customerId = "test@gmail.com";
+        String preferredArea = dto.getPreferredArea();
+        String alias = dto.getAlias();
+
+        boolean flag = customerMyPageService.updateCustomerAreaInfo(customerId, List.of(dto));
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
+    }
 }

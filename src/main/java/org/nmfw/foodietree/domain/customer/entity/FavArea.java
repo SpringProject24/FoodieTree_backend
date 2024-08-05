@@ -34,4 +34,7 @@ public class FavArea {
 
     @Column(name = "preferred_area")
     private String preferredArea;
+
+    @Column(name = "alias")
+    private String alias;
 }

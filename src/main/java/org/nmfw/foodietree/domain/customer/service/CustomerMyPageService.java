@@ -7,6 +7,7 @@ import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
 import org.nmfw.foodietree.domain.customer.entity.value.IssueStatus;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
 import org.nmfw.foodietree.domain.customer.repository.CustomerMyPageRepository;
+import org.nmfw.foodietree.domain.customer.repository.FavAreaRepository;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
@@ -38,7 +39,10 @@ public class CustomerMyPageService {
     private final PasswordEncoder encoder;
     private final ReservationService reservationService;
 
+    private final FavAreaService FavAreaService;
+
     private final CustomerMyPageRepository customerMyPageRepository;
+    private final FavAreaService favAreaService;
 
     @Value("${env.upload.path}")
     private String uploadDir;
@@ -218,5 +222,10 @@ public class CustomerMyPageService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean updateCustomerAreaInfo(String customerId, List<UpdateAreaDto> dto) {
+        favAreaService.saveAllFavAreas(customerId, dto);
+        return true;
     }
 }
