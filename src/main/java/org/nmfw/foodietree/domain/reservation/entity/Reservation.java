@@ -1,6 +1,8 @@
 package org.nmfw.foodietree.domain.reservation.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -24,6 +26,7 @@ public class Reservation {
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
+    @CreationTimestamp
     @Column(name = "reservation_time", nullable = false)
     private LocalDateTime reservationTime;
 
