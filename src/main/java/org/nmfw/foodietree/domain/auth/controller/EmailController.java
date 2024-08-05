@@ -125,7 +125,7 @@ public class EmailController {
                     emailCodeDto.setEmailVerified(true);
 
                     // 이메일 인증이 완료되지 않은 경우 - 실제 회원가입이 되지 않은 경우
-                    if (!emailCodeDto.isEmailVerified()) {
+                    if (!emailService.existsByEmailInCustomerOrStore(emailCodeDto.getEmail())) {
                         // 이메일 재전송 페이지로 리다이렉션
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
                     }

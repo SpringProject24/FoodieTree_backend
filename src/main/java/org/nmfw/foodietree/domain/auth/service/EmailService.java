@@ -26,6 +26,7 @@ public class EmailService {
     private final EmailRepository emailRepository;
     private final TokenProvider tokenProvider;
 
+    @Transactional
     public EmailCodeDto findOneByEmail(String email) {
         return emailRepository.findOneByEmail(email);
     }
@@ -33,6 +34,11 @@ public class EmailService {
     @Transactional
     public void updateEmailVerification(EmailCodeDto dto) {
         emailRepository.updateEmailVerification(dto.getExpiryDate(), dto.getEmailVerified(), dto.getEmail());
+    }
+
+    @Transactional
+    public Boolean existsByEmailInCustomerOrStore(String email) {
+        return emailRepository.existsByEmailInCustomerOrStore(email);
     }
 
 
