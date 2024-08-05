@@ -8,14 +8,8 @@ import org.nmfw.foodietree.domain.customer.dto.resp.UpdateDto;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -29,9 +23,8 @@ import java.util.List;
 public class CustomerController {
 
 
-    @Value("${env.kakao.api.key:default}")
-    private String kakaoApiKey;
-    private final CustomerService customerService;
+//    @Value("${env.kakao.api.key:default}")
+//    private String kakaoApiKey;
 
     @PostMapping("/myFavMap")
     public ResponseEntity<Map<String, String>> getMyLocation(@RequestBody Map<String, String> payload) {
@@ -55,15 +48,15 @@ public class CustomerController {
 //    }
 
     // 회원가입 요청 처리
-    @PostMapping("/sign-up")
-    public String signUp(@Validated SignUpDto dto, BindingResult result) {
-        if (result.hasErrors()) {
-            log.info("{}", result);
-            return "redirect:/customer/sign-up";
-        }
-
-        boolean flag = customerService.join(dto);
-        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
+//    @PostMapping("/sign-up")
+//    public String signUp(@Validated SignUpDto dto, BindingResult result) {
+//        if (result.hasErrors()) {
+//            log.info("{}", result);
+//            return "redirect:/customer/sign-up";
+//        }
+//
+//        boolean flag = customerService.join(dto);
+//        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
 
     private final CustomerMyPageService customerMyPageService;
 
