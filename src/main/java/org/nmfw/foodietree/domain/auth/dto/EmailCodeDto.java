@@ -4,7 +4,6 @@ import lombok.*;
 import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -13,10 +12,11 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class EmailCodeDto{
-    private String email; //nullable
+    private String customerId; //nullable
+    private String storeId; //nullable
     private String code; //추후 refresh token 도입예정
     @Setter
-    private LocalDateTime expiryDate; // 인증번호 만료기간
+    private LocalDateTime expiryDate;
     @Setter
     private boolean emailVerified;
     private String userType;
@@ -24,7 +24,8 @@ public class EmailCodeDto{
 
     public EmailVerification toEntity() {
         return EmailVerification.builder()
-                .email(this.email)
+                .customerId(this.customerId)
+                .storeId(this.storeId)
                 .code(this.code)
                 .expiryDate(this.expiryDate)
                 .emailVerified(this.emailVerified)

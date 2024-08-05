@@ -120,7 +120,7 @@ public class ReservationController {
      */
     private String getCustomerIdFromToken() {
         TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return tokenUserInfo.getEmail(); // 윤종 임의 수정 getUserId-> getEmail 24/07/31 21:11
+        return tokenUserInfo.getUserId();
     }
 
     /**

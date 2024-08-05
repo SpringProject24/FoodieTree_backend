@@ -61,7 +61,7 @@ public class EmailService {
         if (purpose.equalsIgnoreCase("signup")) {
             EmailCodeDto build = EmailCodeDto.builder()
                     .code(code)
-                    .email(to)
+                    .customerId(to)
                     .expiryDate(LocalDateTime.now().plusMinutes(5)).build();
             signUpList.put(to, build);
             log.info("{}", build);
@@ -72,7 +72,6 @@ public class EmailService {
         saveVerificationCode(to, userType,code);
     }
 
-    /*
     public boolean verifyCode(String email, String inputCode) {
         EmailCodeDto verificationCode = emailMapper.findByEmail(email);
 
@@ -83,8 +82,6 @@ public class EmailService {
         }
         return false;
     }
-
-     */
 
     public boolean verifyCodeForSignUp(String email, String inputCode) {
         EmailCodeDto verificationCode = signUpList.get(email);
@@ -179,7 +176,7 @@ public class EmailService {
 
     private void saveVerificationCode(String email, String userType,String code) {
         EmailCodeDto verificationCode = EmailCodeDto.builder()
-                .email(email)
+                .customerId(email)
                 .code(code)
                 .expiryDate(LocalDateTime.now().plusMinutes(5))
                 .build();
@@ -189,25 +186,25 @@ public class EmailService {
 
     // 이메일 인증 링크 전송 메서드
     public void sendVerificationEmailLink(String email, String userType, EmailCodeDto emailCodeDto) throws MessagingException {
+
         // JWT 토큰 생성
         String token = tokenProvider.createToken(emailCodeDto);
-        String refreshToken = tokenProvider.createRefreshToken(email, userType);
+        tokenProvider.createRefreshToken(email);
 
         log.info("전달받은 usertype : {}", userType);
 
         EmailCodeDto dto = EmailCodeDto.builder()
-                .email(email)
+                .customerId(email)
+                .storeId(email)
                 .userType(userType)
-                .expiryDate(LocalDateTime.now().plusMinutes(5)) // 엑세스 토큰 만료 시간
+                .expiryDate(LocalDateTime.now().plusMinutes(1))
                 .build();
 
-        if(!emailMapper.isEmailExists(email)) {
-            emailMapper.save(dto);
-        } else emailMapper.update(dto);
+        emailMapper.save(dto);
 
         // 이메일에 포함될 링크 생성
-        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token + "&refreshToken=" + refreshToken;
-
+        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token;
+//        String verificationLink = "/verifyEmail?token=" + token;
 
         log.info("인증링크 {} :", verificationLink);
 

@@ -2,21 +2,15 @@ package org.nmfw.foodietree.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.auth.dto.EmailCustomerDto;
+import org.nmfw.foodietree.domain.auth.dto.EmailCodeCustomerDto;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeStoreDto;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
-import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
-import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -29,89 +23,64 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
 
-    public ResponseEntity<Map<String, ? extends Serializable>> saveUserInfo(EmailCodeDto emailCodeDto) {
-
-        String emailCodeDtoUserType = emailCodeDto.getUserType();
-        String emailCodeDtoEmail = emailCodeDto.getEmail();
-
-        String token = tokenProvider.createToken(emailCodeDto);
-        String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
-        Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
+    public void saveUserInfo(EmailCodeDto emailCodeDto) {
 
         // 최초 회원 정보 저장 로직 :  customer인지 store 인지 null 값으로 구분
-        if (emailCodeDtoUserType.equals("store")) {
+        if (emailCodeDto.getCustomerId() == null) {
+            String token = tokenProvider.createRefreshToken(emailCodeDto.getStoreId());
+            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
             EmailCodeStoreDto emailCodeStoreDto = EmailCodeStoreDto.builder()
-                    .storeId(emailCodeDtoEmail)
-                    .userType(emailCodeDtoUserType)
+                    .storeId(emailCodeDto.getStoreId())
+                    .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
                     .build();
 
             storeMapper.signUpSaveStore(emailCodeStoreDto);
 
-        } else if(emailCodeDtoUserType.equals("customer")) {
+        } else {
+            String token = tokenProvider.createRefreshToken(emailCodeDto.getCustomerId());
+            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
-            EmailCustomerDto emailCodeCustomerDto = EmailCustomerDto.builder()
-                    .customerId(emailCodeDtoEmail)
-                    .userType(emailCodeDtoUserType)
+            log.info("db에 refresh token 기간 추가 {}", expirationDate);
+
+            EmailCodeCustomerDto emailCodeCustomerDto = EmailCodeCustomerDto.builder()
+                    .customerId(emailCodeDto.getCustomerId())
+                    .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
                     .build();
 
             customerMapper.signUpSaveCustomer(emailCodeCustomerDto);
         }
-
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "token", token,
-                "refreshToken", refreshToken,
-                "email", emailCodeDtoUserType,
-                "role", emailCodeDtoEmail,
-                "message", "Token reissued successfully."
-        ));
-
     }
 
     // access token, refresh token 재발급
-    public ResponseEntity<Map<String, ? extends Serializable>> updateUserInfo(EmailCodeDto emailCodeDto) {
+    public void updateUserInfo(EmailCodeDto emailCodeDto) {
 
-        String emailCodeDtoUserType = emailCodeDto.getUserType();
-        String emailCodeDtoEmail = emailCodeDto.getEmail();
-
-        String token = tokenProvider.createToken(emailCodeDto);
-        log.info(" 새로운 토큰 재발급 ! {}",token);
-        String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
-        log.info("새로운 리프레시 토큰 재발급 ! {} ",refreshToken);
-        Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
-
-        if (emailCodeDtoUserType.equals("store")) {
+        //store 일 경우
+        if (emailCodeDto.getCustomerId() == null) {
+            String token = tokenProvider.createRefreshToken(emailCodeDto.getStoreId());
+            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
             EmailCodeStoreDto emailCodeStoreDto = EmailCodeStoreDto.builder()
-                    .storeId(emailCodeDtoEmail)
-                    .userType(emailCodeDtoUserType)
+                    .storeId(emailCodeDto.getStoreId())
+                    .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
                     .build();
             storeMapper.signUpUpdateStore(emailCodeStoreDto);
 
             // customer 일 경우
-        } else if (emailCodeDtoUserType.equals("customer")) {
+        } else if (emailCodeDto.getStoreId() == null) {
+            String token = tokenProvider.createRefreshToken(emailCodeDto.getCustomerId());
+            Date expirationDate = tokenProvider.getExpirationDateFromToken(token);
 
-            EmailCustomerDto emailCodeCustomerDto = EmailCustomerDto.builder()
-                    .customerId(emailCodeDtoEmail)
-                    .userType(emailCodeDtoUserType)
+            EmailCodeCustomerDto emailCodeCustomerDto = EmailCodeCustomerDto.builder()
+                    .customerId(emailCodeDto.getCustomerId())
+                    .userType(emailCodeDto.getUserType())
                     .refreshTokenExpireDate(expirationDate)
                     .build();
-
             customerMapper.signUpUpdateCustomer(emailCodeCustomerDto);
         }
-
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "token", token,
-                "refreshToken", refreshToken,
-                "email", emailCodeDtoEmail,
-                "role", emailCodeDtoUserType,
-                "message", "Token reissued successfully."
-        ));
     }
 
     // customer, store DB 에 회원이 존재하는지 여부 확인
@@ -128,34 +97,20 @@ public class UserService {
         if ("store".equals(emailCodeDto.getUserType())) {
             log.info("store 타입 확인");
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
-            if (storeMapper.findOne(emailCodeDto.getEmail()) != null) {
+            if (storeMapper.findOne(emailCodeDto.getStoreId()) != null) {
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
         } else if ("customer".equals(emailCodeDto.getUserType())) {
             log.info("customer 타입 확인");
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
-            if (customerMapper.findOne(emailCodeDto.getEmail()) != null) {
+            if (customerMapper.findOne(emailCodeDto.getCustomerId()) != null) {
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
         }
 
         return result;
-    }
-
-    public LocalDateTime getRefreshTokenExpiryDate(String email, String userType) {
-        if ("customer".equals(userType)) {
-            Customer customer = customerMapper.findOne(email);
-            log.info("customer object : {},customer email : {}, customer 의 리프레시 만료일자 인 서버 : {}", customer,customer.getCustomerId(), customer.getRefreshTokenExpireDate());
-            return customer != null ? customer.getRefreshTokenExpireDate() : null;
-        } else if ("store".equals(userType)) {
-            Store store = storeMapper.findOne(email);
-            log.info("store email : {}, store 의 리프레시 만료일자 인 서버 : {}", email, store.getRefreshTokenExpireDate());
-            return store != null ? store.getRefreshTokenExpireDate() : null;
-        } else {
-            throw new IllegalArgumentException("Invalid user type");
-        }
     }
 }
 

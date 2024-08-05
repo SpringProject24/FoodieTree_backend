@@ -10,60 +10,14 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.Map;
-
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
-
-@RestController
+@Controller
 @RequestMapping("/customer")
 @Slf4j
 @RequiredArgsConstructor
 public class CustomerController {
-
-
-    @Value("${env.kakao.api.key:default}")
-    private String kakaoApiKey;
-    private final CustomerService customerService;
-
-    @PostMapping("/myFavMap")
-    public ResponseEntity<Map<String, String>> getMyLocation(@RequestBody Map<String, String> payload) {
-        String location = payload.get("location");
-        if (location != null) {
-            log.info("My location test: {}", location);
-            return ResponseEntity.ok(Map.of("location", location));
-        } else {
-            return ResponseEntity.badRequest().body(Map.of("error", "Location is required"));
-        }
-    }
-
-
-
-    //회원가입 양식 열기
-//    @GetMapping("/sign-up")
-//    public String signUp(Model model) {
-//        log.info("customer/sign-up GET : forwarding to sign-up.jsp");
-//        model.addAttribute("kakaoApiKey", kakaoApiKey);
-//        return "/customer/sign-up";
-//    }
-
-    // 회원가입 요청 처리
-    @PostMapping("/sign-up")
-    public String signUp(@Validated SignUpDto dto, BindingResult result) {
-        if (result.hasErrors()) {
-            log.info("{}", result);
-            return "redirect:/customer/sign-up";
-        }
-
-        boolean flag = customerService.join(dto);
-        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
 
     private final CustomerMyPageService customerMyPageService;
 
@@ -80,7 +34,6 @@ public class CustomerController {
         // String customerId = getCustomerIdFromToken();
         CustomerMyPageDto customerInfo = customerMyPageService.getCustomerInfo(customerId);
         return ResponseEntity.ok(customerInfo);
-
     }
 
     /**

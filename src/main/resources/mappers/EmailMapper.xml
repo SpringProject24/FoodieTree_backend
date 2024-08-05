@@ -8,16 +8,25 @@
 <!--    usertype에 따라서 email 칼럼의 expiredate 업데이트-->
     <update id="update">
         UPDATE tbl_verification_code
-        SET expiry_date = #{expiryDate},
-        email_verified = #{emailVerified}
-        WHERE email = #{email}
+        SET expiry_date = #{expiryDate}
+        WHERE
+        <choose>
+            <when test="userType == 'customer'">
+                customer_id = #{customerId}
+            </when>
+            <when test="userType == 'store'">
+                store_id = #{storeId}
+            </when>
+        </choose>
     </update>
+
 
     <insert id="save">
         INSERT INTO
         tbl_verification_code
         (
-        email,
+        customer_id,
+        store_id,
         code,
         expiry_date,
         email_verified,
@@ -25,35 +34,50 @@
         )
         VALUES
         (
-        #{email},
+        <choose>
+            <when test="userType == 'customer'">
+                #{customerId}
+            </when>
+            <when test="userType == 'store'">
+                NULL
+            </when>
+            <otherwise>
+                NULL
+            </otherwise>
+        </choose>,
+        <choose>
+            <when test="userType == 'store'">
+                #{storeId}
+            </when>
+            <otherwise>
+                NULL
+            </otherwise>
+        </choose>,
         NULL,
         #{expiryDate},
         #{emailVerified},
         #{userType}
         )
     </insert>
+<!--      현재시간으로부터 유효한 코드 가져옴-->
 
-    <select id="findByEmail" resultType="int">
-        SELECT COUNT(*)
-        FROM tbl_verification_code
-        WHERE email = #{email}
-    </select>
-
-    <select id="findOneByEmail" resultType="EmailCodeDto">
+    <select id="findByEmail" resultType="EmailCodeDto">
         SELECT
-        email,
+        customer_id,
+        store_id,
         code,
         expiry_date,
         user_type
         FROM
         tbl_verification_code
         WHERE
-        email = #{email}
+        (customer_id = #{customerId} OR (customer_id IS NULL AND store_id = #{storeId}))
+        AND
+        expiry_date > NOW()
+        ORDER BY
+        expiry_date DESC
+        LIMIT 1
     </select>
-
-
-
-
 
     <insert id="saveStore">
         INSERT INTO
