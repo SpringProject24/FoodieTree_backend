@@ -6,6 +6,7 @@ import org.nmfw.foodietree.domain.customer.dto.resp.*;
 import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
 import org.nmfw.foodietree.domain.customer.entity.value.IssueStatus;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMyPageMapper;
+import org.nmfw.foodietree.domain.customer.repository.CustomerMyPageRepository;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.nmfw.foodietree.domain.customer.entity.value.IssueCategory.fromString;
@@ -27,12 +30,16 @@ import static org.nmfw.foodietree.domain.customer.entity.value.IssueStatus.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class CustomerMyPageService {
 
     private final CustomerMyPageMapper customerMyPageMapper;
     private final ReservationMapper reservationMapper;
     private final PasswordEncoder encoder;
     private final ReservationService reservationService;
+
+    private final CustomerMyPageRepository customerMyPageRepository;
+
     @Value("${env.upload.path}")
     private String uploadDir;
 
@@ -42,20 +49,7 @@ public class CustomerMyPageService {
      * @return 고객 정보 DTO
      */
     public CustomerMyPageDto getCustomerInfo(String customerId) {
-        CustomerMyPageDto customer = customerMyPageMapper.findOne(customerId);
-        List<String> preferenceAreas = customerMyPageMapper.findPreferenceAreas(customerId);
-        List<PreferredFoodDto> preferenceFoods = customerMyPageMapper.findPreferenceFoods(customerId);
-        List<CustomerFavStoreDto> favStore = customerMyPageMapper.findFavStore(customerId);
-
-        return CustomerMyPageDto.builder()
-                .customerId(customer.getCustomerId())
-                .nickname(customer.getNickname())
-                .profileImage(customer.getProfileImage())
-                .customerPhoneNumber(customer.getCustomerPhoneNumber())
-                .preferredFood(preferenceFoods)
-                .preferredArea(preferenceAreas)
-                .favStore(favStore)
-                .build();
+        return customerMyPageRepository.findCustomerDetails(customerId);
     }
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH시mm분");
@@ -66,26 +60,9 @@ public class CustomerMyPageService {
      * @return 고객 예약 목록 DTO 리스트
      */
     public List<ReservationDetailDto> getReservationList(String customerId) {
-        List<ReservationDetailDto> reservations = reservationMapper.findReservationsByCustomerId(customerId);
+        List<ReservationDetailDto> reservations = customerMyPageRepository.findReservationsByCustomerId(customerId);
 
-        List<ReservationDetailDto> reservationList = reservations.stream()
-                .map(reservation -> ReservationDetailDto.builder()
-                        .reservationId(reservation.getReservationId())
-                        .status(reservationService.determinePickUpStatus(reservation))
-                        .storeImg(reservation.getStoreImg())
-                        .storeName(reservation.getStoreName())
-                        .reservationTime(reservation.getReservationTime())
-                        .pickupTime(reservation.getPickupTime())
-                        .pickedUpAt(reservation.getPickedUpAt())
-                        .nickname(reservation.getNickname())
-                        .cancelReservationAt(reservation.getCancelReservationAt())
-                        .customerId(reservation.getCustomerId())
-                        .price(reservation.getPrice())
-                        .build())
-                .collect(Collectors.toList());
-
-        for (ReservationDetailDto reservation : reservationList) {
-            log.info(reservation.toString());
+        reservations.forEach(reservation -> {
             if (reservation.getReservationTime() != null) {
                 reservation.setReservationTimeF(reservation.getReservationTime().format(formatter));
             }
@@ -98,8 +75,44 @@ public class CustomerMyPageService {
             if (reservation.getPickupTime() != null) {
                 reservation.setPickupTimeF(reservation.getPickupTime().format(formatter));
             }
-        }
-        return reservationList;
+        });
+        return reservations;
+    }
+
+
+    /**
+     * 고객 통계 정보를 가져오는 메서드
+     * @param customerId 고객 ID
+     * @return 고객 통계 정보 DTO
+     */
+    public StatsDto getStats(String customerId) {
+        List<ReservationDetailDto> reservations = customerMyPageRepository.findReservationsByCustomerId(customerId);
+
+        // 예약 내역 중 pickedUpAt이 null이 아닌 것들의 리스트
+        List<ReservationDetailDto> pickedUpReservations = reservations.stream()
+                .filter(reservation -> reservation.getPickedUpAt() != null)
+                .collect(Collectors.toList());
+
+        // pickedUpAt이 null이 아닌 것들의 개수
+        int total = pickedUpReservations.size();
+
+        // CO2 계산
+        double coTwo = total * 0.12;
+
+        // totalPrice 계산
+        int totalPrice = pickedUpReservations.stream()
+                .mapToInt(ReservationDetailDto::getPrice)
+                .sum();
+
+        // money 계산
+        int money = (int) (totalPrice * 0.7);
+
+        return StatsDto.builder()
+                .total(total)
+                .coTwo(coTwo)
+                .money(money)
+                .customerId(customerId)
+                .build();
     }
 
     public List<CustomerIssueDetailDto> getCustomerIssues(String customerId) {
@@ -184,35 +197,6 @@ public class CustomerMyPageService {
         String encodedPw = encoder.encode(newPassword);
         customerMyPageMapper.updateCustomerInfo(customerId,"customer_password", encodedPw);
         return true;
-    }
-
-    public StatsDto getStats(String customerId){
-        List<ReservationDetailDto> reservations = customerMyPageMapper.findReservations(customerId);
-
-        // 예약 내역 중 pickedUpAt이 null이 아닌 것들의 리스트
-        List<ReservationDetailDto> pickedUpReservations = reservations.stream()
-                .filter(reservation -> reservation.getPickedUpAt() != null)
-                .collect(Collectors.toList());
-
-        // pickedUpAt이 null이 아닌 것들의 개수
-        int total = pickedUpReservations.size();
-
-        // CO2 계산
-        double coTwo = total * 0.12;
-
-        // totalPrice 계산
-        int totalPrice = pickedUpReservations.stream()
-                .mapToInt(ReservationDetailDto::getPrice)
-                .sum();
-
-        // money 계산
-        int money = (int) (totalPrice * 0.7);
-
-        return StatsDto.builder()
-                .total(total)
-                .coTwo(coTwo)
-                .money(money)
-                .build();
     }
 
     public boolean updateProfileImg(String customerId, MultipartFile customerImg) {

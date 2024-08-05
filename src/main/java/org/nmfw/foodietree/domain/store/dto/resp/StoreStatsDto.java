@@ -13,4 +13,5 @@ public class StoreStatsDto {
     private int total;
     private double coTwo;
     private int customerCnt;
+    private String storeId;
 }

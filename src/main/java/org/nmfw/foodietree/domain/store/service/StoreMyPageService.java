@@ -119,6 +119,7 @@ public class StoreMyPageService {
                 .total(total)
                 .coTwo(coTwo)
                 .customerCnt(customerCnt)
+                .storeId(storeId)
                 .build();
     }
 

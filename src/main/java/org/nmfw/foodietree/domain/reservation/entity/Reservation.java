@@ -35,8 +35,4 @@ public class Reservation {
     @Column(name = "picked_up_at")
     private LocalDateTime pickedUpAt;
 
-//    @Setter
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "status")
-//    private ReservationStatus status;
 }

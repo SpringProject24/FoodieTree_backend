@@ -2,11 +2,14 @@ package org.nmfw.foodietree.domain.store.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.customer.dto.resp.UpdateDto;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
+import org.nmfw.foodietree.domain.store.service.StoreMyPageEditService;
 import org.nmfw.foodietree.domain.store.service.StoreMyPageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +21,7 @@ import java.util.Map;
 public class StoreMyPageController {
 
     private final StoreMyPageService storeMyPageService;
+    private final StoreMyPageEditService storeMyPageEditService;
 
     // 하드코딩된 storeId
     private final String storeId = "thdghtjd115@naver.com";
@@ -168,21 +172,6 @@ public class StoreMyPageController {
     }
 
     /**
-     * 특정 날짜가 휴무일인지 확인하는 POST 요청 처리
-     * @param requestBody 확인할 날짜를 포함한 요청 본문
-     * @return 해당 날짜가 휴무일인지 여부를 나타내는 boolean 값
-     */
-    @PostMapping("/calendar/check/holiday")
-    public ResponseEntity<?> checkHoliday(@RequestBody Map<String, String> requestBody) {
-        String date = requestBody.get("date");
-        log.info("check holiday");
-        // String storeId = getStoreIdFromToken(); // 주석처리된 부분
-        boolean isHoliday = storeMyPageService.checkHoliday(storeId, date);
-        log.info("isHoliday = " + isHoliday);
-        return ResponseEntity.ok().body(isHoliday);
-    }
-
-    /**
      * 특정 날짜의 픽업 시간을 설정하는 POST 요청 처리
      * @param requestBody 설정할 픽업 시간을 포함한 요청 본문
      * @return 성공 여부에 따라 HTTP 상태 코드 반환
@@ -198,15 +187,43 @@ public class StoreMyPageController {
     }
 
     /**
-     * 특정 일자의 픽업 완료된 랜덤박스 개수를 가져오는 GET 요청 처리
-     * @param dateString 특정 일자
-     * @return 픽업 완료된 랜덤박스 개수
+     *
+     * @method   updateStoreInfo
+     * @param    dto
+     * @return   ResponseEntity<?> type
+     * @author   hoho
+     * @date     2024 07 25 16:26
+     *
+     * {
+     *     type: price / openAt / closedAt / productCnt / business_number
+     *     value: String
+     * }
+     *
      */
-    @GetMapping("/countPickedUpProducts/{dateString}")
-    public ResponseEntity<Integer> countPickedUpProductsByDate(@PathVariable String dateString) {
-        log.info("Counting picked up products for date: {}", dateString);
-        // String storeId = getStoreIdFromToken(); // 토큰정보 사용 시 주석 해제
-        int count = storeMyPageService.countPickedUpProductsByDate(storeId, dateString);
-        return ResponseEntity.ok().body(count);
+    @PatchMapping("/edit")
+    public ResponseEntity<?> updateStoreInfo(@RequestBody UpdateDto dto) {
+        String storeId = "thdghtjd115@naver.com";
+        boolean flag = storeMyPageEditService.updateStoreInfo(storeId, dto.getType(), dto.getValue());
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
+    }
+
+    /**
+     *
+     * @method   updateProfileImage
+     * @param    storeImg
+     * @return   ResponseEntity<?> type
+     * @author   hoho
+     * @date     2024 07 25 17:14
+     *
+     */
+    @PostMapping("/edit/img")
+    public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg) {
+        String storeId = "thdghtjd115@naver.com";
+        boolean flag = storeMyPageEditService.updateProfileImg(storeId, storeImg);
+        if (flag)
+            return ResponseEntity.ok().body(true);
+        return ResponseEntity.badRequest().body(false);
     }
 }
