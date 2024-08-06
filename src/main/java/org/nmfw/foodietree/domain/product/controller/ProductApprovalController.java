@@ -9,6 +9,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.NoSuchElementException;
+
 
 @RestController
 @RequestMapping("/store")
@@ -37,9 +39,10 @@ public class ProductApprovalController {
                     dto
 //                    , userInfo
             );
-        } catch (Exception e) { // 등록 요청 실패, 예외처리 보완 필요
+        } catch (NoSuchElementException e) { // 등록 요청 실패, 예외처리 보완 필요
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
-//            throw new RuntimeException(e);
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
 

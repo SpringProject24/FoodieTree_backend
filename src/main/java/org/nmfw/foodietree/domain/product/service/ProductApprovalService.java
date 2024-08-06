@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 @Transactional
 public class ProductApprovalService {
 
-    private final ProductRepository productRepository;
     @Value("${file.upload.root-path}")
     private String rootPath;
 

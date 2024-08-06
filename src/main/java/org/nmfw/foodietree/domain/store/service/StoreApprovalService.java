@@ -16,7 +16,6 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class StoreApprovalService {
 
-    //    private final StoreApprovalMapper storeApprovalMapper;
     private final StoreApprovalRepository storeApprovalRepository;
     private final StoreRepository storeRepository;
 
@@ -43,13 +42,23 @@ public class StoreApprovalService {
         log.debug("saved storeApproval: {}", saved);
     }
 
+    // 가게 등록 요청 중 사업자등록번호 검증
+    public void verifyLicenses() {
+//        storeApprovalRepository.
+    }
+
     // 가게 등록 요청이 승인되면 tbl_store에 저장
     public void sendStoreInfo(
             StoreApproval sa
     ) {
-        Store updatedStore = sa.updateFromStoreApproval();
-        Store saved = storeRepository.save(updatedStore);
-        log.info("saved store: {}", saved);
+        Store foundStore = storeRepository.findByStoreId(sa.getStoreId())
+                .orElseThrow(()->new NoSuchElementException("가입한 계정이 아닙니다."));
+
+        Store updatedStore = sa.updateFromStoreApproval(foundStore);
+
+//        Store updatedStore = sa.updateFromStoreApproval();
+//        Store saved = storeRepository.save(updatedStore);
+        log.info("saved store: {}", updatedStore);
 
     }
 }
