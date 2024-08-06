@@ -11,7 +11,10 @@ import org.nmfw.foodietree.domain.auth.security.CodeGenerator;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
+import org.nmfw.foodietree.domain.store.entity.Store;
+import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
 import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
+import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -33,6 +37,7 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final EmailMapper emailMapper;
+    private final StoreRepository storeRepository;
 
     private final TokenProvider tokenProvider;
 
