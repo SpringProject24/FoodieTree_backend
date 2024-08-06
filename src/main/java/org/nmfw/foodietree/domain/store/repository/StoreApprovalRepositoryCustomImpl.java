@@ -2,9 +2,12 @@ package org.nmfw.foodietree.domain.store.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.product.entity.QProductApproval;
+import org.nmfw.foodietree.domain.store.dto.resp.ApprovalListDto;
 import org.nmfw.foodietree.domain.store.entity.QStoreApproval;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static org.nmfw.foodietree.domain.product.entity.QProductApproval.*;
 import static org.nmfw.foodietree.domain.store.entity.QStoreApproval.*;
 
 @Repository
@@ -25,18 +29,46 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
 
     private final JPAQueryFactory factory;
 
-    @Override // 등록 요청 처리 상태에 따라 목록 조회
-    public Page<StoreApproval> findStoreApprovals(
-            Pageable pageable, String sort, String storeId
+    @Override // 등록 요청 처리 상태에 따라 목록 조회 (가게 + 상품)
+    public Page<ApprovalListDto> findApprovalsByStatus(
+            // Pageable, String sort, ApproveStatus status
+            Pageable pageable, ApproveStatus status
     ) {
 
+        // status 따라 요청 목록 조회할 수 있도록 동적 쿼리 사용
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        // status 따라 요청 목록 조회할 수 있도록 booleanBuilder 추가 필요
+        if(status == ApproveStatus.PENDING) {
+            booleanBuilder.and(storeApproval.status.eq(ApproveStatus.PENDING));
+        }
+        if(status == ApproveStatus.APPROVED) {
+            booleanBuilder.and(storeApproval.status.eq(ApproveStatus.APPROVED));
+        }
+        if(status == ApproveStatus.REJECTED) {
+            booleanBuilder.and(storeApproval.status.eq(ApproveStatus.REJECTED));
+        }
 
-        List<StoreApproval> storeApprovals = factory
-                .selectFrom(storeApproval)
-                .where(storeApproval.status.eq(ApproveStatus.PENDING))
-                .orderBy(specifier(sort))
+        List<ApprovalListDto> list = factory
+                .select(Projections.bean(
+                        ApprovalListDto.class,
+                        storeApproval.id.as("storeApprovalId"),
+                        storeApproval.storeId.as("storeId"),
+                        storeApproval.name.as("name"),
+                        storeApproval.contact.as("contact"),
+                        storeApproval.address.as("address"),
+                        storeApproval.status.as("status"),
+                        storeApproval.category.as("category"),
+                        storeApproval.license.as("license"),
+                        storeApproval.licenseVerification.as("licenseVerification"),
+                        storeApproval.createdAt.as("createdAt"),
+                        productApproval.id.as("productApprovalId"),
+                        productApproval.productCnt.as("productCnt"),
+                        productApproval.price.as("price"),
+                        productApproval.proImage.as("proImage")
+                        ))
+                .from(storeApproval)
+                .innerJoin(productApproval).on(productApproval.storeId.eq(storeApproval.storeId))
+                .where(booleanBuilder)
+//                .orderBy(specifier(sort))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -45,10 +77,21 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
         Long count = factory
                 .select(storeApproval.count())
                 .from(storeApproval)
+                .innerJoin(productApproval).on(productApproval.storeId.eq(storeApproval.storeId))
                 .where(storeApproval.status.eq(ApproveStatus.PENDING))
                 .fetchOne();
 
-        return new PageImpl<>(storeApprovals, pageable, count);
+        if(count == null) count = 0L;
+
+        return new PageImpl<>(list, pageable, count);
+    }
+
+    @Override // 사업자등록번호 검증하지 않은 요청 리스트 조회
+    public List<StoreApproval> findApprovalsByLicenseVerification() {
+
+
+
+        return List.of();
     }
 
     // 정렬 조건을 처리하는 메서드
@@ -64,4 +107,6 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
                 return null;
         }
     }
+
+
 }
