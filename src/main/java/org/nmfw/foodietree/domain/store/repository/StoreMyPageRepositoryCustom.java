@@ -40,9 +40,9 @@ public interface StoreMyPageRepositoryCustom {
 
     List<StoreCheckDto> getAllStore();
 
-    List<StoreHolidayDto> getHolidays(@Param("storeId") String storeId);
+//    List<StoreHolidayDto> getHolidays(@Param("storeId") String storeId);
 
-//    List<ProductInfoDto> getProductCntByDate(@Param("storeId") String storeId, @Param("date") String date);
+    List<ProductInfoDto> getProductCntByDate(@Param("storeId") String storeId, @Param("date") String date);
 
     /**
      * 특정 일자의 픽업 완료된 랜덤박스 개수를 가져오는 메서드

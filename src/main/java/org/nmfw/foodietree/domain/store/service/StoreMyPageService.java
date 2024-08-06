@@ -88,7 +88,7 @@ public class StoreMyPageService {
         }
         StoreMyPageCalendarModalDto dto = list.get(0);
 
-        List<ProductInfoDto> productCntByDate = storeMyPageMapper.getProductCntByDate(storeId, date);
+        List<ProductInfoDto> productCntByDate = storeMyPageRepository.getProductCntByDate(storeId, date);
         int tpuc = productCntByDate.stream()
                 .filter(product -> product.getPickedUpAt() != null && product.getReservationTime() != null && product.getCancelReservationAt() == null)
                 .collect(Collectors.toList())
@@ -199,7 +199,7 @@ public class StoreMyPageService {
         int productCnt = storeMyPageInfo.getProductCnt();
 
         LocalDate today = LocalDate.now();
-        List<ProductInfoDto> dto = storeMyPageMapper.getProductCntByDate(storeId, today.toString());
+        List<ProductInfoDto> dto = storeMyPageRepository.getProductCntByDate(storeId, today.toString());
         int todayProductCnt = dto.size();
         int todayPickedUpCnt = dto.stream()
                 .filter(product -> product.getPickedUpAt() != null && product.getReservationTime() != null)
@@ -238,7 +238,7 @@ public class StoreMyPageService {
             storeMyPageMapper.updateProductAuto(storeId, pickupTime);
         }
 
-        List<ProductInfoDto> dto = storeMyPageMapper.getProductCntByDate(storeId, today.toString());
+        List<ProductInfoDto> dto = storeMyPageRepository.getProductCntByDate(storeId, today.toString());
         // true false 뭐로 반환할지 생각좀...
         return true;
     }
