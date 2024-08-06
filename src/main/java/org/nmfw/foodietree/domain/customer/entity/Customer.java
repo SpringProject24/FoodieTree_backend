@@ -29,12 +29,15 @@ public class Customer {
     @Column(name = "customer_password")
     private String customerPassword;
 
+    @Setter
     @Column(name = "nickname")
     private String nickname;
 
+    @Setter
     @Column(name = "customer_phone_number")
     private String customerPhoneNumber;
 
+    @Setter
     @Column(name = "profile_image")
     private String profileImage;
 

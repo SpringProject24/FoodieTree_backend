@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import static org.nmfw.foodietree.domain.customer.entity.QFavArea.favArea;
 
 //@Getter @Setter
 //@ToString

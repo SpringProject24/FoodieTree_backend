@@ -1,10 +1,8 @@
 package org.nmfw.foodietree.domain.customer.service;
 
-import com.querydsl.core.types.Projections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.*;
-import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.entity.CustomerIssues;
 import org.nmfw.foodietree.domain.customer.entity.FavArea;
 import org.nmfw.foodietree.domain.customer.entity.FavFood;
@@ -52,7 +50,6 @@ public class CustomerMyPageService {
     private final CustomerMyPageRepository customerMyPageRepository;
     private final CustomerEditRepository customerEditRepository;
     private final FavFoodRepository favFoodRepository;
-	private final FavAreaRepository favAreaRepository;
 	private final FavStoreRepository favStoreRepository;
 
     @Value("${env.upload.path}")
