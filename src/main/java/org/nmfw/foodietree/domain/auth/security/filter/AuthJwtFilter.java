@@ -45,7 +45,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
         // 우회할 경로 설정 (여기에 permitAll 경로를 추가)
         String requestURI = request.getRequestURI();
         if (requestURI.startsWith("/storeLists")) {
-            log.info("requestURI 경로 우회애애애애애{}", requestURI);
+            log.info("requestURI 경로 우회 {}", requestURI);
             // 이 경로는 필터를 통과하도록 설정
             filterChain.doFilter(request, response);
             return;
@@ -60,26 +60,32 @@ public class AuthJwtFilter extends OncePerRequestFilter {
                 try {
                     TokenUserInfo tokenInfo = tokenProvider.validateAndGetTokenInfo(token);
                     setAuthenticationContext(request, tokenInfo);
+                    log.info("필터 통과 ✅");
                 } catch (JwtException e) {
                     log.warn("Access token is not valid or expired. Attempting to verify refresh token.");
+                    log.info("access token 만료되어도 괜찮아 ✅");
 
                     if (refreshToken != null) {
                         try {
                             TokenUserInfo refreshTokenInfo = tokenProvider.validateAndGetRefreshTokenInfo(refreshToken);
                             handleRefreshToken(request, response, refreshTokenInfo);
+                            log.info("refresh token 기간 안 ✅");
                         } catch (JwtException ex) {
                             log.error("Refresh token parsing error: {}", ex.getMessage());
+                            log.info("refresh token 기간 지나거나 위조됨 ❌");
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.getWriter().write("Invalid refresh token");
                             return;
                         }
                     } else {
+                        log.info("refresh token 삭제됨 ❌");
                         log.warn("No refresh token provided.");
                     }
                 }
             }
 
         } catch (Exception e) {
+            log.info("refresh token, access token 유효성 검증 통과 둘다 못함 ❌");
             log.warn("Token validation error");
             e.printStackTrace();
         }
