@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.customer.service;
 
+import com.querydsl.core.types.Projections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.*;
@@ -46,6 +47,8 @@ public class CustomerMyPageService {
     private final PasswordEncoder encoder;
     private final ReservationService reservationService;
 
+    private final FavAreaRepository favAreaRepository;
+
     private final CustomerMyPageRepository customerMyPageRepository;
     private final CustomerEditRepository customerEditRepository;
     private final FavFoodRepository favFoodRepository;
@@ -57,6 +60,7 @@ public class CustomerMyPageService {
 
     /**
      * 고객 정보를 가져오는 메서드
+     *
      * @param customerId 고객 ID
      * @return 고객 정보 DTO
      */
@@ -68,6 +72,7 @@ public class CustomerMyPageService {
 
     /**
      * 고객의 예약 목록을 가져오는 메서드
+     *
      * @param customerId 고객 ID
      * @return 고객 예약 목록 DTO 리스트
      */
@@ -94,6 +99,7 @@ public class CustomerMyPageService {
 
     /**
      * 고객 통계 정보를 가져오는 메서드
+     *
      * @param customerId 고객 ID
      * @return 고객 통계 정보 DTO
      */
@@ -146,13 +152,14 @@ public class CustomerMyPageService {
     /**
      * 이슈가 해결되어 시간이 있다면 -> Solved(해결완료)
      * 접수된 시간이 있다면 -> INPROGRESS(진행중)
+     *
      * @param issueCompleteAt : 이슈가 해결된 시간
      * @return Status enum
      */
     private IssueStatus checkIssueStatus(LocalDateTime issueCompleteAt) {
         if (issueCompleteAt == null) {
             return INPROGRESS;
-        }else{
+        } else {
             return SOLVED;
         }
     }
@@ -184,8 +191,7 @@ public class CustomerMyPageService {
 					.build();
 				favStoreRepository.save(build);
                 return true;
-            }
-            else{
+            } else {
                 customerMyPageMapper.updateCustomerInfo(customerId, type, value);
                 return true;
             }
@@ -200,15 +206,15 @@ public class CustomerMyPageService {
 
             log.info("delete type: {}, target: {}", type, target);
 
-            if("preferredFood".equals(type)) {
+            if ("preferredFood".equals(type)) {
                 customerMyPageMapper.deletePreferenceFood(customerId, target);
                 return true;
             }
-            if("preferredArea".equals(type)) {
+            if ("preferredArea".equals(type)) {
                 customerMyPageMapper.deletePreferenceArea(customerId, target);
                 return true;
             }
-            if("favStore".equals(type)) {
+            if ("favStore".equals(type)) {
                 customerMyPageMapper.deleteFavStore(customerId, target);
                 return true;
             }
@@ -218,7 +224,7 @@ public class CustomerMyPageService {
 
     public boolean updateCustomerPw(String customerId, String newPassword) {
         String encodedPw = encoder.encode(newPassword);
-        customerMyPageMapper.updateCustomerInfo(customerId,"customer_password", encodedPw);
+        customerMyPageMapper.updateCustomerInfo(customerId, "customer_password", encodedPw);
         return true;
     }
 
@@ -241,5 +247,53 @@ public class CustomerMyPageService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean updateCustomerAreaInfo(String customerId, UpdateAreaDto dto) {
+        String preferredArea = dto.getPreferredArea();
+        String alias = dto.getAlias();
+
+        try {
+            favAreaRepository.save(FavArea.builder()
+                    .customerId(customerId)
+                    .preferredArea(preferredArea)
+                    .alias(alias)
+                    .build()
+            );
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteCustomerAreaInfo(String customerId, UpdateAreaDto dto) {
+
+        String preferredArea = dto.getPreferredArea();
+        String alias = dto.getAlias();
+//            favAreaRepository.delete(FavArea.builder()
+//                    .customerId(customerId)
+//                    .preferredArea(preferredArea)
+//                    .alias(alias)
+//                    .build()
+//            );
+        log.info("deleteCustomerAreaInfo customerId: {}, preferredArea: {}, alias: {}", customerId, preferredArea, alias);
+        try {
+            favAreaRepository.deleteByCustomerIdAndPreferredAreaAndAlias(customerId, preferredArea, alias);
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<UpdateAreaDto> getFavArea(String customerId) {
+        return favAreaRepository.findByCustomerId(customerId).stream()
+                .map(favArea -> UpdateAreaDto.builder()
+                        .preferredArea(favArea.getPreferredArea())
+                        .alias(favArea.getAlias())
+                        .build()
+                ).collect(Collectors.toList());
     }
 }

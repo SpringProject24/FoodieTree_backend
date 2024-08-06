@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class ProductApprovalDto {
 
-    private int productId;
+    private long productId;
     private String storeId;
     private MultipartFile proImage;
     private StoreCategory category;

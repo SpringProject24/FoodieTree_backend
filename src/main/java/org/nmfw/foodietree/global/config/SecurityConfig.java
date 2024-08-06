@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthJwtFilter authJwtFilter;
 
+    // 권한설정이야...
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -25,8 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안 함
                 .and()
                 .authorizeRequests()
-//                .antMatchers("/reservation/**").authenticated() // 특정 경로에만 필터 적용
-                .anyRequest().permitAll(); // 나머지 경로는 인증 불필요
+
+                .anyRequest().permitAll();
 
         // JwtAuthFilter를 UsernamePasswordAuthenticationFilter 전에 실행하도록 설정
         http.addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class);

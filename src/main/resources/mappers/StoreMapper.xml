@@ -24,9 +24,7 @@
   </insert>
 
   <select id="findOne" resultType="store">
-    SELECT
-      store_id,
-      password
+    SELECT *
     FROM tbl_store
     WHERE store_id = #{storeId}
   </select>

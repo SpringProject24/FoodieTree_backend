@@ -14,7 +14,6 @@ import java.util.List;
 
 @Getter @Setter
 @ToString(exclude = {"products"})
-//@EqualsAndHashCode(of = "storeId")
 @EqualsAndHashCode(of = "idxStoreId")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -68,19 +67,35 @@ public class Store {
     private String storeLicenseNumber; // 사업자번호
 
     @Column(name = "open_at")
-    private LocalTime openAt; // 오픈시간
+    private LocalTime openAt; // 가게 오픈시간
 
     @Column(name = "closed_at")
-    private LocalTime closedAt; // 마감시간
+    private LocalTime closedAt; // 가게 마감시간
+
+    @Column(name = "pickup_open_at")
+    private LocalTime pickupOpenAt; // 픽업 시작 시간
+
+    @Column(name = "pickup_closed_at")
+    private LocalTime pickupClosedAt; // 픽업 종료 시간
 
     @Column(name = "limit_time")
     private LocalDateTime limitTime; // 제한시간
+
+    @Column(name = "refresh_token_expire_date")
+    private LocalDateTime refreshTokenExpireDate;
+
+    @Column(name = "user_type")
+    private String userType;
+
+    @Column(name = "email_verified", nullable = true)
+    private Boolean emailVerified;
   
     @OneToMany(mappedBy = "store",
             fetch = FetchType.LAZY,
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
     )
+    @Builder.Default
     private List<Product> products = new ArrayList<>();  // products 연관관계
 
     // 연관된 product 추가 메서드

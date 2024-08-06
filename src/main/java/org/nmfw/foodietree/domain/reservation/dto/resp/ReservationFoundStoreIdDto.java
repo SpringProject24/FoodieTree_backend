@@ -13,5 +13,5 @@ import lombok.extern.slf4j.Slf4j;
 public class ReservationFoundStoreIdDto {
     private String storeId;
     private Long productId;
-    private Long secLeft;
+//    private Long secLeft;
 }
