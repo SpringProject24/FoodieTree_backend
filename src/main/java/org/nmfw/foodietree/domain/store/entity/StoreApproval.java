@@ -57,17 +57,20 @@ public class StoreApproval {
     @Column(name = "store_approval_email", nullable = false)
     private String storeId; // 가게 회원의 이메일
 
-    // StoreApproval 정보를 업데이트한 Store
-    public Store updateFromStoreApproval() {
-        return Store.builder()
-                .storeId(storeId)
-                .category(category)
-                .address(address)
-                .approve(status)
-                .storeContact(contact)
-                .storeName(name)
-                .storeLicenseNumber(license)
-                .build();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "license_verification") // 사업자등록번호 검증 상태
+    @Builder.Default
+    private ApproveStatus licenseVerification = ApproveStatus.PENDING;
+
+    // StoreApproval 정보를 업데이트한 Store 리턴
+    public Store updateFromStoreApproval(Store store) {
+        store.setCategory(category);
+        store.setAddress(address);
+        store.setApprove(status);
+        store.setStoreContact(contact);
+        store.setStoreName(name);
+        store.setStoreLicenseNumber(license);
+        return store;
     }
 
 }

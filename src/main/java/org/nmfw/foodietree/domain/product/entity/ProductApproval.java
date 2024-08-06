@@ -2,9 +2,7 @@ package org.nmfw.foodietree.domain.product.entity;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
 
 import javax.persistence.*;
@@ -32,7 +30,7 @@ public class ProductApproval {
     private String proImage; // 상품 이미지 경로
 
     @Column(name = "product_approval_amount", nullable = false)
-    private int productCnt;  // 상품 수량
+    private Integer productCnt;  // 상품 수량
     @Column(name = "product_approval_price", nullable = false)
     private Integer price;  // 상품 가격
 
