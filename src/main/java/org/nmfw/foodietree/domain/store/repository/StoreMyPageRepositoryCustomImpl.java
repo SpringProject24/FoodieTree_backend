@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -106,13 +105,11 @@ public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCus
                 .fetch();
     }
 
+    @Override
+    public void updateProductAuto(String storeId, String pickupTime) {
+        // productRepository 의 save 로 구현
+    }
 
-//    @Override
-//    @Transactional
-//    public void updateProductAuto(String storeId, LocalDate pickupTime) {
-//        // Implement updateProductAuto using QueryDSL if needed
-//    }
-//
 //    @Override
 //    @Transactional
 //    public void cancelProductByStore(String storeId, LocalDate pickupTime) {
