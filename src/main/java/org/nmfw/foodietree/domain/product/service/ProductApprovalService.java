@@ -44,7 +44,6 @@ public class ProductApprovalService {
           .findByStoreId(storeId)
           .orElseThrow(() -> new NoSuchElementException("가입하지 않은 계정입니다."));
 
-
         // 이미지 파일 저장 및 경로 문자열로 반환
         MultipartFile file = dto.getProductImage();
         String productImage = null;

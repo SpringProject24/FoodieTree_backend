@@ -20,7 +20,12 @@ public class LicenseService {
     @Value("${license.enc}")
     private String licenseEncKey;
 
-    public LicenseResDto postLicense() {
+    /**
+     * 유효한 사업자등록번호인지 공공데이터 API 조회
+     * @param arr - 사업자등록번호만 담은 String 배열
+     * @return LicenseResDto - HTTP, 총 조회결과, 사업자등록번호별 상태조회 (List<LicenseDto>)
+     */
+    public LicenseResDto verifyLicensesByOpenApi(String[] arr) {
 
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory();
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE);
@@ -34,7 +39,7 @@ public class LicenseService {
                 + licenseEncKey;
 
         // StoreApproval PENDING 상태인 사업자등록번호 조회하도록 수정 필요
-        String[] arr = {"1234567891", "1141916588", "2744700926", "8781302319"};
+//        String[] arr = {"1234567891", "1141916588", "2744700926", "8781302319"};
         // 사업자등록번호 예시 중 첫번째를 제외하고 계속사업자로 조회되어야 정상
 
         Map<String, Object> requestBody = new HashMap<>();
@@ -49,7 +54,7 @@ public class LicenseService {
                 .block();
     }
     /*
-        postLicense 응답 예시
+        verifyLicensesByOpenApi 응답 예시
         {
           "status_code": "OK",
           "match_cnt": 3,

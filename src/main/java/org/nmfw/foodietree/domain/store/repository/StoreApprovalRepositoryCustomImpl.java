@@ -6,17 +6,15 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.product.entity.QProductApproval;
 import org.nmfw.foodietree.domain.store.dto.resp.ApprovalListDto;
-import org.nmfw.foodietree.domain.store.entity.QStoreApproval;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.nmfw.foodietree.domain.product.entity.QProductApproval.*;
@@ -86,12 +84,19 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
         return new PageImpl<>(list, pageable, count);
     }
 
-    @Override // 사업자등록번호 검증하지 않은 요청 리스트 조회
+    @Override // 사업자등록번호 검증하지 않은 요청 목록 조회
     public List<StoreApproval> findApprovalsByLicenseVerification() {
 
+        // 어제 이후 요청
+        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+//        LocalDateTime startOfToday = LocalDateTime.now().with(LocalDate.MIN);
 
-
-        return List.of();
+        return factory
+                .selectFrom(storeApproval)
+                .where(storeApproval.licenseVerification.eq(ApproveStatus.PENDING)
+                    .and(storeApproval.createdAt.after(yesterday)))
+                .limit(100)
+                .fetch();
     }
 
     // 정렬 조건을 처리하는 메서드
