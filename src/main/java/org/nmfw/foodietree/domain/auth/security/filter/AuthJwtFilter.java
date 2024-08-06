@@ -42,15 +42,6 @@ public class AuthJwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        // 우회할 경로 설정 (여기에 permitAll 경로를 추가)
-        String requestURI = request.getRequestURI();
-        if (requestURI.startsWith("/storeLists")) {
-            log.info("requestURI 경로 우회 {}", requestURI);
-            // 이 경로는 필터를 통과하도록 설정
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         try {
             String token = parseBearerToken(request);
             String refreshToken = request.getHeader("refreshToken");
