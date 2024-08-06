@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthJwtFilter authJwtFilter;
 
+    // 권한설정이야...
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -28,6 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/reservation/**").authenticated()
                 .antMatchers("/customer/myFavMap").authenticated()
+                // 유저 정보 필요없는 uri는 dofilterinternal으로만 바로 검증 후 통과
+                .antMatchers("/storeLists/**").permitAll()
                 .anyRequest().permitAll();
 
         // JwtAuthFilter를 UsernamePasswordAuthenticationFilter 전에 실행하도록 설정
