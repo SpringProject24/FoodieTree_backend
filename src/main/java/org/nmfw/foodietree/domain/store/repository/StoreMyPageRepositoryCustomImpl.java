@@ -122,8 +122,8 @@ public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCus
         return factory.select(Projections.constructor(StoreCheckDto.class,
                         qStore.storeId,
                         qStore.storeName,
+//                        qStore.pickupTime,
                         qStore.productCnt,
-                        qStore.openAt,
                         qStore.closedAt))
                 .from(qStore)
                 .fetch();
