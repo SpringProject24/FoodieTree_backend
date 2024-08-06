@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.store.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
+import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 import org.nmfw.foodietree.domain.store.service.StoreList.StoreListService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,7 +33,8 @@ public class StoreListController {
     // 카테고리 별 Store 조회 요청!
     @GetMapping("/category")
     public ResponseEntity<List<StoreListDto>> getStoresByCategory(@RequestParam("category") String category) {
-        List<StoreListDto> storeListDto = storeListService.getStoresByCategory(category);
+        StoreCategory storeCategory = StoreCategory.valueOf(category.toUpperCase());
+        List<StoreListDto> storeListDto = storeListService.getStoresByCategory(storeCategory);
         return ResponseEntity.ok().body(storeListDto);
     }
 }
