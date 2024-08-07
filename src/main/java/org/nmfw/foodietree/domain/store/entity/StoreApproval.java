@@ -47,6 +47,16 @@ public class StoreApproval {
     @Builder.Default       // 등록 요청 상태
     private ApproveStatus status = ApproveStatus.PENDING;
 
+    @Setter
+    @Column(name = "store_approval_image", nullable = false)
+    private String proImage; // 상품 이미지 경로
+
+    @Column(name = "store_approval_amount", nullable = false)
+    private Integer productCnt;  // 상품 수량
+
+    @Column(name = "store_approval_price", nullable = false)
+    private Integer price;  // 상품 가격
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt; // 생성시간
@@ -70,6 +80,8 @@ public class StoreApproval {
         store.setStoreContact(contact);
         store.setStoreName(name);
         store.setStoreLicenseNumber(license);
+        store.setProductCnt(productCnt);
+        store.setPrice(price);
         return store;
     }
 

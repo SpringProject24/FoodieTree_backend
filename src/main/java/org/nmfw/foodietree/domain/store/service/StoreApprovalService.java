@@ -2,6 +2,8 @@ package org.nmfw.foodietree.domain.store.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.product.Util.FileUtil;
+import org.nmfw.foodietree.domain.store.dto.request.ProductApprovalReqDto;
 import org.nmfw.foodietree.domain.store.dto.request.StoreApprovalReqDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
@@ -11,51 +13,87 @@ import org.nmfw.foodietree.domain.store.openapi.LicenseResDto;
 import org.nmfw.foodietree.domain.store.openapi.LicenseService;
 import org.nmfw.foodietree.domain.store.repository.StoreApprovalRepository;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+
+import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class StoreApprovalService {
 
+    @Value("${file.upload.root-path}")
+    private String rootPath;
+
     private final StoreApprovalRepository storeApprovalRepository;
     private final StoreRepository storeRepository;
     private final LicenseService licenseService;
 
     // 등록 요청 내역을 tbl_store_approval에 저장
-    public void askStoreApproval(
+    public StoreApproval askStoreApproval(
             StoreApprovalReqDto dto
-//            , String storeId
-//           , TokenUserInfo userInfo
+           , TokenUserInfo userInfo
     ) {
         // userInfo storeId로 Store
-//        Store foundStore = storeRepository
-//                .findById(userInfo.getUserId())
-//                .orElseThrow(throw new NoSuchElementException());
+        if(!userInfo.getRole().equals("STORE")) {
+            throw new NoSuchElementException("가입한 계정이 아닙니다.");
+        }
+        String storeId = userInfo.getEmail();
+        log.debug("등록요청 가게: {}", storeId);
 
-        // 테스트용으로 storeId = 'test@test.com'
-        String storeId = "test@test.com";
-        Store foundStore = storeRepository
-                .findByStoreId(storeId)
-                .orElseThrow(() -> new NoSuchElementException("가입한 계정이 아닙니다."));
-        log.debug("등록요청: 가게 foundStore: {}", foundStore);
+        // 테스트용
+//        List<Store> all = storeRepository.findAll();
+//        int idx = (int) Math.floor(Math.random() * all.size());
+//        String storeId = all.get(idx).getStoreId();
 
-        StoreApproval storeApproval = dto.toEntity();
+        StoreApproval storeApproval = dto.toEntityForStoreDetail();
         storeApproval.setStoreId(storeId);
         StoreApproval saved = storeApprovalRepository.save(storeApproval);
-        log.debug("saved storeApproval: {}", saved);
+        log.debug("saved storeApproval - storeDetail: {}", saved);
+        return saved;
     }
+
+    // 상품 디테일 tbl_store_approval 업데이트
+    public void askProductApproval(
+            ProductApprovalReqDto dto
+            , TokenUserInfo userInfo
+    ) {
+        // userInfo에서 storeId 찾기
+        String storeId = userInfo.getEmail();
+
+        // 이미지 파일 저장 및 경로 문자열로 반환
+        MultipartFile file = dto.getProductImage();
+//        String productImage = null;
+        String productImage = "/test";
+        if (file != null && !file.isEmpty()) {
+            productImage = FileUtil.uploadFile(rootPath, file);
+        }
+
+        // StoreApproval 상품 디테일 업데이트
+        StoreApproval entity = storeApprovalRepository.findByStoreId(storeId);
+        entity.setPrice(dto.getPrice());
+        entity.setProductCnt(dto.getProductCnt());
+        entity.setProImage(productImage);
+
+        // repository 저장
+        StoreApproval saved = storeApprovalRepository.save(entity);
+        log.info("saved StoreApproval - productDetail: {}", saved);
+    }
+
+
 
     // 가게 승인 요청 대기 중이면 사업자등록번호 검증
 //    @Scheduled(fixedRate = 180000) // 3분마다 스케줄 실행
     public void verifyLicenses() {
         List<StoreApproval> noVerifiedList
                 = storeApprovalRepository.findApprovalsByLicenseVerification();
+        log.debug("\n승인 대기 리스트 {}", noVerifiedList);
 
         // API 요구대로 List를 사업자등록번호만 담은 Array로 변환
         String[] array = noVerifiedList.stream()
@@ -86,15 +124,36 @@ public class StoreApprovalService {
 
     // 가게 등록 요청이 승인되면 tbl_store에 저장
     public void sendStoreInfo(
-            StoreApproval sa
+            String storeId,
+            TokenUserInfo userInfo
     ) {
-        Store foundStore = storeRepository.findByStoreId(sa.getStoreId())
-                .orElseThrow(()->new NoSuchElementException("가입한 계정이 아닙니다."));
+        // 관리자가 아닌 경우 BadRequest
+        if(!userInfo.getRole().equals("ADMIN")) {
+            throw new RuntimeException("관리자 권한이 없습니다.");
+        }
 
-        Store updatedStore = sa.updateFromStoreApproval(foundStore);
+        StoreApproval foundApproval = storeApprovalRepository.findByStoreId(storeId);
 
-//        Store updatedStore = sa.updateFromStoreApproval();
-//        Store saved = storeRepository.save(updatedStore);
-        log.info("saved store: {}", updatedStore);
+        Store foundStore = storeRepository.findByStoreId(foundApproval.getStoreId())
+                .orElseThrow(()->new NoSuchElementException("존재하지 않는 스토어입니다."));
+
+        Store updatedStore = foundApproval.updateFromStoreApproval(foundStore);
+
+        Store saved = storeRepository.save(updatedStore);
+        log.info("saved store: {}", saved);
     }
+
+//    // 가게 등록 요청이 승인되면 tbl_store에 저장
+//    public void sendStoreInfo(
+//            StoreApproval sa
+//    ) {
+//        Store foundStore = storeRepository.findByStoreId(sa.getStoreId())
+//                .orElseThrow(()->new NoSuchElementException("가입한 계정이 아닙니다."));
+//
+//        Store updatedStore = sa.updateFromStoreApproval(foundStore);
+//
+////        Store updatedStore = sa.updateFromStoreApproval();
+//        Store saved = storeRepository.save(updatedStore);
+//        log.info("saved store: {}", saved);
+//    }
 }

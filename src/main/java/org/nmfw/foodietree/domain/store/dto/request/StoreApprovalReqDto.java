@@ -35,7 +35,7 @@ public class StoreApprovalReqDto {
     private String category;
 
 
-    public StoreApproval toEntity() {
+    public StoreApproval toEntityForStoreDetail() {
 
         return  StoreApproval.builder()
                 .license(storeLicenseNumber)
