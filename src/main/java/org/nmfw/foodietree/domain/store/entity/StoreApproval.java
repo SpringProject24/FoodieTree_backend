@@ -72,7 +72,7 @@ public class StoreApproval {
     @Builder.Default
     private ApproveStatus licenseVerification = ApproveStatus.PENDING;
 
-    // StoreApproval 정보를 업데이트한 Store 리턴
+    // StoreApproval 승인되면 Store setter 후 리턴
     public Store updateFromStoreApproval(Store store) {
         store.setCategory(category);
         store.setAddress(address);
@@ -82,6 +82,7 @@ public class StoreApproval {
         store.setStoreLicenseNumber(license);
         store.setProductCnt(productCnt);
         store.setPrice(price);
+        store.setApprove(ApproveStatus.APPROVED);
         return store;
     }
 

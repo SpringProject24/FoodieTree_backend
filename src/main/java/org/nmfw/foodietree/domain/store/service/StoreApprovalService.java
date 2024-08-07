@@ -122,26 +122,7 @@ public class StoreApprovalService {
 
     }
 
-    // 가게 등록 요청이 승인되면 tbl_store에 저장
-    public void sendStoreInfo(
-            String storeId,
-            TokenUserInfo userInfo
-    ) {
-        // 관리자가 아닌 경우 BadRequest
-        if(!userInfo.getRole().equals("ADMIN")) {
-            throw new RuntimeException("관리자 권한이 없습니다.");
-        }
 
-        StoreApproval foundApproval = storeApprovalRepository.findByStoreId(storeId);
-
-        Store foundStore = storeRepository.findByStoreId(foundApproval.getStoreId())
-                .orElseThrow(()->new NoSuchElementException("존재하지 않는 스토어입니다."));
-
-        Store updatedStore = foundApproval.updateFromStoreApproval(foundStore);
-
-        Store saved = storeRepository.save(updatedStore);
-        log.info("saved store: {}", saved);
-    }
 
 //    // 가게 등록 요청이 승인되면 tbl_store에 저장
 //    public void sendStoreInfo(
