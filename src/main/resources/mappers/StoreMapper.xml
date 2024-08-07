@@ -29,6 +29,15 @@
     VALUES (#{storeId}, #{password}, #{category}, #{address}, #{approve}, #{warningCount}, #{price}, #{businessNumber})
   </insert>
 
+<<<<<<< HEAD
+=======
+  <select id="findOne" resultType="store">
+    SELECT *
+    FROM tbl_store
+    WHERE store_id = #{storeId}
+  </select>
+
+>>>>>>> main
   <insert id="storeSave">
     INSERT INTO tbl_store
       (store_id, password)

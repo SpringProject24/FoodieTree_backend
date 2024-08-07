@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
+import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 import org.nmfw.foodietree.domain.store.repository.StoreListRepository;
+import org.nmfw.foodietree.domain.store.repository.StoreListRepositoryCustom;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class StoreListService {
 
     private final StoreListRepository storeListRepository;
+    private final StoreListRepositoryCustom storeListRepositoryCustom;
 
     // 모든 가게 리스트 출력
     public List<StoreListDto> getAllStores() {
@@ -28,11 +31,9 @@ public class StoreListService {
     }
 
     // 해당 카테고리 별 리스트 출력
-    public List<StoreListDto> getStoresByCategory(String category) {
-        List<Store> stores = storeListRepository.findByCategory(category);
-        return stores.stream()
-                .map(StoreListDto::fromEntity)
-                .collect(Collectors.toList());
+    public List<StoreListDto> getStoresByCategory(StoreCategory category) {
+        return storeListRepositoryCustom.findStoresByCategory(category);
     }
 
 }
+

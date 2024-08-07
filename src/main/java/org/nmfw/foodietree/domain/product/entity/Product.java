@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -23,13 +24,19 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private Integer productId;
+    private Long productId;
 
     @Column(name = "store_id")
     private String storeId;
 
     @Column(name = "pickup_time")
     private LocalDateTime pickupTime;
+
+//    @Column(name = "pickup_start_time")
+//    private LocalDateTime pickupStartTime; // 픽업 시작 시간
+//
+//    @Column(name = "pickup_end_time")
+//    private LocalDateTime pickupEndTime; // 픽업 종료 시간
 
     @Column(name = "product_upload_date")
     private LocalDateTime productUploadDate;

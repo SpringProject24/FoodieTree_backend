@@ -49,6 +49,22 @@
             (#{customerId}, #{customerPassword}, #{nickName}, #{sessionId})
     </insert>
 
+<<<<<<< HEAD
+=======
+    <!-- 아이디 중복 검사-->
+    <select id="existsById" resultType="boolean">
+        SELECT COUNT(*)
+        FROM tbl_customer
+        WHERE customer_id = #{keyword}
+    </select>
+
+    <!--  고객 1명의 정보를 조회 -->
+    <select id="findOne" resultType="customer">
+        SELECT *
+        FROM tbl_customer
+        WHERE customer_id = #{customerId}
+    </select>
+>>>>>>> main
 
     <!-- 선호하는 음식 저장하기 -->
     <insert id="savePreferredFoods">

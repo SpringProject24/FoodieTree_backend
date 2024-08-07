@@ -18,12 +18,14 @@ public class StoreReservationDto {
     private String profileImage;
     private String nickname;
     private String customerPhoneNumber;
-    private int productId;
-    private int reservationId;
+    private Long productId;
+    private Long reservationId;
     private LocalDateTime reservationTime;
     private LocalDateTime cancelReservationAt;
     private LocalDateTime pickedUpAt;
     private LocalDateTime pickupTime;
+//    private LocalDateTime pickupStartTime;
+//    private LocalDateTime pickupEndTime;
     private LocalDateTime productUploadDate;
     private int price;
     private ReservationStatus status;

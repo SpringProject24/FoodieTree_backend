@@ -34,7 +34,7 @@ public class ProductService {
     }
 
     // 제품 ID로 조회
-    public Product getProductById(Integer productId) {
+    public Product getProductById(Long productId) {
         return productRepository.findByProductId(productId);
     }
 }

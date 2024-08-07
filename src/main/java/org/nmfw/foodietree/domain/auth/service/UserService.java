@@ -7,17 +7,14 @@ import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeStoreDto;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
-import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
 import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.nmfw.foodietree.domain.store.entity.Store;
-import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
 import org.nmfw.foodietree.domain.store.service.StoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 
@@ -88,6 +85,7 @@ public class UserService {
         log.info(" 새로운 토큰 재발급 ! {}",token);
         String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
         log.info("새로운 리프레시 토큰 재발급 ! {} ",refreshToken);
+
         LocalDateTime expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
 
         if (emailCodeDtoUserType.equals("store")) {
@@ -110,6 +108,7 @@ public class UserService {
                     .build();
 
             customerService.signUpUpdateCustomer(emailCodeCustomerDto);
+
         }
 
         return ResponseEntity.ok(Map.of(
@@ -137,6 +136,7 @@ public class UserService {
             log.info("store 타입 확인");
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
             if (storeService.findOne(emailCodeDto.getEmail())) {
+
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
@@ -144,6 +144,7 @@ public class UserService {
             log.info("customer 타입 확인");
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
             if (customerService.findOne(emailCodeDto.getEmail())) {
+
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
@@ -159,6 +160,7 @@ public class UserService {
             return customer != null ? customer.getRefreshTokenExpireDate() : null;
         } else if ("store".equals(userType)) {
             Store store = storeService.getStoreById(email);
+
             log.info("store email : {}, store 의 리프레시 만료일자 인 서버 : {}", email, store.getRefreshTokenExpireDate());
             return store != null ? store.getRefreshTokenExpireDate() : null;
         } else {

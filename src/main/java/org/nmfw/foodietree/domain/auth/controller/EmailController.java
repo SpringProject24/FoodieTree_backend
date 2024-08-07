@@ -117,6 +117,7 @@ public class EmailController {
 
                 // 이메일 dto 정보를 데이터베이스에서 조회
                 EmailCodeDto emailCodeDto = emailService.findOneByEmail(email);
+
                 log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
                 // 이메일 정보가 인증 테이블에 있을 경우
@@ -126,6 +127,7 @@ public class EmailController {
 
                     // 이메일 인증이 완료되지 않은 경우 - 실제 회원가입이 되지 않은 경우
                     if (!emailService.existsByEmailInCustomerOrStore(emailCodeDto.getEmail())) {
+
                         // 이메일 재전송 페이지로 리다이렉션
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
                     }
@@ -134,7 +136,9 @@ public class EmailController {
                     if (!(userService.findByEmail(emailCodeDto))) {
 
                         log.info("실제 회원가입(테이블에 저장)이 되지 않은 경우 {}", emailCodeDto);
+
                         emailService.updateEmailVerification(emailCodeDto); // 인증정보 true 업데이트
+
                         return userService.saveUserInfo(emailCodeDto);
 
                     } else {

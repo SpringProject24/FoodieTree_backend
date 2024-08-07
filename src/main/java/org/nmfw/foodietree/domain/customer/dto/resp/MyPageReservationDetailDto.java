@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @Builder
 public class MyPageReservationDetailDto {
-    private int reservationId;
+    private Long reservationId;
     private String customerId;
     private String nickname;
     private LocalDateTime reservationTime; // 고객이 예약한 시간

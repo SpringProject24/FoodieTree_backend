@@ -8,7 +8,11 @@ import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
+import org.nmfw.foodietree.domain.store.entity.StoreHolidays;
 import org.nmfw.foodietree.domain.store.mapper.StoreMyPageMapper;
+import org.nmfw.foodietree.domain.store.repository.StoreHolidaysRepository;
+import org.nmfw.foodietree.domain.store.repository.StoreMyPageRepository;
+import org.nmfw.foodietree.domain.store.repository.StoreMyPageRepositoryCustomImpl;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,10 +30,12 @@ public class StoreMyPageService {
     private final StoreMyPageMapper storeMyPageMapper;
     private final ReservationService reservationService;
     private final ReservationMapper reservationMapper;
+    private final StoreMyPageRepository storeMyPageRepository;
+    private final StoreHolidaysRepository storeHolidaysRepository;
 
     public StoreMyPageDto getStoreMyPageInfo(String storeId) {
         log.info("Fetching store my page info for storeId: {}", storeId);
-        StoreMyPageDto store = storeMyPageMapper.getStoreMyPageInfo(storeId);
+        StoreMyPageDto store = storeMyPageRepository.getStoreMyPageInfo(storeId);
         if (store == null) {
             throw new IllegalArgumentException("Store not found with ID: " + storeId);
         }
@@ -76,7 +82,7 @@ public class StoreMyPageService {
 
     public StoreMyPageCalendarModalDto getStoreMyPageCalendarModalInfo(String storeId, String date) {
         log.info("service get store my page calendar modal info");
-        List<StoreMyPageCalendarModalDto> list = storeMyPageMapper.getStoreMyPageCalendarModalInfo(storeId, date);
+        List<StoreMyPageCalendarModalDto> list = storeMyPageRepository.getStoreMyPageCalendarModalInfo(storeId, date);
         if (list.isEmpty()) {
             throw new IllegalArgumentException("No calendar info found for storeId: " + storeId + " on date: " + date);
         }
@@ -124,9 +130,14 @@ public class StoreMyPageService {
     }
 
     public boolean setHoliday(String storeId, String holidayDate) {
-        log.info("service set holiday");
-        storeMyPageMapper.setHoliday(storeId, holidayDate);
-        List<StoreHolidayDto> holidays = storeMyPageMapper.getHolidays(storeId);
+
+        storeHolidaysRepository.save(StoreHolidays.builder()
+                .storeId(storeId)
+                .holidays(LocalDate.parse(holidayDate))
+                .build());
+
+        List<StoreHolidayDto> holidays = getHolidays(storeId);
+
         for (StoreHolidayDto holiday : holidays) {
             log.info("holiday = " + holiday.getHolidays());
             if (holiday.getHolidays().equals(holidayDate)) {
@@ -136,12 +147,17 @@ public class StoreMyPageService {
         return false;
     }
 
-    public boolean undoHoliday(String storeId, String holidayDate) {
-        log.info("service remove holiday");
-        storeMyPageMapper.undoHoliday(storeId, holidayDate);
-        List<StoreHolidayDto> holidays = storeMyPageMapper.getHolidays(storeId);
+    public boolean undoHoliday(String storeId, String date) {
+
+        LocalDate holidayDate = LocalDate.parse(date);
+        log.info("holidayDate = " + holidayDate);
+        storeHolidaysRepository.deleteByStoreIdAndHolidays(storeId, holidayDate);
+
+        List<StoreHolidayDto> holidays = getHolidays(storeId);
+
         for (StoreHolidayDto holiday : holidays) {
-            if (holiday.getHolidays().equals(holidayDate)) {
+            log.info("holiday = " + holiday.getHolidays());
+            if (holiday.getHolidays().equals(date)) {
                 return false;
             }
         }
@@ -150,12 +166,16 @@ public class StoreMyPageService {
 
     public List<StoreHolidayDto> getHolidays(String storeId) {
         log.info("service get holidays");
-        return storeMyPageMapper.getHolidays(storeId);
+        List<StoreHolidays> storeHolidaysList = storeHolidaysRepository.findByStoreId(storeId);
+
+        return storeHolidaysList.stream()
+                .map(holiday -> new StoreHolidayDto(holiday.getStoreId(), holiday.getHolidays()))
+                .collect(Collectors.toList());
     }
 
     public boolean checkHoliday(String storeId, String date) {
         log.info("service check holiday");
-        List<StoreHolidayDto> holidays = storeMyPageMapper.getHolidays(storeId);
+        List<StoreHolidayDto> holidays = getHolidays(storeId);
         for (StoreHolidayDto holiday : holidays) {
             if (holiday.getHolidays().equals(date)) {
                 return true;

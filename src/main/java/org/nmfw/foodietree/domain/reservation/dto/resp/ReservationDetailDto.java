@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.reservation.dto.resp;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
+import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,16 +17,18 @@ import java.time.format.DateTimeFormatter;
 @Builder
 public class ReservationDetailDto {
 
-    private int reservationId;
-    private int productId;
+    private Long reservationId;
+    private Long productId;
     private String customerId;
     private LocalDateTime reservationTime; // 고객이 예약한 시간
     private LocalDateTime cancelReservationAt; // 고객이 얘약을 취소한 시간 null 가능, 값이 존재한다면 예약취소 된 것
     private LocalDateTime pickedUpAt; // 고객이 픽업한 시간
     private String storeId;
-    private LocalDateTime pickupTime; // 가게에서 지정한 픽업가능 시간
+    private LocalDateTime pickupTime; // 가게에서 지정한 픽업시간
+//    private LocalDateTime pickupStartTime; // 가게에서 지정한 픽업가능 시작시간
+//    private LocalDateTime pickupEndTime; // 가게에서 지정한 픽업가능 마감시간
     private String storeName;
-    private String category;
+    private StoreCategory category;
     private String address;
     private int price;
     private String storeImg;
@@ -38,9 +41,11 @@ public class ReservationDetailDto {
     private String cancelReservationAtF;
     private String pickedUpAtF;
     private String pickupTimeF;
+    private String pickupStartTimeF;
+    private String pickupEndTimeF;
 
     // 명시적으로 모든 매개변수를 포함하는 생성자 추가
-    public ReservationDetailDto(int reservationId, int productId, String customerId, LocalDateTime reservationTime,
+    public ReservationDetailDto(long reservationId, long productId, String customerId, LocalDateTime reservationTime,
                                 LocalDateTime cancelReservationAt, LocalDateTime pickedUpAt, String storeId,
                                 LocalDateTime pickupTime, String storeName, String category, String address, int price,
                                 String storeImg, String nickname, String profileImage) {
@@ -53,7 +58,7 @@ public class ReservationDetailDto {
         this.storeId = storeId;
         this.pickupTime = pickupTime;
         this.storeName = storeName;
-        this.category = category;
+        this.category = StoreCategory.valueOf(category);
         this.address = address;
         this.price = price;
         this.storeImg = storeImg;
@@ -76,5 +81,11 @@ public class ReservationDetailDto {
         if (pickupTime != null) {
             this.pickupTimeF = pickupTime.format(formatter);
         }
+//        if (pickupStartTime != null) {
+//            this.pickupStartTimeF = pickupStartTime.format(formatter);
+//        }
+//        if (pickupEndTime != null) {
+//            this.pickupEndTimeF = pickupEndTime.format(formatter);
+//        }
     }
 }

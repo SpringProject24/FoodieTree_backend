@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthJwtFilter authJwtFilter;
 
+    // 권한설정이야...
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -25,9 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안 함
                 .and()
                 .authorizeRequests()
-
-                .antMatchers("/reservation/**").authenticated()
-                .antMatchers("/customer/myFavMap").authenticated()
 
                 .anyRequest().permitAll();
 

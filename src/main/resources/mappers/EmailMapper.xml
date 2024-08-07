@@ -6,6 +6,16 @@
 <mapper namespace="org.nmfw.foodietree.domain.auth.mapper.EmailMapper">
 
 <!--    usertype에 따라서 email 칼럼의 expiredate 업데이트-->
+<<<<<<< HEAD
+=======
+    <update id="update">
+        UPDATE tbl_verification_code
+        SET expiry_date = #{expiryDate},
+        email_verified = #{emailVerified}
+        WHERE email = #{email}
+    </update>
+
+>>>>>>> main
     <insert id="save">
         INSERT INTO
         tbl_verification_code
@@ -26,6 +36,7 @@
         )
     </insert>
 
+<<<<<<< HEAD
     <update id="update">
         UPDATE tbl_verification_code
         SET expiry_date = #{expiryDate},
@@ -35,12 +46,27 @@
 
     <select id="findOneByEmail" resultType="EmailCodeDto">
         SELECT (*)
+=======
+    <select id="findByEmail" resultType="int">
+        SELECT COUNT(*)
+        FROM tbl_verification_code
+        WHERE email = #{email}
+    </select>
+
+    <select id="findOneByEmail" resultType="EmailCodeDto">
+        SELECT
+        email,
+        code,
+        expiry_date,
+        user_type
+>>>>>>> main
         FROM
         tbl_verification_code
         WHERE
         email = #{email}
     </select>
 
+<<<<<<< HEAD
     <select id="existsByEmail" resultType="boolean">
         SELECT (*)
         FROM tbl_verification_code
@@ -49,4 +75,25 @@
 
 
 
+=======
+
+
+
+
+    <insert id="saveStore">
+        INSERT INTO
+            tbl_verification_code
+                (
+                    store_id,
+                    code,
+                    expiry_date
+                )
+        VALUES
+                (
+                    #{storeId},
+                    #{code},
+                    #{expiryDate}
+                )
+    </insert>
+>>>>>>> main
 </mapper>

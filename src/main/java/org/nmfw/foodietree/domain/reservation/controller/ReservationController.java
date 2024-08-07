@@ -45,7 +45,7 @@ public class ReservationController {
      * @return 취소 성공 여부
      */
     @PatchMapping("/cancel")
-    public ResponseEntity<?> cancelReservation(@RequestParam int reservationId) {
+    public ResponseEntity<?> cancelReservation(@RequestParam long reservationId) {
         log.info("cancel reservation with ID: {}", reservationId);
         // 추후 토큰을 통해 예약 ID를 가져옴
         // int reservationId = getReservationIdFromToken();
@@ -58,7 +58,7 @@ public class ReservationController {
      * @return 픽업 완료 성공 여부
      */
     @PatchMapping("/pickup")
-    public ResponseEntity<?> completePickup(@RequestParam int reservationId) {
+    public ResponseEntity<?> completePickup(@RequestParam long reservationId) {
         log.info("complete pickup with ID: {}", reservationId);
         // 추후 토큰을 통해 예약 ID를 가져옴
         // int reservationId = getReservationIdFromToken();
@@ -71,7 +71,7 @@ public class ReservationController {
      * @return 취소 가능 여부
      */
     @GetMapping("/check-cancel")
-    public ResponseEntity<?> checkCancel(@RequestParam int reservationId) {
+    public ResponseEntity<?> checkCancel(@RequestParam long reservationId) {
         log.info("check cancel is allowed without cancel fee for reservation ID: {}", reservationId);
         boolean flag = reservationService.isCancelAllowed(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
@@ -82,7 +82,7 @@ public class ReservationController {
      * @return 픽업 가능 여부
      */
     @GetMapping("/check-pickup")
-    public ResponseEntity<?> checkPickup(@RequestParam int reservationId) {
+    public ResponseEntity<?> checkPickup(@RequestParam long reservationId) {
         log.info("check pickup for reservation ID: {}", reservationId);
         boolean flag = reservationService.isPickupAllowed(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body("픽업 확인 실패");
@@ -94,7 +94,7 @@ public class ReservationController {
      * @return 예약 상세 정보 DTO
      */
     @GetMapping("/{reservationId}/modal/detail")
-    public ResponseEntity<?> getReservationDetail(@PathVariable int reservationId) {
+    public ResponseEntity<?> getReservationDetail(@PathVariable long reservationId) {
         log.info("get reservation detail for reservation ID: {}", reservationId);
         ReservationDetailDto dto = reservationService.getReservationDetail(reservationId);
         return ResponseEntity.ok().body(dto);

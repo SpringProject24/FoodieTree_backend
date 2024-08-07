@@ -93,7 +93,7 @@
         WHERE
             r.customer_id = #{customerId}
         ORDER BY p.pickup_time DESC
-        ;
+        
     </select>
 
     <select id="findIssues" resultType="CustomerIssues">

@@ -9,12 +9,14 @@ import java.util.List;
 import javax.persistence.*;
 
 
-@Entity
+
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "idxCustomerId")
+
+@Entity
 @Table(name = "tbl_customer")
 public class Customer {
 
@@ -29,12 +31,15 @@ public class Customer {
 //    @Column(name = "customer_password")
 //    private String customerPassword;
 
+    @Setter
     @Column(name = "nickname")
     private String nickname;
 
+    @Setter
     @Column(name = "customer_phone_number")
     private String customerPhoneNumber;
 
+    @Setter
     @Column(name = "profile_image")
     private String profileImage;
 
@@ -56,7 +61,6 @@ public class Customer {
 
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<EmailVerification> emailVerifications = new ArrayList<>();
-
 
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<FavFood> favFoods;

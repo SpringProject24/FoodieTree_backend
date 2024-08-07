@@ -33,7 +33,7 @@ import static org.nmfw.foodietree.domain.customer.util.LoginUtil.AUTO_LOGIN_COOK
 @Slf4j
 public class CustomerService {
 
-//	private final CustomerMapper customerMapper;
+
 	private final CustomerRepository customerRepository;
 
 	//회원 가입 중간 처리 (저장 성공 여부 boolean 값으로 반환)
@@ -113,10 +113,10 @@ public class CustomerService {
 //	}
 
 	// 아이디 중복 검사
-//	public boolean checkIdentifier(String keyword) {
-//		return customerMapper.existsById(keyword);
-//	}
-//
+	public boolean checkIdentifier(String keyword) {
+		return customerRepository.existsById(keyword);
+	}
+
 //	public void autoLoginClear(HttpServletRequest request,
 //							   HttpServletResponse response) {
 //
