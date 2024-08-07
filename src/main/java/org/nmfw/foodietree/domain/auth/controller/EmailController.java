@@ -96,31 +96,13 @@ public class EmailController {
 
     @PostMapping("/verifyEmail")
     public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
-
-            log.info("Request Data: {}", request);
-
             String token = request.get("token");
             String refreshToken = request.get("refreshToken");
-
-            log.info("access token 있는지 확인 {}", token);
-            log.info("refresh token 있는지 확인 {}", refreshToken);
-
             try {
-                // access token 유효성 검사
                 TokenUserInfo accessTokenUserInfo = tokenProvider.validateAndGetTokenInfo(token);
-
-                log.info("Email extracted from token: {}", accessTokenUserInfo.getEmail());
-                log.info("user Role (type) extracted from token: {}", accessTokenUserInfo.getRole());
-                log.info("user access expire date : {}", accessTokenUserInfo.getTokenExpireDate().toString());
-
                 String email = accessTokenUserInfo.getEmail();
                 String userType = accessTokenUserInfo.getRole();
-
-                // 이메일 dto 정보를 데이터베이스에서 조회
                 EmailCodeDto emailCodeDto = emailMapper.findOneByEmail(email);
-                log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
-
-                // 이메일 정보가 인증 테이블에 있을 경우
                 if (emailCodeDto != null) {
                     emailCodeDto.setUserType(userType);
                     emailCodeDto.setEmailVerified(true);

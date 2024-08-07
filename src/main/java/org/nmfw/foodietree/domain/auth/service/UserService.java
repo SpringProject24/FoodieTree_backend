@@ -10,6 +10,7 @@ import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
+import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +26,8 @@ public class UserService {
 
     private final CustomerMapper customerMapper;
     private final StoreMapper storeMapper;
-
     private final TokenProvider tokenProvider;
-
+    private final StoreRepository storeRepository;
 
     public ResponseEntity<Map<String, ? extends Serializable>> saveUserInfo(EmailCodeDto emailCodeDto) {
 
@@ -64,8 +64,8 @@ public class UserService {
                 "success", true,
                 "token", token,
                 "refreshToken", refreshToken,
-                "email", emailCodeDtoUserType,
-                "role", emailCodeDtoEmail,
+                "email", emailCodeDtoEmail,
+                "role", emailCodeDtoUserType,
                 "message", "Token reissued successfully."
         ));
 
@@ -82,6 +82,7 @@ public class UserService {
         String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
         log.info("새로운 리프레시 토큰 재발급 ! {} ",refreshToken);
         Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
+        String storeApprove = null;
 
         if (emailCodeDtoUserType.equals("store")) {
 
@@ -91,6 +92,8 @@ public class UserService {
                     .refreshTokenExpireDate(expirationDate)
                     .build();
             storeMapper.signUpUpdateStore(emailCodeStoreDto);
+            Store store = storeRepository.findByStoreId(emailCodeDtoEmail).orElseThrow();
+            storeApprove = store.getApprove() != null ? store.getApprove().getStatusDesc() : null;
 
             // customer 일 경우
         } else if (emailCodeDtoUserType.equals("customer")) {
@@ -110,7 +113,8 @@ public class UserService {
                 "refreshToken", refreshToken,
                 "email", emailCodeDtoEmail,
                 "role", emailCodeDtoUserType,
-                "message", "Token reissued successfully."
+                "message", "Token reissued successfully.",
+                "storeApprove", storeApprove != null
         ));
     }
 

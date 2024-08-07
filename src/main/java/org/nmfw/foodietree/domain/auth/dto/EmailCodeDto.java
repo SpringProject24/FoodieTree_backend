@@ -20,6 +20,7 @@ public class EmailCodeDto{
     @Setter
     private boolean emailVerified;
     private String userType;
+    private String storeApprove;
 
 
     public EmailVerification toEntity() {
