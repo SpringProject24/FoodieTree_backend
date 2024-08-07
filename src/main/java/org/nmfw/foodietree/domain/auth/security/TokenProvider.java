@@ -87,7 +87,6 @@ public class TokenProvider {
 
     public LocalDateTime getExpirationDateFromRefreshToken(String refreshToken) {
 
-//    public Date getExpirationDateFromRefreshToken(String refreshToken) {
         byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
