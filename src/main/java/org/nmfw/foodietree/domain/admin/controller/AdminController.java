@@ -26,11 +26,22 @@ public class AdminController {
     // 스토어 등록 요청 목록을 조회
     @RequestMapping("/approve/page/{pageNo}")
     @GetMapping
-    public ResponseEntity<?> getList(
+    public ResponseEntity<?> getPagedList(
             @PathVariable Integer pageNo,
             @AuthenticationPrincipal final UserDetails userDetails) {
 
         Map<String,Object> approvalsMap = adminService.getApprovals(pageNo);
+
+        return ResponseEntity.ok().body(approvalsMap);
+    }
+    // 스토어 등록 요청 목록을 조회
+    @RequestMapping("/approve")
+    @GetMapping
+    public ResponseEntity<?> getList(
+//            @PathVariable Integer pageNo,
+            @AuthenticationPrincipal final UserDetails userDetails) {
+
+        Map<String,Object> approvalsMap = adminService.getApprovals();
 
         return ResponseEntity.ok().body(approvalsMap);
     }

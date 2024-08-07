@@ -20,4 +20,5 @@ public interface StoreApprovalRepositoryCustom {
     // 가게 이메일로 등록 요청 조회
     ApprovalInfoDto findApprovalsByStoreId(String storeId);
 
+    List<ApprovalInfoDto> findAllByDate();
 }

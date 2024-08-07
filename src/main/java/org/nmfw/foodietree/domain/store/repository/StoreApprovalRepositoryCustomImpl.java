@@ -118,6 +118,11 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
         return infoDto;
     }
 
+    @Override
+    public List<ApprovalInfoDto> findAllByDate() {
+        return List.of();
+    }
+
     // storeApproval 동적 쿼리 메서드
     private BooleanBuilder makeDynamicStoreStatus(ApproveStatus status) {
 

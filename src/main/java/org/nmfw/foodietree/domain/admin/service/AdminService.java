@@ -49,6 +49,19 @@ public class AdminService {
 
         return map;
     }
+    public Map<String, Object> getApprovals() {
+
+        List<ApprovalInfoDto> approvals = storeApprovalRepository.findAllByDate();
+
+        // 총 이벤트 개수
+        long totalElements = storeApprovalRepository.count();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("approvals", approvals);
+        map.put("totalCount", totalElements);
+
+        return map;
+    }
 
     /**
      * 스토어 등록 요청을 승인하면 store 업데이트
