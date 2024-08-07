@@ -14,14 +14,14 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "idxCustomerId")
 @Table(name = "tbl_customer")
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idx_customer_id")
-    private Long id;
+    private Long idxCustomerId;
 
     @Column(name = "customer_id", nullable = false, unique = true)
     private String customerId;

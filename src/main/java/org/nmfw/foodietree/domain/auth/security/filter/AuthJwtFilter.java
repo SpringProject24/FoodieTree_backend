@@ -77,6 +77,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             log.info("refresh token, access token 유효성 검증 통과 둘다 못함 ❌");
+
             log.warn("Token validation error");
             e.printStackTrace();
         }
