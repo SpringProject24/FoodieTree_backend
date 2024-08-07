@@ -35,41 +35,6 @@ public class EmailController {
     private final UserService userService;
     private final TokenProvider tokenProvider;
 
-//    @GetMapping("/send-reset-email")
-//    public String sendVerificationCode(@RequestParam String to, String userType) {
-//        try {
-//            emailService.sendResetVerificationCode(to, userType, "reset");
-//            return "Password reset email sent successfully";
-//        } catch (Exception e) {
-//            return "Failed to send password reset email: " + e.getMessage();
-//        }
-//    }
-
-    /*
-    @GetMapping("/verify-reset-code")
-    public String verifyResetCode(@RequestParam String email, @RequestParam String code) {
-        if (emailService.verifyCode(email, code)) {
-            return "Verification successful";
-        } else {
-            return "Verification failed or code expired";
-        }
-    }
-
-     */
-
-    // 인증 코드 전송
-//    @PostMapping("/sendVerificationCode")
-//    public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
-//        String email = request.get("email");
-//        String purpose = request.get("purpose");
-//        String userType = request.get("userType");
-//        try {
-//            emailService.sendResetVerificationCode(email, purpose, userType);
-//            return ResponseEntity.ok("Verification code sent");
-//        } catch (MessagingException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification code");
-//        }
-//    }
 
     // 인증 리다이렉션 링크 메일 전송
     @PostMapping("/sendVerificationLink")
@@ -192,22 +157,4 @@ public class EmailController {
 }
 
 
-    /*
-    @PostMapping("/verifyCode")
-    public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> request, @RequestParam(required = false) String purpose) {
-        String email = request.get("email");
-        String code = request.get("code");
-        boolean isValid = false;
-        if (purpose != null && purpose.equals("signup")) {
-            isValid = emailService.verifyCodeForSignUp(email, code);
-        } else {
-            isValid = emailService.verifyCode(email, code);
-        }
-        if (isValid) {
-            return ResponseEntity.ok("success");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("failure");
-        }
-    }
-
-     */
+ 
