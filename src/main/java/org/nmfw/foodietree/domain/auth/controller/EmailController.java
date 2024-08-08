@@ -5,24 +5,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
-import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
-import org.nmfw.foodietree.domain.auth.security.filter.AuthJwtFilter;
 import org.nmfw.foodietree.domain.auth.service.EmailService;
 import org.nmfw.foodietree.domain.auth.service.UserService;
-import org.nmfw.foodietree.domain.customer.service.CustomerService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -138,7 +130,6 @@ public class EmailController {
         } catch (JwtException e) {
             log.warn("JWT parsing error: {}", e.getMessage(), e);
         }
-
                 // 리프레시 토큰의 만료일자를 확인 - 서버에도 리프레시 토큰 저장
                 TokenUserInfo refreshTokenUserInfo = tokenProvider.validateAndGetRefreshTokenInfo(refreshToken);
 
@@ -147,7 +138,7 @@ public class EmailController {
                 String email = refreshTokenUserInfo.getEmail();
                 String userType = refreshTokenUserInfo.getRole();
 
-                LocalDateTime refreshTokenExpiryDate = userService.getRefreshTokenExpiryDate(email, userType);
+                LocalDateTime refreshTokenExpiryDate = userService.getUserRefreshTokenExpiryDate(email, userType);
 
                 log.info(" 서버에서 리프레시 토큰 만료일자 {}", refreshTokenExpiryDate);
 
@@ -162,15 +153,7 @@ public class EmailController {
                         .build();
 
                 return userService.updateUserInfo(emailCodeDto);
-
-//            } catch (Exception ex) {
-//                log.error("Refresh token parsing error: {}", ex.getMessage(), ex);
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid refresh token"));
-//            }
         }
-//        log.error("Unexpected error occurred during email verification");
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
     }
-//}
 
  

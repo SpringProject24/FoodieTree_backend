@@ -75,4 +75,7 @@ public class CustomerService {
 				.orElseThrow(() -> new RuntimeException("Customer not found with id: " + customerId));
 	}
 
+	public void updateCustomer(LocalDateTime date, String email) {
+		customerRepository.updateRefreshTokenExpireDate(date, email);
+	}
 }

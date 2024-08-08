@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -151,7 +150,7 @@ public class UserService {
         return result;
     }
 
-    public LocalDateTime getRefreshTokenExpiryDate(String email, String userType) {
+    public LocalDateTime getUserRefreshTokenExpiryDate(String email, String userType) {
         if ("customer".equals(userType)) {
             Customer customer = customerService.getCustomerById(email);
             log.info("customer object : {},customer email : {}, customer 의 리프레시 만료일자 인 서버 : {}", customer,customer.getCustomerId(), customer.getRefreshTokenExpireDate());
@@ -166,4 +165,22 @@ public class UserService {
         }
     }
 
+    public void setUserRefreshTokenExpiryDate(String email, String userType) {
+        String newRefreshToken = tokenProvider.createRefreshToken(email, userType);
+        LocalDateTime newExpiryDate = tokenProvider.getExpirationDateFromRefreshToken(newRefreshToken);
+
+        if ("customer".equals(userType)) {
+            Customer customer = customerService.getCustomerById(email);
+            if (customer != null) {
+                customerService.updateCustomer(newExpiryDate, email);
+            }
+        } else if ("store".equals(userType)) {
+            Store store = storeService.getStoreById(email);
+            if (store != null) {
+                storeService.updateStore(newExpiryDate, email);
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid user type");
+        }
+    }
 }

@@ -65,14 +65,8 @@ public class TokenProvider {
 
     public String createRefreshToken(String email, String userType) {
 
-        byte[] decodedKey = Base64.getDecoder().decode(REFRESH_SECRET_KEY);
-        System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
-        System.out.println("Decoded Key Length in Bits: " + (decodedKey.length * 8));
-
         byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
-        System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
-        System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
 
         return Jwts.builder()
                 .claim("role", userType) // role 클레임에 userType 추가
@@ -106,10 +100,6 @@ public class TokenProvider {
     public TokenUserInfo validateAndGetTokenInfo(String token) {
 
         log.info("validateAndGetTokenInfo run!!!!");
-
-//        if (token == null || token.isEmpty()) {
-//            throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
-//        }
 
         try {
             //토큰 발급 당시 서명 처리
