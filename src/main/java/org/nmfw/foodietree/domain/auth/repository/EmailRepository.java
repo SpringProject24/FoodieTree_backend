@@ -43,7 +43,7 @@ public interface EmailRepository extends JpaRepository<EmailVerification, Intege
     Boolean existsByEmail(@Param("email") String email);
 
     @Query("SELECT CASE WHEN COUNT(c) > 0 OR COUNT(s) > 0 THEN TRUE ELSE FALSE END " +
-            "FROM Customer c LEFT JOIN Store s ON c.customerId = s.storeId " +
+            "FROM Customer c RIGHT JOIN Store s ON c.customerId = s.storeId " +
             "WHERE c.customerId = :email OR s.storeId = :email")
     Boolean existsByEmailInCustomerOrStore(@Param("email") String email);
 

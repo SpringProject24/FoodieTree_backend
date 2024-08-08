@@ -36,6 +36,18 @@ public class EmailController {
     private final UserService userService;
     private final TokenProvider tokenProvider;
 
+    @GetMapping("/check")
+    @CrossOrigin
+    @ResponseBody
+    public ResponseEntity<?> check(String keyword) {
+        log.info("이메일 중복체크 아이디 : {}",  keyword);
+        boolean flag = emailService.existsByEmailInCustomerOrStore(keyword);
+        log.info("이메일 중복체크  결과 {}",  flag);
+        return ResponseEntity
+                .ok()
+                .body(flag);
+    }
+
 
     // 인증 리다이렉션 링크 메일 전송
     @PostMapping("/sendVerificationLink")
@@ -107,10 +119,7 @@ public class EmailController {
 
                     // 이메일 인증이 완료되지 않은 경우 - 실제 회원가입이 되지 않은 경우
                     if (!emailService.existsByEmailInCustomerOrStore(emailCodeDto.getEmail())) {
-                        // 이메일 재전송 페이지로 리다이렉션
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
-//                } else { //실제 회원가입(테이블에 저장)이 되지 않은 경우
-//                if (!(userService.findByEmail(emailCodeDto))) {
+
                         log.info("실제 회원가입(테이블에 저장)이 되지 않은 경우 {}", emailCodeDto);
 
                         emailService.updateEmailVerification(emailCodeDto); // 인증정보 true 업데이트
@@ -153,7 +162,6 @@ public class EmailController {
                         .userType(userType)
                         .build();
 
-                // Call updateUserInfo and capture its response
                 return userService.updateUserInfo(emailCodeDto);
 
 

@@ -23,10 +23,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserService {
 
-    //mapper.xml
-//    private final CustomerMapper customerMapper;
-//    private final StoreMapper storeMapper;
-    //jpa
     private final CustomerService customerService;
     private final StoreService storeService;
 
@@ -169,4 +165,5 @@ public class UserService {
             throw new IllegalArgumentException("Invalid user type");
         }
     }
+
 }

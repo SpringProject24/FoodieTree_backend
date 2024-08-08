@@ -57,12 +57,4 @@ public class Customer {
     @Column(name = "email_verified", nullable = true)
     private Boolean emailVerified;
 
-//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<EmailVerification> emailVerifications = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<FavFood> favFoods;
-//
-//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<FavArea> favAreas;
 }

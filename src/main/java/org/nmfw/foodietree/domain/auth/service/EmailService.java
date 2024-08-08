@@ -51,7 +51,9 @@ public class EmailService {
 
     @Transactional
     public Boolean existsByEmailInCustomerOrStore(String email) {
-        return emailRepository.existsByEmailInCustomerOrStore(email);
+        Boolean flag = emailRepository.existsByEmailInCustomerOrStore(email);
+        log.info(" 실제 유저 테이블에 존재하는지 확인하는 값 flag : {}", flag);
+        return flag;
     }
 
 
