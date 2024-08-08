@@ -42,9 +42,9 @@ public class StoreApprovalService {
     ) {
         // userInfo storeId로 Store
         if(!userInfo.getRole().equalsIgnoreCase("store")) {
-            throw new NoSuchElementException("가입한 계정이 아닙니다.");
+            throw new RuntimeException("스토어 계정이 아닙니다.");
         }
-        String storeId = userInfo.getEmail();
+        String storeId = userInfo.getUsername();
         log.debug("등록요청 가게: {}", storeId);
 
         // 테스트용
@@ -65,7 +65,10 @@ public class StoreApprovalService {
             , TokenUserInfo userInfo
     ) {
         // userInfo에서 storeId 찾기
-        String storeId = userInfo.getEmail();
+        if(!userInfo.getRole().equalsIgnoreCase("store")) {
+            throw new RuntimeException("스토어 계정이 아닙니다.");
+        }
+        String storeId = userInfo.getUsername();
 
         // 이미지 파일 저장 및 경로 문자열로 반환
         MultipartFile file = dto.getProductImage();
@@ -122,19 +125,3 @@ public class StoreApprovalService {
 
     }
 
-
-
-//    // 가게 등록 요청이 승인되면 tbl_store에 저장
-//    public void sendStoreInfo(
-//            StoreApproval sa
-//    ) {
-//        Store foundStore = storeRepository.findByStoreId(sa.getStoreId())
-//                .orElseThrow(()->new NoSuchElementException("가입한 계정이 아닙니다."));
-//
-//        Store updatedStore = sa.updateFromStoreApproval(foundStore);
-//
-////        Store updatedStore = sa.updateFromStoreApproval();
-//        Store saved = storeRepository.save(updatedStore);
-//        log.info("saved store: {}", saved);
-//    }
-}
