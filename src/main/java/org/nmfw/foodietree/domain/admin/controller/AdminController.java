@@ -25,8 +25,7 @@ public class AdminController {
     private final AdminService adminService;
 
     // 스토어 등록 요청 목록을 조회 (서버에서 페이징)
-    @RequestMapping("/approve/page/{pageNo}")
-    @GetMapping
+    @GetMapping(value = "/approve/page/{pageNo}")
     public ResponseEntity<?> getPagedList(
             @PathVariable Integer pageNo,
             @AuthenticationPrincipal final UserDetails userDetails) {
@@ -36,8 +35,7 @@ public class AdminController {
         return ResponseEntity.ok().body(approvalsMap);
     }
     // 스토어 등록 요청 목록을 생성일시 기준 조회
-    @RequestMapping("/approve")
-    @GetMapping
+    @GetMapping(value="/approve")
     public ResponseEntity<?> getListByDate(
             @RequestParam(required = false)LocalDateTime start,
             @RequestParam(required = false)LocalDateTime end,
