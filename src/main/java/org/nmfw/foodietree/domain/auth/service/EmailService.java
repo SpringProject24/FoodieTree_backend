@@ -6,6 +6,8 @@ import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
 import org.nmfw.foodietree.domain.auth.repository.EmailRepository;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.customer.repository.CustomerRepository;
+import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -24,6 +26,8 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final EmailRepository emailRepository;
+    private final CustomerRepository customerRepository;
+    private final StoreRepository storeRepository;
     private final TokenProvider tokenProvider;
 
     public EmailCodeDto getEmailCodeDtoByEmail(String email) {
@@ -51,9 +55,9 @@ public class EmailService {
 
     @Transactional
     public Boolean existsByEmailInCustomerOrStore(String email) {
-        Boolean flag = emailRepository.existsByEmailInCustomerOrStore(email);
-        log.info(" 실제 유저 테이블에 존재하는지 확인하는 값 flag : {}", flag);
-        return flag;
+        Boolean existsInCustomer = customerRepository.existsByCustomerId(email);
+        Boolean existsInStore = storeRepository.existsByStoreId(email);
+        return existsInCustomer || existsInStore;
     }
 
 

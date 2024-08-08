@@ -15,6 +15,9 @@ import java.util.Optional;
 @Transactional
 public interface CustomerRepository extends JpaRepository<Customer, Long> ,CustomerRepositoryCustom {
 
+    @Query("SELECT COUNT(s) > 0 FROM Store s WHERE s.storeId = :email")
+    Boolean existsInStore(@Param("email") String email);
+
     @Query("SELECT c.refreshTokenExpireDate FROM Customer c WHERE c.customerId = :email")
     Optional<LocalDateTime> findRefreshDateById(@Param("email") String email);
 
