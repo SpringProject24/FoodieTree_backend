@@ -6,6 +6,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.admin.dto.res.StoreApproveDto;
 import org.nmfw.foodietree.domain.store.dto.resp.ApprovalInfoDto;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
@@ -14,9 +15,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 import static org.nmfw.foodietree.domain.store.entity.QStoreApproval.*;
 
 @Repository
@@ -25,6 +28,7 @@ import static org.nmfw.foodietree.domain.store.entity.QStoreApproval.*;
 public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositoryCustom{
 
     private final JPAQueryFactory factory;
+    private final EntityManager em;
 
     @Override // 등록 요청 처리 상태에 따라 목록 조회 (가게 + 상품)
     public Page<ApprovalInfoDto> findApprovalsByStatus(
@@ -116,6 +120,56 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
                 .fetchOne();
 
         return infoDto;
+    }
+
+    @Override // status(APPROVED, REJECTED)로 bulk update
+    public Long updateApprovalStatus(ApproveStatus status, List<Long> ids) {
+        Long result = factory
+                .update(storeApproval)
+                .set(storeApproval.status, status)
+                .where(storeApproval.id.in(ids))
+                .execute();
+        em.flush();
+        em.clear();
+        return result;
+    }
+
+    public List<StoreApproval> findAllByIdInIds(List<Long> ids) {
+        return factory
+                .selectFrom(storeApproval)
+                .where(storeApproval.id.in(ids))
+                .fetch();
+    }
+
+    @Override
+    public Long updateStoreInfo(List<StoreApproveDto> approvals) {
+        int batchSize = 100; // Batch size
+        int count = 0;
+        long resultCnt = 0;
+
+        for (StoreApproveDto sa : approvals) {
+            long result = factory.update(store)
+                    .set(store.category, sa.getCategory())
+                    .set(store.address, sa.getAddress())
+                    .set(store.approve, sa.getStatus())
+                    .set(store.storeContact, sa.getContact())
+                    .set(store.storeName, sa.getName())
+                    .set(store.storeLicenseNumber, sa.getLicense())
+                    .set(store.productCnt, sa.getProductCnt())
+                    .set(store.price, sa.getPrice())
+                    .where(store.storeId.eq(sa.getStoreId()))
+                    .execute();
+            if(result > 0) resultCnt++;
+            if (++count % batchSize == 0) {
+                em.flush();
+                em.clear();
+            }
+        }
+
+        em.flush();
+        em.clear();
+
+        return resultCnt;
     }
 
     // storeApproval 동적 쿼리 메서드

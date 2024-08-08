@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.store.repository;
 
+import org.nmfw.foodietree.domain.admin.dto.res.StoreApproveDto;
 import org.nmfw.foodietree.domain.store.dto.resp.ApprovalInfoDto;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
@@ -19,5 +20,14 @@ public interface StoreApprovalRepositoryCustom {
 
     // 가게 이메일로 등록 요청 조회
     ApprovalInfoDto findApprovalsByStoreId(String storeId);
+
+    // 요청 id 리스트로 요청 status를 bulk update
+    Long updateApprovalStatus(ApproveStatus status, List<Long> ids);
+
+    // 요청 id 리스트로 엔터티 조회
+    List<StoreApproval> findAllByIdInIds(List<Long> ids);
+
+    // storeApproval 정보를 store 에 추가 (update)
+    Long updateStoreInfo(List<StoreApproveDto> approvals);
 
 }
