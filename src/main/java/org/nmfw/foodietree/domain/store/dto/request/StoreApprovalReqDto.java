@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.store.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.nmfw.foodietree.domain.customer.entity.value.PreferredFoodCategory;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 

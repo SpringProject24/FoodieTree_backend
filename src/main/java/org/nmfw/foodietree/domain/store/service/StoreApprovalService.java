@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.store.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.store.dto.request.StoreApprovalReqDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
@@ -23,7 +24,7 @@ public class StoreApprovalService {
     // 등록 요청 내역을 tbl_store_approval에 저장
     public void askStoreApproval(
             StoreApprovalReqDto dto
-//            TokenUserInfo userInfo
+            , TokenUserInfo userInfo
     ) {
         // userInfo storeId로 Store
 //        Store foundStore = storeRepository
@@ -31,7 +32,7 @@ public class StoreApprovalService {
 //                .orElseThrow(throw new NoSuchElementException());
 
         // 테스트용으로 storeId = 'test@test.com'
-        String storeId = "test@test.com";
+        String storeId = userInfo.getUsername();
         Store foundStore = storeRepository
                 .findByStoreId(storeId)
                 .orElseThrow(() -> new NoSuchElementException("가입한 계정이 아닙니다."));

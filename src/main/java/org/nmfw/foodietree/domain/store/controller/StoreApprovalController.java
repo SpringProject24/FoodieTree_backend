@@ -2,10 +2,12 @@ package org.nmfw.foodietree.domain.store.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.product.controller.ProductApprovalController;
 import org.nmfw.foodietree.domain.store.dto.request.StoreApprovalReqDto;
 import org.nmfw.foodietree.domain.store.service.StoreApprovalService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +26,7 @@ public class StoreApprovalController {
     @PostMapping("/approval")
     public ResponseEntity<?> approveStore(
             @Valid @RequestBody StoreApprovalReqDto dto
-//        , @AuthenticationPrincipal TokenUserInfo userInfo
+            , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
         // Validation 예외처리는 ExceptionAdvisor.java
         log.info("Request to approveStore : {}", dto.toString());
@@ -33,7 +35,7 @@ public class StoreApprovalController {
         try {
             storeApprovalService.askStoreApproval(
                     dto
-    //                , userInfo
+                    , userInfo
             );
         } catch (NoSuchElementException e) { // 등록 요청 실패
 //            throw new RuntimeException(e);
