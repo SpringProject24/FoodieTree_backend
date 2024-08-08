@@ -7,6 +7,7 @@ import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class ReservationController {
     private final CustomerMyPageService customerMyPageService;
 
     // 테스트용 변수, 추후 토큰에서 사용하는것으로 변경 예정
-    String customerId = "test@gmail.com";
+//    String customerId = "test@gmail.com";
     int reservationId = 38;
 
     /**
@@ -32,9 +33,11 @@ public class ReservationController {
      * @return 예약 목록 DTO 리스트
      */
     @GetMapping("/list")
-    public ResponseEntity<List<ReservationDetailDto>> getReservationList() {
+    public ResponseEntity<List<ReservationDetailDto>> getReservationList(
+            @AuthenticationPrincipal TokenProvider.TokenUserInfo userInfo
+    ) {
         // 추후 토큰을 통해 고객 ID를 가져옴
-        // String customerId = getCustomerIdFromToken();
+        String customerId = userInfo.getUsername();
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok().body(reservations);
     }

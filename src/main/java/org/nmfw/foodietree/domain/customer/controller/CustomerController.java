@@ -110,19 +110,20 @@ public class CustomerController {
         return ResponseEntity.ok(stats);
     }
 
-    /**
-     * 고객 예약 목록을 가져오는 GET 요청 처리
-     * @return 고객 예약 목록 DTO 리스트
-     */
-    @GetMapping("/reservations")
-    public ResponseEntity<List<ReservationDetailDto>> getReservations(
-            @AuthenticationPrincipal TokenUserInfo userInfo
-    ) {
-        // 추후 토큰을 통해 고객 ID를 가져옴
-         String customerId = userInfo.getEmail();
-        List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
-        return ResponseEntity.ok(reservations);
-    }
+//    /**
+//     * 고객 예약 목록을 가져오는 GET 요청 처리
+//     * @return 고객 예약 목록 DTO 리스트
+//     */
+//    @GetMapping("/reservations")
+//    public ResponseEntity<List<ReservationDetailDto>> getReservations(
+//            @AuthenticationPrincipal TokenUserInfo userInfo
+//    ) {
+//        // 추후 토큰을 통해 고객 ID를 가져옴
+//        String customerId = userInfo.getEmail();
+//        log.info("reservations fetch 토큰에서 추출한 유저아이디 {}", customerId);
+//        List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
+//        return ResponseEntity.ok(reservations);
+//    }
 
     /**
      * 현재 인증된 사용자로부터 고객 ID를 추출하는 메서드
