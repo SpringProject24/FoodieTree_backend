@@ -47,11 +47,6 @@ public class StoreApprovalService {
         String storeId = userInfo.getUsername();
         log.debug("등록요청 가게: {}", storeId);
 
-        // 테스트용
-//        List<Store> all = storeRepository.findAll();
-//        int idx = (int) Math.floor(Math.random() * all.size());
-//        String storeId = all.get(idx).getStoreId();
-
         StoreApproval storeApproval = dto.toEntityForStoreDetail();
         storeApproval.setStoreId(storeId);
         StoreApproval saved = storeApprovalRepository.save(storeApproval);
