@@ -48,13 +48,13 @@ public class StoreApproval {
     private ApproveStatus status = ApproveStatus.PENDING;
 
     @Setter
-    @Column(name = "store_approval_image", nullable = false)
+    @Column(name = "store_approval_image")
     private String proImage; // 상품 이미지 경로
 
-    @Column(name = "store_approval_amount", nullable = false)
+    @Column(name = "store_approval_amount")
     private Integer productCnt;  // 상품 수량
 
-    @Column(name = "store_approval_price", nullable = false)
+    @Column(name = "store_approval_price")
     private Integer price;  // 상품 가격
 
     @CreationTimestamp
