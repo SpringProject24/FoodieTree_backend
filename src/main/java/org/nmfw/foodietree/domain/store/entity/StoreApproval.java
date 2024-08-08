@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
+import org.nmfw.foodietree.domain.store.entity.value.CategoryConverter;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 
 import javax.persistence.*;
@@ -38,7 +39,7 @@ public class StoreApproval {
     @Column(name = "store_approval_contact", nullable = false)
     private String contact; // 가게 연락처
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = CategoryConverter.class)
     @Column(name = "store_approval_category", nullable = false)
     private StoreCategory category; // 업종
 
