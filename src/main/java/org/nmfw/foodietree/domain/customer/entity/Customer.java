@@ -18,12 +18,12 @@ import javax.persistence.*;
 @Table(name = "tbl_customer")
 public class Customer {
 
-    @Id
+    @Id // auto increment
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idx_customer_id")
+    @Column(name = "idx_customer_id", nullable = false)
     private Long idxCustomerId;
 
-    @Column(name = "customer_id", nullable = false, unique = true)
+    @Column(name = "customer_id", unique = true)
     private String customerId;
 
     @Column(name = "customer_password")

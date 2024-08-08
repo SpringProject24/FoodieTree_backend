@@ -49,13 +49,19 @@ public class CustomerService {
 
 	@Transactional
 	public void signUpSaveCustomer(EmailCustomerDto emailCustomerDto) {
-		Customer customer = Customer.builder()
-				.customerId(emailCustomerDto.getCustomerId())
-				.refreshTokenExpireDate(emailCustomerDto.getRefreshTokenExpireDate())
-				.userType(emailCustomerDto.getUserType())
-				.build();
+		try {
+			Customer customer = Customer.builder()
+					.customerId(emailCustomerDto.getCustomerId())
+					.refreshTokenExpireDate(emailCustomerDto.getRefreshTokenExpireDate())
+					.userType(emailCustomerDto.getUserType())
+					.build();
 
-		customerRepository.save(customer);
+			customerRepository.save(customer);
+		} catch (Exception e) {
+			log.error("Error saving customer: ", e);
+			throw e; // 예외를 다시 던져서 롤백 트리거
+		}
+
 	}
 
 	@Transactional(readOnly = true)

@@ -20,6 +20,7 @@ public class EmailVerification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "email", nullable = true, length = 50, unique = true)

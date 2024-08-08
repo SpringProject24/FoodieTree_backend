@@ -98,7 +98,7 @@ public class CustomerController {
             @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
         // 추후 토큰을 통해 고객 ID를 가져옴
-         String customerId = userInfo.getEmail();
+         String customerId = userInfo.getUsername();
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok(reservations);
     }
