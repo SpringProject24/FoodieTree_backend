@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class AdminService {
     private final StoreApprovalRepository storeApprovalRepository;
     private final StoreRepository storeRepository;
 
+    // 페이징 된 요청 리스트
     public Map<String, Object> getApprovals(int page) {
         Pageable pageable = PageRequest.of(page, 10);
 
@@ -49,9 +51,13 @@ public class AdminService {
 
         return map;
     }
-    public Map<String, Object> getApprovals() {
+    // 기간 기준으로 필터링 된 요청 리스트
+    public Map<String, Object> getApprovals(LocalDateTime start, LocalDateTime end) {
 
-        List<ApprovalInfoDto> approvals = storeApprovalRepository.findAllByDate();
+        start = start.with(LocalDateTime.MIN); // 시작일의 0시 0분
+        end = end.with(LocalDateTime.MAX).minusSeconds(1); // 종료일의 11시 59분 59초
+
+        List<ApprovalInfoDto> approvals = storeApprovalRepository.findAllByDate(start, end);
 
         // 총 이벤트 개수
         long totalElements = storeApprovalRepository.count();

@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.store.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,34 +29,15 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
 
     @Override // 등록 요청 처리 상태에 따라 목록 조회 (가게 + 상품)
     public Page<ApprovalInfoDto> findApprovalsByStatus(
-            // Pageable, String sort, ApproveStatus status
             Pageable pageable, ApproveStatus status
     ) {
 
         // status 따라 요청 목록 조회할 수 있도록 동적 쿼리 사용
         BooleanBuilder booleanBuilder = makeDynamicStoreStatus(status);
 
-        List<ApprovalInfoDto> list = factory
-                .select(Projections.bean(
-                        ApprovalInfoDto.class,
-                        storeApproval.id.as("storeApprovalId"),
-                        storeApproval.storeId.as("storeId"),
-                        storeApproval.name.as("name"),
-                        storeApproval.contact.as("contact"),
-                        storeApproval.address.as("address"),
-                        storeApproval.status.as("status"),
-                        storeApproval.category.as("category"),
-                        storeApproval.license.as("license"),
-                        storeApproval.licenseVerification.as("licenseVerification"),
-                        storeApproval.createdAt.as("createdAt"),
-                        storeApproval.productCnt.as("productCnt"),
-                        storeApproval.price.as("price"),
-                        storeApproval.proImage.as("proImage")
-                        ))
-                .from(storeApproval)
-//                .innerJoin(productApproval).on(productApproval.storeId.eq(storeApproval.storeId))
+        List<ApprovalInfoDto> list =
+                selectToDto()
                 .where(booleanBuilder)
-//                .orderBy(specifier(sort))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -64,7 +46,6 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
         Long count = factory
                 .select(storeApproval.count())
                 .from(storeApproval)
-//                .innerJoin(productApproval).on(productApproval.storeId.eq(storeApproval.storeId))
                 .where(storeApproval.status.eq(ApproveStatus.PENDING))
                 .fetchOne();
 
@@ -76,9 +57,9 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
     @Override // 사업자등록번호 검증하지 않은 요청 목록 조회
     public List<StoreApproval> findApprovalsByLicenseVerification() {
 
-        // 어제 이후 요청
-        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
-//        LocalDateTime startOfToday = LocalDateTime.now().with(LocalDate.MIN);
+        // 어제 0시 0분
+        LocalDateTime yesterday = LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0);
+//        LocalDateTime startOfToday = LocalDateTime.now().with(LocalDateTime.MIN);
 
         return factory
                 .selectFrom(storeApproval)
@@ -93,7 +74,25 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
 
         BooleanBuilder booleanBuilder = makeDynamicStoreStatus(ApproveStatus.APPROVED);
 
-        ApprovalInfoDto infoDto = factory
+        return selectToDto()
+        .from(storeApproval)
+        .where(booleanBuilder.and(storeApproval.storeId.eq(storeId)))
+        .fetchOne();
+    }
+
+    @Override
+    public List<ApprovalInfoDto> findAllByDate(LocalDateTime startDate, LocalDateTime endDate) {
+
+        return selectToDto()
+                .where(
+                    storeApproval.createdAt.after(startDate)
+                    .and(storeApproval.createdAt.before(endDate))
+                ).fetch();
+    }
+
+    // select 결과를 dto로 담는 쿼리 분리
+    private JPAQuery<ApprovalInfoDto> selectToDto() {
+        return  factory
                 .select(Projections.bean(
                         ApprovalInfoDto.class,
                         storeApproval.id.as("storeApprovalId"),
@@ -110,17 +109,7 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
                         storeApproval.price.as("price"),
                         storeApproval.proImage.as("proImage")
                 ))
-                .from(storeApproval)
-//                .innerJoin(productApproval).on(productApproval.storeId.eq(storeApproval.storeId))
-                .where(booleanBuilder.and(storeApproval.storeId.eq(storeId)))
-                .fetchOne();
-
-        return infoDto;
-    }
-
-    @Override
-    public List<ApprovalInfoDto> findAllByDate() {
-        return List.of();
+                .from(storeApproval);
     }
 
     // storeApproval 동적 쿼리 메서드
@@ -154,6 +143,5 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
                 return null;
         }
     }
-
 
 }

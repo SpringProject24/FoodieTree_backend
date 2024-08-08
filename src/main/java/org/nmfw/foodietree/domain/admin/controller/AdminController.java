@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    // 스토어 등록 요청 목록을 조회
+    // 스토어 등록 요청 목록을 조회 (서버에서 페이징)
     @RequestMapping("/approve/page/{pageNo}")
     @GetMapping
     public ResponseEntity<?> getPagedList(
@@ -34,14 +35,15 @@ public class AdminController {
 
         return ResponseEntity.ok().body(approvalsMap);
     }
-    // 스토어 등록 요청 목록을 조회
+    // 스토어 등록 요청 목록을 생성일시 기준 조회
     @RequestMapping("/approve")
     @GetMapping
-    public ResponseEntity<?> getList(
-//            @PathVariable Integer pageNo,
+    public ResponseEntity<?> getListByDate(
+            @RequestParam(required = false)LocalDateTime start,
+            @RequestParam(required = false)LocalDateTime end,
             @AuthenticationPrincipal final UserDetails userDetails) {
 
-        Map<String,Object> approvalsMap = adminService.getApprovals();
+        Map<String,Object> approvalsMap = adminService.getApprovals(start, end);
 
         return ResponseEntity.ok().body(approvalsMap);
     }
