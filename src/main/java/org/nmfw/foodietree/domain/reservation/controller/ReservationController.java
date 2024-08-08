@@ -34,7 +34,7 @@ public class ReservationController {
     @GetMapping("/list")
     public ResponseEntity<List<ReservationDetailDto>> getReservationList() {
         // 추후 토큰을 통해 고객 ID를 가져옴
-        // String customerId = getCustomerIdFromToken();
+        String customerId = getCustomerIdFromToken();
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok().body(reservations);
     }
