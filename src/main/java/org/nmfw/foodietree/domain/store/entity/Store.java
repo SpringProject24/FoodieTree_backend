@@ -111,6 +111,8 @@ public class Store {
         product.setStore(null);
     }
 
-  
+    public void setCategory(String category) {
+        this.category = StoreCategory.fromString(category);
+    }
 }
 
