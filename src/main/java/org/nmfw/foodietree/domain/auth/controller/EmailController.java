@@ -40,9 +40,9 @@ public class EmailController {
     @CrossOrigin
     @ResponseBody
     public ResponseEntity<?> check(String keyword) {
-        log.info("이메일 중복체크 아이디 : {}",  keyword);
+        log.info("이메일 중복체크 아이디 : {}", keyword);
         boolean flag = emailService.existsByEmailInCustomerOrStore(keyword);
-        log.info("이메일 중복체크  결과 {}",  flag);
+        log.info("이메일 중복체크  결과 {}", flag);
         return ResponseEntity
                 .ok()
                 .body(flag);
@@ -91,9 +91,9 @@ public class EmailController {
             log.info("user access expire date : {}", accessTokenUserInfo.getTokenExpireDate().toString());
 
             String email = accessTokenUserInfo.getEmail();
-            log.info("유효성 검증 후  email : {}",email);
+            log.info("유효성 검증 후  email : {}", email);
             String userType = accessTokenUserInfo.getRole();
-            log.info("유효성 검증 후  userType : {}",userType);
+            log.info("유효성 검증 후  userType : {}", userType);
 
             // 이메일 dto 정보를 데이터베이스에서 조회
             Optional<EmailVerification> emailVerificationOpt = emailService.findOneByEmail(email);
@@ -120,15 +120,15 @@ public class EmailController {
                     // 이메일 인증이 완료되지 않은 경우 - 실제 회원가입이 되지 않은 경우
                     if (!emailService.existsByEmailInCustomerOrStore(emailCodeDto.getEmail())) {
 
-                        log.info("실제 회원가입(테이블에 저장)이 되지 않은 경우 {}", emailCodeDto);
+                        log.info("( customer, store 테이블에 저장)이 되지 않은 경우 {}", emailCodeDto);
 
                         emailService.updateEmailVerification(emailCodeDto); // 인증정보 true 업데이트
-//                    return
+
                         userService.saveUserInfo(emailCodeDto);
                     } else {
                         // 실제 회원가입이 되어있는 경우, 로그인 하는데 access token 기간이 종료된 경우
                         // 만료 기한 access, refresh 업데이트
-                        log.info("email이 실제 회원가입 되어있는 경우 dto {}", emailCodeDto);
+                        log.info("customer, store에 email이 실제 회원가입 되어있는 경우 dto {}", emailCodeDto);
                         return userService.updateUserInfo(emailCodeDto);
                     }
                 }
@@ -136,10 +136,9 @@ public class EmailController {
             // email table에 인증정보가 없을 경우 즉, access token이 만료되었을경우
             // 인증 정보는 상관없이 access token이 만료되었을 경우
         } catch (JwtException e) {
-            log.warn(" 토큰 검증에 실패함, JWT parsing error: {}", e.getMessage());
-        } catch (Exception e) {
-            log.info("JWT parsing error: {}", e.getMessage());
-            try {
+            log.warn("JWT parsing error: {}", e.getMessage(), e);
+        }
+
                 // 리프레시 토큰의 만료일자를 확인 - 서버에도 리프레시 토큰 저장
                 TokenUserInfo refreshTokenUserInfo = tokenProvider.validateAndGetRefreshTokenInfo(refreshToken);
 
@@ -150,7 +149,7 @@ public class EmailController {
 
                 LocalDateTime refreshTokenExpiryDate = userService.getRefreshTokenExpiryDate(email, userType);
 
-                log.info("리이이이이이이이이프레에에에에에시토오오오크크ㅡ으응으으응으ㅡㄴ!!! 서버 만료일자 {}", refreshTokenExpiryDate);
+                log.info(" 서버에서 리프레시 토큰 만료일자 {}", refreshTokenExpiryDate);
 
                 if (refreshTokenExpiryDate == null || refreshTokenExpiryDate.isBefore(LocalDateTime.now())) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Refresh token expired"));
@@ -164,15 +163,14 @@ public class EmailController {
 
                 return userService.updateUserInfo(emailCodeDto);
 
-
-            } catch (Exception ex) {
-                log.error("Refresh token parsing error: {}", ex.getMessage());
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid refresh token"));
-            }
+//            } catch (Exception ex) {
+//                log.error("Refresh token parsing error: {}", ex.getMessage(), ex);
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid refresh token"));
+//            }
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
+//        log.error("Unexpected error occurred during email verification");
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An unexpected error occurred"));
     }
-}
-
+//}
 
  

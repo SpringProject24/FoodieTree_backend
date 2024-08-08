@@ -107,9 +107,9 @@ public class TokenProvider {
 
         log.info("validateAndGetTokenInfo run!!!!");
 
-        if (token == null || token.isEmpty()) {
-            throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
-        }
+//        if (token == null || token.isEmpty()) {
+//            throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
+//        }
 
         try {
             //토큰 발급 당시 서명 처리

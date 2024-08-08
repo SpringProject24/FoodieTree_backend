@@ -66,8 +66,8 @@ public class UserService {
                 "success", true,
                 "token", token,
                 "refreshToken", refreshToken,
-                "email", emailCodeDtoUserType,
-                "role", emailCodeDtoEmail,
+                "email", emailCodeDtoEmail,
+                "role", emailCodeDtoUserType,
                 "message", "Token reissued successfully."
         ));
 
@@ -113,8 +113,8 @@ public class UserService {
                 "success", true,
                 "token", token,
                 "refreshToken", refreshToken,
-                "email", emailCodeDtoEmail,
-                "role", emailCodeDtoUserType,
+                "email", emailCodeDtoEmail,  // "email" 키에 email을 할당
+                "role", emailCodeDtoUserType,  // "role" 키에 userType을 할당
                 "message", "Token reissued successfully."
         ));
     }
