@@ -1,6 +1,7 @@
 package org.nmfw.foodietree.domain.auth.entity;
 
 import lombok.*;
+import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 
 import javax.persistence.*;
@@ -31,8 +32,17 @@ public class EmailVerification {
     private LocalDateTime expiryDate;
 
     @Column(name = "email_verified", nullable = true)
-    private boolean emailVerified;
+    private Boolean emailVerified;
 
     @Column(name = "user_type", nullable = true, length = 50)
     private String userType;
+
+    public EmailCodeDto toDto() {
+        return EmailCodeDto.builder()
+                .email(this.email)
+                .expiryDate(this.expiryDate)
+                .emailVerified(this.emailVerified)
+                .userType(this.userType)
+                .build();
+    }
 }

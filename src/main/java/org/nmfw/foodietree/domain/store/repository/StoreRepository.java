@@ -20,4 +20,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             @Param("storeId") String storeId,
             @Param("refreshTokenExpireDate") LocalDateTime refreshTokenExpireDate
     );
+
+    @Query("SELECT COUNT(c) > 0 FROM Store c WHERE c.storeId = :keyword")
+    boolean existsByStoreId(@Param("keyword") String keyword);
 }

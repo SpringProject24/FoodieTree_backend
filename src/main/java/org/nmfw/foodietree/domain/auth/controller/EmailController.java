@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -78,48 +79,57 @@ public class EmailController {
             log.info("user access expire date : {}", accessTokenUserInfo.getTokenExpireDate().toString());
 
             String email = accessTokenUserInfo.getEmail();
+            log.info("유효성 검증 후  email : {}",email);
             String userType = accessTokenUserInfo.getRole();
+            log.info("유효성 검증 후  userType : {}",userType);
 
             // 이메일 dto 정보를 데이터베이스에서 조회
-            EmailCodeDto emailCodeDto = emailService.findOneByEmail(email);
+            Optional<EmailVerification> emailVerificationOpt = emailService.findOneByEmail(email);
 
-            log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
+            if (emailVerificationOpt.isPresent()) {
+                EmailVerification emailVerification = emailVerificationOpt.get();
+                EmailCodeDto emailCodeDto = EmailCodeDto.builder()
+                        .email(emailVerification.getEmail())
+                        .expiryDate(emailVerification.getExpiryDate())
+                        .emailVerified(true)
+                        .userType(userType)
+                        .build();
 
-            // 이메일 정보가 인증 테이블에 있을 경우
-            if (emailCodeDto != null) {
-                emailCodeDto.setUserType(userType);
-                emailCodeDto.setEmailVerified(true);
+                log.info("EmailCodeDto retrieved from database: {}", emailCodeDto);
 
-                // 이메일 인증이 완료되지 않은 경우 - 실제 회원가입이 되지 않은 경우
-                if (!emailService.existsByEmailInCustomerOrStore(emailCodeDto.getEmail())) {
 
-                    // 이메일 재전송 페이지로 리다이렉션
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
-                }
+                // 이메일 정보가 인증 테이블에 있을 경우
+                if (emailCodeDto != null) {
 
-                //실제 회원가입(테이블에 저장)이 되지 않은 경우 false
-                if (!(userService.findByEmail(emailCodeDto))) {
+                    log.info("이메일 정보 테이블에 해당 이메일 있음 {}", email);
+                    emailCodeDto.setUserType(userType);
+                    emailCodeDto.setEmailVerified(true);
 
-                    log.info("실제 회원가입(테이블에 저장)이 되지 않은 경우 {}", emailCodeDto);
+                    // 이메일 인증이 완료되지 않은 경우 - 실제 회원가입이 되지 않은 경우
+                    if (!emailService.existsByEmailInCustomerOrStore(emailCodeDto.getEmail())) {
+                        // 이메일 재전송 페이지로 리다이렉션
+//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "Email link is not verified! Please resend verification email."));
+//                } else { //실제 회원가입(테이블에 저장)이 되지 않은 경우
+//                if (!(userService.findByEmail(emailCodeDto))) {
+                        log.info("실제 회원가입(테이블에 저장)이 되지 않은 경우 {}", emailCodeDto);
 
-                    emailService.updateEmailVerification(emailCodeDto); // 인증정보 true 업데이트
-
-                    return userService.saveUserInfo(emailCodeDto);
-
-                } else {
-                    // 실제 회원가입이 되어있는 경우, 로그인 하는데 access token 기간이 종료된 경우
-                    // 만료 기한 access, refresh 업데이트
-                    log.info("email이 실제 회원가입 되어있는 경우 dto {}", emailCodeDto);
-                    return userService.updateUserInfo(emailCodeDto);
+                        emailService.updateEmailVerification(emailCodeDto); // 인증정보 true 업데이트
+//                    return
+                        userService.saveUserInfo(emailCodeDto);
+                    } else {
+                        // 실제 회원가입이 되어있는 경우, 로그인 하는데 access token 기간이 종료된 경우
+                        // 만료 기한 access, refresh 업데이트
+                        log.info("email이 실제 회원가입 되어있는 경우 dto {}", emailCodeDto);
+                        return userService.updateUserInfo(emailCodeDto);
+                    }
                 }
             }
-
             // email table에 인증정보가 없을 경우 즉, access token이 만료되었을경우
             // 인증 정보는 상관없이 access token이 만료되었을 경우
+        } catch (JwtException e) {
+            log.warn(" 토큰 검증에 실패함, JWT parsing error: {}", e.getMessage());
         } catch (Exception e) {
-            log.info("access token 의 기한이 만료되었거나 위조되었습니다.");
             log.info("JWT parsing error: {}", e.getMessage());
-
             try {
                 // 리프레시 토큰의 만료일자를 확인 - 서버에도 리프레시 토큰 저장
                 TokenUserInfo refreshTokenUserInfo = tokenProvider.validateAndGetRefreshTokenInfo(refreshToken);

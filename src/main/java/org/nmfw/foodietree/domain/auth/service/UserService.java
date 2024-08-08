@@ -36,7 +36,9 @@ public class UserService {
     public ResponseEntity<Map<String, ? extends Serializable>> saveUserInfo(EmailCodeDto emailCodeDto) {
 
         String emailCodeDtoUserType = emailCodeDto.getUserType();
+        log.info("emailcodedto에서 유저타입 찾기 {}", emailCodeDtoUserType);
         String emailCodeDtoEmail = emailCodeDto.getEmail();
+        log.info("emailcodedto에서 이메일 찾기 {}", emailCodeDtoEmail);
 
         String token = tokenProvider.createToken(emailCodeDto);
         String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);

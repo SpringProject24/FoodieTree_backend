@@ -23,7 +23,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> ,Custo
     void updateRefreshTokenExpireDate(@Param("refreshTokenExpireDate") LocalDateTime refreshTokenExpireDate, @Param("customerId") String customerId);
 
     @Query("SELECT COUNT(c) > 0 FROM Customer c WHERE c.customerId = :keyword")
-    boolean existsById(@Param("keyword") String keyword);
+    boolean existsByCustomerId(@Param("keyword") String keyword);
 
     Optional<Customer> findByCustomerId(String customerId);
 }

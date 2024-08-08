@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Repository
 public interface EmailRepository extends JpaRepository<EmailVerification, Integer>, EmailRepositoryCustom {
@@ -36,7 +37,7 @@ public interface EmailRepository extends JpaRepository<EmailVerification, Intege
     int countByEmail(@Param("email") String email);
 
     @Query("SELECT ev FROM EmailVerification ev WHERE ev.email = :email")
-    EmailCodeDto findOneByEmail(@Param("email") String email);
+    Optional<EmailVerification> findOneByEmail(@Param("email") String email);
 
     @Query("SELECT COUNT(ev) > 0 FROM EmailVerification ev WHERE ev.email = :email")
     Boolean existsByEmail(@Param("email") String email);

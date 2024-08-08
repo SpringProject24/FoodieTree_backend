@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
-import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
 import org.nmfw.foodietree.domain.auth.repository.EmailRepository;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -26,8 +26,21 @@ public class EmailService {
     private final EmailRepository emailRepository;
     private final TokenProvider tokenProvider;
 
+    public EmailCodeDto getEmailCodeDtoByEmail(String email) {
+        EmailVerification emailVerification = emailRepository.findOneByEmail(email)
+                .orElseThrow(() -> new RuntimeException("EmailVerification not found for email: " + email));
+
+        return EmailCodeDto.builder()
+                .email(emailVerification.getEmail())
+                .expiryDate(emailVerification.getExpiryDate())
+                .emailVerified(emailVerification.getEmailVerified())
+                .userType(emailVerification.getUserType())
+                .build();
+    }
+
+
     @Transactional
-    public EmailCodeDto findOneByEmail(String email) {
+    public Optional<EmailVerification> findOneByEmail(String email) {
         return emailRepository.findOneByEmail(email);
     }
 

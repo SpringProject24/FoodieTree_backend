@@ -62,7 +62,7 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public boolean findOne(String storeId) {
-        return true;
+    public boolean findOne(String keyword) {
+        return storeRepository.existsByStoreId(keyword);
     }
 }

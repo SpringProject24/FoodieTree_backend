@@ -36,8 +36,9 @@ public class CustomerController {
     @CrossOrigin
     @ResponseBody
     public ResponseEntity<?> check(String keyword) {
-        log.info("{}",  keyword);
+        log.info("customer 중복체크 아이디 : {}",  keyword);
         boolean flag = customerService.findOne(keyword);
+        log.info("customer 중복체크  결과 {}",  flag);
         return ResponseEntity
                 .ok()
                 .body(flag);

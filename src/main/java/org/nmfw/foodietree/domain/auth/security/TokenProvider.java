@@ -105,6 +105,8 @@ public class TokenProvider {
 
     public TokenUserInfo validateAndGetTokenInfo(String token) {
 
+        log.info("validateAndGetTokenInfo run!!!!");
+
         if (token == null || token.isEmpty()) {
             throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
         }
@@ -141,11 +143,13 @@ public class TokenProvider {
 
         } catch (JwtException e) {
             log.error("ACCESS Token validation error: {}", e.getMessage());
-            throw e; // 또는 적절한 예외 처리
+            throw e;
         }
     }
 
     public TokenUserInfo validateAndGetRefreshTokenInfo(String refreshToken) {
+
+        log.info("validateAndGetRefreshTokenInfo run!!!!");
 
         if (refreshToken == null || refreshToken.isEmpty()) {
             throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
