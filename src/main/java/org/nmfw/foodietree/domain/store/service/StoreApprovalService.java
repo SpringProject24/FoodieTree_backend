@@ -41,7 +41,7 @@ public class StoreApprovalService {
            , TokenUserInfo userInfo
     ) {
         // userInfo storeId로 Store
-        if(!userInfo.getRole().equals("STORE")) {
+        if(!userInfo.getRole().equalsIgnoreCase("store")) {
             throw new NoSuchElementException("가입한 계정이 아닙니다.");
         }
         String storeId = userInfo.getEmail();

@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.nmfw.foodietree.domain.store.entity.QStoreApproval.*;
@@ -85,8 +87,8 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
 
         return selectToDto()
                 .where(
-                    storeApproval.createdAt.after(startDate)
-                    .and(storeApproval.createdAt.before(endDate))
+                    storeApproval.createdAt.between(startDate, endDate)
+//                    .and(storeApproval.createdAt.before(endDate))
                 ).fetch();
     }
 
