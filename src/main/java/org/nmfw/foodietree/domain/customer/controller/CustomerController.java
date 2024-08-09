@@ -22,10 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 
-@Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/customer")
+@Slf4j
+@RequiredArgsConstructor
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -98,7 +98,7 @@ public class CustomerController {
             @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
         // 추후 토큰을 통해 고객 ID를 가져옴
-         String customerId = userInfo.getUsername();
+        String customerId = userInfo.getUsername();
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok(reservations);
     }
