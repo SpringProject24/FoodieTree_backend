@@ -89,12 +89,9 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
     public List<ApprovalInfoDto> findAllByDate(LocalDateTime startDate, LocalDateTime endDate) {
 
         List<ApprovalInfoDto> list = selectToDto()
-                .where(
-                        storeApproval.createdAt.between(startDate, endDate)
-//                    .and(storeApproval.createdAt.before(endDate))
-                ).fetch();
-        em.flush();
-        em.clear();
+                .where(storeApproval.createdAt
+                        .between(startDate, endDate))
+                .fetch();
         return list;
     }
 

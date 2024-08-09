@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -96,6 +97,7 @@ public class AdminService {
      * @param dto - 액션타입(승인, 거절)과 요청 Id 목록
      * @param userInfo - 관리자 정보를 담은 토큰
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public int updateApprovalsStatus(
             ApprovalStatusDto dto,
             TokenUserInfo userInfo
