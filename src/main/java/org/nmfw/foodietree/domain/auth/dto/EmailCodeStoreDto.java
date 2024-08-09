@@ -15,5 +15,5 @@ public class EmailCodeStoreDto {
     private String storeId;
     private String userType;
     @Setter
-    private Date refreshTokenExpireDate;
+    private LocalDateTime refreshTokenExpireDate;
 }

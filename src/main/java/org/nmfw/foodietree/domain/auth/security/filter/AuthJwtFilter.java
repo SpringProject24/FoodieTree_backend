@@ -1,17 +1,12 @@
 package org.nmfw.foodietree.domain.auth.security.filter;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
-import org.nmfw.foodietree.domain.auth.mapper.EmailMapper;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.auth.service.UserService;
-import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
-import org.nmfw.foodietree.domain.customer.repository.CustomerRepository;
-import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,8 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -65,7 +58,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
                             log.error("Refresh token parsing error: {}", ex.getMessage());
                             log.info("refresh token 기간 지나거나 위조됨 ❌");
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().write("Invalid refresh token");
+//                            response.getWriter().write("Invalid refresh token");
                             return;
                         }
                     } else {
@@ -77,6 +70,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             log.info("refresh token, access token 유효성 검증 통과 둘다 못함 ❌");
+
             log.warn("Token validation error");
             e.printStackTrace();
         }
@@ -85,15 +79,20 @@ public class AuthJwtFilter extends OncePerRequestFilter {
     }
 
     private void handleRefreshToken(HttpServletRequest request, HttpServletResponse response, TokenUserInfo refreshTokenInfo) throws IOException {
-        String email = refreshTokenInfo.getEmail();
+        String email = refreshTokenInfo.getUsername();
         String userType = refreshTokenInfo.getRole();
 
-        LocalDateTime refreshTokenExpiryDate = userService.getRefreshTokenExpiryDate(email, userType);
+        // DB 에 저장된 토큰 만료 일자
+        LocalDateTime refreshTokenExpiryDate = userService.getUserRefreshTokenExpiryDate(email, userType);
         log.info("Refresh token expiry date from server: {}", refreshTokenExpiryDate);
 
-        if (refreshTokenExpiryDate == null || refreshTokenExpiryDate.isBefore(LocalDateTime.now())) {
+        if (refreshTokenExpiryDate.isAfter(LocalDateTime.now())) {
+            // 로그인 함과 동시에 리프레시 토큰 재발급
+            userService.setUserRefreshTokenExpiryDate(email, userType);
+            log.info("리프레시토큰 재발급 ✅");
+
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Refresh token expired");
+//            response.getWriter().write("Refresh token expired");
             return;
         }
 
