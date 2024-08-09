@@ -44,7 +44,7 @@ public class StoreService {
         storeRepository.updateRefreshTokenExpireDate(
                 emailCodeStoreDto.getRefreshTokenExpireDate(),
                 emailCodeStoreDto.getStoreId()
-                );
+        );
     }
 
     @Transactional
@@ -72,5 +72,9 @@ public class StoreService {
 
     public void updateStore(LocalDateTime date, String email) {
         storeRepository.updateRefreshTokenExpireDate(date, email);
+    }
+
+    public boolean existByStoreEmail(String email) {
+       return storeRepository.existsByStoreId(email);
     }
 }

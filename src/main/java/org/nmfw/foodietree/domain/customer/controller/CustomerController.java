@@ -32,6 +32,18 @@ public class CustomerController {
     private final CustomerMyPageService customerMyPageService;
     private final CustomerEditService customerEditService;
 
+    @GetMapping("/check")
+    @CrossOrigin
+    @ResponseBody
+    public ResponseEntity<?> check(@RequestParam String email) {
+        log.info("이메일 중복체크 아이디 : {}", email);
+        boolean flag = customerService.existByCustomerEmail(email);
+        log.info("이메일 중복체크  결과 {}", flag);
+        return ResponseEntity
+                .ok()
+                .body(flag);
+    }
+
 //    @GetMapping("/check")
 //    @CrossOrigin
 //    @ResponseBody

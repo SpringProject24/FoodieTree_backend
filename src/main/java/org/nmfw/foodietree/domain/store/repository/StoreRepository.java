@@ -11,15 +11,14 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
-    Optional<Store> findByStoreId(String storeId);
+    Optional<Store> findByStoreId(@Param("email") String storeId);
 
     @Modifying
     @Transactional
     @Query("UPDATE Store s SET s.refreshTokenExpireDate = :refreshTokenExpireDate WHERE s.storeId = :storeId")
     void updateRefreshTokenExpireDate(
             @Param("refreshTokenExpireDate") LocalDateTime refreshTokenExpireDate,
-            @Param("storeId") String storeId
-    );
+            @Param("storeId") String storeId);
 
     @Query("SELECT COUNT(c) > 0 FROM Store c WHERE c.storeId = :email")
     boolean existsByStoreId(@Param("email") String email);

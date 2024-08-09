@@ -15,15 +15,13 @@ import java.util.Optional;
 @Transactional
 public interface CustomerRepository extends JpaRepository<Customer, Long> ,CustomerRepositoryCustom {
 
-    @Query("SELECT COUNT(s) > 0 FROM Store s WHERE s.storeId = :email")
-    Boolean existsInStore(@Param("email") String email);
-
     @Query("SELECT c.refreshTokenExpireDate FROM Customer c WHERE c.customerId = :email")
     Optional<LocalDateTime> findRefreshDateById(@Param("email") String email);
 
     @Modifying
     @Query("UPDATE Customer c SET c.refreshTokenExpireDate = :refreshTokenExpireDate WHERE c.customerId = :customerId")
-    void updateRefreshTokenExpireDate(@Param("refreshTokenExpireDate") LocalDateTime refreshTokenExpireDate, @Param("customerId") String customerId);
+    void updateRefreshTokenExpireDate(@Param("refreshTokenExpireDate") LocalDateTime refreshTokenExpireDate,
+                                      @Param("customerId") String customerId);
 
     @Query("SELECT COUNT(c) > 0 FROM Customer c WHERE c.customerId = :email")
     boolean existsByCustomerId(@Param("email") String email);

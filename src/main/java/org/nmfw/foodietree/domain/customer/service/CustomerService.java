@@ -78,4 +78,9 @@ public class CustomerService {
 	public void updateCustomer(LocalDateTime date, String email) {
 		customerRepository.updateRefreshTokenExpireDate(date, email);
 	}
+
+	public boolean existByCustomerEmail(String email) {
+		return customerRepository.existsByCustomerId(email);
+
+	}
 }
