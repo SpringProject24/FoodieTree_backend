@@ -65,8 +65,8 @@ public class CustomerService {
 	}
 
 	@Transactional(readOnly = true)
-	public boolean findOne(String keyword) {
-		return customerRepository.existsByCustomerId(keyword);
+	public boolean findOne(String email) {
+		return customerRepository.existsByCustomerId(email);
 	}
 
 	@Transactional(readOnly = true)

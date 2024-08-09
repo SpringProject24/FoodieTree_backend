@@ -31,9 +31,9 @@ public class EmailController {
     @GetMapping("/check")
     @CrossOrigin
     @ResponseBody
-    public ResponseEntity<?> check(String keyword) {
-        log.info("이메일 중복체크 아이디 : {}", keyword);
-        boolean flag = emailService.existsByEmailInCustomerOrStore(keyword);
+    public ResponseEntity<?> check(@RequestParam String email) {
+        log.info("이메일 중복체크 아이디 : {}", email);
+        boolean flag = emailService.existsByEmailInCustomerOrStore(email);
         log.info("이메일 중복체크  결과 {}", flag);
         return ResponseEntity
                 .ok()
