@@ -43,6 +43,7 @@ public class ApprovalCellDto {
         this.createdAt = dto.getCreatedAt().toString();
         this.productCnt = dto.getProductCnt();
         this.price = dto.getPrice();
+        this.proImage = dto.getProImage();
     }
 
 }

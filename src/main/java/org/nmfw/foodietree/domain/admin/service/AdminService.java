@@ -138,7 +138,7 @@ public class AdminService {
     }
 
 
-    // Token role 확인
+    // Token role admin 여부 확인
     public boolean isAdmin(TokenUserInfo userInfo) {
         return userInfo.getRole().equalsIgnoreCase("admin");
     }

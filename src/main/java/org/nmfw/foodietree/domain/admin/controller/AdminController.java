@@ -69,7 +69,7 @@ public class AdminController {
                 , end
 //                , userInfo
         );
-        log.info(approvalsMap.get("approvals").toString());
+        log.info("조회 결과: {}", approvalsMap.get("approvals").toString());
 
         return ResponseEntity.ok().body(approvalsMap);
     }
@@ -79,10 +79,10 @@ public class AdminController {
     @RequestMapping("/approve")
     @PostMapping
     public ResponseEntity<?> approveStore(
-            @RequestBody ApprovalStatusDto dto,
-            @AuthenticationPrincipal TokenUserInfo userInfo
+            @RequestBody ApprovalStatusDto dto
+//            , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
-
+        TokenUserInfo userInfo = null;
         int resultCnt;
         try {
             resultCnt = adminService.updateApprovalsStatus(dto, userInfo);

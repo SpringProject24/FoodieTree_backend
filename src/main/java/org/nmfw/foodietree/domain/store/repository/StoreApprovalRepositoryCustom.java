@@ -22,6 +22,9 @@ public interface StoreApprovalRepositoryCustom {
     // 가게 이메일로 등록 요청 조회
     ApprovalInfoDto findApprovalsByStoreId(String storeId);
 
+    // 기간 기준으로 등록 요청 조회
+    List<ApprovalInfoDto> findAllByDate(LocalDateTime startDate, LocalDateTime endDate);
+
     // 요청 id 리스트로 요청 status를 bulk update
     Long updateApprovalStatus(ApproveStatus status, List<Long> ids);
 
