@@ -25,12 +25,12 @@
         <div class="wrapper-header">
         <c:if test="${login == null}">
             <div class="signin">
-            <a href="http://localhost:3000/sign-in" class="button btnFade btnBlueGreen margarine-regular">
+            <a href="#" class="button btnFade btnBlueGreen margarine-regular">
                 Login
             </a>
             </div>
             <div class="signup">
-            <a href="http://localhost:3000/sign-up" class="button btnFade btnBlueGreen margarine-regular">
+            <a href="#" class="button btnFade btnBlueGreen margarine-regular">
                 Signup
             </a>
             </div>
@@ -50,5 +50,11 @@
         </div>
     </div>
     </header>
+    <script>
+        const $signInTag = document.querySelector(".signin a");
+        const $signUpTag = document.querySelector(".signup a");
+        $signInTag.href = `http://\${window.location.hostname}:3000/sign-in`;
+        $signUpTag.href = `http://\${window.location.hostname}:3000/sign-up`;
+    </script>
 </body>
 </html>
