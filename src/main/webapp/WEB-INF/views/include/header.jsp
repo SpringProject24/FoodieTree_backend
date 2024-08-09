@@ -25,12 +25,12 @@
         <div class="wrapper-header">
         <c:if test="${login == null}">
             <div class="signin">
-            <a href="/customer/sign-in" class="button btnFade btnBlueGreen margarine-regular">
+            <a href="http://localhost:3000/sign-in" class="button btnFade btnBlueGreen margarine-regular">
                 Login
             </a>
             </div>
             <div class="signup">
-            <a href="/customer/sign-up" class="button btnFade btnBlueGreen margarine-regular">
+            <a href="http://localhost:3000/sign-up" class="button btnFade btnBlueGreen margarine-regular">
                 Signup
             </a>
             </div>

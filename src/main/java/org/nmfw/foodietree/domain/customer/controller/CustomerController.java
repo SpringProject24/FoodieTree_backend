@@ -29,16 +29,16 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CustomerMyPageService customerMyPageService;
+    private final CustomerEditService customerEditService;
 
     @GetMapping("/check")
     @CrossOrigin
     @ResponseBody
-    public ResponseEntity<?> check(
-//            String type,
-            String keyword) {
-        log.info("{}",  keyword);
-
-        boolean flag = customerService.checkIdentifier(keyword);
+    public ResponseEntity<?> check(String email) {
+        log.info("customer 중복체크 아이디 : {}",  email);
+        boolean flag = customerService.findOne(email);
+        log.info("customer 중복체크  결과 {}",  flag);
         return ResponseEntity
                 .ok()
                 .body(flag);
@@ -55,27 +55,6 @@ public class CustomerController {
         }
     }
 
-    //회원가입 양식 열기
-//    @GetMapping("/sign-up")
-//    public String signUp(Model model) {
-//        log.info("customer/sign-up GET : forwarding to sign-up.jsp");
-//        model.addAttribute("kakaoApiKey", kakaoApiKey);
-//        return "/customer/sign-up";
-//    }
-
-    // 회원가입 요청 처리
-//    @PostMapping("/sign-up")
-//    public String signUp(@Validated SignUpDto dto, BindingResult result) {
-//        if (result.hasErrors()) {
-//            log.info("{}", result);
-//            return "redirect:/customer/sign-up";
-//        }
-//
-//        boolean flag = customerService.join(dto);
-//        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
-
-    private final CustomerMyPageService customerMyPageService;
-    private final CustomerEditService customerEditService;
 
     // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
 //    String customerId = "test@gmail.com";
@@ -110,20 +89,19 @@ public class CustomerController {
         return ResponseEntity.ok(stats);
     }
 
-//    /**
-//     * 고객 예약 목록을 가져오는 GET 요청 처리
-//     * @return 고객 예약 목록 DTO 리스트
-//     */
-//    @GetMapping("/reservations")
-//    public ResponseEntity<List<ReservationDetailDto>> getReservations(
-//            @AuthenticationPrincipal TokenUserInfo userInfo
-//    ) {
-//        // 추후 토큰을 통해 고객 ID를 가져옴
-//        String customerId = userInfo.getEmail();
-//        log.info("reservations fetch 토큰에서 추출한 유저아이디 {}", customerId);
-//        List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
-//        return ResponseEntity.ok(reservations);
-//    }
+    /**
+     * 고객 예약 목록을 가져오는 GET 요청 처리
+     * @return 고객 예약 목록 DTO 리스트
+     */
+    @GetMapping("/reservations")
+    public ResponseEntity<List<ReservationDetailDto>> getReservations(
+            @AuthenticationPrincipal TokenUserInfo userInfo
+    ) {
+        // 추후 토큰을 통해 고객 ID를 가져옴
+        String customerId = userInfo.getUsername();
+        List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
+        return ResponseEntity.ok(reservations);
+    }
 
     /**
      * 현재 인증된 사용자로부터 고객 ID를 추출하는 메서드

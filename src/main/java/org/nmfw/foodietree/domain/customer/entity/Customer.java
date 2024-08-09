@@ -10,34 +10,31 @@ import javax.persistence.*;
 
 
 @Entity
-@Getter
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "idxCustomerId")
 @Table(name = "tbl_customer")
 public class Customer {
 
-    @Id
+    @Id // auto increment
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idx_customer_id")
-    private Long id;
+    @Column(name = "idx_customer_id", nullable = false)
+    private Long idxCustomerId;
 
-    @Column(name = "customer_id", nullable = false, unique = true)
+    @Column(name = "customer_id", unique = true)
     private String customerId;
 
     @Column(name = "customer_password")
     private String customerPassword;
 
-    @Setter
     @Column(name = "nickname")
     private String nickname;
 
-    @Setter
     @Column(name = "customer_phone_number")
     private String customerPhoneNumber;
 
-    @Setter
     @Column(name = "profile_image")
     private String profileImage;
 
@@ -47,7 +44,6 @@ public class Customer {
     @Column(name = "limit_time")
     private LocalDateTime limitTime;
 
-    @Setter
     @Column(name = "refresh_token_expire_date", nullable = true)
     private LocalDateTime refreshTokenExpireDate;
 
@@ -57,12 +53,4 @@ public class Customer {
     @Column(name = "email_verified", nullable = true)
     private Boolean emailVerified;
 
-//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<EmailVerification> emailVerifications = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<FavFood> favFoods;
-//
-//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<FavArea> favAreas;
 }
