@@ -53,7 +53,10 @@ public class Store {
 
     @Column(name = "product_cnt")
     private Integer productCnt; // 상품갯수
-    
+
+    @Column(name = "product_image")
+    private String productImg; // 상품 이미지
+
     @Column(name = "store_contact")
     private String storeContact;  // 가게 연락처
 
