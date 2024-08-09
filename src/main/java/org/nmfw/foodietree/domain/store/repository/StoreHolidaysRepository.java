@@ -12,7 +12,5 @@ public interface StoreHolidaysRepository
     @Transactional
     void deleteByStoreIdAndHolidays(String storeId, LocalDate holidays);
 
-//    void deleteByStoreId(String storeId);
-
     List<StoreHolidays> findByStoreId(String storeId);
 }

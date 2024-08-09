@@ -9,6 +9,9 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -18,7 +21,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -184,10 +189,45 @@ public class TokenProvider {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TokenUserInfo {
+    public static class TokenUserInfo implements UserDetails {
         private String role;
         private String email;
         private LocalDateTime tokenExpireDate; // 두 토큰의 만료일자를 담음
+
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return List.of(new SimpleGrantedAuthority(role));
+        }
+
+        @Override
+        public String getPassword() {
+            return null; // JWT 기반 인증에서는 비밀번호가 필요 없음
+        }
+
+        @Override
+        public String getUsername() {
+            return email;
+        }
+
+        @Override
+        public boolean isAccountNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return true;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
     }
 
 }

@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthJwtFilter authJwtFilter;
 
+    // 권한설정이야...
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -26,8 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .antMatchers("/reservation/**").authenticated()
-                .antMatchers("/customer/myFavMap").authenticated()
                 .anyRequest().permitAll();
 
         // JwtAuthFilter를 UsernamePasswordAuthenticationFilter 전에 실행하도록 설정

@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import static org.nmfw.foodietree.domain.customer.entity.QFavArea.favArea;
 
 //@Getter @Setter
 //@ToString
@@ -34,4 +33,7 @@ public class FavArea {
 
     @Column(name = "preferred_area")
     private String preferredArea;
+
+    @Column(name = "alias")
+    private String alias;
 }

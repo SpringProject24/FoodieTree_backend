@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.store.dto.request.ProductApprovalReqDto;
 import org.nmfw.foodietree.domain.store.dto.request.StoreApprovalReqDto;
+import org.nmfw.foodietree.domain.store.entity.StoreApproval;
 import org.nmfw.foodietree.domain.store.service.StoreApprovalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,10 +42,12 @@ public class StoreApprovalController {
         } catch (NoSuchElementException e) { // 등록 요청 실패
 //            throw new RuntimeException(e);
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
 
         // 등록 요청 성공
-        return ResponseEntity.ok().body("");
+        return ResponseEntity.ok().body("Approved Store");
     }
 
     // 상품 디테일 등록 요청
@@ -75,6 +78,5 @@ public class StoreApprovalController {
         // 등록 요청 성공
         return ResponseEntity.ok().body("");
     }
-
 
 }

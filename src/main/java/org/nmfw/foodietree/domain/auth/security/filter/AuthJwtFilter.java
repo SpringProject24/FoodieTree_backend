@@ -41,6 +41,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
         try {
             String token = parseBearerToken(request);
             String refreshToken = request.getHeader("refreshToken");
@@ -50,26 +51,32 @@ public class AuthJwtFilter extends OncePerRequestFilter {
                 try {
                     TokenUserInfo tokenInfo = tokenProvider.validateAndGetTokenInfo(token);
                     setAuthenticationContext(request, tokenInfo);
+                    log.info("필터 통과 ✅");
                 } catch (JwtException e) {
                     log.warn("Access token is not valid or expired. Attempting to verify refresh token.");
+                    log.info("access token 만료되어도 괜찮아 ✅");
 
                     if (refreshToken != null) {
                         try {
                             TokenUserInfo refreshTokenInfo = tokenProvider.validateAndGetRefreshTokenInfo(refreshToken);
                             handleRefreshToken(request, response, refreshTokenInfo);
+                            log.info("refresh token 기간 안 ✅");
                         } catch (JwtException ex) {
                             log.error("Refresh token parsing error: {}", ex.getMessage());
+                            log.info("refresh token 기간 지나거나 위조됨 ❌");
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.getWriter().write("Invalid refresh token");
                             return;
                         }
                     } else {
+                        log.info("refresh token 삭제됨 ❌");
                         log.warn("No refresh token provided.");
                     }
                 }
             }
 
         } catch (Exception e) {
+            log.info("refresh token, access token 유효성 검증 통과 둘다 못함 ❌");
             log.warn("Token validation error");
             e.printStackTrace();
         }

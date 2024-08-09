@@ -41,16 +41,11 @@ public class StoreApprovalService {
            , TokenUserInfo userInfo
     ) {
         // userInfo storeId로 Store
-        if(!userInfo.getRole().equals("STORE")) {
-            throw new NoSuchElementException("가입한 계정이 아닙니다.");
+        if(!userInfo.getRole().equalsIgnoreCase("store")) {
+            throw new RuntimeException("스토어 계정이 아닙니다.");
         }
-        String storeId = userInfo.getEmail();
+        String storeId = userInfo.getUsername();
         log.debug("등록요청 가게: {}", storeId);
-
-        // 테스트용
-//        List<Store> all = storeRepository.findAll();
-//        int idx = (int) Math.floor(Math.random() * all.size());
-//        String storeId = all.get(idx).getStoreId();
 
         StoreApproval storeApproval = dto.toEntityForStoreDetail();
         storeApproval.setStoreId(storeId);
@@ -65,7 +60,10 @@ public class StoreApprovalService {
             , TokenUserInfo userInfo
     ) {
         // userInfo에서 storeId 찾기
-        String storeId = userInfo.getEmail();
+        if(!userInfo.getRole().equalsIgnoreCase("store")) {
+            throw new RuntimeException("스토어 계정이 아닙니다.");
+        }
+        String storeId = userInfo.getUsername();
 
         // 이미지 파일 저장 및 경로 문자열로 반환
         MultipartFile file = dto.getProductImage();
@@ -102,6 +100,10 @@ public class StoreApprovalService {
 
         // API 호출 및 결과 LicenseResDto
         LicenseResDto resDto = licenseService.verifyLicensesByOpenApi(array);
+
+        // API status code OK이면 사업자등록번호 검증 결과 setter로 업데이트
+        if("OK".equals(resDto.getStatus_code())) {
+            List<LicenseDto> results = resDto.getData();
 
         // API status code OK이면 사업자등록번호 검증 결과 setter로 업데이트
         if("OK".equals(resDto.getStatus_code())) {
