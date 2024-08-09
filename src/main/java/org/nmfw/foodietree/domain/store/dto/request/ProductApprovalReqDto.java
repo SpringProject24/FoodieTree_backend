@@ -1,15 +1,12 @@
-package org.nmfw.foodietree.domain.product.dto.request;
+package org.nmfw.foodietree.domain.store.dto.request;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
-import org.nmfw.foodietree.domain.product.Util.FileUtil;
-import org.nmfw.foodietree.domain.product.entity.ProductApproval;
+//import org.nmfw.foodietree.domain.product.entity.ProductApproval;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Getter @ToString
 @EqualsAndHashCode
@@ -33,5 +30,5 @@ public class ProductApprovalReqDto {
     @Setter
     private MultipartFile productImage;
 
-
+    private String storeId; // 임시로 테스트를 위해 추가
 }
