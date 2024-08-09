@@ -37,11 +37,11 @@ public class StoreApprovalService {
 
     // 등록 요청 내역을 tbl_store_approval에 저장
     public StoreApproval askStoreApproval(
-            StoreApprovalReqDto dto
-           , TokenUserInfo userInfo
+        StoreApprovalReqDto dto
+        , TokenUserInfo userInfo
     ) {
         // userInfo storeId로 Store
-        if(!userInfo.getRole().equalsIgnoreCase("store")) {
+        if (!userInfo.getRole().equalsIgnoreCase("store")) {
             throw new RuntimeException("스토어 계정이 아닙니다.");
         }
         String storeId = userInfo.getUsername();
@@ -56,11 +56,11 @@ public class StoreApprovalService {
 
     // 상품 디테일 tbl_store_approval 업데이트
     public void askProductApproval(
-            ProductApprovalReqDto dto
-            , TokenUserInfo userInfo
+        ProductApprovalReqDto dto
+        , TokenUserInfo userInfo
     ) {
         // userInfo에서 storeId 찾기
-        if(!userInfo.getRole().equalsIgnoreCase("store")) {
+        if (!userInfo.getRole().equalsIgnoreCase("store")) {
             throw new RuntimeException("스토어 계정이 아닙니다.");
         }
         String storeId = userInfo.getUsername();
@@ -85,30 +85,29 @@ public class StoreApprovalService {
     }
 
 
-
     // 가게 승인 요청 대기 중이면 사업자등록번호 검증
 //    @Scheduled(fixedRate = 180000) // 3분마다 스케줄 실행
     public void verifyLicenses() {
         List<StoreApproval> noVerifiedList
-                = storeApprovalRepository.findApprovalsByLicenseVerification();
+            = storeApprovalRepository.findApprovalsByLicenseVerification();
         log.debug("\n승인 대기 리스트 {}", noVerifiedList);
 
         // API 요구대로 List를 사업자등록번호만 담은 Array로 변환
         String[] array = noVerifiedList.stream()
-                .map(StoreApproval::getLicense).collect(Collectors.toList())
-                .toArray(new String[noVerifiedList.size()]);
+            .map(StoreApproval::getLicense).collect(Collectors.toList())
+            .toArray(new String[noVerifiedList.size()]);
 
         // API 호출 및 결과 LicenseResDto
         LicenseResDto resDto = licenseService.verifyLicensesByOpenApi(array);
 
         // API status code OK이면 사업자등록번호 검증 결과 setter로 업데이트
-        if("OK".equals(resDto.getStatus_code())) {
+        if ("OK".equals(resDto.getStatus_code())) {
             List<LicenseDto> results = resDto.getData();
 
             for (int i = 0; i < results.size(); i++) {
                 StoreApproval storeApproval = noVerifiedList.get(i);
                 // 조회 결과 유효한 번호인 경우
-                if(!results.get(i).getB_stt().isEmpty()) {
+                if (!results.get(i).getB_stt().isEmpty()) {
                     storeApproval.setLicenseVerification(ApproveStatus.APPROVED);
                 } else { // 조회 결과 유효하지 않은 번호인 경우
                     storeApproval.setLicenseVerification(ApproveStatus.REJECTED);
@@ -117,6 +116,5 @@ public class StoreApprovalService {
             }
             storeApprovalRepository.saveAll(noVerifiedList);
         }
-
     }
-
+}
