@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
+import org.nmfw.foodietree.domain.store.entity.value.CategoryConverter;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 
 import javax.persistence.*;
@@ -36,7 +37,7 @@ public class Store {
 //    @Column(name = "password", nullable = false)
 //    private String password;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = CategoryConverter.class)
     private StoreCategory category; // 업종 카테고리
 
     @Enumerated(EnumType.STRING)
@@ -110,6 +111,8 @@ public class Store {
         product.setStore(null);
     }
 
-  
+    public void setCategory(String category) {
+        this.category = StoreCategory.fromString(category);
+    }
 }
 

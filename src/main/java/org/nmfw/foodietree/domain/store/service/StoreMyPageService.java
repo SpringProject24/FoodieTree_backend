@@ -3,6 +3,8 @@ package org.nmfw.foodietree.domain.store.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.product.dto.response.ProductInfoDto;
+import org.nmfw.foodietree.domain.product.entity.Product;
+import org.nmfw.foodietree.domain.product.repository.ProductRepository;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
@@ -32,6 +34,7 @@ public class StoreMyPageService {
     private final ReservationMapper reservationMapper;
     private final StoreMyPageRepository storeMyPageRepository;
     private final StoreHolidaysRepository storeHolidaysRepository;
+    private final ProductRepository productRepository;
 
     public StoreMyPageDto getStoreMyPageInfo(String storeId) {
         log.info("Fetching store my page info for storeId: {}", storeId);
@@ -88,7 +91,7 @@ public class StoreMyPageService {
         }
         StoreMyPageCalendarModalDto dto = list.get(0);
 
-        List<ProductInfoDto> productCntByDate = storeMyPageMapper.getProductCntByDate(storeId, date);
+        List<ProductInfoDto> productCntByDate = storeMyPageRepository.getProductCntByDate(storeId, date);
         int tpuc = productCntByDate.stream()
                 .filter(product -> product.getPickedUpAt() != null && product.getReservationTime() != null && product.getCancelReservationAt() == null)
                 .collect(Collectors.toList())
@@ -199,7 +202,7 @@ public class StoreMyPageService {
         int productCnt = storeMyPageInfo.getProductCnt();
 
         LocalDate today = LocalDate.now();
-        List<ProductInfoDto> dto = storeMyPageMapper.getProductCntByDate(storeId, today.toString());
+        List<ProductInfoDto> dto = storeMyPageRepository.getProductCntByDate(storeId, today.toString());
         int todayProductCnt = dto.size();
         int todayPickedUpCnt = dto.stream()
                 .filter(product -> product.getPickedUpAt() != null && product.getReservationTime() != null)
@@ -235,10 +238,14 @@ public class StoreMyPageService {
         String pickupTime = pickupDateTime.toString(); // 문자열로 변환
 
         for (int i = 0; i < newCount; i++) {
-            storeMyPageMapper.updateProductAuto(storeId, pickupTime);
+            productRepository.save(Product.builder()
+                    .storeId(storeId)
+                    .pickupTime(pickupDateTime)
+                    .productUploadDate(LocalDateTime.now())
+                    .build());
         }
 
-        List<ProductInfoDto> dto = storeMyPageMapper.getProductCntByDate(storeId, today.toString());
+        List<ProductInfoDto> dto = storeMyPageRepository.getProductCntByDate(storeId, today.toString());
         // true false 뭐로 반환할지 생각좀...
         return true;
     }

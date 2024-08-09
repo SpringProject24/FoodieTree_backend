@@ -1,26 +1,30 @@
 package org.nmfw.foodietree.domain.store.repository;
 
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.DateTemplate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.product.dto.response.ProductInfoDto;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
+import org.nmfw.foodietree.domain.reservation.entity.QReservation;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.entity.QStore;
-import org.nmfw.foodietree.domain.store.entity.QStoreHolidays;
 import org.nmfw.foodietree.domain.store.entity.Store;
-import org.nmfw.foodietree.domain.store.entity.StoreHolidays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+
 @Repository
+@Slf4j
 public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCustom {
 
     private final JPAQueryFactory factory;
@@ -101,13 +105,11 @@ public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCus
                 .fetch();
     }
 
+    @Override
+    public void updateProductAuto(String storeId, String pickupTime) {
+        // productRepository 의 save 로 구현
+    }
 
-//    @Override
-//    @Transactional
-//    public void updateProductAuto(String storeId, LocalDate pickupTime) {
-//        // Implement updateProductAuto using QueryDSL if needed
-//    }
-//
 //    @Override
 //    @Transactional
 //    public void cancelProductByStore(String storeId, LocalDate pickupTime) {
@@ -120,57 +122,36 @@ public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCus
         return factory.select(Projections.constructor(StoreCheckDto.class,
                         qStore.storeId,
                         qStore.storeName,
+//                        qStore.pickupTime,
                         qStore.productCnt,
-                        qStore.openAt,
                         qStore.closedAt))
                 .from(qStore)
                 .fetch();
     }
 
-//    @Override
-//    @Transactional
-//    public void setHoliday(String storeId, String holidays) {
-//        StoreHolidays storeHoliday = new StoreHolidays();
-//        storeHoliday.setStoreId(storeId);
-//        storeHoliday.setHolidays(holidays);
-//        storeHolidaysRepository.save(storeHoliday);
-//    }
-
-//    @Override
-//    @Transactional
-//    public void undoHoliday(String storeId, LocalDate holidays) {
-//        storeHolidaysRepository.deleteByStoreIdAndHolidays(storeId, holidays);
-//    }
-
-
     @Override
-    public List<StoreHolidayDto> getHolidays(String storeId) {
-        QStoreHolidays qStoreHoliday = QStoreHolidays.storeHolidays;
-        return factory.select(Projections.constructor(StoreHolidayDto.class,
-                        qStoreHoliday.storeId,
-                        qStoreHoliday.holidays))
-                .from(qStoreHoliday)
-                .where(qStoreHoliday.storeId.eq(storeId))
+    public List<ProductInfoDto> getProductCntByDate(String storeId, String date) {
+        QProduct qProduct = QProduct.product;
+        QReservation qReservation = QReservation.reservation;
+
+        // String으로 변환하여 날짜 비교
+        StringTemplate formattedDate = Expressions.stringTemplate(
+                "DATE_FORMAT({0}, {1})", qProduct.productUploadDate, ConstantImpl.create("%Y-%m-%d")
+        );
+        BooleanExpression dateCondition = formattedDate.eq(date);
+        log.info("dateCondition = {}", dateCondition);
+        return factory.select(Projections.constructor(ProductInfoDto.class,
+                        qProduct.pickupTime,
+                        qProduct.productUploadDate,
+//                        qProduct.cancelByStore,
+                        qReservation.reservationTime,
+                        qReservation.cancelReservationAt,
+                        qReservation.pickedUpAt))
+                .from(qProduct)
+                .leftJoin(qReservation).on(qProduct.productId.eq(qReservation.productId))
+                .where(qProduct.storeId.eq(storeId).and(dateCondition))
                 .fetch();
     }
-
-//    @Override
-//    public List<ProductInfoDto> getProductCntByDate(String storeId, LocalDate date) {
-//        QProduct qProduct = QProduct.product;
-//        QReservation qReservation = QReservation.reservation;
-//
-//        return queryFactory.select(Projections.constructor(ProductInfoDto.class,
-//                        qProduct.pickupTime,
-//                        qProduct.productUploadDate,
-//                        qProduct.canceledByStoreAt,
-//                        qReservation.reservationTime,
-//                        qReservation.cancelReservationAt,
-//                        qReservation.pickedUpAt))
-//                .from(qProduct)
-//                .leftJoin(qReservation).on(qProduct.productId.eq(qReservation.productId))
-//                .where(qProduct.store.storeId.eq(storeId).and(qProduct.productUploadDate.dateEq(date)))
-//                .fetch();
-//    }
 
 //    @Override
 //    public long countPickedUpProductsByDate(String storeId, LocalDate date) {
