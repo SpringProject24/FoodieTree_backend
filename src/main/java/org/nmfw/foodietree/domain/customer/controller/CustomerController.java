@@ -32,17 +32,17 @@ public class CustomerController {
     private final CustomerMyPageService customerMyPageService;
     private final CustomerEditService customerEditService;
 
-//    @GetMapping("/check")
-//    @CrossOrigin
-//    @ResponseBody
-//    public ResponseEntity<?> check(String keyword) {
-//        log.info("customer 중복체크 아이디 : {}",  keyword);
-//        boolean flag = customerService.findOne(keyword);
-//        log.info("customer 중복체크  결과 {}",  flag);
-//        return ResponseEntity
-//                .ok()
-//                .body(flag);
-//    }
+    @GetMapping("/check")
+    @CrossOrigin
+    @ResponseBody
+    public ResponseEntity<?> check(String email) {
+        log.info("customer 중복체크 아이디 : {}",  email);
+        boolean flag = customerService.findOne(email);
+        log.info("customer 중복체크  결과 {}",  flag);
+        return ResponseEntity
+                .ok()
+                .body(flag);
+    }
 
     @PostMapping("/myFavMap")
     public ResponseEntity<Map<String, String>> getMyLocation(@RequestBody Map<String, String> payload) {
