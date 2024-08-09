@@ -47,6 +47,16 @@ public class StoreApproval {
     @Builder.Default       // 등록 요청 상태
     private ApproveStatus status = ApproveStatus.PENDING;
 
+    @Setter
+    @Column(name = "store_approval_image")
+    private String proImage; // 상품 이미지 경로
+
+    @Column(name = "store_approval_amount")
+    private Integer productCnt;  // 상품 수량
+
+    @Column(name = "store_approval_price")
+    private Integer price;  // 상품 가격
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt; // 생성시간
@@ -57,17 +67,23 @@ public class StoreApproval {
     @Column(name = "store_approval_email", nullable = false)
     private String storeId; // 가게 회원의 이메일
 
-    // StoreApproval 정보를 업데이트한 Store
-    public Store updateFromStoreApproval() {
-        return Store.builder()
-                .storeId(storeId)
-                .category(category)
-                .address(address)
-                .approve(status)
-                .storeContact(contact)
-                .storeName(name)
-                .storeLicenseNumber(license)
-                .build();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "license_verification") // 사업자등록번호 검증 상태
+    @Builder.Default
+    private ApproveStatus licenseVerification = ApproveStatus.PENDING;
+
+    // StoreApproval 승인되면 Store setter 후 리턴
+    public Store updateFromStoreApproval(Store store) {
+        store.setCategory(category);
+        store.setAddress(address);
+        store.setApprove(status);
+        store.setStoreContact(contact);
+        store.setStoreName(name);
+        store.setStoreLicenseNumber(license);
+        store.setProductCnt(productCnt);
+        store.setPrice(price);
+        store.setApprove(ApproveStatus.APPROVED);
+        return store;
     }
 
 }
