@@ -13,7 +13,7 @@ import java.time.LocalTime;
 public class StoreListDto {
     private String storeId;
     private String storeName;
-    private StoreCategory category;
+    private String category;
     private String address;
     private Integer price;
     private String storeImg;
@@ -28,7 +28,7 @@ public class StoreListDto {
         return StoreListDto.builder()
                 .storeId(store.getStoreId())
                 .storeName(store.getStoreName())
-                .category(store.getCategory())
+                .category(store.getCategory().getFoodType())
                 .address(store.getAddress())
                 .price(store.getPrice())
                 .storeImg(store.getStoreImg())
