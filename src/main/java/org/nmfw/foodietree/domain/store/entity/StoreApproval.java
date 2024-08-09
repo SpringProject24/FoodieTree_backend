@@ -86,5 +86,4 @@ public class StoreApproval {
         store.setApprove(ApproveStatus.APPROVED);
         return store;
     }
-
 }
