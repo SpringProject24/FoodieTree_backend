@@ -53,6 +53,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
                         try {
                             TokenUserInfo refreshTokenInfo = tokenProvider.validateAndGetRefreshTokenInfo(refreshToken);
                             handleRefreshToken(request, response, refreshTokenInfo);
+                            setAuthenticationContext(request, refreshTokenInfo);
                             log.info("refresh token 기간 안 ✅");
                         } catch (JwtException ex) {
                             log.error("Refresh token parsing error: {}", ex.getMessage());
