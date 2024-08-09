@@ -58,7 +58,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
                             log.error("Refresh token parsing error: {}", ex.getMessage());
                             log.info("refresh token 기간 지나거나 위조됨 ❌");
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().write("Invalid refresh token");
+//                            response.getWriter().write("Invalid refresh token");
                             return;
                         }
                     } else {
@@ -92,7 +92,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
             log.info("리프레시토큰 재발급 ✅");
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Refresh token expired");
+//            response.getWriter().write("Refresh token expired");
             return;
         }
 
