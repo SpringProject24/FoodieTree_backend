@@ -114,5 +114,9 @@ public class Store {
     public void setCategory(String category) {
         this.category = StoreCategory.fromString(category);
     }
+
+    public void setCategory(StoreCategory category) {
+        this.category = category;
+    }
 }
 
