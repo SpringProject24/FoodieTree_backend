@@ -3,7 +3,6 @@ package org.nmfw.foodietree.domain.store.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +11,11 @@ import org.nmfw.foodietree.domain.admin.dto.res.StoreApproveDto;
 import org.nmfw.foodietree.domain.store.dto.resp.ApprovalInfoDto;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -89,14 +85,17 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
         .fetchOne();
     }
 
-    @Override
+    @Override // 기간 기준 조회
     public List<ApprovalInfoDto> findAllByDate(LocalDateTime startDate, LocalDateTime endDate) {
 
-        return selectToDto()
+        List<ApprovalInfoDto> list = selectToDto()
                 .where(
-                    storeApproval.createdAt.between(startDate, endDate)
+                        storeApproval.createdAt.between(startDate, endDate)
 //                    .and(storeApproval.createdAt.before(endDate))
                 ).fetch();
+        em.flush();
+        em.clear();
+        return list;
     }
 
     // select 결과를 dto로 담는 쿼리 분리
@@ -157,6 +156,7 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
                     .set(store.storeLicenseNumber, sa.getLicense())
                     .set(store.productCnt, sa.getProductCnt())
                     .set(store.price, sa.getPrice())
+//                    .set(store.productImage, sa.getProductImage()) // store 필드에 따라 변경 필요
                     .where(store.storeId.eq(sa.getStoreId()))
                     .execute();
             if(result > 0) resultCnt++;
