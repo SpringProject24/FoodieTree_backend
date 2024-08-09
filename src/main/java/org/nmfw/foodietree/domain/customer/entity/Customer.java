@@ -10,7 +10,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Getter
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,15 +29,12 @@ public class Customer {
     @Column(name = "customer_password")
     private String customerPassword;
 
-    @Setter
     @Column(name = "nickname")
     private String nickname;
 
-    @Setter
     @Column(name = "customer_phone_number")
     private String customerPhoneNumber;
 
-    @Setter
     @Column(name = "profile_image")
     private String profileImage;
 
@@ -47,7 +44,6 @@ public class Customer {
     @Column(name = "limit_time")
     private LocalDateTime limitTime;
 
-    @Setter
     @Column(name = "refresh_token_expire_date", nullable = true)
     private LocalDateTime refreshTokenExpireDate;
 

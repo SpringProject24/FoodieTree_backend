@@ -23,10 +23,14 @@ public class StoreListController {
 
     private final StoreListService storeListService;
 
+    // 현재 hardcoding 된 값 사용
+    // 추후 변경
+    String customerId = "test@gmail.com";
+
     // Store 전체 조회 요청!
     @GetMapping
     public ResponseEntity<List<StoreListDto>> getAllStores() {
-        List<StoreListDto> storeListDto = storeListService.getAllStores();
+        List<StoreListDto> storeListDto = storeListService.getAllStores(customerId);
         return ResponseEntity.ok().body(storeListDto);
     }
 

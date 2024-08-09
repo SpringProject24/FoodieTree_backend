@@ -17,10 +17,10 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Transactional
     @Query("UPDATE Store s SET s.refreshTokenExpireDate = :refreshTokenExpireDate WHERE s.storeId = :storeId")
     void updateRefreshTokenExpireDate(
-            @Param("storeId") String storeId,
-            @Param("refreshTokenExpireDate") LocalDateTime refreshTokenExpireDate
+            @Param("refreshTokenExpireDate") LocalDateTime refreshTokenExpireDate,
+            @Param("storeId") String storeId
     );
 
-    @Query("SELECT COUNT(c) > 0 FROM Store c WHERE c.storeId = :keyword")
-    boolean existsByStoreId(@Param("keyword") String keyword);
+    @Query("SELECT COUNT(c) > 0 FROM Store c WHERE c.storeId = :email")
+    boolean existsByStoreId(@Param("email") String email);
 }

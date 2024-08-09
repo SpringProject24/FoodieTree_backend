@@ -5,6 +5,7 @@ import javax.servlet.http.Cookie;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeStoreDto;
 import org.nmfw.foodietree.domain.customer.dto.request.AutoLoginDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
@@ -17,6 +18,8 @@ import org.nmfw.foodietree.domain.store.dto.request.StoreSignUpDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,8 +42,8 @@ public class StoreService {
     public void signUpUpdateStore(EmailCodeStoreDto emailCodeStoreDto) {
 
         storeRepository.updateRefreshTokenExpireDate(
-                emailCodeStoreDto.getStoreId(),
-                emailCodeStoreDto.getRefreshTokenExpireDate()
+                emailCodeStoreDto.getRefreshTokenExpireDate(),
+                emailCodeStoreDto.getStoreId()
                 );
     }
 
@@ -62,7 +65,12 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public boolean findOne(String keyword) {
-        return storeRepository.existsByStoreId(keyword);
+    public boolean findOne(String email) {
+        return storeRepository.existsByStoreId(email);
+    }
+
+
+    public void updateStore(LocalDateTime date, String email) {
+        storeRepository.updateRefreshTokenExpireDate(date, email);
     }
 }
