@@ -44,10 +44,14 @@ public class ReservationDetailDto {
     private String pickupStartTimeF;
     private String pickupEndTimeF;
 
+    public void setCategory(String category) {
+        this.category = StoreCategory.fromString(category);
+    }
+
     // 명시적으로 모든 매개변수를 포함하는 생성자 추가
     public ReservationDetailDto(long reservationId, long productId, String customerId, LocalDateTime reservationTime,
                                 LocalDateTime cancelReservationAt, LocalDateTime pickedUpAt, String storeId,
-                                LocalDateTime pickupTime, String storeName, String category, String address, int price,
+                                LocalDateTime pickupTime, String storeName, StoreCategory category, String address, int price,
                                 String storeImg, String nickname, String profileImage) {
         this.reservationId = reservationId;
         this.productId = productId;
@@ -58,7 +62,7 @@ public class ReservationDetailDto {
         this.storeId = storeId;
         this.pickupTime = pickupTime;
         this.storeName = storeName;
-        this.category = StoreCategory.valueOf(category);
+        this.category = category;
         this.address = address;
         this.price = price;
         this.storeImg = storeImg;

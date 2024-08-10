@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class ProductInfoDto {
     private LocalDateTime pickupTime;
     private LocalDateTime productUploadDate;
-    private LocalDateTime cancelByStoreAt;
+//    private LocalDateTime cancelByStore;
 
     private LocalDateTime reservationTime;
     private LocalDateTime cancelReservationAt;

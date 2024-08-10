@@ -40,7 +40,6 @@ public class AutoLoginInterceptor implements HandlerInterceptor {
             if (foundCustomer != null
                     && LocalDateTime.now().isBefore(foundCustomer.getLimitTime())) {
 
-                CustomerService.maintainLoginState(request.getSession(), foundCustomer);
             }
         }
 

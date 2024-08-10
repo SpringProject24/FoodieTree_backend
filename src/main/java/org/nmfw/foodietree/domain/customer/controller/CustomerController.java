@@ -22,23 +22,23 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 
-@RestController
-@RequestMapping("/customer")
 @Slf4j
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/customer")
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CustomerMyPageService customerMyPageService;
+    private final CustomerEditService customerEditService;
 
     @GetMapping("/check")
     @CrossOrigin
     @ResponseBody
-    public ResponseEntity<?> check(
-//            String type,
-            String keyword) {
-        log.info("{}",  keyword);
-
-        boolean flag = customerService.checkIdentifier(keyword);
+    public ResponseEntity<?> check(String email) {
+        log.info("customer 중복체크 아이디 : {}",  email);
+        boolean flag = customerService.findOne(email);
+        log.info("customer 중복체크  결과 {}",  flag);
         return ResponseEntity
                 .ok()
                 .body(flag);
@@ -55,27 +55,6 @@ public class CustomerController {
         }
     }
 
-    //회원가입 양식 열기
-//    @GetMapping("/sign-up")
-//    public String signUp(Model model) {
-//        log.info("customer/sign-up GET : forwarding to sign-up.jsp");
-//        model.addAttribute("kakaoApiKey", kakaoApiKey);
-//        return "/customer/sign-up";
-//    }
-
-    // 회원가입 요청 처리
-//    @PostMapping("/sign-up")
-//    public String signUp(@Validated SignUpDto dto, BindingResult result) {
-//        if (result.hasErrors()) {
-//            log.info("{}", result);
-//            return "redirect:/customer/sign-up";
-//        }
-//
-//        boolean flag = customerService.join(dto);
-//        return flag ? "redirect:/customer/sign-in" : "redirect:/customer/sign-up";
-
-    private final CustomerMyPageService customerMyPageService;
-    private final CustomerEditService customerEditService;
 
     // 테스트용 계정 강제 삽입, 추후 토큰에서 customerId 입력하는것으로 변경 예정
 //    String customerId = "test@gmail.com";
@@ -119,7 +98,7 @@ public class CustomerController {
             @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
         // 추후 토큰을 통해 고객 ID를 가져옴
-         String customerId = userInfo.getEmail();
+         String customerId = userInfo.getUsername();
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok(reservations);
     }

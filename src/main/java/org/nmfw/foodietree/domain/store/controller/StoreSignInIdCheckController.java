@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.store.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.store.service.LoginIdCheckService;
+import org.nmfw.foodietree.domain.store.service.StoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequiredArgsConstructor
 public class StoreSignInIdCheckController {
 
-    private final LoginIdCheckService loginIdCheckService;
+    private final StoreService storeService;
 
     // 아이디(이메일) 중복검사 비동기 요청 처리
     @GetMapping("/check")
@@ -24,10 +25,10 @@ public class StoreSignInIdCheckController {
     @ResponseBody
     public ResponseEntity<?> check(
 //            String type,
-                                   String keyword) {
-        log.info("{}",  keyword);
+                                   String email) {
+        log.info("{}",  email);
 
-        boolean flag = loginIdCheckService.checkIdentifier(keyword);
+        boolean flag = storeService.findOne(email);
         return ResponseEntity
                 .ok()
                 .body(flag);

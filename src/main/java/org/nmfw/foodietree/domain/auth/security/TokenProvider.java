@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+
 @Component
 @Slf4j
 public class TokenProvider {
@@ -62,18 +63,10 @@ public class TokenProvider {
                 .compact();
     }
 
-    // refresh token : for long term life cycle and did not need to verify email link
-    // save at user's DB
     public String createRefreshToken(String email, String userType) {
-
-        byte[] decodedKey = Base64.getDecoder().decode(REFRESH_SECRET_KEY);
-        System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
-        System.out.println("Decoded Key Length in Bits: " + (decodedKey.length * 8));
 
         byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
-        System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
-        System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
 
         return Jwts.builder()
                 .claim("role", userType) // role 클레임에 userType 추가
@@ -85,24 +78,28 @@ public class TokenProvider {
                 .compact();
     }
 
-    public Date getExpirationDateFromRefreshToken(String refreshToken) {
+
+    public LocalDateTime getExpirationDateFromRefreshToken(String refreshToken) {
+
         byte[] keyBytes = REFRESH_SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
-        return Jwts.parserBuilder()
+        Date expiration = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(refreshToken)
                 .getBody()
-                .getExpiration(); // 리프레시 토큰 만료일자
+                .getExpiration();
+
+        return expiration.toInstant()
+                .atZone(ZoneId.systemDefault()) // 시스템 기본 시간대를 사용
+                .toLocalDateTime();
     }
 
 
-   public TokenUserInfo validateAndGetTokenInfo(String token) {
+    public TokenUserInfo validateAndGetTokenInfo(String token) {
 
-       if (token == null || token.isEmpty()) {
-           throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
-       }
+        log.info("validateAndGetTokenInfo run!!!!");
 
         try {
             //토큰 발급 당시 서명 처리
@@ -136,11 +133,13 @@ public class TokenProvider {
 
         } catch (JwtException e) {
             log.error("ACCESS Token validation error: {}", e.getMessage());
-            throw e; // 또는 적절한 예외 처리
+            throw e;
         }
     }
 
     public TokenUserInfo validateAndGetRefreshTokenInfo(String refreshToken) {
+
+        log.info("validateAndGetRefreshTokenInfo run!!!!");
 
         if (refreshToken == null || refreshToken.isEmpty()) {
             throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
