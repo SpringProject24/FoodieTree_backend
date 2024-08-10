@@ -75,7 +75,7 @@ public class StoreApproval {
 
     // StoreApproval 승인되면 Store setter 후 리턴
     public Store updateFromStoreApproval(Store store) {
-        store.setCategory(category);
+        store.setCategory(String.valueOf(category));
         store.setAddress(address);
         store.setApprove(status);
         store.setStoreContact(contact);
@@ -86,5 +86,4 @@ public class StoreApproval {
         store.setApprove(ApproveStatus.APPROVED);
         return store;
     }
-
 }

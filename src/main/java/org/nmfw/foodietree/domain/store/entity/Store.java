@@ -64,6 +64,9 @@ public class Store {
     @Column(name = "store_img")
     private String storeImg; // 가게 사진
 
+    @Column(name = "product_image")
+    private String productImg; // 상품 사진
+
     @Column(name = "store_license_number")
     private String storeLicenseNumber; // 사업자번호
 
@@ -113,6 +116,10 @@ public class Store {
 
     public void setCategory(String category) {
         this.category = StoreCategory.fromString(category);
+    }
+
+    public void setCategory(StoreCategory category) {
+        this.category = category;
     }
 }
 
