@@ -87,30 +87,29 @@ public class AuthJwtFilter extends OncePerRequestFilter {
         log.info("Refresh token expiry date from server: {}", refreshTokenExpiryDate);
 
         if (refreshTokenExpiryDate.isAfter(LocalDateTime.now())) {
-            // 로그인 함과 동시에 리프레시 토큰 재발급
-            userService.setUserRefreshTokenExpiryDate(email, userType);
-            log.info("리프레시토큰 재발급 ✅");
 
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            response.getWriter().write("Refresh token expired");
+            // 로그인 함과 동시에 토큰, 리프레시 토큰 재발급
+            String token = tokenProvider.createToken(email, userType);
+            userService.setUserRefreshTokenExpiryDate(email, userType);
+
+            log.info("리프레시 토큰 및 액세스 토큰 재발급 ✅");
+
+            // 응답 상태 코드 설정 (200 OK)
+            response.setStatus(HttpServletResponse.SC_OK);
+
+            // Set authentication context
+            TokenUserInfo newAccessTokenInfo = tokenProvider.validateAndGetTokenInfo(token);
+            setAuthenticationContext(request, newAccessTokenInfo);
+
+            // Set new tokens in response headers
+            response.setHeader("token", token);
             return;
         }
 
-        // Generate new tokens
-        EmailCodeDto emailCodeDto = EmailCodeDto.builder()
-                .email(email)
-                .userType(userType)
-                .build();
-        String newAccessToken = tokenProvider.createToken(emailCodeDto);
-        String newRefreshToken = tokenProvider.createRefreshToken(email, userType);
+        log.warn("리프레시 토큰이 만료되었거나 잘못되었습니다.");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Invalid refresh token");
 
-        // Set new tokens in response headers
-        response.setHeader("token", newAccessToken);
-        response.setHeader("refreshToken", newRefreshToken);
-
-        // Set authentication context
-        TokenUserInfo newAccessTokenInfo = tokenProvider.validateAndGetTokenInfo(newAccessToken);
-        setAuthenticationContext(request, newAccessTokenInfo);
     }
 
     private void setAuthenticationContext(HttpServletRequest request, TokenUserInfo tokenInfo) {

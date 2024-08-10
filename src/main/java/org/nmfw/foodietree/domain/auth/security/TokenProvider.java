@@ -37,7 +37,7 @@ public class TokenProvider {
     private String REFRESH_SECRET_KEY;
 
     // create access token : short term for access server DB and saved at local storage
-    public String createToken(EmailCodeDto emailCodeDto) {
+    public String createToken(String email, String userType) {
 
         byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
         System.out.println("Decoded Key Length in Bytes: " + decodedKey.length);
@@ -48,10 +48,9 @@ public class TokenProvider {
         System.out.println("Secret Key Length in Bytes: " + key.getEncoded().length);
         System.out.println("Secret Key Length in Bits: " + (key.getEncoded().length * 8));
 
-        String email = emailCodeDto.getEmail();
-        String userType = emailCodeDto.getUserType();
 
-        return Jwts.builder()
+
+        String compact = Jwts.builder()
                 .claim("role", userType) // role 클레임에 userType 추가
                 // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
                 .signWith(key, SignatureAlgorithm.HS512)
@@ -61,7 +60,13 @@ public class TokenProvider {
                 .setIssuedAt(new Date()) // iat
                 .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.MINUTES))) // exp
                 .compact();
+
+        log.info(" access token 발급 완료 ✅");
+
+        return compact;
+
     }
+
 
     public String createRefreshToken(String email, String userType) {
 
@@ -191,8 +196,9 @@ public class TokenProvider {
     public static class TokenUserInfo implements UserDetails {
         private String role;
         private String email;
-        private LocalDateTime tokenExpireDate; // 두 토큰의 만료일자를 담음
+        private LocalDateTime tokenExpireDate; // 토큰의 만료일자를 담음
 
+        // usertype(role)
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
             return List.of(new SimpleGrantedAuthority(role));
@@ -203,6 +209,7 @@ public class TokenProvider {
             return null; // JWT 기반 인증에서는 비밀번호가 필요 없음
         }
 
+        // email
         @Override
         public String getUsername() {
             return email;

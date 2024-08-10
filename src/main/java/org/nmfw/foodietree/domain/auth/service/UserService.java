@@ -35,7 +35,7 @@ public class UserService {
         String emailCodeDtoEmail = emailCodeDto.getEmail();
         log.info("emailcodedto에서 이메일 찾기 {}", emailCodeDtoEmail);
 
-        String token = tokenProvider.createToken(emailCodeDto);
+        String token = tokenProvider.createToken(emailCodeDtoEmail, emailCodeDtoUserType);
         String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
         LocalDateTime expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
 
@@ -78,7 +78,7 @@ public class UserService {
         String emailCodeDtoUserType = emailCodeDto.getUserType();
         String emailCodeDtoEmail = emailCodeDto.getEmail();
 
-        String token = tokenProvider.createToken(emailCodeDto);
+        String token = tokenProvider.createToken(emailCodeDtoEmail, emailCodeDtoUserType);
         log.info(" 새로운 토큰 재발급 ! {}",token);
         String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
         log.info("새로운 리프레시 토큰 재발급 ! {} ",refreshToken);
@@ -166,6 +166,7 @@ public class UserService {
     }
 
     public void setUserRefreshTokenExpiryDate(String email, String userType) {
+
         String newRefreshToken = tokenProvider.createRefreshToken(email, userType);
         LocalDateTime newExpiryDate = tokenProvider.getExpirationDateFromRefreshToken(newRefreshToken);
 

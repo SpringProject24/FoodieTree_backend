@@ -64,7 +64,7 @@ public class EmailService {
     // 이메일 인증 링크 전송 메서드
     public void sendVerificationEmailLink(String email, String userType, EmailCodeDto emailCodeDto) throws MessagingException {
         // JWT 토큰 생성
-        String token = tokenProvider.createToken(emailCodeDto);
+        String token = tokenProvider.createToken(email, userType);
         String refreshToken = tokenProvider.createRefreshToken(email, userType);
 
         log.info("전달받은 usertype : {}", userType);
