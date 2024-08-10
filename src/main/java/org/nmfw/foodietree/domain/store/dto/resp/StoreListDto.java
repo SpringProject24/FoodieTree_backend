@@ -22,6 +22,7 @@ public class StoreListDto {
     private LocalTime closedAt;
     private LocalDateTime limitTime;
     private Boolean emailVerified;
+    private String productImg;
 
     public static StoreListDto fromEntity(Store store) {
 
@@ -37,6 +38,7 @@ public class StoreListDto {
                 .closedAt(store.getClosedAt())
                 .limitTime(store.getLimitTime())
                 .emailVerified(store.getEmailVerified())
+                .productImg(store.getProductImg())
                 .build();
 
     }
