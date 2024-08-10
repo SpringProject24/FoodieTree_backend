@@ -2,7 +2,10 @@ package org.nmfw.foodietree.domain.store.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.EnumPath;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +41,7 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
     ) {
 
         // status 따라 요청 목록 조회할 수 있도록 동적 쿼리 사용
-        BooleanBuilder booleanBuilder = makeDynamicStoreStatus(status);
+        BooleanBuilder booleanBuilder = makeDynamicCondition(storeApproval.status, status);
 
         List<ApprovalInfoDto> list =
                 selectToDto()
@@ -64,7 +67,6 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
 
         // 어제 0시 0분
         LocalDateTime yesterday = LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0);
-//        LocalDateTime startOfToday = LocalDateTime.now().with(LocalDateTime.MIN);
 
         return factory
                 .selectFrom(storeApproval)
@@ -77,7 +79,7 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
     @Override // 해당 가게의 승인 요청 조회
     public ApprovalInfoDto findApprovalsByStoreId(String storeId) {
 
-        BooleanBuilder booleanBuilder = makeDynamicStoreStatus(ApproveStatus.APPROVED);
+        BooleanBuilder booleanBuilder = makeDynamicCondition(storeApproval.status, ApproveStatus.APPROVED);
 
         return selectToDto()
         .from(storeApproval)
@@ -169,22 +171,13 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
         return resultCnt;
     }
 
-    // storeApproval 동적 쿼리 메서드
-    private BooleanBuilder makeDynamicStoreStatus(ApproveStatus status) {
+    // 동적 쿼리 eq 메서드
+    private <T> BooleanBuilder makeDynamicCondition(PathBuilder<T> field, T value) {
+        return new BooleanBuilder().and(field.eq(value));
+    }
 
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-
-        if(status == ApproveStatus.PENDING) {
-            booleanBuilder.and(storeApproval.status.eq(ApproveStatus.PENDING));
-        }
-        if(status == ApproveStatus.APPROVED) {
-            booleanBuilder.and(storeApproval.status.eq(ApproveStatus.APPROVED));
-        }
-        if(status == ApproveStatus.REJECTED) {
-            booleanBuilder.and(storeApproval.status.eq(ApproveStatus.REJECTED));
-        }
-
-        return booleanBuilder;
+    private BooleanBuilder makeDynamicCondition(EnumPath<ApproveStatus> field, ApproveStatus value) {
+        return new BooleanBuilder().and(field.eq(value)); // Enum에 사용
     }
 
     // 정렬 조건을 처리하는 메서드

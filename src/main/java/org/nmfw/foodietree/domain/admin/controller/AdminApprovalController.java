@@ -3,19 +3,13 @@ package org.nmfw.foodietree.domain.admin.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.admin.dto.req.ApprovalStatusDto;
-import org.nmfw.foodietree.domain.admin.dto.req.ApprovalStatusDto;
-import org.nmfw.foodietree.domain.admin.service.AdminService;
-import org.nmfw.foodietree.domain.store.dto.resp.ApprovalInfoDto;
-import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.nmfw.foodietree.domain.admin.service.AdminApprovalService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
@@ -24,9 +18,9 @@ import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 @Slf4j
-public class AdminController {
+public class AdminApprovalController {
 
-    private final AdminService adminService;
+    private final AdminApprovalService adminApprovalService;
 
     // 스토어 등록 요청 목록을 조회 (서버에서 페이징)
     @GetMapping(value = "/approve/page/{pageNo}")
@@ -51,20 +45,15 @@ public class AdminController {
             LocalDateTime end
 //          , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
-        if (start == null && end == null) {
-            start = LocalDateTime.now();
-            end = LocalDateTime.now();
-        }
         if (start == null) {
             start = LocalDateTime.of(2024, 6, 1, 0, 0, 0);
-            end = LocalDateTime.now();
         }
         if (end == null) {
             end = LocalDateTime.now();
         }
         log.info("관리자 - 승인요청 : 시작일 {} / 종료일 {}", start, end );
 
-        Map<String, Object> approvalsMap = adminService.getApprovals(
+        Map<String, Object> approvalsMap = adminApprovalService.getApprovals(
                 start
                 , end
 //                , userInfo
@@ -85,7 +74,7 @@ public class AdminController {
         TokenUserInfo userInfo = null;
         int resultCnt;
         try {
-            resultCnt = adminService.updateApprovalsStatus(dto, userInfo);
+            resultCnt = adminApprovalService.updateApprovalsStatus(dto, userInfo);
         } catch (Exception e) { // 예외처리 보완 필요
             return ResponseEntity.badRequest().body(e.getMessage());
         }

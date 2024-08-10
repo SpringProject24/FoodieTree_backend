@@ -5,17 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.admin.dto.req.ApprovalStatusDto;
 import org.nmfw.foodietree.domain.admin.dto.res.StoreApproveDto;
 import org.nmfw.foodietree.domain.admin.dto.res.ApprovalCellDto;
-import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.store.dto.resp.ApprovalInfoDto;
-import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
 import org.nmfw.foodietree.domain.store.repository.StoreApprovalRepository;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -36,10 +29,9 @@ import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class AdminService {
+public class AdminApprovalService {
 
     private final StoreApprovalRepository storeApprovalRepository;
-    private final StoreRepository storeRepository;
 
     // 페이징 된 요청 리스트
 //    public Map<String, Object> getApprovals(
@@ -55,7 +47,7 @@ public class AdminService {
 //        Page<ApprovalInfoDto> approvalsPage = storeApprovalRepository.findApprovalsByStatus(pageable, approveStatus);
 //        List<ApprovalInfoDto> approvals = approvalsPage.getContent();
 //
-//        // 총 이벤트 개수
+//        // 총 개수
 //        long totalElements = approvalsPage.getTotalElements();
 //
 //        Map<String, Object> map = new HashMap<>();
@@ -82,12 +74,15 @@ public class AdminService {
             ApprovalCellDto approvalCell = new ApprovalCellDto(approval);
             approvals.add(approvalCell);
         }
-        // 총 이벤트 개수
-//        long totalElements = storeApprovalRepository.count();
+        // 요청 상태별 count
+        Map<ApproveStatus, Long> stats = approvalList.stream().collect(Collectors.groupingBy(
+                ApprovalInfoDto::getStatus,
+                Collectors.counting()
+        ));
 
         Map<String, Object> map = new HashMap<>();
         map.put("approvals", approvals);
-//        map.put("totalCount", totalElements);
+        map.put("stats", stats);
 
         return map;
     }
