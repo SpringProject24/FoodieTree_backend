@@ -33,18 +33,20 @@ public class FavFoodRepositoryCustomImpl implements FavFoodRepositoryCustom {
     @Override // review 테이블로 변경 필요
     public List<ProductDto> findByReviews() {
 
-        // 1. 최근 5개의 distinct productId 조회
-        List<Long> recentProductIds = factory
-                .select(reservation.productId)
+        // 1. 최근 5개의 distinct storeId 조회
+        List<String> recentStoreIds = factory
+                .select(store.storeId)
                 .from(reservation)
-                .groupBy(reservation.productId)
+                .join(product).on(reservation.productId.eq(product.productId))  // reservation에서 product와 조인
+                .join(store).on(product.storeId.eq(store.storeId))
+                .groupBy(store.storeId)
                 .orderBy(reservation.reservationId.desc()) // 최근 예약 기준 정렬
                 .limit(5)
                 .fetch();
-        log.debug("productIds {}", recentProductIds);
+        log.debug("storeIds {}", recentStoreIds);
         // 2. 해당 productId에 대한 ProductDto 리스트 조회
         return selectProductDto()
-                .where(product.productId.in(recentProductIds))
+                .where(product.store.storeId.in(recentStoreIds))
                 .fetch();
     }
 
