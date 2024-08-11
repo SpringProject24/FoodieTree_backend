@@ -3,10 +3,12 @@ package org.nmfw.foodietree.domain.reservation.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class ReservationController {
     private final CustomerMyPageService customerMyPageService;
 
     // 테스트용 변수, 추후 토큰에서 사용하는것으로 변경 예정
-    String customerId = "test@gmail.com";
+//    String customerId = "test@gmail.com";
     int reservationId = 38;
 
     /**
@@ -32,9 +34,11 @@ public class ReservationController {
      * @return 예약 목록 DTO 리스트
      */
     @GetMapping("/list")
-    public ResponseEntity<List<ReservationDetailDto>> getReservationList() {
+    public ResponseEntity<List<ReservationDetailDto>> getReservationList(
+            @AuthenticationPrincipal TokenUserInfo userInfo
+    ) {
         // 추후 토큰을 통해 고객 ID를 가져옴
-        // String customerId = getCustomerIdFromToken();
+        String customerId = userInfo.getUsername();
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok().body(reservations);
     }
@@ -119,7 +123,7 @@ public class ReservationController {
      * @return 고객 ID
      */
     private String getCustomerIdFromToken() {
-        TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TokenUserInfo tokenUserInfo = (TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return tokenUserInfo.getEmail(); // 윤종 임의 수정 getUserId-> getEmail 24/07/31 21:11
     }
 
@@ -130,7 +134,7 @@ public class ReservationController {
      */
     private int getReservationIdFromToken() {
         try {
-            TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            TokenUserInfo tokenUserInfo = (TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             // 추후 실제 예약 ID를 토큰에서 추출
             return reservationId; // 임시로 하드코딩된 값 반환
         } catch (Exception e) {

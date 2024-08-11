@@ -37,8 +37,8 @@ public class StoreApprovalService {
 
     // 등록 요청 내역을 tbl_store_approval에 저장
     public StoreApproval askStoreApproval(
-            StoreApprovalReqDto dto
-            , TokenUserInfo userInfo
+        StoreApprovalReqDto dto
+        , TokenUserInfo userInfo
     ) {
         // userInfo storeId로 Store
         if (!userInfo.getRole().equalsIgnoreCase("store")) {
@@ -56,8 +56,8 @@ public class StoreApprovalService {
 
     // 상품 디테일 tbl_store_approval 업데이트
     public void askProductApproval(
-            ProductApprovalReqDto dto
-            , TokenUserInfo userInfo
+        ProductApprovalReqDto dto
+        , TokenUserInfo userInfo
     ) {
         // userInfo에서 storeId 찾기
         if (!userInfo.getRole().equalsIgnoreCase("store")) {
@@ -89,13 +89,13 @@ public class StoreApprovalService {
 //    @Scheduled(fixedRate = 180000) // 3분마다 스케줄 실행
     public void verifyLicenses() {
         List<StoreApproval> noVerifiedList
-                = storeApprovalRepository.findApprovalsByLicenseVerification();
+            = storeApprovalRepository.findApprovalsByLicenseVerification();
         log.debug("\n승인 대기 리스트 {}", noVerifiedList);
 
         // API 요구대로 List를 사업자등록번호만 담은 Array로 변환
         String[] array = noVerifiedList.stream()
-                .map(StoreApproval::getLicense).collect(Collectors.toList())
-                .toArray(new String[noVerifiedList.size()]);
+            .map(StoreApproval::getLicense).collect(Collectors.toList())
+            .toArray(new String[noVerifiedList.size()]);
 
         // API 호출 및 결과 LicenseResDto
         LicenseResDto resDto = licenseService.verifyLicensesByOpenApi(array);
@@ -117,20 +117,7 @@ public class StoreApprovalService {
             }
             storeApprovalRepository.saveAll(noVerifiedList);
         }
-
     }
 }
-//    // 가게 등록 요청이 승인되면 tbl_store에 저장
-//    public void sendStoreInfo(
-//            StoreApproval sa
-//    ) {
-//        Store foundStore = storeRepository.findByStoreId(sa.getStoreId())
-//                .orElseThrow(()->new NoSuchElementException("가입한 계정이 아닙니다."));
-//
-//        Store updatedStore = sa.updateFromStoreApproval(foundStore);
-//
-////        Store updatedStore = sa.updateFromStoreApproval();
-//        Store saved = storeRepository.save(updatedStore);
-//        log.info("saved store: {}", saved);
-//    }
+
 

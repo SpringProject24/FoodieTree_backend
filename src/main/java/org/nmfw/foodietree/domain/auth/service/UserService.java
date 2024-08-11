@@ -7,15 +7,15 @@ import org.nmfw.foodietree.domain.auth.dto.EmailCodeDto;
 import org.nmfw.foodietree.domain.auth.dto.EmailCodeStoreDto;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
-import org.nmfw.foodietree.domain.customer.mapper.CustomerMapper;
+import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.nmfw.foodietree.domain.store.entity.Store;
-import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
+import org.nmfw.foodietree.domain.store.service.StoreService;
+import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -23,20 +23,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final CustomerMapper customerMapper;
-    private final StoreMapper storeMapper;
-
+    private final CustomerService customerService;
+    private final StoreService storeService;
     private final TokenProvider tokenProvider;
-
+    private final StoreRepository storeRepository;
 
     public ResponseEntity<Map<String, ? extends Serializable>> saveUserInfo(EmailCodeDto emailCodeDto) {
 
         String emailCodeDtoUserType = emailCodeDto.getUserType();
+        log.info("emailcodedto에서 유저타입 찾기 {}", emailCodeDtoUserType);
         String emailCodeDtoEmail = emailCodeDto.getEmail();
+        log.info("emailcodedto에서 이메일 찾기 {}", emailCodeDtoEmail);
 
-        String token = tokenProvider.createToken(emailCodeDto);
+        String token = tokenProvider.createToken(emailCodeDtoEmail, emailCodeDtoUserType);
         String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
-        Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
+        LocalDateTime expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
 
         // 최초 회원 정보 저장 로직 :  customer인지 store 인지 null 값으로 구분
         if (emailCodeDtoUserType.equals("store")) {
@@ -47,7 +48,7 @@ public class UserService {
                     .refreshTokenExpireDate(expirationDate)
                     .build();
 
-            storeMapper.signUpSaveStore(emailCodeStoreDto);
+            storeService.signUpSaveStore(emailCodeStoreDto);
 
         } else if(emailCodeDtoUserType.equals("customer")) {
 
@@ -57,15 +58,15 @@ public class UserService {
                     .refreshTokenExpireDate(expirationDate)
                     .build();
 
-            customerMapper.signUpSaveCustomer(emailCodeCustomerDto);
+            customerService.signUpSaveCustomer(emailCodeCustomerDto);
         }
 
         return ResponseEntity.ok(Map.of(
                 "success", true,
                 "token", token,
                 "refreshToken", refreshToken,
-                "email", emailCodeDtoUserType,
-                "role", emailCodeDtoEmail,
+                "email", emailCodeDtoEmail,
+                "role", emailCodeDtoUserType,
                 "message", "Token reissued successfully."
         ));
 
@@ -77,11 +78,12 @@ public class UserService {
         String emailCodeDtoUserType = emailCodeDto.getUserType();
         String emailCodeDtoEmail = emailCodeDto.getEmail();
 
-        String token = tokenProvider.createToken(emailCodeDto);
+        String token = tokenProvider.createToken(emailCodeDtoEmail, emailCodeDtoUserType);
         log.info(" 새로운 토큰 재발급 ! {}",token);
         String refreshToken = tokenProvider.createRefreshToken(emailCodeDtoEmail, emailCodeDtoUserType);
         log.info("새로운 리프레시 토큰 재발급 ! {} ",refreshToken);
-        Date expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
+        LocalDateTime expirationDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
+        String storeApprove = null;
 
         if (emailCodeDtoUserType.equals("store")) {
 
@@ -90,7 +92,10 @@ public class UserService {
                     .userType(emailCodeDtoUserType)
                     .refreshTokenExpireDate(expirationDate)
                     .build();
-            storeMapper.signUpUpdateStore(emailCodeStoreDto);
+
+            storeService.signUpUpdateStore(emailCodeStoreDto);
+            Store store = storeRepository.findByStoreId(emailCodeDtoEmail).orElseThrow();
+            storeApprove = store.getApprove() != null ? store.getApprove().getStatusDesc() : null;
 
             // customer 일 경우
         } else if (emailCodeDtoUserType.equals("customer")) {
@@ -101,7 +106,8 @@ public class UserService {
                     .refreshTokenExpireDate(expirationDate)
                     .build();
 
-            customerMapper.signUpUpdateCustomer(emailCodeCustomerDto);
+            customerService.signUpUpdateCustomer(emailCodeCustomerDto);
+
         }
 
         return ResponseEntity.ok(Map.of(
@@ -110,7 +116,8 @@ public class UserService {
                 "refreshToken", refreshToken,
                 "email", emailCodeDtoEmail,
                 "role", emailCodeDtoUserType,
-                "message", "Token reissued successfully."
+                "message", "Token reissued successfully.",
+                "storeApprove", storeApprove != null
         ));
     }
 
@@ -128,14 +135,14 @@ public class UserService {
         if ("store".equals(emailCodeDto.getUserType())) {
             log.info("store 타입 확인");
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
-            if (storeMapper.findOne(emailCodeDto.getEmail()) != null) {
+            if (storeService.findOne(emailCodeDto.getEmail())) {
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
         } else if ("customer".equals(emailCodeDto.getUserType())) {
             log.info("customer 타입 확인");
             log.info("로그인 로직 확인 : 들어오는 유저타입 : {}", emailCodeDto.getUserType());
-            if (customerMapper.findOne(emailCodeDto.getEmail()) != null) {
+            if (customerService.findOne(emailCodeDto.getEmail())) {
                 log.info("로그인 로직 확인 : 들어오는 유저타입 : {}, TRUE", emailCodeDto.getUserType());
                 result = true;
             }
@@ -144,15 +151,36 @@ public class UserService {
         return result;
     }
 
-    public LocalDateTime getRefreshTokenExpiryDate(String email, String userType) {
+    public LocalDateTime getUserRefreshTokenExpiryDate(String email, String userType) {
         if ("customer".equals(userType)) {
-            Customer customer = customerMapper.findOne(email);
+            Customer customer = customerService.getCustomerById(email);
             log.info("customer object : {},customer email : {}, customer 의 리프레시 만료일자 인 서버 : {}", customer,customer.getCustomerId(), customer.getRefreshTokenExpireDate());
             return customer != null ? customer.getRefreshTokenExpireDate() : null;
         } else if ("store".equals(userType)) {
-            Store store = storeMapper.findOne(email);
+            Store store = storeService.getStoreById(email);
+
             log.info("store email : {}, store 의 리프레시 만료일자 인 서버 : {}", email, store.getRefreshTokenExpireDate());
             return store != null ? store.getRefreshTokenExpireDate() : null;
+        } else {
+            throw new IllegalArgumentException("Invalid user type");
+        }
+    }
+
+    public void setUserRefreshTokenExpiryDate(String email, String userType) {
+
+        String newRefreshToken = tokenProvider.createRefreshToken(email, userType);
+        LocalDateTime newExpiryDate = tokenProvider.getExpirationDateFromRefreshToken(newRefreshToken);
+
+        if ("customer".equals(userType)) {
+            Customer customer = customerService.getCustomerById(email);
+            if (customer != null) {
+                customerService.updateCustomer(newExpiryDate, email);
+            }
+        } else if ("store".equals(userType)) {
+            Store store = storeService.getStoreById(email);
+            if (store != null) {
+                storeService.updateStore(newExpiryDate, email);
+            }
         } else {
             throw new IllegalArgumentException("Invalid user type");
         }
