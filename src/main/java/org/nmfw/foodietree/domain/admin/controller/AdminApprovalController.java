@@ -45,8 +45,7 @@ public class AdminApprovalController {
             LocalDateTime end
 //          , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
-        if (start == null) {
-            start = LocalDateTime.of(2024, 6, 1, 0, 0, 0);
+        if (start == null) {start = LocalDateTime.of(2024, 7, 1, 0, 0, 0);
         }
         if (end == null) {
             end = LocalDateTime.now();

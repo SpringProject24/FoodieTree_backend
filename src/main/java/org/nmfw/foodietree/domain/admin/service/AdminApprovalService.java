@@ -140,9 +140,8 @@ public class AdminApprovalService {
         return userInfo.getRole().equalsIgnoreCase("admin");
     }
 
-    //
+    // 한국 시간으로 변환된 LocalDateTime을 UTC로 변환
     public LocalDateTime timeConverter(LocalDateTime time, String type) {
-        // 한국 시간으로 변환된 LocalDateTime을 UTC로 변환
         ZoneId koreaZoneId = ZoneId.of("Asia/Seoul");
         LocalDateTime timeUtc = ZonedDateTime.of(time, koreaZoneId).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
         if(type.equalsIgnoreCase("start")) { // 시작일의 0시 0분
