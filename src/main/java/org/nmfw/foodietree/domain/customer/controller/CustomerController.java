@@ -201,8 +201,10 @@ public class CustomerController {
     }
 
     @PostMapping("/edit/area")
-    public ResponseEntity<?> insertArea(@RequestBody UpdateAreaDto dto) {
-        String customerId = "test@gmail.com";
+    public ResponseEntity<?> insertArea(@RequestBody UpdateAreaDto dto,
+                                        @AuthenticationPrincipal TokenUserInfo userInfo) {
+//        String customerId = "test@gmail.com";
+        String customerId = userInfo.getUsername();
 
         boolean flag = customerMyPageService.updateCustomerAreaInfo(customerId, dto);
         if (flag)
@@ -211,8 +213,10 @@ public class CustomerController {
     }
 
     @DeleteMapping("/edit/area")
-    public ResponseEntity<?> deleteArea(@RequestBody UpdateAreaDto dto) {
-        String customerId = "test@gmail.com";
+    public ResponseEntity<?> deleteArea(@RequestBody UpdateAreaDto dto,
+                                        @AuthenticationPrincipal TokenUserInfo userInfo) {
+//        String customerId = "test@gmail.com";
+        String customerId = userInfo.getUsername();
 
         boolean flag = customerMyPageService.deleteCustomerAreaInfo(customerId, dto);
         if (flag)
@@ -221,8 +225,10 @@ public class CustomerController {
     }
 
     @GetMapping("/info/area")
-    public ResponseEntity<?> getFavArea() {
-        String customerId = "test@gmail.com";
+    public ResponseEntity<?> getFavArea(@AuthenticationPrincipal TokenUserInfo userInfo) {
+//        String customerId = "test@gmail.com";
+        String customerId = userInfo.getUsername();
+
         try{
             List<UpdateAreaDto> favAreas = customerMyPageService.getFavArea(customerId);
             return ResponseEntity.ok().body(favAreas);
