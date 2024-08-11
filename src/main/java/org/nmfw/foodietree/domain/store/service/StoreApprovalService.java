@@ -100,16 +100,17 @@ public class StoreApprovalService {
         // API 호출 및 결과 LicenseResDto
         LicenseResDto resDto = licenseService.verifyLicensesByOpenApi(array);
 
+
         // API status code OK이면 사업자등록번호 검증 결과 setter로 업데이트
         if ("OK".equals(resDto.getStatus_code())) {
             List<LicenseDto> results = resDto.getData();
 
             for (int i = 0; i < results.size(); i++) {
                 StoreApproval storeApproval = noVerifiedList.get(i);
-                // 조회 결과 유효한 번호인 경우
+                // 조회 결과 유효한 번호인 경우 유효
                 if (!results.get(i).getB_stt().isEmpty()) {
                     storeApproval.setLicenseVerification(ApproveStatus.APPROVED);
-                } else { // 조회 결과 유효하지 않은 번호인 경우
+                } else { // 조회 결과 유효하지 않은 번호인 경우 무효
                     storeApproval.setLicenseVerification(ApproveStatus.REJECTED);
                 }
                 log.debug("\n조회 결과 : {}", storeApproval.toString());
