@@ -41,12 +41,13 @@ public class FavFoodRepositoryCustomImpl implements FavFoodRepositoryCustom {
                 .orderBy(reservation.reservationId.desc()) // 최근 예약 기준 정렬
                 .limit(5)
                 .fetch();
-
+        log.debug("productIds {}", recentProductIds);
         // 2. 해당 productId에 대한 ProductDto 리스트 조회
         return selectProductDto()
                 .where(product.productId.in(recentProductIds))
                 .fetch();
     }
+
     // ProductDto 조회 쿼리 분리
     public JPAQuery<ProductDto> selectProductDto() {
         return factory

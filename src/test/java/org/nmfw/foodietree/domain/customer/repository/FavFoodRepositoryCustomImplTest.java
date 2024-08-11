@@ -37,9 +37,11 @@ class FavFoodRepositoryCustomImplTest {
         assertNotNull(categoryByFood);
     }
     @Test
-    @DisplayName("findByReviews 테스트")
+    @DisplayName("findByReviews 테스트 - 최근 예약 productId 5개로 상품조회")
     void findByReviewsTest() {
         List<ProductDto> byReviews = favFoodRepository.findByReviews();
+        // productIds [157798296, 157798295, 157798294, 157798288, 157798267]
+        System.out.println(byReviews.size());
 
         assertNotNull(byReviews);
     }

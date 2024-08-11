@@ -61,14 +61,18 @@ public class ProductMainPageService {
      */
     public List<ProductDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response) {
         List<PreferredFoodDto> preferredFood = customerMyPageService.getCustomerInfo(customerId).getPreferredFood();
-//        if (preferredFood == null) {
-//            log.warn("Preferred food list is null for customerId: {}", customerId);
-//            return null; // or handle the case accordingly
-//        }
-        List<StoreCategory> categories = preferredFood.stream()
-                .map(preferredFoodDto -> StoreCategory.valueOf(preferredFoodDto.getPreferredFood()))
-                .collect(Collectors.toList());
-        List<ProductDto> categoryByFood = favFoodRepository.findCategoryByFood(categories);
+
+        // 선호음식 없으면 최신 리뷰 기준 5개 조회 - 임시로 예약 내역 사용
+        List<ProductDto> categoryByFood = null;
+        if (preferredFood == null) {
+            log.warn("Preferred food list is null for customerId: {}", customerId);
+            categoryByFood = favFoodRepository.findByReviews();
+        } else {
+            List<StoreCategory> categories = preferredFood.stream()
+                    .map(preferredFoodDto -> StoreCategory.valueOf(preferredFoodDto.getPreferredFood()))
+                    .collect(Collectors.toList());
+            categoryByFood = favFoodRepository.findCategoryByFood(categories);
+        }
 
         for (ProductDto productDto : categoryByFood) {
             LocalDateTime pickupTime = productDto.getPickupTime();
