@@ -9,6 +9,8 @@ import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.nmfw.foodietree.domain.store.entity.Store;
+import org.nmfw.foodietree.domain.store.entity.StoreApproval;
+import org.nmfw.foodietree.domain.store.repository.StoreApprovalRepository;
 import org.nmfw.foodietree.domain.store.service.StoreService;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class UserService {
     private final CustomerService customerService;
     private final StoreService storeService;
     private final TokenProvider tokenProvider;
-    private final StoreRepository storeRepository;
+    private final StoreApprovalRepository storeApprovalRepository;
 
     public ResponseEntity<Map<String, ? extends Serializable>> saveUserInfo(EmailCodeDto emailCodeDto) {
 
@@ -94,8 +96,8 @@ public class UserService {
                     .build();
 
             storeService.signUpUpdateStore(emailCodeStoreDto);
-            Store store = storeRepository.findByStoreId(emailCodeDtoEmail).orElseThrow();
-            storeApprove = store.getApprove() != null ? store.getApprove().getStatusDesc() : null;
+            StoreApproval store = storeApprovalRepository.findByStoreId(emailCodeDtoEmail);
+            storeApprove = store.getStatus() != null ? store.getStatus().getStatusDesc() : null;
 
             // customer 일 경우
         } else if (emailCodeDtoUserType.equals("customer")) {
