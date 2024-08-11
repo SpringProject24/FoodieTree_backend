@@ -109,7 +109,7 @@ public class CustomerMyPageRepositoryCustomImpl implements CustomerMyPageReposit
                                 product.storeId,
                                 product.pickupTime,
                                 store.storeName,
-                                store.category.stringValue(),
+                                store.category,
                                 store.address,
                                 store.price,
                                 store.storeImg,

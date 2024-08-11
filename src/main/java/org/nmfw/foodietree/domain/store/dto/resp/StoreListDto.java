@@ -13,7 +13,7 @@ import java.time.LocalTime;
 public class StoreListDto {
     private String storeId;
     private String storeName;
-    private StoreCategory category;
+    private String category;
     private String address;
     private Integer price;
     private String storeImg;
@@ -22,13 +22,14 @@ public class StoreListDto {
     private LocalTime closedAt;
     private LocalDateTime limitTime;
     private Boolean emailVerified;
+    private String productImg;
 
     public static StoreListDto fromEntity(Store store) {
 
         return StoreListDto.builder()
                 .storeId(store.getStoreId())
                 .storeName(store.getStoreName())
-                .category(store.getCategory())
+                .category(store.getCategory().getFoodType())
                 .address(store.getAddress())
                 .price(store.getPrice())
                 .storeImg(store.getStoreImg())
@@ -37,6 +38,7 @@ public class StoreListDto {
                 .closedAt(store.getClosedAt())
                 .limitTime(store.getLimitTime())
                 .emailVerified(store.getEmailVerified())
+                .productImg(store.getProductImg())
                 .build();
 
     }

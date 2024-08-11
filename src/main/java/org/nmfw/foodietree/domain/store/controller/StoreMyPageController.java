@@ -2,11 +2,16 @@ package org.nmfw.foodietree.domain.store.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateDto;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.service.StoreMyPageEditService;
 import org.nmfw.foodietree.domain.store.service.StoreMyPageService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,15 +36,10 @@ public class StoreMyPageController {
      * 추후 토큰 기반 인증으로 사용 예정
      * @return storeId
      */
-    /*
     private String getStoreIdFromToken() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new IllegalArgumentException("Invalid authentication token");
-        }
-        return authentication.getName(); // Assuming the storeId is the username in the token
+        TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return tokenUserInfo.getEmail();
     }
-    */
 
     /**
      * 가게의 마이페이지 정보를 가져오는 GET 요청 처리
@@ -47,8 +47,8 @@ public class StoreMyPageController {
      */
     @GetMapping("/info")
     public ResponseEntity<StoreMyPageDto> getStoreMyPageInfo() {
+        String storeId = getStoreIdFromToken(); // 주석처리된 부분
         log.info("Fetching store my page info for storeId: {}", storeId);
-        // String storeId = getStoreIdFromToken(); // 주석처리된 부분
         StoreMyPageDto storeInfo = storeMyPageService.getStoreMyPageInfo(storeId);
         return ResponseEntity.ok().body(storeInfo);
     }
@@ -59,8 +59,8 @@ public class StoreMyPageController {
      */
     @GetMapping("/stats")
     public ResponseEntity<StoreStatsDto> getStoreStats() {
+        String storeId = getStoreIdFromToken(); // 토큰정보 사용 시 주석 해제
         log.info("Fetching store stats for storeId: {}", storeId);
-        // String storeId = getStoreIdFromToken(); // 토큰정보 사용 시 주석 해제
         StoreStatsDto storeStats = storeMyPageService.getStats(storeId);
         return ResponseEntity.ok().body(storeStats);
     }
@@ -71,8 +71,8 @@ public class StoreMyPageController {
      */
     @GetMapping("/reservations")
     public ResponseEntity<List<StoreReservationDto>> getStoreReservations() {
+        String storeId = getStoreIdFromToken(); // 주석처리된 부분
         log.info("Fetching reservations for storeId: {}", storeId);
-        // String storeId = getStoreIdFromToken(); // 주석처리된 부분
         List<StoreReservationDto> reservations = storeMyPageService.findReservations(storeId);
         return ResponseEntity.ok().body(reservations);
     }
@@ -84,7 +84,7 @@ public class StoreMyPageController {
     @GetMapping("/getProductCount")
     public ResponseEntity<StoreProductCountDto> getProductCount() {
         log.info("store my page get product count");
-        // String storeId = getStoreIdFromToken(); // 토큰정보 사용 시 주석 해제
+        String storeId = getStoreIdFromToken(); // 토큰정보 사용 시 주석 해제
         StoreProductCountDto dto = storeMyPageService.getStoreProductCnt(storeId);
         log.debug(dto.toString());
         return ResponseEntity.ok().body(dto);
@@ -99,7 +99,7 @@ public class StoreMyPageController {
     public ResponseEntity<?> updateProductCnt(@RequestBody Map<String, Integer> requestBody) {
         int productCnt = requestBody.get("newCount");
         log.info("update product count");
-        // String storeId = getStoreIdFromToken(); // 토큰정보 사용 시 주석 해제
+        String storeId = getStoreIdFromToken(); // 토큰정보 사용 시 주석 해제
         boolean flag = storeMyPageService.updateProductCnt(storeId, productCnt);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -112,7 +112,7 @@ public class StoreMyPageController {
     @GetMapping("/calendar/{dateString}")
     public ResponseEntity<StoreMyPageDto> getCalendar(@PathVariable String dateString) {
         log.info("store my page calendar");
-        // String storeId = getStoreIdFromToken(); // 주석처리된 부분
+        String storeId = getStoreIdFromToken(); // 주석처리된 부분
         StoreMyPageDto storeMyPageInfo = storeMyPageService.getStoreMyPageInfo(storeId);
         return ResponseEntity.ok().body(storeMyPageInfo);
     }
@@ -125,7 +125,7 @@ public class StoreMyPageController {
     @GetMapping("/calendar/modal/{dateString}")
     public ResponseEntity<StoreMyPageCalendarModalDto> getCalendarModalDetail(@PathVariable String dateString) {
         log.info("store my page calendar modal");
-        // String storeId = getStoreIdFromToken(); // 주석처리된 부분
+        String storeId = getStoreIdFromToken(); // 주석처리된 부분
         StoreMyPageCalendarModalDto dto = storeMyPageService.getStoreMyPageCalendarModalInfo(storeId, dateString);
         log.info(dto.toString());
         return ResponseEntity.ok().body(dto);
@@ -140,7 +140,7 @@ public class StoreMyPageController {
     public ResponseEntity<?> closeStore(@RequestBody Map<String, String> requestBody) {
         String holidayDate = requestBody.get("holidayDate");
         log.info("set holiday");
-        // String storeId = getStoreIdFromToken(); // 주석처리된 부분
+        String storeId = getStoreIdFromToken(); // 주석처리된 부분
         boolean flag = storeMyPageService.setHoliday(storeId, holidayDate);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -154,7 +154,7 @@ public class StoreMyPageController {
     public ResponseEntity<?> undoHoliday(@RequestBody Map<String, String> requestBody) {
         String holidayDate = requestBody.get("holidayDate");
         log.info("set holiday");
-        // String storeId = getStoreIdFromToken(); // 주석처리된 부분
+        String storeId = getStoreIdFromToken(); // 주석처리된 부분
         boolean flag = storeMyPageService.undoHoliday(storeId, holidayDate);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -166,7 +166,7 @@ public class StoreMyPageController {
     @GetMapping("/calendar/getHoliday")
     public ResponseEntity<List<StoreHolidayDto>> getHolidays() {
         log.info("store my page get closed date");
-        // String storeId = getStoreIdFromToken(); // 주석처리된 부분
+        String storeId = getStoreIdFromToken(); // 주석처리된 부분
         List<StoreHolidayDto> holidays = storeMyPageService.getHolidays(storeId);
         return ResponseEntity.ok().body(holidays);
     }
@@ -181,7 +181,7 @@ public class StoreMyPageController {
         String pickupTime = requestBody.get("pickupTime");
         String date = requestBody.get("date");
         log.info("set pickup time");
-        // String storeId = getStoreIdFromToken(); // 주석처리된 부분
+        String storeId = getStoreIdFromToken(); // 주석처리된 부분
         boolean flag = storeMyPageService.setPickupTime(storeId, date, pickupTime);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -202,7 +202,7 @@ public class StoreMyPageController {
      */
     @PatchMapping("/edit")
     public ResponseEntity<?> updateStoreInfo(@RequestBody UpdateDto dto) {
-        String storeId = "thdghtjd115@naver.com";
+        String storeId = getStoreIdFromToken();
         boolean flag = storeMyPageEditService.updateProfileInfo(storeId, dto);
         if (flag)
             return ResponseEntity.ok().body(true);
@@ -220,7 +220,7 @@ public class StoreMyPageController {
      */
     @PostMapping("/edit/img")
     public ResponseEntity<?> updateProfileImage(@RequestParam("storeImg") MultipartFile storeImg) {
-        String storeId = "thdghtjd115@naver.com";
+        String storeId = getStoreIdFromToken();
         boolean flag = storeMyPageEditService.updateProfileImg(storeId, storeImg);
         if (flag)
             return ResponseEntity.ok().body(true);

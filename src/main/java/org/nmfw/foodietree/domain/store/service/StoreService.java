@@ -5,6 +5,8 @@ import javax.servlet.http.Cookie;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
+import org.nmfw.foodietree.domain.auth.dto.EmailCodeStoreDto;
 import org.nmfw.foodietree.domain.customer.dto.request.AutoLoginDto;
 import org.nmfw.foodietree.domain.customer.dto.resp.LoginUserInfoDto;
 import org.nmfw.foodietree.domain.customer.entity.Customer;
@@ -15,8 +17,12 @@ import org.nmfw.foodietree.domain.store.dto.request.StoreLoginDto;
 import org.nmfw.foodietree.domain.store.dto.request.StoreSignUpDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.mapper.StoreMapper;
+import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,74 +36,41 @@ import static org.nmfw.foodietree.domain.store.service.StoreLoginResult.*;
 @RequiredArgsConstructor
 @Slf4j
 public class StoreService {
-    private final StoreMapper storeMapper;
-    private final PasswordEncoder encoder;
+    private final StoreRepository storeRepository;
 
-    public boolean signUp(StoreSignUpDto dto, HttpSession session) {
-        Store store = dto.toEntity();
-//        String encodedPassword = encoder.encode(dto.getPassword());
-//        store.setPassword(encodedPassword);
-        boolean flag = storeMapper.storeSave(store);
-        if (!flag) {
-            return false;
-        }
-        StoreService.maintainLoginState(session, store);
-        return true;
+    @Transactional
+    public void signUpUpdateStore(EmailCodeStoreDto emailCodeStoreDto) {
+
+        storeRepository.updateRefreshTokenExpireDate(
+                emailCodeStoreDto.getRefreshTokenExpireDate(),
+                emailCodeStoreDto.getStoreId()
+                );
     }
 
-    public StoreLoginResult authenticate(StoreLoginDto dto, HttpSession session, HttpServletResponse response) {
-        String storeId = dto.getStoreId();
-        Store foundStore = storeMapper.findOne(storeId);
-        if (foundStore == null) {
-            log.info("{} - 회원가입이 필요합니다.", storeId);
-            return NO_ACC;
-        }
+    @Transactional
+    public void signUpSaveStore(EmailCodeStoreDto emailCodeStoreDto) {
+        Store store = Store.builder()
+                .storeId(emailCodeStoreDto.getStoreId())
+                .userType(emailCodeStoreDto.getUserType())
+                .refreshTokenExpireDate(emailCodeStoreDto.getRefreshTokenExpireDate())
+                .build();
 
-        String inputPassword = dto.getPassword();
-//        String originPassword = foundStore.getPassword();
-//        if (!encoder.matches(inputPassword, originPassword)) {
-//            log.info("비밀번호가 일치하지 않습니다");
-//            return NO_PW;
-//        }
-
-        if (dto.isAutoLogin()) {
-            String sessionId = session.getId();
-            Cookie autoLoginCookie = new Cookie(LoginUtil.AUTO_LOGIN_COOKIE, sessionId);
-            autoLoginCookie.setPath("/"); // 쿠키를 사용할 경로
-            autoLoginCookie.setMaxAge(60 * 60 * 24 * 90); // 자동로그인 유지 시간
-            response.addCookie(autoLoginCookie);
-            storeMapper.updateAutoLogin(
-                    AutoLoginDto.builder()
-                            .sessionId(sessionId)
-                            .limitTime(LocalDateTime.now().plusDays(90))
-                            .id(storeId)
-                            .build()
-            );
-        }
-        maintainLoginState(session, foundStore);
-        return SUCCESS;
+        storeRepository.save(store);
     }
 
-    public static void maintainLoginState(HttpSession session, Store found) {
-        session.setMaxInactiveInterval(60 * 60);
-        session.setAttribute("login", new LoginStoreInfoDto(found));
+    @Transactional(readOnly = true)
+    public Store getStoreById(String storeId) {
+        return storeRepository.findByStoreId(storeId)
+                .orElseThrow(() -> new RuntimeException("Store not found with id: " + storeId));
     }
 
-    public void autoLoginClear(HttpServletRequest request,
-                               HttpServletResponse response) {
+    @Transactional(readOnly = true)
+    public boolean findOne(String email) {
+        return storeRepository.existsByStoreId(email);
+    }
 
-        Cookie c = WebUtils.getCookie(request, AUTO_LOGIN_COOKIE);
-        if (c != null) {
-            c.setPath("/");
-            c.setMaxAge(0);
-            response.addCookie(c);
-            storeMapper.updateAutoLogin(
-                    AutoLoginDto.builder()
-                            .sessionId("none")
-                            .limitTime(LocalDateTime.now())
-                            .id(LoginUtil.getLoggedInUser(request.getSession()))
-                            .build()
-            );
-        }
+
+    public void updateStore(LocalDateTime date, String email) {
+        storeRepository.updateRefreshTokenExpireDate(date, email);
     }
 }
