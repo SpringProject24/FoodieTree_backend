@@ -98,6 +98,9 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </div>
       </div>
     </section>
+    <div class ="guest-store-list-section">
+      <%@ include file="guestProductPage.jsp" %>
+    </div>
 
     <div class="info-section">
       <div class="info-box">

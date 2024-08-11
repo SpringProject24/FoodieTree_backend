@@ -421,3 +421,84 @@ section.info .container .right {
   align-items: center;
   cursor: pointer;
 } */
+
+/*비회원 메인페이지 렌더링 가게 리스트 css*/
+.list {
+  margin: 0 auto;
+  position: relative;
+  inline-size: 70%;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-top: solid 1px #e7e7e7;
+}
+
+.list .title {
+  padding: 20px 20px 0 20px;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.favorite-store-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.storeItem {
+  flex: 0 0 23%;
+  box-sizing: border-box;
+  padding: 10px;
+  position: relative;
+  height: 250px;
+}
+
+.storeItem img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid #cecece;
+}
+
+.storeItem .storeName {
+  padding: 10px 0 10px 10px;
+  font-weight: bold;
+}
+
+.storeItem .storePrice, .storeItem .productCnt {
+  font-size: 15px;
+  position: absolute;
+  bottom: 4px;
+}
+
+.storeItem .storePrice {
+  left: 20px;
+}
+
+.storeItem .productCnt {
+  right: 20px;
+}
+
+.storeItem.low-stock img {
+  opacity: 0.5;
+}
+
+.overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 92%;
+  height: 72%;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}

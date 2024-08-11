@@ -38,5 +38,12 @@ public class StoreListService {
         return storeListRepositoryCustom.findStoresByCategory(category);
     }
 
+    // 비회원 메인페이지 가게 리스트 출력
+    public List<StoreListDto> getStoresByProductCnt() {
+        return storeListRepositoryCustom.findAllStoresByProductCnt();
+    }
+
+    //비회원 메인페이지 마감임박 리스트 출력
+
 }
 

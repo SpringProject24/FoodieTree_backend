@@ -5,7 +5,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
+import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
+import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 import org.springframework.stereotype.Repository;
 
@@ -73,5 +75,50 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
             }
         }
         return null;
+    }
+
+    @Override
+    public List<StoreListDto> findAllStoresByProductCnt() {
+        QProduct product = QProduct.product;
+        QStore store = QStore.store;
+
+        // 서브쿼리로 storeId별 유효한 상품 수를 계산
+        List<String> storeIdsByProductCount = jpaQueryFactory
+                .select(product.storeId)
+                .from(product)
+                .where(product.cancelByStore.isNull()) // 취소되지 않은 상품만 카운트
+                .groupBy(product.storeId) // storeId별로 그룹화
+                .orderBy(product.storeId.count().desc()) // 유효한 상품 수로 내림차순 정렬
+                .fetch();
+
+        // 위에서 구한 storeId를 기준으로 store 테이블에서 정보 가져오기
+        return jpaQueryFactory
+                .selectFrom(store)
+                .where(store.storeId.in(storeIdsByProductCount)) // storeIdsByProductCount에 있는 storeId만 가져오기
+                .fetch()
+                .stream()
+                .map(s -> StoreListDto.builder()
+                        .storeId(s.getStoreId())
+                        .storeName(s.getStoreName())
+                        .category(String.valueOf(s.getCategory()))
+                        .address(s.getAddress())
+                        .price(s.getPrice())
+                        .storeImg(s.getStoreImg())
+                        .productCnt( // 해당 storeId의 유효한 상품 수를 가져옴
+                                jpaQueryFactory
+                                        .select(product.count())
+                                        .from(product)
+                                        .where(product.storeId.eq(s.getStoreId())
+                                                .and(product.cancelByStore.isNull()))
+                                        .fetchOne().intValue()
+                        )
+                        .openAt(s.getOpenAt())
+                        .closedAt(s.getClosedAt())
+                        .limitTime(s.getLimitTime())
+                        .emailVerified(s.getEmailVerified())
+                        .productImg(s.getProductImg())
+                        .build()
+                )
+                .collect(Collectors.toList());
     }
 }

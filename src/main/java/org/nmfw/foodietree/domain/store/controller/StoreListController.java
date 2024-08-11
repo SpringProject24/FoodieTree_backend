@@ -2,10 +2,12 @@ package org.nmfw.foodietree.domain.store.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 import org.nmfw.foodietree.domain.store.service.StoreList.StoreListService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
 
 @RestController
 @RequestMapping("/storeLists")
@@ -23,13 +27,10 @@ public class StoreListController {
 
     private final StoreListService storeListService;
 
-    // 현재 hardcoding 된 값 사용
-    // 추후 변경
-    String customerId = "test@gmail.com";
-
     // Store 전체 조회 요청!
     @GetMapping
-    public ResponseEntity<List<StoreListDto>> getAllStores() {
+    public ResponseEntity<List<StoreListDto>> getAllStores(@AuthenticationPrincipal TokenUserInfo userInfo) {
+        String customerId = userInfo.getUsername();
         List<StoreListDto> storeListDto = storeListService.getAllStores(customerId);
         return ResponseEntity.ok().body(storeListDto);
     }
@@ -41,4 +42,13 @@ public class StoreListController {
         List<StoreListDto> storeListDto = storeListService.getStoresByCategory(storeCategory);
         return ResponseEntity.ok().body(storeListDto);
     }
+
+    // co2를 가장 많이 줄인 순
+    @GetMapping("/by-product-count")
+    public ResponseEntity<List<StoreListDto>> getStoresByProductCnt() {
+        List<StoreListDto> storeListDto = storeListService.getStoresByProductCnt();
+        return ResponseEntity.ok().body(storeListDto);
+    }
+
+    // 상품 시간이 현재로부터 제일 가까운 순 (마감임박)
 }
