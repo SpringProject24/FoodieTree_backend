@@ -30,4 +30,8 @@ public class FavAreaService {
 
         favAreaRepository.saveAll(areasToSave);
     }
+
+    public List<FavArea> getFavAreas(String customerId) {
+        return favAreaRepository.findByCustomerId(customerId);
+    }
 }
