@@ -3,7 +3,8 @@ package org.nmfw.foodietree.domain.customer.repository;
 import org.nmfw.foodietree.domain.customer.entity.FavFood;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FavFoodRepository extends JpaRepository<FavFood, Long> {
+public interface FavFoodRepository
+        extends JpaRepository<FavFood, Long>, FavFoodRepositoryCustom {
 
     void deleteByCustomerIdAndPreferredFood(String customerId, String preferredFood);
 }
