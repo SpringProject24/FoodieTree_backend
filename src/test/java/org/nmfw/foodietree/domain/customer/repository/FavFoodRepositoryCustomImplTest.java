@@ -27,7 +27,7 @@ class FavFoodRepositoryCustomImplTest {
 
     @Test
     @DisplayName("findCategoryByFood 테스트")
-    void findByCategory() {
+    void findByCategoryTest() {
         String customerId = "summer7@gmail.com";
         List<PreferredFoodDto> preferredFood = customerMyPageService.getCustomerInfo(customerId).getPreferredFood();
         List<StoreCategory> categories = preferredFood.stream()
@@ -35,6 +35,13 @@ class FavFoodRepositoryCustomImplTest {
                 .collect(Collectors.toList()); // 한식, 중식, 일식
         List<ProductDto> categoryByFood = favFoodRepository.findCategoryByFood(categories);
         assertNotNull(categoryByFood);
+    }
+    @Test
+    @DisplayName("findByReviews 테스트")
+    void findByReviewsTest() {
+        List<ProductDto> byReviews = favFoodRepository.findByReviews();
+
+        assertNotNull(byReviews);
     }
 
 }

@@ -10,4 +10,7 @@ import java.util.List;
 public interface FavFoodRepositoryCustom {
 
     List<ProductDto> findCategoryByFood(List<StoreCategory> preferredFood);
+
+    // 최근 리뷰 기준 5개 -> 예약으로 일단 개발
+    List<ProductDto> findByReviews();
 }
