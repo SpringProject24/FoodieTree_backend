@@ -12,14 +12,14 @@
 
     <div>
         <div class="list">
-            <h2 class="title">CO2 Saver</h2>
-            <div class="co2-saver-section">
+            <h2 class="title">It will end soon!</h2>
+            <div class="list-container end-time-soon-section">
             </div>
         </div>
 
         <div class="list">
-            <h2 class="title">It will end soon!</h2>
-            <div class="end-time-soon-section">
+            <h2 class="title">CO2 Saver</h2>
+            <div class="list-container co2-saver-section">
             </div>
         </div>
     </div>

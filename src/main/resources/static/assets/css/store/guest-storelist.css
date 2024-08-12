@@ -1,0 +1,48 @@
+/* 기본 박스 모델 설정 */
+* {
+    box-sizing: border-box;
+}
+
+/* 컨테이너 설정 */
+.list-container {
+    display: flex;
+    overflow-x: auto; /* 가로로 스크롤 가능하게 설정 */
+    padding: 10px;
+    scroll-behavior: smooth; /* 부드러운 스크롤 */
+}
+
+.list-container::-webkit-scrollbar {
+    display: none; /* 스크롤바 숨기기 */
+}
+
+.list-item {
+    min-width: 200px; /* 각 항목의 최소 너비 설정 */
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.list-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.list-item .category {
+    font-weight: bold;
+}
+
+.list-item .remainingTime {
+    color: #888;
+}
+
+/* 모바일에서 더 작은 화면 처리 */
+@media (max-width: 600px) {
+    .list-item {
+        min-width: 150px;
+    }
+}
