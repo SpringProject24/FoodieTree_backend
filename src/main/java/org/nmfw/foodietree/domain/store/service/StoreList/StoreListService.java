@@ -38,5 +38,13 @@ public class StoreListService {
         return storeListRepositoryCustom.findStoresByCategory(category);
     }
 
+    // 지역별 가게 리스트 출력
+    public List<StoreListDto> getStoresByAddress(String address) {
+        List<Store> stores = storeListRepository.findByAddressContaining(address);
+        // DTO 변환을 fromEntity 메서드를 사용하여 직접 구현
+        return stores.stream()
+                .map(StoreListDto::fromEntity)
+                .collect(Collectors.toList());
+    }
 }
 
