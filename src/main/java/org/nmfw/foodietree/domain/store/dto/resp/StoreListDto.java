@@ -1,7 +1,10 @@
 package org.nmfw.foodietree.domain.store.dto.resp;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 
@@ -17,6 +20,7 @@ public class StoreListDto {
     private String address;
     private Integer price;
     private String storeImg;
+	@Setter
     private Integer productCnt;
     private LocalTime openAt;
     private LocalTime closedAt;
@@ -41,5 +45,10 @@ public class StoreListDto {
                 .productImg(store.getProductImg())
                 .build();
 
+    }
+    public static StoreListDto fromEntity(Store store, int cnt) {
+		StoreListDto storeListDto = fromEntity(store);
+		storeListDto.setProductCnt(cnt);
+		return storeListDto;
     }
 }

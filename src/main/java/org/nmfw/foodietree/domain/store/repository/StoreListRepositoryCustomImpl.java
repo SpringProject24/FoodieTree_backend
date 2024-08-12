@@ -1,11 +1,20 @@
 package org.nmfw.foodietree.domain.store.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.DateExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
+import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +22,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.types.dsl.Expressions.*;
+import static org.nmfw.foodietree.domain.product.entity.QProduct.product;
+import static org.nmfw.foodietree.domain.reservation.entity.QReservation.reservation;
 import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 
 @Repository
@@ -62,6 +75,23 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
 
         log.info("Stores found: {}", stores);
         return stores;
+    }
+
+    @Override
+    public List<StoreListDto> findAllProductsStoreId() {
+
+        return jpaQueryFactory
+            .select(store, store.count())
+            .from(product)
+            .leftJoin(reservation).on(product.productId.eq(reservation.productId))
+            .leftJoin(store).on(product.storeId.eq(store.storeId))
+            .where(dateTemplate(Date.class, "DATE_FORMAT({0}, '%Y-%m-%d')", product.pickupTime)
+                .eq(currentDate()).and(reservation.reservationTime.isNull()))
+            .groupBy(product.storeId)
+            .fetch()
+            .stream()
+            .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(store.count()).intValue()))
+            .collect(Collectors.toList());
     }
 
     // 도시 부분을 추출하는 helper method - 현재는 데이터가 부족해 '시'로만 추출

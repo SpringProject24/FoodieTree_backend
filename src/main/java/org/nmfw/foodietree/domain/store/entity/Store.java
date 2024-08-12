@@ -54,7 +54,7 @@ public class Store {
 
     @Column(name = "product_cnt")
     private Integer productCnt; // 상품갯수
-    
+
     @Column(name = "store_contact")
     private String storeContact;  // 가게 연락처
 

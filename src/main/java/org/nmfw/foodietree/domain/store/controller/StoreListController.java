@@ -41,4 +41,11 @@ public class StoreListController {
         List<StoreListDto> storeListDto = storeListService.getStoresByCategory(storeCategory);
         return ResponseEntity.ok().body(storeListDto);
     }
+
+    // 지역별 Store 조회 요청!
+    @GetMapping("/address")
+    public ResponseEntity<List<StoreListDto>> getStoresByAddress(@RequestParam("address") String address) {
+        List<StoreListDto> storeListDto = storeListService.getStoresByAddress(address);
+        return ResponseEntity.ok().body(storeListDto);
+    }
 }

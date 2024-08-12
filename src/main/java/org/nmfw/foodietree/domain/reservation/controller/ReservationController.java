@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.reservation.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
@@ -34,7 +35,7 @@ public class ReservationController {
      */
     @GetMapping("/list")
     public ResponseEntity<List<ReservationDetailDto>> getReservationList(
-            @AuthenticationPrincipal TokenProvider.TokenUserInfo userInfo
+            @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
         // 추후 토큰을 통해 고객 ID를 가져옴
         String customerId = userInfo.getUsername();
@@ -105,13 +106,13 @@ public class ReservationController {
 
     /**
      * 새로운 예약을 생성, 테스트 미실시
-     * @param customerId 고객 ID
      * @param data 예약 생성에 필요한 데이터 맵
      * @return 예약 생성 성공 여부
      */
     @PostMapping("/create-reservation")
     @CrossOrigin
-    public ResponseEntity<?> createReservation(@RequestParam String customerId, @RequestBody Map<String, String> data) {
+    public ResponseEntity<?> createReservation(@RequestBody Map<String, String> data) {
+        String customerId = getCustomerIdFromToken();
         boolean flag = reservationService.createReservation(customerId, data);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
@@ -122,7 +123,7 @@ public class ReservationController {
      * @return 고객 ID
      */
     private String getCustomerIdFromToken() {
-        TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TokenUserInfo tokenUserInfo = (TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return tokenUserInfo.getEmail(); // 윤종 임의 수정 getUserId-> getEmail 24/07/31 21:11
     }
 
@@ -133,7 +134,7 @@ public class ReservationController {
      */
     private int getReservationIdFromToken() {
         try {
-            TokenProvider.TokenUserInfo tokenUserInfo = (TokenProvider.TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            TokenUserInfo tokenUserInfo = (TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             // 추후 실제 예약 ID를 토큰에서 추출
             return reservationId; // 임시로 하드코딩된 값 반환
         } catch (Exception e) {

@@ -1,4 +1,4 @@
-package org.nmfw.foodietree.domain.issue.entiry;
+package org.nmfw.foodietree.domain.issue.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -36,7 +36,7 @@ public class StoreApprovalController {
 
         // 가게 등록 요청 처리 (tbl_store_approval)
         try {
-            StoreApproval storeApproval = storeApprovalService.askStoreApproval(
+            storeApprovalService.askStoreApproval(
                     dto, userInfo
             );
         } catch (NoSuchElementException e) { // 등록 요청 실패
@@ -78,6 +78,5 @@ public class StoreApprovalController {
         // 등록 요청 성공
         return ResponseEntity.ok().body("");
     }
-
 
 }
