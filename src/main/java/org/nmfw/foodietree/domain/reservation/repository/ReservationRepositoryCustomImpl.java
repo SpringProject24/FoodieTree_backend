@@ -138,9 +138,10 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                         product.storeId,
                         product.productId))
                 .from(product)
+                .leftJoin(reservation).on(product.productId.eq(reservation.productId))
                 .where(product.storeId.eq(storeId)
                         .and(product.pickupTime.gt(LocalDateTime.now()))
-                        .and(product.cancelByStore.isNull()))
+                        .and(reservation.reservationTime.isNull()))
                 .limit(cnt)
                 .fetch();
     }
