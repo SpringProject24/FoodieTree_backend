@@ -19,4 +19,6 @@ public interface StoreListRepositoryCustom {
 
     List<StoreListByEndTimeDto> findAllStoresByProductEndTime();
 
+    List<StoreListDto> findAllProductsStoreId();
+
 }

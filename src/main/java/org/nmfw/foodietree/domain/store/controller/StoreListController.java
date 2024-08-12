@@ -44,6 +44,7 @@ public class StoreListController {
         return ResponseEntity.ok().body(storeListDto);
     }
 
+
     // co2를 가장 많이 줄인 순
     @GetMapping("/by-product-count")
     public ResponseEntity<List<StoreListDto>> getStoresByProductCnt() {
@@ -58,3 +59,12 @@ public class StoreListController {
         return ResponseEntity.ok().body(storeListDto);
     }
 }
+
+    // 지역별 Store 조회 요청!
+    @GetMapping("/address")
+    public ResponseEntity<List<StoreListDto>> getStoresByAddress(@RequestParam("address") String address) {
+        List<StoreListDto> storeListDto = storeListService.getStoresByAddress(address);
+        return ResponseEntity.ok().body(storeListDto);
+    }
+}
+

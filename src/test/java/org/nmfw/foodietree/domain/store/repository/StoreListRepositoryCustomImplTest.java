@@ -41,4 +41,20 @@ import static org.mockito.Mockito.when;
 @DataJpaTest
 class StoreListRepositoryCustomImplTest {
 
+	private static final Logger log = LoggerFactory.getLogger(
+		StoreListRepositoryCustomImplTest.class);
+	@Autowired
+	StoreListRepositoryCustomImpl storeListRepository;
+
+	@Test
+	void test() {
+		// given
+
+		// when
+		List<StoreListDto> allProductsStoreId = storeListRepository.findAllProductsStoreId();
+		// then
+		for (StoreListDto storeListDto : allProductsStoreId) {
+			log.info("{}", storeListDto);
+		}
+	}
 }
