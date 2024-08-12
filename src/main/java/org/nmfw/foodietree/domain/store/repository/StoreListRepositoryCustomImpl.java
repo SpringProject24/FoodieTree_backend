@@ -133,44 +133,56 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
     // time to expiry 가 제일 적은 순으로 리스트 렌더링
     @Override
     public List<StoreListByEndTimeDto> findAllStoresByProductEndTime() {
-        // 쿼리에서 오늘 날짜의 시작과 끝을 설정합니다.
-        LocalDate today = LocalDate.now();
-        LocalDateTime startOfToday = today.atStartOfDay();
-        LocalDateTime endOfToday = startOfToday.plusDays(1).minusNanos(1);
+        // 현재 시간을 기준으로 남은 시간을 계산할 필요가 있으므로 현재 시간을 미리 가져옵니다.
+        LocalDateTime now = LocalDateTime.now();
 
+        // JPA Query Factory를 사용하여 쿼리를 구성합니다.
         QProduct product = QProduct.product;
         QStore store = QStore.store;
 
-        // 1. 오늘 등록된 상품 조회
-        // 오늘 등록된 상품을 조회합니다.
+        // 1. 오늘 등록된 상품을 조회합니다.
         List<Product> todayProducts = jpaQueryFactory
                 .selectFrom(product)
-                .where(product.productUploadDate.between(startOfToday, endOfToday) // 오늘 등록된 상품
-                        .and(product.cancelByStore.isNull()) // 취소되지 않은 상품
-                        .and(product.pickupStartTime.loe(LocalDateTime.now()) // 현재 시간이 픽업 시작 시간 이후
-                                .and(product.pickupEndTime.goe(LocalDateTime.now())))) // 현재 시간이 픽업 종료 시간 이전
+                .where(product.productUploadDate.between(LocalDate.now().atStartOfDay(),
+                                LocalDate.now().plusDays(1).atStartOfDay().minusNanos(1))
+                        .and(product.cancelByStore.isNull())
+                        .and(product.pickupStartTime.loe(now))
+                        .and(product.pickupEndTime.goe(now)))
                 .fetch();
 
-        // 2. 남은 시간을 계산하고, 가장 적은 순으로 정렬
+        // 2. 상품을 남은 시간 기준으로 정렬합니다.
+        // 상품의 남은 시간 계산을 위해 현재 시간을 기준으로 Duration을 계산합니다.
         List<Product> sortedProducts = todayProducts.stream()
-                .sorted(Comparator.comparing(p -> Duration.between(LocalDateTime.now(), p.getPickupEndTime())))
+                .sorted(Comparator.comparing(p -> Duration.between(now, p.getPickupEndTime())))
                 .collect(Collectors.toList());
 
-        // 3. 해당 상품이 포함된 스토어 정보를 반환
+        // 3. 상점 정보를 조회하고 DTO 객체를 생성합니다.
         return sortedProducts.stream()
-                .map(p -> {
+                .collect(Collectors.groupingBy(Product::getStoreId, Collectors.counting())) // 각 상점의 상품 개수를 집계합니다.
+                .entrySet().stream()
+                .map(entry -> {
+                    String storeId = entry.getKey();
+                    long productCount = entry.getValue();
+
+                    // 상점 정보를 조회합니다.
                     Store s = jpaQueryFactory
                             .selectFrom(store)
-                            .where(store.storeId.eq(p.getStoreId()))
+                            .where(store.storeId.eq(storeId))
                             .fetchOne();
 
-                    // 남은 시간을 계산하여 문자열로 변환
-                    Duration duration = Duration.between(LocalDateTime.now(), p.getPickupEndTime());
+                    // 상점의 모든 상품에 대해 남은 시간을 계산하고, 이를 문자열로 변환합니다.
+                    Product firstProduct = sortedProducts.stream()
+                            .filter(p -> p.getStoreId().equals(storeId))
+                            .findFirst()
+                            .orElseThrow(() -> new RuntimeException("Product not found"));
+
+                    Duration duration = Duration.between(now, firstProduct.getPickupEndTime());
                     long hours = duration.toHours();
                     long minutes = duration.toMinutes() % 60;
                     long seconds = duration.getSeconds() % 60;
                     String remainingTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 
+                    // DTO 객체를 생성하여 반환합니다.
                     return StoreListByEndTimeDto.builder()
                             .storeId(s.getStoreId())
                             .storeName(s.getStoreName())
@@ -178,13 +190,13 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                             .address(s.getAddress())
                             .price(s.getPrice())
                             .storeImg(s.getStoreImg())
-                            .productCnt(1) // 해당 상품 하나만 포함되므로 1
+                            .productCnt((int) productCount) // 상품 개수를 설정합니다.
                             .openAt(s.getOpenAt())
                             .closedAt(s.getClosedAt())
                             .limitTime(s.getLimitTime())
                             .emailVerified(s.getEmailVerified())
-                            .productImg(s.getProductImg()) // 해당 상품의 이미지
-                            .remainingTime(remainingTime) // 남은 시간 추가
+                            .productImg(s.getProductImg())
+                            .remainingTime(remainingTime) // 남은 시간 문자열을 설정합니다.
                             .build();
                 })
                 .collect(Collectors.toList());
