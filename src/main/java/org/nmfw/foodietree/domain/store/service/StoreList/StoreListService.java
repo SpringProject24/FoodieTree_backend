@@ -29,8 +29,7 @@ public class StoreListService {
     private final FavAreaRepositoryCustom favAreaRepositoryCustom;
     // 모든 가게 리스트 출력
     public List<StoreListDto> getAllStores(String customerId) {
-        List<UpdateAreaDto> favouriteAreas = favAreaRepositoryCustom.findFavAreaByCustomerId(customerId);
-        return storeListRepositoryCustom.findAllStoresByFavArea(favouriteAreas);
+        return storeListRepositoryCustom.findAllProductsStoreId();
     }
 
     // 해당 카테고리 별 리스트 출력

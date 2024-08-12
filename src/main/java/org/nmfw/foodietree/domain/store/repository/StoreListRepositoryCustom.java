@@ -13,4 +13,6 @@ public interface StoreListRepositoryCustom {
     List<StoreListDto> findStoresByCategory(StoreCategory category);
 
     List<StoreListDto> findAllStoresByFavArea(List<UpdateAreaDto> favouriteAreas);
+
+    List<StoreListDto> findAllProductsStoreId();
 }
