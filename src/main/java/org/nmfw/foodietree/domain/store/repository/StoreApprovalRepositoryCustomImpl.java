@@ -155,7 +155,7 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
                     .set(store.storeLicenseNumber, sa.getLicense())
                     .set(store.productCnt, sa.getProductCnt())
                     .set(store.price, sa.getPrice())
-//                    .set(store.productImage, sa.getProductImage()) // store 필드에 따라 변경 필요
+                    .set(store.productImg, sa.getProductImage()) // store 필드에 따라 변경 필요
                     .where(store.storeId.eq(sa.getStoreId()))
                     .execute();
             if(result > 0) resultCnt++;
