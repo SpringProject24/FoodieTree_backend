@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.store.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreListByEndTimeDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 import org.nmfw.foodietree.domain.store.service.StoreList.StoreListService;
@@ -51,4 +52,9 @@ public class StoreListController {
     }
 
     // 상품 시간이 현재로부터 제일 가까운 순 (마감임박)
+    @GetMapping("/by-product-end-time")
+    public ResponseEntity<List<StoreListByEndTimeDto>> getStoresByProductEndTime() {
+        List<StoreListByEndTimeDto> storeListDto = storeListService.getStoresByProductEndTime();
+        return ResponseEntity.ok().body(storeListDto);
+    }
 }

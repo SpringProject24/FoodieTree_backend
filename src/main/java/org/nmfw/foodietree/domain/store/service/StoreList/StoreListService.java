@@ -7,6 +7,7 @@ import org.nmfw.foodietree.domain.customer.entity.FavArea;
 import org.nmfw.foodietree.domain.customer.repository.FavAreaRepository;
 import org.nmfw.foodietree.domain.customer.repository.FavAreaRepositoryCustom;
 import org.nmfw.foodietree.domain.customer.service.FavAreaService;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreListByEndTimeDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
@@ -44,6 +45,9 @@ public class StoreListService {
     }
 
     //비회원 메인페이지 마감임박 리스트 출력
+    public List<StoreListByEndTimeDto> getStoresByProductEndTime() {
+        return storeListRepositoryCustom.findAllStoresByProductEndTime();
+    }
 
 }
 
