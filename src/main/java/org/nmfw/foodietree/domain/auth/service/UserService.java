@@ -11,7 +11,7 @@ import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.service.StoreService;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
-import org.nmfw.foodietree.global.LoggedInUserInfo;
+import org.nmfw.foodietree.global.LoggedInUserInfoDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -188,7 +188,7 @@ public class UserService {
     }
 
     // DB에서 유저정보 찾기
-    public LoggedInUserInfo getUserInfo(String email, String userType) {
+    public LoggedInUserInfoDto getUserInfo(String email, String userType) {
 
         String defaultCustomerImage = "/assets/img/defaultImage.jpg"; // 기본 고객 프로필 이미지 경로
         String defaultStoreImage = "/assets/img/defaultImage.jpg"; // 기본 상점 프로필 이미지 경로
@@ -202,7 +202,7 @@ public class UserService {
                 profileImage = defaultCustomerImage;
             }
 
-            return LoggedInUserInfo.builder()
+            return LoggedInUserInfoDto.builder()
                     .email(customer.getCustomerId())
                     .subName(customer.getNickname())
                     .profileImage(profileImage)
@@ -217,7 +217,7 @@ public class UserService {
                 productImage = defaultStoreImage;
             }
 
-            return LoggedInUserInfo.builder()
+            return LoggedInUserInfoDto.builder()
                     .email(store.getStoreId())
                     .subName(store.getStoreName())
                     .productImg(productImage)

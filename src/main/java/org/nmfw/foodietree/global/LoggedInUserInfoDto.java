@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class LoggedInUserInfo {
+public class LoggedInUserInfoDto {
     //global
     private String email;
     private String subName;
