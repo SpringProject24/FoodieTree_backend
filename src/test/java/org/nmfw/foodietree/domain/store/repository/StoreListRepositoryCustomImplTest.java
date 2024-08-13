@@ -3,7 +3,6 @@ package org.nmfw.foodietree.domain.store.repository;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.slf4j.Logger;

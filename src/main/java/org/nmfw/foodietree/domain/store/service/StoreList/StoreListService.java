@@ -7,6 +7,8 @@ import org.nmfw.foodietree.domain.customer.entity.FavArea;
 import org.nmfw.foodietree.domain.customer.repository.FavAreaRepository;
 import org.nmfw.foodietree.domain.customer.repository.FavAreaRepositoryCustom;
 import org.nmfw.foodietree.domain.customer.service.FavAreaService;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreListByEndTimeDto;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreListCo2Dto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
@@ -35,6 +37,16 @@ public class StoreListService {
     // 해당 카테고리 별 리스트 출력
     public List<StoreListDto> getStoresByCategory(StoreCategory category) {
         return storeListRepositoryCustom.findStoresByCategory(category);
+    }
+
+    // 비회원 메인페이지 가게 리스트 출력
+    public List<StoreListCo2Dto> getStoresByProductCnt() {
+        return storeListRepositoryCustom.findAllStoresByProductCnt();
+    }
+
+    //비회원 메인페이지 마감임박 리스트 출력
+    public List<StoreListByEndTimeDto> getStoresByProductEndTime() {
+        return storeListRepositoryCustom.findAllStoresByProductEndTime();
     }
 
     // 지역별 가게 리스트 출력
