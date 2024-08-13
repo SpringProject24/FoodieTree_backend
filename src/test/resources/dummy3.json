@@ -1,0 +1,695 @@
+[
+  {
+    "address": "서울시 강남구 청담동 101-1",
+    "productCnt": 7,
+    "storeName": "청담디저트",
+    "storeId": "cheongdam@abc.com1",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 종로구 관철동 102-2",
+    "productCnt": 4,
+    "storeName": "종로와플하우스",
+    "storeId": "jongno@abc.com2",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 마포구 합정동 103-3",
+    "productCnt": 6,
+    "storeName": "합정달콤",
+    "storeId": "hapjeong@abc.com3",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 용산구 이태원동 104-4",
+    "productCnt": 9,
+    "storeName": "이태원아이스크림",
+    "storeId": "itaewon@abc.com4",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성동구 성수동 105-5",
+    "productCnt": 5,
+    "storeName": "성수디저트카페",
+    "storeId": "seongsu@abc.com5",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 광진구 화양동 106-6",
+    "productCnt": 3,
+    "storeName": "건대와플",
+    "storeId": "gundae@abc.com6",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강서구 화곡동 107-7",
+    "productCnt": 7,
+    "storeName": "화곡초코렛",
+    "storeId": "hwagok@abc.com7",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 영등포구 여의도동 108-8",
+    "productCnt": 2,
+    "storeName": "여의도팬케이크",
+    "storeId": "yeouido@abc.com8",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서대문구 창천동 109-9",
+    "productCnt": 6,
+    "storeName": "신촌푸딩",
+    "storeId": "sinchon@abc.com9",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동대문구 장안동 110-10",
+    "productCnt": 4,
+    "storeName": "장안베이커리",
+    "storeId": "jangan@abc.com10",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 송파구 잠실동 111-11",
+    "productCnt": 8,
+    "storeName": "잠실초코파이",
+    "storeId": "jamsil@abc.com11",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서초구 반포동 112-12",
+    "productCnt": 3,
+    "storeName": "반포타르트",
+    "storeId": "banpo@abc.com12",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성북구 정릉동 113-13",
+    "productCnt": 7,
+    "storeName": "정릉디저트카페",
+    "storeId": "jeongneung@abc.com13",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강북구 수유동 114-14",
+    "productCnt": 5,
+    "storeName": "수유스위츠",
+    "storeId": "suyu@abc.com14",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 구로구 구로동 115-15",
+    "productCnt": 9,
+    "storeName": "구로컵케이크",
+    "storeId": "guro@abc.com15",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 노원구 상계동 116-16",
+    "productCnt": 4,
+    "storeName": "상계도넛",
+    "storeId": "sanggye@abc.com16",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 중랑구 묵동 117-17",
+    "productCnt": 3,
+    "storeName": "묵동아이스크림",
+    "storeId": "mukdong@abc.com17",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동작구 사당동 118-18",
+    "productCnt": 7,
+    "storeName": "사당초콜릿",
+    "storeId": "sadang@abc.com18",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강동구 천호동 119-19",
+    "productCnt": 8,
+    "storeName": "천호마카롱",
+    "storeId": "cheonho@abc.com19",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 영등포구 당산동 120-20",
+    "productCnt": 5,
+    "storeName": "당산타르트",
+    "storeId": "dangsan@abc.com20",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강남구 삼성동 121-21",
+    "productCnt": 3,
+    "storeName": "삼성디저트카페",
+    "storeId": "samsung@abc.com21",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 마포구 신수동 122-22",
+    "productCnt": 2,
+    "storeName": "신수머핀",
+    "storeId": "sinsudong@abc.com22",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서초구 양재동 123-23",
+    "productCnt": 6,
+    "storeName": "양재팬케이크",
+    "storeId": "yangjae@abc.com23",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성동구 왕십리동 124-24",
+    "productCnt": 4,
+    "storeName": "왕십리초코릿",
+    "storeId": "wangsimni@abc.com24",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강남구 역삼동 125-25",
+    "productCnt": 5,
+    "storeName": "역삼디저트",
+    "storeId": "yeoksam@abc.com25",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 은평구 불광동 126-26",
+    "productCnt": 7,
+    "storeName": "불광스위츠",
+    "storeId": "bulgwang@abc.com26",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서초구 서초동 127-27",
+    "productCnt": 8,
+    "storeName": "서초베이커리",
+    "storeId": "seocho@abc.com27",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 양천구 목동 128-28",
+    "productCnt": 9,
+    "storeName": "목동초코렛",
+    "storeId": "mokdong@abc.com28",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 송파구 가락동 129-29",
+    "productCnt": 4,
+    "storeName": "가락케이크",
+    "storeId": "garak@abc.com29",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동대문구 신설동 130-30",
+    "productCnt": 6,
+    "storeName": "신설디저트",
+    "storeId": "shinseol@abc.com30",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 구로구 신도림동 131-31",
+    "productCnt": 8,
+    "storeName": "신도림케이크",
+    "storeId": "sindorim@abc.com31",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 마포구 대흥동 132-32",
+    "productCnt": 4,
+    "storeName": "대흥초콜릿",
+    "storeId": "daeheung@abc.com32",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 영등포구 영등포동 133-33",
+    "productCnt": 9,
+    "storeName": "영등포베이커리",
+    "storeId": "yeongdeungpo@abc.com33",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서대문구 홍제동 134-34",
+    "productCnt": 3,
+    "storeName": "홍제아이스크림",
+    "storeId": "hongje@abc.com34",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동작구 상도동 135-35",
+    "productCnt": 7,
+    "storeName": "상도스위츠",
+    "storeId": "sangdo@abc.com35",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 은평구 응암동 136-36",
+    "productCnt": 6,
+    "storeName": "응암타르트",
+    "storeId": "eungam@abc.com36",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 종로구 낙원동 137-37",
+    "productCnt": 4,
+    "storeName": "낙원초코파이",
+    "storeId": "nakwon@abc.com37",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강남구 도곡동 138-38",
+    "productCnt": 3,
+    "storeName": "도곡팬케이크",
+    "storeId": "dogok@abc.com38",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 마포구 망원동 139-39",
+    "productCnt": 7,
+    "storeName": "망원디저트카페",
+    "storeId": "mangwon@abc.com39",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서초구 반포동 140-40",
+    "productCnt": 5,
+    "storeName": "반포마카롱",
+    "storeId": "banpo@abc.com40",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 송파구 문정동 141-41",
+    "productCnt": 6,
+    "storeName": "문정타르트",
+    "storeId": "munjeong@abc.com41",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성동구 금호동 142-42",
+    "productCnt": 3,
+    "storeName": "금호디저트",
+    "storeId": "geumho@abc.com42",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강서구 마곡동 143-43",
+    "productCnt": 4,
+    "storeName": "마곡초콜릿",
+    "storeId": "magok@abc.com43",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 노원구 하계동 144-44",
+    "productCnt": 9,
+    "storeName": "하계디저트",
+    "storeId": "hagye@abc.com44",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성북구 돈암동 145-45",
+    "productCnt": 8,
+    "storeName": "돈암스위츠",
+    "storeId": "donam@abc.com45",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 영등포구 신길동 146-46",
+    "productCnt": 7,
+    "storeName": "신길마카롱",
+    "storeId": "shingil@abc.com46",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 종로구 서린동 147-47",
+    "productCnt": 2,
+    "storeName": "서린타르트",
+    "storeId": "seorin@abc.com47",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강남구 대치동 148-48",
+    "productCnt": 5,
+    "storeName": "대치초콜릿",
+    "storeId": "daechi@abc.com48",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서초구 방배동 149-49",
+    "productCnt": 4,
+    "storeName": "방배디저트카페",
+    "storeId": "bangbae@abc.com49",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 은평구 갈현동 150-50",
+    "productCnt": 3,
+    "storeName": "갈현스위츠",
+    "storeId": "galhyeon@abc.com50",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성동구 행당동 151-51",
+    "productCnt": 8,
+    "storeName": "행당타르트",
+    "storeId": "haengdang@abc.com51",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 송파구 석촌동 152-52",
+    "productCnt": 7,
+    "storeName": "석촌디저트카페",
+    "storeId": "seokchon@abc.com52",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 중구 필동 153-53",
+    "productCnt": 4,
+    "storeName": "필동초콜릿",
+    "storeId": "pildong@abc.com53",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 양천구 신월동 154-54",
+    "productCnt": 3,
+    "storeName": "신월마카롱",
+    "storeId": "sinwol@abc.com54",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 노원구 중계동 155-55",
+    "productCnt": 8,
+    "storeName": "중계디저트",
+    "storeId": "junggye@abc.com55",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강북구 미아동 156-56",
+    "productCnt": 7,
+    "storeName": "미아베이커리",
+    "storeId": "mia@abc.com56",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동작구 노량진동 157-57",
+    "productCnt": 5,
+    "storeName": "노량진초코렛",
+    "storeId": "noryangjin@abc.com57",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 관악구 봉천동 158-58",
+    "productCnt": 2,
+    "storeName": "봉천디저트",
+    "storeId": "bongcheon@abc.com58",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강서구 방화동 159-59",
+    "productCnt": 6,
+    "storeName": "방화스위츠",
+    "storeId": "banghwa@abc.com59",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동대문구 답십리동 160-60",
+    "productCnt": 4,
+    "storeName": "답십리초콜릿",
+    "storeId": "dapsimni@abc.com60",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성북구 보문동 161-61",
+    "productCnt": 7,
+    "storeName": "보문디저트",
+    "storeId": "bomun@abc.com61",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성동구 옥수동 162-62",
+    "productCnt": 6,
+    "storeName": "옥수마카롱",
+    "storeId": "oksu@abc.com62",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강동구 성내동 163-63",
+    "productCnt": 3,
+    "storeName": "성내초코릿",
+    "storeId": "seongnae@abc.com63",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서초구 잠원동 164-64",
+    "productCnt": 8,
+    "storeName": "잠원디저트",
+    "storeId": "jamwon@abc.com64",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동대문구 제기동 165-65",
+    "productCnt": 5,
+    "storeName": "제기초코파이",
+    "storeId": "jegidong@abc.com65",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 송파구 송파동 166-66",
+    "productCnt": 9,
+    "storeName": "송파베이커리",
+    "storeId": "songpa@abc.com66",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강남구 신사동 167-67",
+    "productCnt": 4,
+    "storeName": "신사초콜릿",
+    "storeId": "sinsa@abc.com67",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 은평구 대조동 168-68",
+    "productCnt": 3,
+    "storeName": "대조스위츠",
+    "storeId": "daejo@abc.com68",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 마포구 도화동 169-69",
+    "productCnt": 7,
+    "storeName": "도화마카롱",
+    "storeId": "dohwa@abc.com69",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성북구 삼선동 170-70",
+    "productCnt": 4,
+    "storeName": "삼선디저트카페",
+    "storeId": "samseon@abc.com70",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강서구 염창동 171-71",
+    "productCnt": 8,
+    "storeName": "염창베이커리",
+    "storeId": "yeomchang@abc.com71",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 양천구 신정동 172-72",
+    "productCnt": 5,
+    "storeName": "신정디저트",
+    "storeId": "sinjeong@abc.com72",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강동구 둔촌동 173-73",
+    "productCnt": 6,
+    "storeName": "둔촌초콜릿",
+    "storeId": "dunchon@abc.com73",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 구로구 고척동 174-74",
+    "productCnt": 9,
+    "storeName": "고척마카롱",
+    "storeId": "gocheok@abc.com74",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 중구 신당동 175-75",
+    "productCnt": 7,
+    "storeName": "신당디저트카페",
+    "storeId": "shindang@abc.com75",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동대문구 청량리동 176-76",
+    "productCnt": 3,
+    "storeName": "청량리베이커리",
+    "storeId": "cheongnyangni@abc.com76",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 마포구 상암동 177-77",
+    "productCnt": 4,
+    "storeName": "상암초코파이",
+    "storeId": "sangam@abc.com77",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강남구 논현동 178-78",
+    "productCnt": 8,
+    "storeName": "논현초콜릿",
+    "storeId": "nonhyeon@abc.com78",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성북구 동소문동 179-79",
+    "productCnt": 5,
+    "storeName": "동소문디저트",
+    "storeId": "dongsomun@abc.com79",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동작구 흑석동 180-80",
+    "productCnt": 3,
+    "storeName": "흑석스위츠",
+    "storeId": "heukseok@abc.com80",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강동구 길동 181-81",
+    "productCnt": 6,
+    "storeName": "길동디저트",
+    "storeId": "gildong@abc.com81",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성동구 금호동 182-82",
+    "productCnt": 4,
+    "storeName": "금호초콜릿",
+    "storeId": "geumho@abc.com82",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서초구 우면동 183-83",
+    "productCnt": 7,
+    "storeName": "우면초코파이",
+    "storeId": "umyeon@abc.com83",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강서구 가양동 184-84",
+    "productCnt": 3,
+    "storeName": "가양스위츠",
+    "storeId": "gayang@abc.com84",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 종로구 평창동 185-85",
+    "productCnt": 4,
+    "storeName": "평창베이커리",
+    "storeId": "pyeongchang@abc.com85",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강남구 자곡동 186-86",
+    "productCnt": 6,
+    "storeName": "자곡디저트",
+    "storeId": "jagok@abc.com86",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서초구 내곡동 187-87",
+    "productCnt": 5,
+    "storeName": "내곡타르트",
+    "storeId": "naegok@abc.com87",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동대문구 전농동 188-88",
+    "productCnt": 9,
+    "storeName": "전농초콜릿",
+    "storeId": "jeonnong@abc.com88",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 송파구 오금동 189-89",
+    "productCnt": 7,
+    "storeName": "오금마카롱",
+    "storeId": "ogeum@abc.com89",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 노원구 공릉동 190-90",
+    "productCnt": 4,
+    "storeName": "공릉디저트카페",
+    "storeId": "gongneung@abc.com90",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서대문구 연희동 191-91",
+    "productCnt": 3,
+    "storeName": "연희스위츠",
+    "storeId": "yeonhui@abc.com91",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 동대문구 용두동 192-92",
+    "productCnt": 7,
+    "storeName": "용두초코파이",
+    "storeId": "yongdu@abc.com92",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강동구 고덕동 193-93",
+    "productCnt": 5,
+    "storeName": "고덕디저트",
+    "storeId": "godeok@abc.com93",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 성동구 금호동194-94",
+    "productCnt": 4,
+    "storeName": "금호베이커리",
+    "storeId": "geumho@abc.com94",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 서초구 우면동 195-95",
+    "productCnt": 6,
+    "storeName": "우면스위츠",
+    "storeId": "umyeon@abc.com95",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 송파구 잠실동 196-96",
+    "productCnt": 3,
+    "storeName": "잠실디저트",
+    "storeId": "jamsil@abc.com96",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강남구 삼성동 197-97",
+    "productCnt": 8,
+    "storeName": "삼성초콜릿",
+    "storeId": "samsung@abc.com97",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강북구 수유동 198-98",
+    "productCnt": 7,
+    "storeName": "수유디저트카페",
+    "storeId": "suyu@abc.com98",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 은평구 불광동 199-99",
+    "productCnt": 4,
+    "storeName": "불광마카롱",
+    "storeId": "bulgwang@abc.com99",
+    "category": "디저트"
+  }
+]
