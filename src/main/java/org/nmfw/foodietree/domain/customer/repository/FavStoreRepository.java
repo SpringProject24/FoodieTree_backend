@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface FavStoreRepository extends JpaRepository<FavStore, Long> {
+public interface FavStoreRepository extends JpaRepository<FavStore, Long>
+	, FavStoreRepositoryCustom {
 
     void deleteByCustomerIdAndStoreId(String customerId, String storeId);
 
