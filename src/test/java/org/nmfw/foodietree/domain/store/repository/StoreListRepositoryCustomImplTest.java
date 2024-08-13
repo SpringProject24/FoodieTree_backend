@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.store.repository;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.slf4j.Logger;
@@ -27,8 +28,9 @@ class StoreListRepositoryCustomImplTest {
 		// when
 		List<StoreListDto> allProductsStoreId = storeListRepository.findAllProductsStoreId();
 		// then
-		for (StoreListDto storeListDto : allProductsStoreId) {
-			log.info("{}", storeListDto);
-		}
+		assertAll(
+			() -> assertNotNull(allProductsStoreId),
+			() -> allProductsStoreId.forEach(e -> assertNotEquals(0, e.getProductCnt()))
+		);
 	}
 }
