@@ -160,6 +160,7 @@ public class ReservationService {
             log.info("save 결과 출력: {}", save);
             if (save == null) return false;
         }
+        if (list.isEmpty()) return false;
         return true;
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
@@ -71,13 +72,13 @@ public class AdminApprovalController {
 //            , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
         TokenUserInfo userInfo = null;
-        int resultCnt;
+        Map<String, Object> result;
         try {
-            resultCnt = adminApprovalService.updateApprovalsStatus(dto, userInfo);
+            result = adminApprovalService.updateApprovalsStatus(dto, userInfo);
         } catch (Exception e) { // 예외처리 보완 필요
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok().body(Map.of("result", resultCnt));
+        return ResponseEntity.ok().body(Map.of("result", result));
     }
 
 }

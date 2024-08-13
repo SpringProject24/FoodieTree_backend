@@ -1,0 +1,142 @@
+[
+  {
+    "address": "서울시 성동구 금호동 173-76",
+    "productCnt": 4,
+    "storeName": "금호초밥",
+    "storeId": "kumho@abc.com76",
+    "category": "일식"
+  },
+  {
+    "address": "서울시 강남구 도곡동 174-77",
+    "productCnt": 6,
+    "storeName": "도곡카페",
+    "storeId": "dogok@abc.com77",
+    "category": "카페"
+  },
+  {
+    "address": "서울시 송파구 오금동 175-78",
+    "productCnt": 3,
+    "storeName": "오금치킨",
+    "storeId": "ogeum@abc.com78",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 은평구 녹번동 176-79",
+    "productCnt": 5,
+    "storeName": "녹번갈비",
+    "storeId": "nokbeon@abc.com79",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 성북구 안암동 177-80",
+    "productCnt": 2,
+    "storeName": "안암포차",
+    "storeId": "anam@abc.com80",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 중랑구 망우동 178-81",
+    "productCnt": 7,
+    "storeName": "망우파스타",
+    "storeId": "mangu@abc.com81",
+    "category": "양식"
+  },
+  {
+    "address": "서울시 강서구 화곡동 179-82",
+    "productCnt": 9,
+    "storeName": "화곡떡볶이",
+    "storeId": "hwagok@abc.com82",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 영등포구 신길동 180-83",
+    "productCnt": 3,
+    "storeName": "신길해물찜",
+    "storeId": "shingil@abc.com83",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 양천구 목동 181-84",
+    "productCnt": 5,
+    "storeName": "목동냉면",
+    "storeId": "mokdong@abc.com84",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 노원구 공릉동 182-85",
+    "productCnt": 7,
+    "storeName": "공릉김밥",
+    "storeId": "gongneung@abc.com85",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 부천시 원미동 183-86",
+    "productCnt": 6,
+    "storeName": "원미순대국",
+    "storeId": "wonmi@abc.com86",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 안산시 단원구 고잔동 184-87",
+    "productCnt": 9,
+    "storeName": "고잔찌개",
+    "storeId": "gojan@abc.com87",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 성남시 분당구 구미동 185-88",
+    "productCnt": 4,
+    "storeName": "구미칼국수",
+    "storeId": "gumi@abc.com88",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 용인시 수지구 성복동 186-89",
+    "productCnt": 7,
+    "storeName": "성복돈까스",
+    "storeId": "seongbok@abc.com89",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 의정부시 신곡동 187-90",
+    "productCnt": 3,
+    "storeName": "신곡해장국",
+    "storeId": "shingok@abc.com90",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 평택시 지산동 188-91",
+    "productCnt": 8,
+    "storeName": "지산마라탕",
+    "storeId": "jisan@abc.com91",
+    "category": "중식"
+  },
+  {
+    "address": "경기도 고양시 덕양구 삼송동 189-92",
+    "productCnt": 5,
+    "storeName": "삼송돈까스",
+    "storeId": "samsong@abc.com92",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 남양주시 별내동 190-93",
+    "productCnt": 6,
+    "storeName": "별내불고기",
+    "storeId": "byeollae@abc.com93",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 광명시 철산동 191-94",
+    "productCnt": 9,
+    "storeName": "철산감자탕",
+    "storeId": "cheolsan@abc.com94",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 안양시 동안구 범계동 192-95",
+    "productCnt": 4,
+    "storeName": "범계갈비",
+    "storeId": "beomgye@abc.com95",
+    "category": "한식"
+  }
+]

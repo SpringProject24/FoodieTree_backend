@@ -93,7 +93,7 @@ public class AdminApprovalService {
      * @param userInfo - 관리자 정보를 담은 토큰
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public int updateApprovalsStatus(
+    public Map<String, Object> updateApprovalsStatus(
             ApprovalStatusDto dto,
             TokenUserInfo userInfo
     ) {
@@ -110,7 +110,14 @@ public class AdminApprovalService {
         if(status.equals(ApproveStatus.APPROVED)) { // 승인 요청인 경우 store 업데이트
             updateCnt = sendStoreInfo(approvalIdList, userInfo);
         }
-        return updateCnt;
+        if(approvalIdList.size() != updateCnt) {
+            throw new RuntimeException("전체 " + approvalIdList.size()+ "건 중 "
+                    + (approvalIdList.size() - updateCnt) + "건 처리 실패" );
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("ids", approvalIdList);
+        map.put("status", status.getDesc());
+        return map;
     }
 
     /**

@@ -1,7 +1,7 @@
 package org.nmfw.foodietree.domain.store.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.nmfw.foodietree.domain.store.entity.FoodCategory;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreCategoryDto;
 import org.nmfw.foodietree.domain.store.service.FoodCategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +18,8 @@ public class FoodCategoryController {
     private final FoodCategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<FoodCategory>> getCategories() {
-        List<FoodCategory> categories = categoryService.getAllCategories();
+    public ResponseEntity<List<StoreCategoryDto>> getCategories() {
+        List<StoreCategoryDto> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 }

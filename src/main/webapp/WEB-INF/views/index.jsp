@@ -9,6 +9,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <title>FoodieTree</title>
     <!-- <link rel="stylesheet" href="/assets/css/common.css"> -->
     <link rel="stylesheet" href="/assets/css/index.css" />
+    <link rel="stylesheet" href="/assets/css/store/guest-storelist.css">
     <!-- 구글폰트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -98,6 +99,9 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </div>
       </div>
     </section>
+    <div class ="guest-store-list-section">
+      <%@ include file="guestProductPage.jsp" %>
+    </div>
 
     <div class="info-section">
       <div class="info-box">
