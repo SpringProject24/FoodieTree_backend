@@ -74,5 +74,14 @@ public class StoreListController {
         List<StoreListDto> storeListDtos = storeListService.getFavStoresAndOrders3(customerId);
         return ResponseEntity.ok().body(storeListDtos);
     }
+
+    // 선호 카테고리에 해당하는 가게 조회
+    @GetMapping("/favCategory")
+    public ResponseEntity<List<StoreListDto>> getStoresByPreferredFood(@AuthenticationPrincipal TokenUserInfo tokenUserInfo) {
+        String customerId = tokenUserInfo.getUsername();
+        List<StoreListDto> storeListDtos = storeListService.findStoresByPreferredFood(customerId, null, null);
+        return ResponseEntity.ok().body(storeListDtos);
+    }
+
 }
 
