@@ -1,14 +1,8 @@
 package org.nmfw.foodietree.domain.store.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.DateExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +10,7 @@ import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListByEndTimeDto;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreListCo2Dto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.store.entity.Store;
@@ -23,8 +18,6 @@ import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
@@ -115,7 +108,7 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
     }
 
     @Override
-    public List<StoreListDto> findAllStoresByProductCnt() {
+    public List<StoreListCo2Dto> findAllStoresByProductCnt() {
         QProduct product = QProduct.product;
         QStore store = QStore.store;
 
@@ -134,28 +127,35 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                 .where(store.storeId.in(storeIdsByProductCount)) // storeIdsByProductCount에 있는 storeId만 가져오기
                 .fetch()
                 .stream()
-                .map(s -> StoreListDto.builder()
-                        .storeId(s.getStoreId())
-                        .storeName(s.getStoreName())
-                        .category(String.valueOf(s.getCategory()))
-                        .address(s.getAddress())
-                        .price(s.getPrice())
-                        .storeImg(s.getStoreImg())
-                        .productCnt( // 해당 storeId의 유효한 상품 수를 가져옴
-                                jpaQueryFactory
-                                        .select(product.count())
-                                        .from(product)
-                                        .where(product.storeId.eq(s.getStoreId())
-                                                .and(product.cancelByStore.isNull()))
-                                        .fetchOne().intValue()
-                        )
-                        .openAt(s.getOpenAt())
-                        .closedAt(s.getClosedAt())
-                        .limitTime(s.getLimitTime())
-                        .emailVerified(s.getEmailVerified())
-                        .productImg(s.getProductImg())
-                        .build()
-                )
+                .map(s -> {
+                    // 유효한 상품 수 계산
+                    int productCount = jpaQueryFactory
+                            .select(product.count())
+                            .from(product)
+                            .where(product.storeId.eq(s.getStoreId())
+                                    .and(product.cancelByStore.isNull()))
+                            .fetchOne().intValue();
+
+                    // CO2 계산 (예: 상품 수 * 0.12)
+                    double coTwo = productCount * 0.12;
+                    // StoreListDto 빌드 및 반환
+                    return StoreListCo2Dto.builder()
+                            .storeId(s.getStoreId())
+                            .storeName(s.getStoreName())
+                            .category(String.valueOf(s.getCategory()))
+                            .address(s.getAddress())
+                            .price(s.getPrice())
+                            .storeImg(s.getStoreImg())
+                            .productCnt(productCount) // 해당 storeId의 유효한 상품 수
+                            .openAt(s.getOpenAt())
+                            .closedAt(s.getClosedAt())
+                            .limitTime(s.getLimitTime())
+                            .emailVerified(s.getEmailVerified())
+                            .productImg(s.getProductImg())
+                            .coTwo(coTwo)
+                            .build();
+                })
+                .sorted(Comparator.comparing(StoreListCo2Dto::getCoTwo).reversed()) // coTwo 값으로 내림차순 정렬
                 .collect(Collectors.toList());
     }
 

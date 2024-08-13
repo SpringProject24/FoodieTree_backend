@@ -34,6 +34,7 @@ function renderStoresByProductCount(storeList) {
             <div class="category">${store.category}</div>
             <img src="${imgUrl}" alt="${store.storeName}" onerror="this.onerror=null; this.src='/assets/img/defaultImage.jpg';">
             <p class="storeName">${store.storeName}</p>
+            <span class="storeCo2">🪴: ${store.coTwo}</span> 
             <span class="storePrice">가격: ${store.price}</span>
             <span class="productCnt">수량: ${store.productCnt}</span>
             ${store.productCnt == 0 ? '<div class="overlay">SOLD OUT</div>' : ''}
