@@ -232,14 +232,17 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                             .remainingTime(remainingTime) // 남은 시간을 HH:mm:ss 형식으로 문자열로 설정
                             .build();
                 })
+                //리스트를 남은 시간 순으로 정렬
+                .sorted(Comparator.comparing(StoreListByEndTimeDto::getRemainingTime))
                 .collect(Collectors.toList());
     }
 
+
     /**
-     * 현재 시간과 종료 시간 사이의 남은 시간을 계산합니다.
+     * 현재 시간과 종료 시간 사이의 남은 시간을 계산
      */
     private Duration calculateRemainingTime(LocalTime now, LocalTime endTime) {
-        // 현재 시간이 종료 시간보다 늦은 경우를 처리합니다.
+        // 현재 시간이 종료 시간보다 늦은 경우
         if (now.isAfter(endTime)) {
             return Duration.ZERO;
         }

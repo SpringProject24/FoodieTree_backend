@@ -13,13 +13,6 @@ window.onload = function() {
         .catch(error => console.error('Error:', error));
 };
 
-function formatRemainingTime(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-}
-
 function renderStoresByEndTime(storeList) {
     const endTimeSoonContainer = document.querySelector('.end-time-soon-section');
     endTimeSoonContainer.innerHTML = '';
@@ -37,8 +30,9 @@ function renderStoresByEndTime(storeList) {
             ? store.storeImg
             : store.storeImg ? `${window.location.origin}${store.storeImg}` : '/assets/img/defaultImage.jpg';
 
-        const remainingSeconds = parseInt(store.remainingTime.split(':')[1], 10); // extract seconds
-        const formattedTime = formatRemainingTime(remainingSeconds);
+        // HH:mm 형식으로 시간 추출
+        const [hours, minutes] = store.remainingTime.split(':').slice(0, 2);
+        const formattedTime = `${hours}시간, ${minutes}분 남았어요!`;
 
         storeItem.innerHTML = `
             <div class="category">${store.category}</div>
@@ -46,7 +40,7 @@ function renderStoresByEndTime(storeList) {
             <p class="storeName">${store.storeName}</p>
             <span class="storePrice">가격: ${store.price}</span>
             <span class="productCnt">수량: ${store.productCnt}</span>
-            <span class="remainingTime">남은 시간: ${formattedTime}</span>
+            <span class="remainingTime">🌱${formattedTime}</span>
             ${store.productCnt == 0 ? '<div class="overlay">SOLD OUT</div>' : ''}
         `;
 

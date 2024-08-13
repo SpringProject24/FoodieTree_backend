@@ -58,7 +58,6 @@ public class StoreListController {
         List<StoreListByEndTimeDto> storeListDto = storeListService.getStoresByProductEndTime();
         return ResponseEntity.ok().body(storeListDto);
     }
-}
 
     // 지역별 Store 조회 요청!
     @GetMapping("/address")
