@@ -6,6 +6,7 @@ import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
 import org.nmfw.foodietree.domain.customer.entity.FavArea;
 import org.nmfw.foodietree.domain.customer.repository.FavAreaRepository;
 import org.nmfw.foodietree.domain.customer.repository.FavAreaRepositoryCustom;
+import org.nmfw.foodietree.domain.customer.repository.FavStoreRepository;
 import org.nmfw.foodietree.domain.customer.service.FavAreaService;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListByEndTimeDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListCo2Dto;
@@ -29,6 +30,8 @@ public class StoreListService {
     private final StoreListRepository storeListRepository;
     private final StoreListRepositoryCustom storeListRepositoryCustom;
     private final FavAreaRepositoryCustom favAreaRepositoryCustom;
+    private final FavStoreRepository favStoreRepository;
+
     // 모든 가게 리스트 출력
     public List<StoreListDto> getAllStores(String customerId) {
         return storeListRepositoryCustom.findAllProductsStoreId();
@@ -56,6 +59,15 @@ public class StoreListService {
         return stores.stream()
                 .map(StoreListDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    public List<StoreListDto> getFavStoresAndOrders3(String customerId) {
+        List<StoreListDto> favStoresList = favStoreRepository.findFavStoresByCustomerId(
+            customerId, "favStore");
+        List<StoreListDto> orders = favStoreRepository.findFavStoresByCustomerId(
+            customerId, "orders_3");
+        favStoresList.addAll(orders);
+        return favStoresList;
     }
 }
 

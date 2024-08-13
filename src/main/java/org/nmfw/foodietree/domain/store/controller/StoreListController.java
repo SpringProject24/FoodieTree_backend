@@ -66,5 +66,13 @@ public class StoreListController {
         List<StoreListDto> storeListDto = storeListService.getStoresByAddress(address);
         return ResponseEntity.ok().body(storeListDto);
     }
+
+    @GetMapping("/fav")
+    public ResponseEntity<?> getFavStoresAndOrders3(@AuthenticationPrincipal TokenUserInfo tokenUserInfo) {
+//        String customerId = tokenUserInfo.getUsername();
+        String customerId = "thdghtjd115@gmail.com";
+        List<StoreListDto> storeListDtos = storeListService.getFavStoresAndOrders3(customerId);
+        return ResponseEntity.ok().body(storeListDtos);
+    }
 }
 
