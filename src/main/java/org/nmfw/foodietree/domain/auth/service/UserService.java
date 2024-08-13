@@ -166,10 +166,10 @@ public class UserService {
         }
     }
 
-    public void setUserRefreshTokenExpiryDate(String email, String userType) {
+    public void setUserRefreshTokenExpiryDate(String refreshToken, String email,String userType) {
 
-        String newRefreshToken = tokenProvider.createRefreshToken(email, userType);
-        LocalDateTime newExpiryDate = tokenProvider.getExpirationDateFromRefreshToken(newRefreshToken);
+
+        LocalDateTime newExpiryDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
 
         if ("customer".equals(userType)) {
             Customer customer = customerService.getCustomerById(email);
