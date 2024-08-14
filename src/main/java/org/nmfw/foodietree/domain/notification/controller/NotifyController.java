@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
 
 @Controller
-public class NotiController {
+public class NotifyController {
 
     @MessageMapping("/hello")
     @SendTo("/topic/greetings") // 정해둔 이름
