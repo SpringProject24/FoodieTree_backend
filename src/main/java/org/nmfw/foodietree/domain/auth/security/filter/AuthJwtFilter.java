@@ -90,7 +90,8 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 
             // 로그인 함과 동시에 토큰, 리프레시 토큰 재발급
             String token = tokenProvider.createToken(email, userType);
-            userService.setUserRefreshTokenExpiryDate(email, userType);
+            String refreshToken = tokenProvider.createRefreshToken(email, userType);
+            userService.setUserRefreshTokenExpiryDate(refreshToken ,email, userType);
 
             log.info("리프레시 토큰 및 액세스 토큰 재발급 ✅");
 
@@ -103,6 +104,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 
             // Set new tokens in response headers
             response.setHeader("token", token);
+            response.setHeader("refreshToken", refreshToken);
             return;
         }
 

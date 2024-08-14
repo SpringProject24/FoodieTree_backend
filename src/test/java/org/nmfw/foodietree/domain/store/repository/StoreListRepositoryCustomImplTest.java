@@ -27,8 +27,9 @@ class StoreListRepositoryCustomImplTest {
 		// when
 		List<StoreListDto> allProductsStoreId = storeListRepository.findAllProductsStoreId();
 		// then
-		for (StoreListDto storeListDto : allProductsStoreId) {
-			log.info("{}", storeListDto);
-		}
+		assertAll(
+			() -> assertNotNull(allProductsStoreId),
+			() -> allProductsStoreId.forEach(e -> assertNotEquals(0, e.getProductCnt()))
+		);
 	}
 }

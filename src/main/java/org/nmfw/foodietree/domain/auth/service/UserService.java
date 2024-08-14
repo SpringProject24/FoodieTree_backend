@@ -11,6 +11,7 @@ import org.nmfw.foodietree.domain.customer.service.CustomerService;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.service.StoreService;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.nmfw.foodietree.global.LoggedInUserInfoDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -166,10 +167,10 @@ public class UserService {
         }
     }
 
-    public void setUserRefreshTokenExpiryDate(String email, String userType) {
+    public void setUserRefreshTokenExpiryDate(String refreshToken, String email,String userType) {
 
-        String newRefreshToken = tokenProvider.createRefreshToken(email, userType);
-        LocalDateTime newExpiryDate = tokenProvider.getExpirationDateFromRefreshToken(newRefreshToken);
+
+        LocalDateTime newExpiryDate = tokenProvider.getExpirationDateFromRefreshToken(refreshToken);
 
         if ("customer".equals(userType)) {
             Customer customer = customerService.getCustomerById(email);
@@ -181,6 +182,47 @@ public class UserService {
             if (store != null) {
                 storeService.updateStore(newExpiryDate, email);
             }
+        } else {
+            throw new IllegalArgumentException("Invalid user type");
+        }
+    }
+
+    // DB에서 유저정보 찾기
+    public LoggedInUserInfoDto getUserInfo(String email, String userType) {
+
+        String defaultCustomerImage = "/assets/img/defaultImage.jpg"; // 기본 고객 프로필 이미지 경로
+        String defaultStoreImage = "/assets/img/defaultImage.jpg"; // 기본 상점 프로필 이미지 경로
+
+        if ("customer".equals(userType)) {
+            Customer customer = customerService.getCustomerById(email);
+
+            // 이미지가 없을 경우 기본 이미지 사용
+            String profileImage = customer.getProfileImage();
+            if (profileImage == null || profileImage.isEmpty()) {
+                profileImage = defaultCustomerImage;
+            }
+
+            return LoggedInUserInfoDto.builder()
+                    .email(customer.getCustomerId())
+                    .subName(customer.getNickname())
+                    .profileImage(profileImage)
+                    .build();
+
+        } else if ("store".equals(userType)) {
+            Store store = storeService.getStoreById(email);
+
+            // 이미지가 없을 경우 기본 이미지 사용
+            String productImage = store.getProductImg();
+            if (productImage == null || productImage.isEmpty()) {
+                productImage = defaultStoreImage;
+            }
+
+            return LoggedInUserInfoDto.builder()
+                    .email(store.getStoreId())
+                    .subName(store.getStoreName())
+                    .productImg(productImage)
+                    .build();
+
         } else {
             throw new IllegalArgumentException("Invalid user type");
         }

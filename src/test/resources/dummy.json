@@ -1,0 +1,695 @@
+[
+  {
+    "address": "서울시 종로구 종로3가 123-1",
+    "productCnt": 2,
+    "storeName": "서울분식",
+    "storeId": "sky@abc.com1",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 마포구 서교동 456-2",
+    "productCnt": 5,
+    "storeName": "김밥천국",
+    "storeId": "kim@abc.com2",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 마포구 합정동 789-3",
+    "productCnt": 6,
+    "storeName": "마포갈매기",
+    "storeId": "mapo@abc.com3",
+    "category": "양식"
+  },
+  {
+    "address": "서울시 서대문구 창천동 101-4",
+    "productCnt": 1,
+    "storeName": "신촌설렁탕",
+    "storeId": "sinchon@abc.com4",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 마포구 동교동 102-5",
+    "productCnt": 5,
+    "storeName": "홍대카페",
+    "storeId": "hongdae@abc.com5",
+    "category": "카페"
+  },
+  {
+    "address": "서울시 용산구 한남동 103-6",
+    "productCnt": 3,
+    "storeName": "한남돼지갈비",
+    "storeId": "hannam@abc.com6",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 용산구 이태원동 104-7",
+    "productCnt": 3,
+    "storeName": "이태원피자",
+    "storeId": "itaewon@abc.com7",
+    "category": "양식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 105-8",
+    "productCnt": 9,
+    "storeName": "강남스시",
+    "storeId": "gangnam@abc.com8",
+    "category": "일식"
+  },
+  {
+    "address": "서울시 강남구 압구정동 106-9",
+    "productCnt": 9,
+    "storeName": "압구정초밥",
+    "storeId": "apgujeong@abc.com9",
+    "category": "일식"
+  },
+  {
+    "address": "서울시 송파구 잠실동 107-10",
+    "productCnt": 5,
+    "storeName": "잠실떡볶이",
+    "storeId": "jamshil@abc.com10",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 영등포구 당산동 108-11",
+    "productCnt": 9,
+    "storeName": "영등포치킨",
+    "storeId": "yeongdeungpo@abc.com11",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 종로구 관철동 109-12",
+    "productCnt": 9,
+    "storeName": "종로순대국",
+    "storeId": "jongno@abc.com12",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 용산구 원효로 110-13",
+    "productCnt": 9,
+    "storeName": "용산찜닭",
+    "storeId": "yongsan@abc.com13",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 서초구 서초동 111-14",
+    "productCnt": 1,
+    "storeName": "서초고기집",
+    "storeId": "seocho@abc.com14",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 성동구 성수동 112-15",
+    "productCnt": 6,
+    "storeName": "성수동파스타",
+    "storeId": "seongsu@abc.com15",
+    "category": "양식"
+  },
+  {
+    "address": "서울시 종로구 신문로 113-16",
+    "productCnt": 6,
+    "storeName": "광화문김치찌개",
+    "storeId": "gwanghwamun@abc.com16",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강남구 청담동 114-17",
+    "productCnt": 2,
+    "storeName": "청담포차",
+    "storeId": "cheongdam@abc.com17",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강남구 삼성동 115-18",
+    "productCnt": 6,
+    "storeName": "삼성동카페",
+    "storeId": "samsung@abc.com18",
+    "category": "카페"
+  },
+  {
+    "address": "서울시 동대문구 제기동 116-19",
+    "productCnt": 2,
+    "storeName": "동대문곱창",
+    "storeId": "dongdaemun@abc.com19",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 노원구 상계동 117-20",
+    "productCnt": 7,
+    "storeName": "노원마라탕",
+    "storeId": "nowon@abc.com20",
+    "category": "중식"
+  },
+  {
+    "address": "서울시 광진구 화양동 118-21",
+    "productCnt": 5,
+    "storeName": "건대냉면",
+    "storeId": "gunde@abc.com21",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 119-22",
+    "productCnt": 7,
+    "storeName": "역삼비빔밥",
+    "storeId": "yeoksam@abc.com22",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 관악구 신림동 120-23",
+    "productCnt": 4,
+    "storeName": "신림버거",
+    "storeId": "sillim@abc.com23",
+    "category": "양식"
+  },
+  {
+    "address": "서울시 강북구 수유동 121-24",
+    "productCnt": 8,
+    "storeName": "수유감자탕",
+    "storeId": "suyu@abc.com24",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 성북구 정릉동 122-25",
+    "productCnt": 5,
+    "storeName": "성북비빔국수",
+    "storeId": "seongbuk@abc.com25",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 송파구 문정동 123-26",
+    "productCnt": 1,
+    "storeName": "송파칼국수",
+    "storeId": "songpa@abc.com26",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강북구 미아동 124-27",
+    "productCnt": 7,
+    "storeName": "미아리감자전",
+    "storeId": "mia@abc.com27",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강남구 대치동 125-28",
+    "productCnt": 3,
+    "storeName": "대치쭈꾸미",
+    "storeId": "daechi@abc.com28",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 서초구 양재동 126-29",
+    "productCnt": 7,
+    "storeName": "양재닭갈비",
+    "storeId": "yangjae@abc.com29",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 성동구 왕십리동 127-30",
+    "productCnt": 9,
+    "storeName": "왕십리볶음밥",
+    "storeId": "wangsimni@abc.com30",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 동대문구 장안동 128-31",
+    "productCnt": 3,
+    "storeName": "장안동갈비탕",
+    "storeId": "jangandong@abc.com31",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 서초구 반포동 129-32",
+    "productCnt": 7,
+    "storeName": "남부터미널초밥",
+    "storeId": "nam@abc.com32",
+    "category": "일식"
+  },
+  {
+    "address": "서울시 서초구 잠원동 130-33",
+    "productCnt": 8,
+    "storeName": "잠원족발",
+    "storeId": "jamwon@abc.com33",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강동구 천호동 131-34",
+    "productCnt": 7,
+    "storeName": "천호소고기",
+    "storeId": "cheongho@abc.com34",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 송파구 장지동 132-35",
+    "productCnt": 5,
+    "storeName": "장지돈까스",
+    "storeId": "jangji@abc.com35",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 관악구 사당동 133-36",
+    "productCnt": 8,
+    "storeName": "사당백반",
+    "storeId": "sadang@abc.com36",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 서초구 방배동 134-37",
+    "productCnt": 9,
+    "storeName": "방배돈까스",
+    "storeId": "bangbae@abc.com37",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강동구 성내동 135-38",
+    "productCnt": 4,
+    "storeName": "강동역떡볶이",
+    "storeId": "gangdong@abc.com38",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 영등포구 여의도동 136-39",
+    "productCnt": 6,
+    "storeName": "여의도부대찌개",
+    "storeId": "yeouido@abc.com39",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 동작구 노량진동 137-40",
+    "productCnt": 3,
+    "storeName": "동작해물탕",
+    "storeId": "dongjak@abc.com40",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 고양시 일산동구 마두동 138-41",
+    "productCnt": 2,
+    "storeName": "일산수제버거",
+    "storeId": "ilsan@abc.com41",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 성남시 분당구 서현동 139-42",
+    "productCnt": 9,
+    "storeName": "분당쌀국수",
+    "storeId": "bundang@abc.com42",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 고양시 덕양구 화정동 140-43",
+    "productCnt": 7,
+    "storeName": "화정파스타",
+    "storeId": "hwajeong@abc.com43",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 고양시 일산서구 주엽동 141-44",
+    "productCnt": 3,
+    "storeName": "주엽파스타",
+    "storeId": "juyeop@abc.com44",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 성남시 분당구 정자동 142-45",
+    "productCnt": 4,
+    "storeName": "정자동스테이크",
+    "storeId": "jeongja@abc.com45",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 파주시 운정동 143-46",
+    "productCnt": 6,
+    "storeName": "운정찜닭",
+    "storeId": "unjeong@abc.com46",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 부천시 중동 144-47",
+    "productCnt": 7,
+    "storeName": "중동오리불고기",
+    "storeId": "jungdong@abc.com47",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 고양시 일산동구 풍산동 145-48",
+    "productCnt": 6,
+    "storeName": "풍산순두부",
+    "storeId": "pungsan@abc.com48",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 성남시 분당구 야탑동 146-49",
+    "productCnt": 3,
+    "storeName": "야탑칼국수",
+    "storeId": "yatap@abc.com49",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 용인시 기흥구 구성동 147-50",
+    "productCnt": 5,
+    "storeName": "구성한우",
+    "storeId": "guseong@abc.com50",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 수원시 팔달구 인계동 148-51",
+    "productCnt": 9,
+    "storeName": "수원갈비",
+    "storeId": "suwon@abc.com51",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 안양시 만안구 안양동 149-52",
+    "productCnt": 1,
+    "storeName": "안양돈까스",
+    "storeId": "anyang@abc.com52",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 과천시 중앙동 150-53",
+    "productCnt": 1,
+    "storeName": "과천카레",
+    "storeId": "gwacheon@abc.com53",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 성남시 수정구 태평동 151-54",
+    "productCnt": 7,
+    "storeName": "성남짬뽕",
+    "storeId": "seongnam@abc.com54",
+    "category": "중식"
+  },
+  {
+    "address": "경기도 용인시 처인구 김량장동 152-55",
+    "productCnt": 9,
+    "storeName": "용인김밥",
+    "storeId": "yongin@abc.com55",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 이천시 창전동 153-56",
+    "productCnt": 9,
+    "storeName": "이천순대국밥",
+    "storeId": "icheon@abc.com56",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 수원시 영통구 이의동 154-57",
+    "productCnt": 6,
+    "storeName": "광교족발",
+    "storeId": "gwanggyo@abc.com57",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 화성시 반송동 155-58",
+    "productCnt": 5,
+    "storeName": "화성비빔국수",
+    "storeId": "hwaseong@abc.com58",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 화성시 병점동 156-59",
+    "productCnt": 1,
+    "storeName": "병점소고기",
+    "storeId": "byeongjeom@abc.com59",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 수원시 영통구 영통동 157-60",
+    "productCnt": 4,
+    "storeName": "영통돼지갈비",
+    "storeId": "yeongtong@abc.com60",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 화성시 동탄신도시 158-61",
+    "productCnt": 9,
+    "storeName": "동탄치킨",
+    "storeId": "dongtan@abc.com61",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 용인시 기흥구 신갈동 159-62",
+    "productCnt": 7,
+    "storeName": "기흥막국수",
+    "storeId": "giheung@abc.com62",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 오산시 오산동 160-63",
+    "productCnt": 4,
+    "storeName": "오산된장찌개",
+    "storeId": "osan@abc.com63",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 평택시 합정동 161-64",
+    "productCnt": 6,
+    "storeName": "평택돈까스",
+    "storeId": "pyeongtaek@abc.com64",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 평택시 청북읍 162-65",
+    "productCnt": 4,
+    "storeName": "청북파스타",
+    "storeId": "cheongbuk@abc.com65",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 안성시 공도읍 163-66",
+    "productCnt": 6,
+    "storeName": "안성김치찌개",
+    "storeId": "anseong@abc.com66",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 용인시 기흥구 보정동 164-67",
+    "productCnt": 4,
+    "storeName": "보정감자탕",
+    "storeId": "bojeong@abc.com67",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 평택시 송탄동 165-68",
+    "productCnt": 3,
+    "storeName": "송탄불고기",
+    "storeId": "songtan@abc.com68",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 화성시 향남읍 166-69",
+    "productCnt": 1,
+    "storeName": "화성닭갈비",
+    "storeId": "hwaseong@abc.com69",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 화성시 향남읍 167-70",
+    "productCnt": 6,
+    "storeName": "향남족발",
+    "storeId": "hyangnam@abc.com70",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 남양주시 평내동 168-71",
+    "productCnt": 7,
+    "storeName": "평내호두파이",
+    "storeId": "pyeongnae@abc.com71",
+    "category": "디저트"
+  },
+  {
+    "address": "서울시 강동구 명일동 169-72",
+    "productCnt": 9,
+    "storeName": "명일동갈비",
+    "storeId": "myeongil@abc.com72",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 구로구 신도림동 170-73",
+    "productCnt": 5,
+    "storeName": "신도림떡볶이",
+    "storeId": "sindorim@abc.com73",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 마포구 신수동 171-74",
+    "productCnt": 3,
+    "storeName": "서강대샤브샤브",
+    "storeId": "seogang@abc.com74",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 송파구 문정동 172-75",
+    "productCnt": 1,
+    "storeName": "문정김밥",
+    "storeId": "munjeong@abc.com75",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 하남시 미사동 173-76",
+    "productCnt": 4,
+    "storeName": "미사리냉면",
+    "storeId": "misari@abc.com76",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 성남시 분당구 판교동 174-77",
+    "productCnt": 8,
+    "storeName": "판교떡볶이",
+    "storeId": "pangyo@abc.com77",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 성남시 수정구 위례동 175-78",
+    "productCnt": 3,
+    "storeName": "위례동닭발",
+    "storeId": "wirye@abc.com78",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강서구 마곡동 176-79",
+    "productCnt": 5,
+    "storeName": "마곡비빔면",
+    "storeId": "magok@abc.com79",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 구로구 구로동 177-80",
+    "productCnt": 8,
+    "storeName": "구로비빔밥",
+    "storeId": "guro@abc.com80",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 마포구 상암동 178-81",
+    "productCnt": 6,
+    "storeName": "상암감자탕",
+    "storeId": "sangam@abc.com81",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 서대문구 충정로동 179-82",
+    "productCnt": 1,
+    "storeName": "서대문막국수",
+    "storeId": "seodaemun@abc.com82",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 영등포구 여의도동 180-83",
+    "productCnt": 6,
+    "storeName": "여의도갈비",
+    "storeId": "yeouido@abc.com83",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강남구 삼성동 181-84",
+    "productCnt": 2,
+    "storeName": "삼성동핫도그",
+    "storeId": "samsung@abc.com84",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 동작구 대방동 182-85",
+    "productCnt": 4,
+    "storeName": "대방동라면",
+    "storeId": "daebang@abc.com85",
+    "category": "한식"
+  },
+  {
+    "address": "경기도 고양시 일산동구 마두동 183-86",
+    "productCnt": 9,
+    "storeName": "일산수제버거",
+    "storeId": "ilsan@abc.com86",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 성남시 분당구 서현동 184-87",
+    "productCnt": 1,
+    "storeName": "분당쌀국수",
+    "storeId": "bundang@abc.com87",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 고양시 덕양구 화정동 185-88",
+    "productCnt": 7,
+    "storeName": "화정파스타",
+    "storeId": "hwajeong@abc.com88",
+    "category": "양식"
+  },
+  {
+    "address": "경기도 고양시 일산서구 주엽동 186-89",
+    "productCnt": 7,
+    "storeName": "주엽파스타",
+    "storeId": "juyeop@abc.com89",
+    "category": "양식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 187-90",
+    "productCnt": 8,
+    "storeName": "김치찌개집",
+    "storeId": "gangnam@abc.com90",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 188-91",
+    "productCnt": 2,
+    "storeName": "불고기집",
+    "storeId": "gangnam@abc.com91",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 189-92",
+    "productCnt": 7,
+    "storeName": "파스타하우스",
+    "storeId": "gangnam@abc.com92",
+    "category": "양식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 190-93",
+    "productCnt": 8,
+    "storeName": "비빔밥집",
+    "storeId": "gangnam@abc.com93",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 191-94",
+    "productCnt": 9,
+    "storeName": "스테이크하우스",
+    "storeId": "gangnam@abc.com94",
+    "category": "양식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 192-95",
+    "productCnt": 3,
+    "storeName": "치킨집",
+    "storeId": "gangnam@abc.com95",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 193-96",
+    "productCnt": 7,
+    "storeName": "초밥집",
+    "storeId": "gangnam@abc.com96",
+    "category": "일식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 194-97",
+    "productCnt": 9,
+    "storeName": "라면집",
+    "storeId": "gangnam@abc.com97",
+    "category": "한식"
+  },
+  {
+    "address": "서울시 강남구 역삼동 195-98",
+    "productCnt": 9,
+    "storeName": "카페",
+    "storeId": "gangnam@abc.com98",
+    "category": "카페"
+  },
+  {
+    "address": "서울시 강남구 역삼동 196-99",
+    "productCnt": 5,
+    "storeName": "떡볶이집",
+    "storeId": "gangnam@abc.com99",
+    "category": "한식"
+  }
+]
