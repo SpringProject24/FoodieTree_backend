@@ -26,12 +26,9 @@ public class SearchService {
 
     public Map<String, Object> searchStores(SearchDto dto) {
         Pageable pageable = PageRequest.of(dto.getPageNo() - 1, 20);
-        Page<Store> stores = storeRepository.findStores(pageable, dto.getKeyword());
-        List<StoreListDto> collect = stores.getContent()
-                .stream().map(StoreListDto::fromEntity)
-                .collect(Collectors.toList());
+        Page<StoreListDto> stores = storeRepository.findStores(pageable, dto.getKeyword());
         return Map.of(
-                "result", collect,
+                "result", stores.getContent(),
                 "totalCnt", stores.getTotalElements()
         );
     }
