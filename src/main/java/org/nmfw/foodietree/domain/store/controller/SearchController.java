@@ -31,8 +31,9 @@ public class SearchController {
 
      */
     @GetMapping
-    public ResponseEntity<?> search(SearchDto dto) {
+    public ResponseEntity<?> search(SearchDto dto) throws InterruptedException {
         Map<String, Object> result = searchService.searchStores(dto);
+        Thread.sleep(1000);
         return ResponseEntity.ok().body(result);
     }
 }
