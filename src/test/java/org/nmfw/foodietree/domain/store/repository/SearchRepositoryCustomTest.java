@@ -1,11 +1,10 @@
 package org.nmfw.foodietree.domain.store.repository;
 
-import aj.org.objectweb.asm.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nmfw.foodietree.domain.store.dto.resp.SearchedStoreListDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.slf4j.Logger;
@@ -24,7 +23,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@ActiveProfiles("inmem_test")
+@ActiveProfiles("inmem_test")
 @SpringBootTest
 @Transactional
 @Rollback(value = true)
@@ -33,14 +32,14 @@ class SearchRepositoryCustomTest {
     @Autowired
     StoreRepository storeRepository;
 
-//    @BeforeEach
-//    void before() throws Exception{
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        List<Store> storeList = objectMapper.readValue(
-//                new File("src/test/resources/dummy.json"),
-//                objectMapper.getTypeFactory().constructCollectionType(List.class, Store.class));
-//        storeRepository.saveAll(storeList);
-//    }
+    @BeforeEach
+    void before() throws Exception{
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Store> storeList = objectMapper.readValue(
+                new File("src/test/resources/dummy.json"),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Store.class));
+        storeRepository.saveAll(storeList);
+    }
 
     @Test
     void 조회() {
@@ -48,12 +47,12 @@ class SearchRepositoryCustomTest {
         Pageable pageable = PageRequest.of(0, 3);
         String keyword = "강남";
         // when
-        Page<StoreListDto> result = storeRepository.findStores(pageable, keyword);
+        Page<SearchedStoreListDto> result = storeRepository.findStores(pageable, keyword);
         // then
-//        Assertions.assertAll(
-//                () -> assertNotNull(result.getContent()),
-//                () -> assertEquals(17, result.getTotalElements())
-//        );
+        assertAll(
+                () -> assertNotNull(result.getContent()),
+                () -> assertEquals(17, result.getTotalElements())
+        );
         result.getContent().forEach(e -> log.info("{} {} {}", e, e.getStoreName(), e.getAddress()));
     }
 }
