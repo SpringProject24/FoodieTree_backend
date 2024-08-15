@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
+import org.nmfw.foodietree.domain.notification.dto.res.MessageDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,7 @@ public class ReservationController {
 
     /**
      * 특정 고객의 예약 목록 조회
+     *
      * @return 예약 목록 DTO 리스트
      */
     @GetMapping("/list")
@@ -49,6 +51,7 @@ public class ReservationController {
 
     /**
      * 특정 예약을 취소
+     *
      * @return 취소 성공 여부
      */
     @PatchMapping("/cancel")
@@ -62,6 +65,7 @@ public class ReservationController {
 
     /**
      * 특정 예약을 픽업 완료로 변경
+     *
      * @return 픽업 완료 성공 여부
      */
     @PatchMapping("/pickup")
@@ -75,6 +79,7 @@ public class ReservationController {
 
     /**
      * 특정 예약의 취소 가능 여부 확인
+     *
      * @return 취소 가능 여부
      */
     @GetMapping("/check-cancel")
@@ -86,6 +91,7 @@ public class ReservationController {
 
     /**
      * 특정 예약의 픽업 가능 여부 확인
+     *
      * @return 픽업 가능 여부
      */
     @GetMapping("/check-pickup")
@@ -97,6 +103,7 @@ public class ReservationController {
 
     /**
      * 특정 예약의 상세 정보 조회
+     *
      * @param reservationId 예약 ID
      * @return 예약 상세 정보 DTO
      */
@@ -108,7 +115,7 @@ public class ReservationController {
     }
 
     /**
-     * 새로운 예약을 생성, 테스트 미실시
+     * 새로운 예약을 생성
      * @param data 예약 생성에 필요한 데이터 맵
      * @return 예약 생성 성공 여부
      */
@@ -117,10 +124,24 @@ public class ReservationController {
     public ResponseEntity<?> createReservation(@RequestBody Map<String, String> data) {
         String customerId = getCustomerIdFromToken();
         boolean flag = reservationService.createReservation(customerId, data);
-        if(flag) {
-        log.debug("\n\n예약 성공\n\n");
-        messagingTemplate.convertAndSend("/queue/customer/" + customerId, "Your reservation is confirmed!");
-        messagingTemplate.convertAndSend("/topic/store/" + data.get("storeId"), "New reservation made by customer " + customerId);
+        if (flag) {
+            log.debug("\n\n예약 성공\n\n");
+            MessageDto message = MessageDto.builder()
+                    .type("RESERVATION_ADD")
+                    .receiverId(customerId)
+                    .senderId(data.get("storeId"))
+                    .content(data.get("storeId") + ": 예약 성공하셨습니다!")
+                    .isRead(false)
+                    .build();
+            MessageDto messageStore = MessageDto.builder()
+                    .type("RESERVATION_ADD")
+                    .receiverId(data.get("storeId"))
+                    .senderId(customerId)
+                    .content("새로운 예약 주문 : " + customerId)
+                    .isRead(false)
+                    .build();
+            messagingTemplate.convertAndSend("/queue/customer/" + customerId, message);
+            messagingTemplate.convertAndSend("/topic/store/" + data.get("storeId"), messageStore);
         }
 
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
@@ -129,6 +150,7 @@ public class ReservationController {
     /**
      * 현재 인증된 사용자로부터
      * 고객 ID를 추출하는 메서드
+     *
      * @return 고객 ID
      */
     private String getCustomerIdFromToken() {
@@ -139,6 +161,7 @@ public class ReservationController {
     /**
      * 현재 인증된 사용자로부터
      * 예약 ID를 추출하는 메서드
+     *
      * @return 예약 ID
      */
     private int getReservationIdFromToken() {
