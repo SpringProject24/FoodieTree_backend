@@ -8,6 +8,7 @@ import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,8 @@ public class ReservationController {
 
     private final ReservationService reservationService;
     private final CustomerMyPageService customerMyPageService;
+    private final SimpMessagingTemplate messagingTemplate;
+
 
     // 테스트용 변수, 추후 토큰에서 사용하는것으로 변경 예정
 //    String customerId = "test@gmail.com";
@@ -42,7 +45,7 @@ public class ReservationController {
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok().body(reservations);
     }
-    
+
 
     /**
      * 특정 예약을 취소
@@ -114,6 +117,12 @@ public class ReservationController {
     public ResponseEntity<?> createReservation(@RequestBody Map<String, String> data) {
         String customerId = getCustomerIdFromToken();
         boolean flag = reservationService.createReservation(customerId, data);
+        if(flag) {
+        log.debug("\n\n예약 성공\n\n");
+        messagingTemplate.convertAndSend("/queue/customer/" + customerId, "Your reservation is confirmed!");
+        messagingTemplate.convertAndSend("/topic/store/" + data.get("storeId"), "New reservation made by customer " + customerId);
+        }
+
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 

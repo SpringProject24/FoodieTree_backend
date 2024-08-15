@@ -150,6 +150,7 @@ public class ReservationService {
         int cnt = Integer.parseInt(data.get("cnt"));
         String storeId = data.get("storeId");
         List<ReservationFoundStoreIdDto> list = reservationRepository.findByStoreIdLimit(storeId, cnt);
+        if (list.isEmpty()) return false;
         for (ReservationFoundStoreIdDto tar : list) {
             long productId = tar.getProductId();
             Reservation reservation = Reservation.builder()
@@ -160,7 +161,6 @@ public class ReservationService {
             log.info("save 결과 출력: {}", save);
             if (save == null) return false;
         }
-        if (list.isEmpty()) return false;
         return true;
     }
 }
