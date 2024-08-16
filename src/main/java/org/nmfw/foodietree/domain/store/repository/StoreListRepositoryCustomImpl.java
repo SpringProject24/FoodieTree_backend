@@ -1,6 +1,12 @@
 package org.nmfw.foodietree.domain.store.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
+import org.nmfw.foodietree.domain.reservation.entity.QReservation;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListByEndTimeDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListCo2Dto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
@@ -26,7 +33,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.types.dsl.Expressions.*;
 import static org.nmfw.foodietree.domain.product.entity.QProduct.product;
 import static org.nmfw.foodietree.domain.reservation.entity.QReservation.reservation;
 import static org.nmfw.foodietree.domain.store.entity.QStore.store;
@@ -82,18 +88,27 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
 
     @Override
     public List<StoreListDto> findAllProductsStoreId() {
+        QReservation r = reservation;
+        QProduct p = product;
+        QStore s = store;
+
+        NumberExpression<Integer> currProductCnt = new CaseBuilder()
+            .when(r.reservationTime.isNull().and(p.pickupTime.gt(LocalDateTime.now())))
+            .then(1)
+            .otherwise(0).sum();
+
+        Expression<Integer> cnt = ExpressionUtils.as(currProductCnt, "currProductCnt");
 
         return jpaQueryFactory
-            .select(store, store.count())
+            .select(store, cnt)
             .from(product)
-            .leftJoin(reservation).on(product.productId.eq(reservation.productId))
-            .leftJoin(store).on(product.storeId.eq(store.storeId))
-            .where(product.pickupTime.gt(LocalDateTime.now())
-                .and(reservation.reservationTime.isNull()))
-            .groupBy(product.storeId)
+            .leftJoin(reservation).on(p.productId.eq(r.productId))
+            .leftJoin(store).on(p.storeId.eq(s.storeId))
+            .groupBy(p.storeId)
+            .having(store.isNotNull())
             .fetch()
             .stream()
-            .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(store.count()).intValue()))
+            .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(cnt)))
             .collect(Collectors.toList());
     }
 

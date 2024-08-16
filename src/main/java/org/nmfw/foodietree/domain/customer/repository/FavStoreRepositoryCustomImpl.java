@@ -1,5 +1,9 @@
 package org.nmfw.foodietree.domain.customer.repository;
 
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
@@ -41,18 +45,23 @@ public class FavStoreRepositoryCustomImpl implements FavStoreRepositoryCustom {
 				.having(product.storeId.count().goe(3));
 		}
 
+		NumberExpression<Integer> currProductCnt = new CaseBuilder()
+			.when(reservation.reservationTime.isNull().and(product.pickupTime.gt(LocalDateTime.now())))
+			.then(1)
+			.otherwise(0).sum();
+
+		Expression<Integer> cnt = ExpressionUtils.as(currProductCnt, "currProductCnt");
+
 		return factory
-			.select(store, store.count())
+			.select(store, cnt)
 			.from(product)
 			.leftJoin(reservation).on(product.productId.eq(reservation.productId))
 			.leftJoin(store).on(product.storeId.eq(store.storeId))
-			.where(product.pickupTime.gt(LocalDateTime.now())
-				.and(reservation.reservationTime.isNull()))
 			.groupBy(product.storeId)
 			.having(product.storeId.in(inTarget))
 			.fetch()
 			.stream()
-			.map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(store.count()).intValue()))
+			.map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(cnt)))
 			.collect(Collectors.toList());
 	}
 }
