@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.reservation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.notification.service.NotificationService;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +39,7 @@ public class ReservationService {
      * @param reservationId 취소할 예약의 ID
      * @return 취소가 완료되었는지 여부
      */
-    public boolean cancelReservation(long reservationId) {
+    public boolean cancelReservation(long reservationId, TokenUserInfo userInfo) {
 
 //        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
 //        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
@@ -56,6 +59,7 @@ public class ReservationService {
         // 취소한 적이 없으면 취소
         if(reservation.getCancelReservationAt() == null) {
             reservation.setCancelReservationAt(LocalDateTime.now());
+            notificationService.sendCancelReservationAlert(reservation);
             return true;
         }
         // 이미 픽업했거나, 노쇼인 경우를 확인하지 않아도 되는지?

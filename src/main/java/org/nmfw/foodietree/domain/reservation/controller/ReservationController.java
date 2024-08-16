@@ -54,11 +54,12 @@ public class ReservationController {
      * @return 취소 성공 여부
      */
     @PatchMapping("/cancel")
-    public ResponseEntity<?> cancelReservation(@RequestParam long reservationId) {
+    public ResponseEntity<?> cancelReservation(
+            @RequestParam long reservationId,
+            @AuthenticationPrincipal TokenUserInfo userInfo
+    ) {
         log.info("cancel reservation with ID: {}", reservationId);
-        // 추후 토큰을 통해 예약 ID를 가져옴
-        // int reservationId = getReservationIdFromToken();
-        boolean flag = reservationService.cancelReservation(reservationId);
+        boolean flag = reservationService.cancelReservation(reservationId, userInfo);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 
