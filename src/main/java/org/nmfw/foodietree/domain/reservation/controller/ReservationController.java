@@ -105,12 +105,11 @@ public class ReservationController {
     }
 
     /**
-     * 새로운 예약을 생성, 테스트 미실시
+     * 새로운 예약을 생성
      * @param data 예약 생성에 필요한 데이터 맵
      * @return 예약 생성 성공 여부
      */
-    @PostMapping("/create-reservation")
-    @CrossOrigin
+    @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody Map<String, String> data) {
         String customerId = getCustomerIdFromToken();
         boolean flag = reservationService.createReservation(customerId, data);
