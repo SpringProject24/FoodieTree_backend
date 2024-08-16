@@ -1,11 +1,11 @@
 package org.nmfw.foodietree.domain.store.repository;
 
-import aj.org.objectweb.asm.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nmfw.foodietree.domain.store.dto.resp.SearchedStoreListDto;
+import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +47,9 @@ class SearchRepositoryCustomTest {
         Pageable pageable = PageRequest.of(0, 3);
         String keyword = "강남";
         // when
-        Page<Store> result = storeRepository.findStores(pageable, keyword);
+        Page<SearchedStoreListDto> result = storeRepository.findStores(pageable, keyword);
         // then
-        Assertions.assertAll(
+        assertAll(
                 () -> assertNotNull(result.getContent()),
                 () -> assertEquals(17, result.getTotalElements())
         );
