@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.reservation.service;
 
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.product.entity.Product;
@@ -149,18 +150,17 @@ public class ReservationService {
         log.info("Creating reservation for customer: {}, data: {}", customerId, data);
         int cnt = Integer.parseInt(data.get("cnt"));
         String storeId = data.get("storeId");
+
         List<ReservationFoundStoreIdDto> list = reservationRepository.findByStoreIdLimit(storeId, cnt);
-        for (ReservationFoundStoreIdDto tar : list) {
-            long productId = tar.getProductId();
-            Reservation reservation = Reservation.builder()
-                    .customerId(customerId)
-                    .productId(productId)
-                    .build();
-            Reservation save = reservationRepository.save(reservation);
-            log.info("save 결과 출력: {}", save);
-            if (save == null) return false;
-        }
         if (list.isEmpty()) return false;
-        return true;
-    }
+
+        List<Reservation> collect = list.stream()
+            .map(e -> Reservation.builder()
+                .productId(e.getProductId())
+                .customerId(customerId)
+                .build())
+            .collect(Collectors.toList());
+        reservationRepository.saveAll(collect);
+		return true;
+	}
 }

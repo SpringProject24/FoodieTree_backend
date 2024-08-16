@@ -1,6 +1,8 @@
 package org.nmfw.foodietree.domain.reservation.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -125,12 +127,17 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
     // 예약 가능 제품 조회
     @Override
     public List<ReservationFoundStoreIdDto> findByStoreIdLimit(String storeId, int cnt) {
+        QReservation r = reservation;
+        QProduct p = product;
 
-//        LocalDateTime now = LocalDateTime.now();
-//
-//        // TIMESTAMPDIFF(SECOND, NOW(), pickup_time)
-//        NumberExpression<Long> secLeft = Expressions.numberTemplate(Long.class,
-//                "TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP, {0})", product.pickupTime);
+        BooleanExpression condition = p.storeId.eq(storeId)
+            .and(p.pickupTime.gt(LocalDateTime.now()))
+            .and(r.reservationTime.isNull()
+				.or(
+					r.paymentId.isNull()
+						.and(r.reservationTime.lt(LocalDateTime.now().minusMinutes(5)))
+				)
+			);
 
         return factory
                 .select(Projections.constructor(
@@ -138,10 +145,8 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                         product.storeId,
                         product.productId))
                 .from(product)
-                .leftJoin(reservation).on(product.productId.eq(reservation.productId))
-                .where(product.storeId.eq(storeId)
-                        .and(product.pickupTime.gt(LocalDateTime.now()))
-                        .and(reservation.reservationTime.isNull()))
+                .leftJoin(reservation).on(p.productId.eq(r.productId))
+                .where(condition)
                 .limit(cnt)
                 .fetch();
     }
