@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.reservation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.notification.service.NotificationService;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
@@ -28,6 +29,7 @@ public class ReservationService {
     private final ReservationMapper reservationMapper;
     private final ReservationRepository reservationRepository;
     private final ProductRepository productRepository;
+    private final NotificationService notificationService;
 
     /**
      * 예약을 취소하고 취소가 성공했는지 여부를 반환
@@ -160,7 +162,11 @@ public class ReservationService {
             Reservation save = reservationRepository.save(reservation);
             log.info("save 결과 출력: {}", save);
             if (save == null) return false;
+            data.put("targetId", save.getReservationId().toString());
         }
+
+        notificationService.sendCreatedReservationAlert(customerId, data);
+
         return true;
     }
 }

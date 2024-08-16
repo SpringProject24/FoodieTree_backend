@@ -5,11 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
-import org.nmfw.foodietree.domain.notification.dto.res.MessageDto;
+import org.nmfw.foodietree.domain.notification.service.NotificationService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -26,7 +25,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
     private final CustomerMyPageService customerMyPageService;
-    private final SimpMessagingTemplate messagingTemplate;
+    private final NotificationService notificationService;
 
 
     // 테스트용 변수, 추후 토큰에서 사용하는것으로 변경 예정
@@ -124,26 +123,6 @@ public class ReservationController {
     public ResponseEntity<?> createReservation(@RequestBody Map<String, String> data) {
         String customerId = getCustomerIdFromToken();
         boolean flag = reservationService.createReservation(customerId, data);
-        if (flag) {
-            log.debug("\n\n예약 성공\n\n");
-            MessageDto message = MessageDto.builder()
-                    .type("RESERVATION_ADD")
-                    .receiverId(customerId)
-                    .senderId(data.get("storeId"))
-                    .content(data.get("storeId") + ": 예약 성공하셨습니다!")
-                    .isRead(false)
-                    .build();
-            MessageDto messageStore = MessageDto.builder()
-                    .type("RESERVATION_ADD")
-                    .receiverId(data.get("storeId"))
-                    .senderId(customerId)
-                    .content("새로운 예약 주문 : " + customerId)
-                    .isRead(false)
-                    .build();
-            messagingTemplate.convertAndSend("/queue/customer/" + customerId, message);
-            messagingTemplate.convertAndSend("/topic/store/" + data.get("storeId"), messageStore);
-        }
-
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 
