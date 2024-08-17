@@ -174,19 +174,24 @@
 
 /* 나뭇잎 애니메이션 */
 @keyframes leaf-fall {
-    to {
-        transform: translateY(100vh) rotate(720deg);
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(50vh) translateX(10vw) rotate(360deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) translateX(-10vw) rotate(720deg);
         opacity: 0;
     }
 }
 
 .leaf {
     position: absolute;
-    font-size: 2rem; /* 이모티콘 크기 설정 */
-    opacity: 1;
-    pointer-events: none; /* 클릭 방지 */
+    font-size: 2rem; /* Adjust the size of the emoji */
+    pointer-events: none; /* Prevent interaction */
     animation: leaf-fall 4s linear;
-    /* Custom property for animation duration */
-    --animation-duration: 4s;
-    animation-duration: var(--animation-duration);
+    will-change: transform, opacity; /* Optimize animations */
 }

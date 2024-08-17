@@ -101,20 +101,32 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       });
 
       document.addEventListener('click', function(event) {
-          // Define an array of emojis to use
           const emojis = ['🍃', '🌿', '🍀', '🍂', '🌱'];
 
-          // Create and animate leaves
-          for (let i = 0; i < 10; i++) { // Adjust the number of leaves
+          for (let i = 0; i < 10; i++) {
               const leaf = document.createElement('div');
               leaf.classList.add('leaf');
-              leaf.textContent = emojis[Math.floor(Math.random() * emojis.length)]; // Random emoji
-              leaf.style.left = `${event.clientX + (Math.random() * 20 - 10)}px`; // Randomize position around click
-              leaf.style.top = `${event.clientY + (Math.random() * 20 - 10)}px`; // Randomize position around click
-              leaf.style.opacity = Math.random() * 0.5 + 0.5; // Random opacity
+              leaf.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+              // Calculate a random position offset around the click point
+              const offsetX = (Math.random() - 0.5) * 100;
+              const offsetY = (Math.random() - 0.5) * 100;
+
+              // Adjust the position to account for scrolling
+              const xPosition = event.clientX + offsetX + window.scrollX;
+              const yPosition = event.clientY + offsetY + window.scrollY;
+
+              leaf.style.position = 'absolute';
+              leaf.style.left = `${xPosition}px`;
+              leaf.style.top = `${yPosition}px`;
+
+              leaf.style.opacity = Math.random() * 0.5 + 0.5;
+
               document.body.appendChild(leaf);
 
-              // Remove the leaf after animation
+              const duration = Math.random() * 2 + 2;
+              leaf.style.animation = `leaf-fall ${duration}s linear`;
+
               leaf.addEventListener('animationend', function() {
                   leaf.remove();
               });
