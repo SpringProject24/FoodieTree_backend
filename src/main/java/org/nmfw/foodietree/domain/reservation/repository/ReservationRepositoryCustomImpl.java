@@ -8,6 +8,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
+import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
@@ -181,6 +182,20 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                 .where(store.storeId.eq(storeId))
 //                .orderBy(product.pickupEndTime.desc())
                 .orderBy(product.pickupTime.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<PaymentIdDto> findByPaymentIdForPrice(String paymentId) {
+        return factory
+                .select(Projections.constructor(PaymentIdDto.class,
+                        reservation.paymentId,
+                        store.price
+                ))
+                .from(reservation)
+                .innerJoin(product).on(reservation.productId.eq(product.productId))
+                .innerJoin(store).on(product.storeId.eq(store.storeId))
+                .where(reservation.paymentId.eq(paymentId))
                 .fetch();
     }
 }

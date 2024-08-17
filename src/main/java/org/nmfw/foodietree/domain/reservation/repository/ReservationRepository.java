@@ -10,4 +10,5 @@ public interface ReservationRepository
         extends JpaRepository<Reservation, Long>,
         ReservationRepositoryCustom {
 	List<Reservation> findByCustomerId(String customerId);
+	List<Reservation> findByPaymentId(String paymentId);
 }
