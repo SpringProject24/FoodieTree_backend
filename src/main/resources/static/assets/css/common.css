@@ -52,8 +52,6 @@ section {
 }
 
 .food-info {
-
-
     position: relative;
 }
 
@@ -69,7 +67,6 @@ section {
 }
 
 footer {
-    height: 100vh; /* footer도 전체 화면 높이로 설정 */
     scroll-snap-align: start;
     color: var(--white-color);
     display: flex;

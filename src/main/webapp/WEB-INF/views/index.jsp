@@ -69,14 +69,20 @@ uri="http://java.sun.com/jsp/jstl/core" %>
   <section class="info-for-store">
       <div class="container">
           <div class="left">
-              <div class="wrapper jua-regular">
-                  <h2><span class="margarine-regular">FoodieTree</span> 입점 시 얻을 수 있는 특별한 경험에는 무엇이 있을까요?</h2>
-                  <p>우리 가게에서 판매하고 버려지는 음식물을 최소화하여 환경을 보호하고</p>
-                  <p>지역사회에 우리 가게에 대해 긍정적인 이미지를 심어줄 수 있어요!</p>
+              <div class="wrapper">
+                  <h1><span class="explanation">FOODIE TREE 에</span> 입점 시 얻을 수 있는 </h1>
+                  <h2>특별한 경험에는 무엇이 있을까요?</h2>
+                  <p>우리 가게에서 판매하고 버려지는</p>
+                  <p>음식물을 최소화하여 환경을 보호하고</p>
+                  <p>지역사회에 우리 가게에 대해 </p>
+                  <p>이미지를 심어줄 수 있어요!</p>
+              </div>
+              <div class="signup-image">
+                  <img src="${pageContext.request.contextPath}/assets/img/main-quote/signupImage.jpg" alt="Sign Up Image" id="signup-image">
               </div>
           </div>
           <div class="right">
-              <div class="store-signup jua-regular">
+              <div class="store-signup">
                <span>입점신청</span>
               </div>
           </div>

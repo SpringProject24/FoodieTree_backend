@@ -61,6 +61,117 @@
     animation-delay: 1.5s; /* 애니메이션 지연 시간 */
 }
 
+/* Container for the section */
+.info-for-store .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+/* Left side for the text */
+.info-for-store .left {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.info-for-store .left .wrapper {
+    position: relative;
+    top: 300px;
+}
+.info-for-store .left .wrapper h1 {
+    font-size: 40px;
+    color: #06654E;
+    position: relative;
+    font-weight: 700;
+    left: -100px;
+}
+
+.info-for-store .left .wrapper h2 {
+    font-size: 40px;
+    color: #06654E;
+    position: relative;
+    font-weight: 700;
+    bottom: -20px;
+}
+
+.info-for-store .left .wrapper p {
+    font-size: 30px;
+    font-weight: lighter;
+    color: #06654E;
+    position: relative;
+    top: 100px;
+}
+
+.info-for-store .left .wrapper >  p:nth-child(3) {
+    position: relative;
+    top: 100px;
+    left: 100px;
+}
+
+.info-for-store .left .wrapper >  p:nth-child(4) {
+    position: relative;
+    top: 130px;
+    left: 50px;
+}
+
+.info-for-store .left .wrapper >  p:nth-child(5) {
+    position: relative;
+    top: 160px;
+    left: 150px;
+}
+
+.info-for-store .left .wrapper >  p:nth-child(6) {
+    position: relative;
+    left: 170px;
+    top: 190px;
+}
+
+
+    /* Image styling */
+.info-for-store .signup-image {
+    flex-shrink: 0;
+}
+
+#signup-image {
+    width: 700px;
+    height: 600px;
+    object-fit: cover;
+    margin-bottom: 200px;
+    margin-top: 100px;
+    position: relative;
+    right: -600px;
+}
+
+.info-for-store .right {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+.info-for-store .store-signup {
+    padding: 14px;
+    font-size: 40px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    position: relative;
+    bottom: -800px;
+    left: -450px;
+}
+.info-for-store .store-signup span {
+    color: #043f2e;
+}
+
+.store-signup:hover {
+    transform: translate(-10%, -10%);
+    border-bottom: 1px solid #06654e;
+}
+
+.info-for-store .left h2, .info-for-store .left p {
+    color: var(--green5-color);
+}
+
 /* 나뭇잎 애니메이션 */
 @keyframes leaf-fall {
     to {
