@@ -13,6 +13,6 @@ public class ChatController {
     @SendTo("/topic/messages/{issueId}")
     public ChatMessage sendMessage(@DestinationVariable String issueId, ChatMessage message) {
         // 서버에서 메시지 처리 후, 클라이언트로 전송
-        return new ChatMessage(issueId, message.getContent());
+        return new ChatMessage(issueId, message.getContent(), message.getSender());
     }
 }
