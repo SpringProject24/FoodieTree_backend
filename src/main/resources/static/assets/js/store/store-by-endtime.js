@@ -35,12 +35,14 @@ function renderStoresByEndTime(storeList) {
         const formattedTime = `${hours}시간 ${minutes}분 남았어요!`;
 
         storeItem.innerHTML = `
-            <div class="category">${store.category}</div>
+<!--            <div class="category">${store.category}</div>-->
             <img src="${imgUrl}" alt="${store.storeName}" onerror="this.onerror=null; this.src='/assets/img/defaultImage.jpg';">
             <p class="storeName">${store.storeName}</p>
-            <span class="storePrice">가격: ${store.price}</span>
-            <span class="productCnt">수량: ${store.productCnt}</span>
-            <span class="remainingTime">🌱${formattedTime}</span>
+            <span class="storePrice">${store.price}원</span>
+            <span class="productCnt">${store.productCnt}개 남았어요!</span>
+            <span class="remainingTime">${formattedTime}</span>
+            <span class="reputation"> ✰ 4.5 </span>
+            <span class="store-area">(${store.address})</span>
             ${store.productCnt == 0 ? '<div class="overlay">SOLD OUT</div>' : ''}
         `;
 

@@ -110,6 +110,7 @@
 
 /* 로고 */
 .logoDiv {
+
     color: #06654E;
     font-family: "Archivo Narrow", sans-serif;
     font-weight: 1000;
@@ -120,8 +121,8 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
-    font-size: 280px;
-    width: 1920px;
+    font-size: 250px;
+    width: 1700px;
     margin-bottom: -80px;
-    letter-spacing: 20px;
+    letter-spacing: 16px;
 }

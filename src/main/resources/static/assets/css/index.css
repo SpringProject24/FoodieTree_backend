@@ -61,23 +61,6 @@
     animation-delay: 1.5s; /* 애니메이션 지연 시간 */
 }
 
-.guest-store-list-section span {
-    font-size: 28px;
-    color: #06654E;
-}
-
-#co2-saver-list img {
-    height: 100px;
-    margin-top: 280px;
-}
-
-#end-soon-list img {
-    height: 100px;
-    margin-top: 280px;
-}
-
-
-
 /* 나뭇잎 애니메이션 */
 @keyframes leaf-fall {
     to {
