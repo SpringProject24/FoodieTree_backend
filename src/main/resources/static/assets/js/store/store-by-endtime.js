@@ -18,7 +18,7 @@ function renderStoresByEndTime(storeList) {
     endTimeSoonContainer.innerHTML = '';
 
     if (storeList.length === 0) {
-        endTimeSoonContainer.innerHTML = '<p>No stores available.</p>';
+        endTimeSoonContainer.innerHTML = '<p>이런 ! 현재 픽업 가능한 가게가 없어요.</p>';
         return;
     }
 
@@ -32,7 +32,7 @@ function renderStoresByEndTime(storeList) {
 
         // HH:mm 형식으로 시간 추출
         const [hours, minutes] = store.remainingTime.split(':').slice(0, 2);
-        const formattedTime = `${hours}시간, ${minutes}분 남았어요!`;
+        const formattedTime = `${hours}시간 ${minutes}분 남았어요!`;
 
         storeItem.innerHTML = `
             <div class="category">${store.category}</div>

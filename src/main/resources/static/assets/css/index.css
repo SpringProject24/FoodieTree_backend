@@ -2,6 +2,8 @@
 
 /* section 기본 크기 설정 */
 @import url('./common.css');
+/*storelist css*/
+@import url('../css/store/guest-storelist.css');
 
 .hero {
     display: flex;
@@ -11,7 +13,7 @@
     text-align: center; /* 텍스트 중앙 정렬 */
 }
 
-.hero .main-box {
+.hero .main-box, .guest-store-list-section, .info-for-store {
     display: flex;
     flex-direction: column;
     align-items: center; /* 중앙 정렬 */
@@ -41,8 +43,8 @@
 .main-logo img {
     height: 200px;
     width: 200px;
-    margin-top: -150px;
     animation-delay: 0.5s; /* 애니메이션 지연 시간 */
+    margin-top: 90px;
 }
 
 .save-quote img {
@@ -58,6 +60,23 @@
     margin-top: -10px;
     animation-delay: 1.5s; /* 애니메이션 지연 시간 */
 }
+
+.guest-store-list-section span {
+    font-size: 28px;
+    color: #06654E;
+}
+
+#co2-saver-list img {
+    height: 100px;
+    margin-top: 280px;
+}
+
+#end-soon-list img {
+    height: 100px;
+    margin-top: 280px;
+}
+
+
 
 /* 나뭇잎 애니메이션 */
 @keyframes leaf-fall {

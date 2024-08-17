@@ -8,7 +8,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FoodieTree</title>
     <link rel="stylesheet" href="/assets/css/index.css" />
-    <link rel="stylesheet" href="/assets/css/store/guest-storelist.css">
     <!-- 구글폰트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -63,7 +62,11 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       </div>
   </section>
 
-  <section class="info">
+  <section class="guest-store-list-section">
+      <%@ include file="./guestProductPage.jsp" %>
+  </section>
+
+  <section class="info-for-store">
       <div class="container">
           <div class="left">
               <div class="wrapper jua-regular">
@@ -74,35 +77,9 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           </div>
           <div class="right">
               <div class="store-signup jua-regular">
-                  <a href="/store/sign-up"><span>입점신청</span></a>
+               <span>입점신청</span>
               </div>
           </div>
-      </div>
-  </section>
-
-  <section class="guest-store-list-section">
-<%--      <%@ include file="guestProductPage.jsp" %>--%>
-  </section>
-
-  <section class="info-section">
-      <div class="info-box">
-          <h2>음식물 낭비 최소화</h2>
-          <p>철저한 음식물 관리로 낭비를 최소화하여, 환경 보호에 기여</p>
-      </div>
-      <div class="info-box">
-          <h2>긍정적인 지역사회 이미지</h2>
-          <p>친환경적인 운영으로 지역사회에서 신뢰받고 긍정적인 이미지를 구축</p>
-      </div>
-      <div class="info-box">
-          <h2>스마트한 주문 관리</h2>
-          <p>첨단 기술을 활용한 주문 시스템으로 효율적인 운영과 고객 만족</p>
-      </div>
-  </section>
-
-  <section class="food-info">
-      <div class="food-info-overlay">
-          <p>FoodieTree의 목표는 환경을 보호하고 음식물 낭비를 줄이며<br />지속 가능한 식문화를 조성하는 것입니다.</p>
-          <h2>고객 여러분도 FoodieTree와 함께 환경 보호에 동참해 주세요.</h2>
       </div>
   </section>
 
@@ -114,7 +91,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
   <script>
       const $storeSignup = document.querySelector(".store-signup");
       $storeSignup.addEventListener("click", () => {
-          location.href = "/store/sign-up";
+          location.href = "http://localhost:3000/sign-up";
       });
 
       document.addEventListener('click', function(event) {
