@@ -7,7 +7,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FoodieTree</title>
-    <!-- <link rel="stylesheet" href="/assets/css/common.css"> -->
     <link rel="stylesheet" href="/assets/css/index.css" />
     <link rel="stylesheet" href="/assets/css/store/guest-storelist.css">
     <!-- 구글폰트 -->
@@ -27,6 +26,19 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <!-- 아이콘 -->
     <!-- Add the following <link> to the <head> of your HTML. -->
     <!-- <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css"> -->
+    <style>
+      :root {
+        font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 400;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-text-size-adjust: 100%;
+      }
+    </style>
   </head>
   <body>
     <!-- 공통헤더 -->
@@ -38,22 +50,22 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         <!-- <video muted autoplay loop>
       <source src="../videos/거울샷.mp4" type="video/mp4">
     </video> -->
-        <img src="../assets/img/soleham.png" alt="img" class="soleham" />
-        <img src="../assets/img/cocojuice.png" alt="img" class="cocojuice" />
-        <img src="../assets/img/potato.png" alt="potato" class="potato" />
-        <img src="../assets/img/tomato.png" alt="tomato" class="tomato" />
-        <img src="../assets/img/coca.png" alt="coca" class="coca" />
-        <img src="../assets/img/donut.png" alt="donut" class="donut" />
-        <img
-          src="../assets/img/chocolate.png"
-          alt="chocolate"
-          class="chocolate"
-        />
-        <img
-          src="../assets/img/strawberry.png"
-          alt="strawberry"
-          class="strawberry"
-        />
+<%--        <img src="../assets/img/soleham.png" alt="img" class="soleham" />--%>
+<%--        <img src="../assets/img/cocojuice.png" alt="img" class="cocojuice" />--%>
+<%--        <img src="../assets/img/potato.png" alt="potato" class="potato" />--%>
+<%--        <img src="../assets/img/tomato.png" alt="tomato" class="tomato" />--%>
+<%--        <img src="../assets/img/coca.png" alt="coca" class="coca" />--%>
+<%--        <img src="../assets/img/donut.png" alt="donut" class="donut" />--%>
+<%--        <img--%>
+<%--          src="../assets/img/chocolate.png"--%>
+<%--          alt="chocolate"--%>
+<%--          class="chocolate"--%>
+<%--        />--%>
+<%--        <img--%>
+<%--          src="../assets/img/strawberry.png"--%>
+<%--          alt="strawberry"--%>
+<%--          class="strawberry"--%>
+<%--        />--%>
 
         <div class="container jua-regular">
           <h2>환경 보호에 동참하는</h2>
@@ -100,31 +112,32 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       </div>
     </section>
     <div class ="guest-store-list-section">
-      <%@ include file="guestProductPage.jsp" %>
+<%--      렌더링 --%>
+<%--      <%@ include file="guestProductPage.jsp" %>--%>
     </div>
 
     <div class="info-section">
       <div class="info-box">
-        <img
-          src="https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Dasher Icon"
-        />
+<%--        <img--%>
+<%--          src="https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"--%>
+<%--          alt="Dasher Icon"--%>
+<%--        />--%>
         <h2>음식물 낭비 최소화</h2>
         <p>철저한 음식물 관리로 낭비를 최소화하여, 환경 보호에 기여</p>
       </div>
       <div class="info-box">
-        <img
-          src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Partner Icon"
-        />
+<%--        <img--%>
+<%--          src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"--%>
+<%--          alt="Partner Icon"--%>
+<%--        />--%>
         <h2>긍정적인 지역사회 이미지</h2>
         <p>친환경적인 운영으로 지역사회에서 신뢰받고 긍정적인 이미지를 구축</p>
       </div>
       <div class="info-box">
-        <img
-          src="https://images.unsplash.com/photo-1665686377065-08ba896d16fd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="App Icon"
-        />
+<%--        <img--%>
+<%--          src="https://images.unsplash.com/photo-1665686377065-08ba896d16fd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"--%>
+<%--          alt="App Icon"--%>
+<%--        />--%>
         <h2>스마트한 주문 관리</h2>
         <p>첨단 기술을 활용한 주문 시스템으로 효율적인 운영과 고객 만족</p>
       </div>
