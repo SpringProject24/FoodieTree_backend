@@ -1,23 +1,28 @@
 package org.nmfw.foodietree.domain.reservation.service;
 
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
+import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentIdDto;
+import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentResponseDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
+import org.nmfw.foodietree.domain.reservation.entity.value.PaymentStatus;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 
 @Service
@@ -28,6 +33,10 @@ public class ReservationService {
     private final ReservationMapper reservationMapper;
     private final ReservationRepository reservationRepository;
     private final ProductRepository productRepository;
+    @Value("${env.payment.api.url}")
+    private String apiUrl;
+    @Value("${env.payment.api.key}")
+    private String paymentKey;
 
     /**
      * 예약을 취소하고 취소가 성공했는지 여부를 반환
@@ -35,19 +44,6 @@ public class ReservationService {
      * @return 취소가 완료되었는지 여부
      */
     public boolean cancelReservation(long reservationId) {
-
-//        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-//        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
-//
-//        ReservationStatus status = determinePickUpStatus(reservation);
-//        if(status == ReservationStatus.RESERVED) {
-//            reservationRepository.cancelReservation(reservationId);
-//
-//            return true;
-//        }
-//
-//        return false;
-
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
 
@@ -149,18 +145,66 @@ public class ReservationService {
         log.info("Creating reservation for customer: {}, data: {}", customerId, data);
         int cnt = Integer.parseInt(data.get("cnt"));
         String storeId = data.get("storeId");
+        String paymentId = data.get("paymentId");
+
         List<ReservationFoundStoreIdDto> list = reservationRepository.findByStoreIdLimit(storeId, cnt);
-        for (ReservationFoundStoreIdDto tar : list) {
-            long productId = tar.getProductId();
-            Reservation reservation = Reservation.builder()
-                    .customerId(customerId)
-                    .productId(productId)
-                    .build();
-            Reservation save = reservationRepository.save(reservation);
-            log.info("save 결과 출력: {}", save);
-            if (save == null) return false;
-        }
         if (list.isEmpty()) return false;
-        return true;
+
+        List<Reservation> collect = list.stream()
+            .map(e -> Reservation.builder()
+                .productId(e.getProductId())
+                .customerId(customerId)
+                .paymentId(paymentId)
+                .build())
+            .collect(Collectors.toList());
+        reservationRepository.saveAll(collect);
+		return true;
+	}
+
+    public PaymentStatus processPaymentUpdate(Map<String, String> data) throws InterruptedException {
+        String paymentId = data.get("paymentId");
+        final PaymentResponseDto[] dto = new PaymentResponseDto[1];
+        CountDownLatch cdl = new CountDownLatch(1);
+
+        initiatePaymentRequest(dto, paymentId, cdl); // non-block
+        List<PaymentIdDto> paymentIdList = reservationRepository.findByPaymentIdForPrice(paymentId);
+        List<Reservation> reservationList = reservationRepository.findByPaymentId(paymentId);
+        Integer totalPrice = paymentIdList.stream().reduce(0, (total, y) -> total + y.getPrice(), Integer::sum);
+        cdl.await();
+        return handlePaymentResponse(dto[0], totalPrice, reservationList);
+    }
+
+    private void initiatePaymentRequest(PaymentResponseDto[] tar, String paymentId, CountDownLatch cdl) {
+        String url = apiUrl + paymentId;
+        WebClient.create()
+                .get()
+                .uri(url)
+                .header("Authorization", "PortOne " + paymentKey)
+                .retrieve()
+                .bodyToMono(PaymentResponseDto.class)
+                .doOnTerminate(cdl::countDown)
+                .subscribe(e -> tar[0] = e, error -> {
+                    log.warn("{} API Error: {};", this, error.getMessage());
+                    cdl.countDown();
+                });
+    }
+
+    private PaymentStatus handlePaymentResponse(PaymentResponseDto dto, Integer totalPrice, List<Reservation> list) {
+        if (totalPrice.equals(dto.getAmount().getPaid())) {
+            switch (dto.getStatus()) {
+                case ("PAID") :
+                    List<Reservation> result = list.stream()
+                            .peek(e -> e.setPaymentTime(dto.getPaidAt().atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()))
+                            .collect(Collectors.toList());
+                    reservationRepository.saveAll(result);
+                    return PaymentStatus.PAID;
+                case ("FAILED") :
+                    log.info("failed!");
+                    return PaymentStatus.FAILED;
+                default:
+                    return PaymentStatus.DEFAULT;
+            }
+        }
+        return PaymentStatus.INCONSISTENCY;
     }
 }

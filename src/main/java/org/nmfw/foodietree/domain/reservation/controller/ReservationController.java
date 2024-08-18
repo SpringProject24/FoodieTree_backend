@@ -2,10 +2,10 @@ package org.nmfw.foodietree.domain.reservation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.customer.service.CustomerMyPageService;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
+import org.nmfw.foodietree.domain.reservation.entity.value.PaymentStatus;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -105,16 +105,35 @@ public class ReservationController {
     }
 
     /**
-     * 새로운 예약을 생성, 테스트 미실시
+     * 새로운 예약을 생성
      * @param data 예약 생성에 필요한 데이터 맵
      * @return 예약 생성 성공 여부
      */
-    @PostMapping("/create-reservation")
-    @CrossOrigin
+    @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody Map<String, String> data) {
         String customerId = getCustomerIdFromToken();
         boolean flag = reservationService.createReservation(customerId, data);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
+    }
+
+    /**
+     * PATCH Method 결제 대기 -> 결제 완료
+     * @param data : { "paymentId" : "String" }
+     * @return
+     */
+    @PatchMapping
+    public ResponseEntity<?> updatePayment(@RequestBody Map<String, String> data) {
+        PaymentStatus flag;
+        try {
+            flag = reservationService.processPaymentUpdate(data);
+        } catch (InterruptedException e) {
+            log.error("failed cdl await() {}", e.getMessage());
+            return ResponseEntity.internalServerError().body("잠시 후 다시 시도해주세요.");
+        } catch (Exception e) {
+            log.error("{}", e.getMessage());
+            return ResponseEntity.internalServerError().body("잠시 후 다시 시도해주세요.");
+        }
+        return ResponseEntity.ok().body(flag.toString());
     }
 
     /**

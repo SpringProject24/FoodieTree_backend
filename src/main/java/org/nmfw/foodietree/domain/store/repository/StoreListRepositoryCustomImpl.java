@@ -153,12 +153,13 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                             .fetchOne().intValue();
 
                     // CO2 계산 (예: 상품 수 * 0.12)
-                    double coTwo = productCount * 0.12;
+                    double coTwo = Math.round((productCount * 0.12) * 100.0) / 100.0;
+
                     // StoreListDto 빌드 및 반환
                     return StoreListCo2Dto.builder()
                             .storeId(s.getStoreId())
                             .storeName(s.getStoreName())
-                            .category(String.valueOf(s.getCategory()))
+                            .category(String.valueOf(s.getCategory().getFoodType()))
                             .address(s.getAddress())
                             .price(s.getPrice())
                             .storeImg(s.getStoreImg())
@@ -235,7 +236,7 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                     return StoreListByEndTimeDto.builder()
                             .storeId(s.getStoreId())
                             .storeName(s.getStoreName())
-                            .category(String.valueOf(s.getCategory()))
+                            .category(String.valueOf(s.getCategory().getFoodType()))
                             .address(s.getAddress())
                             .price(s.getPrice())
                             .storeImg(s.getStoreImg())
