@@ -9,9 +9,9 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "review_hashtag")
+@Table(name = "tbl_review_hashtag")
 @Getter
-@ToString
+@ToString(exclude = "review")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,8 +21,8 @@ public class ReviewHashtag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 자동 증가 키
 
-    @ManyToOne
-    @JoinColumn(name = "review_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id", nullable = false)
     private Review review; // 리뷰 아이디 저장
 
     @Enumerated(EnumType.STRING)
