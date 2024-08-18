@@ -18,7 +18,7 @@ function renderStoresByEndTime(storeList) {
     endTimeSoonContainer.innerHTML = '';
 
     if (storeList.length === 0) {
-        endTimeSoonContainer.innerHTML = '<p>No stores available.</p>';
+        endTimeSoonContainer.innerHTML = '<p>이런 ! 현재 픽업 가능한 가게가 없어요.</p>';
         return;
     }
 
@@ -32,15 +32,17 @@ function renderStoresByEndTime(storeList) {
 
         // HH:mm 형식으로 시간 추출
         const [hours, minutes] = store.remainingTime.split(':').slice(0, 2);
-        const formattedTime = `${hours}시간, ${minutes}분 남았어요!`;
+        const formattedTime = `${hours}시간 ${minutes}분 남았어요!`;
 
         storeItem.innerHTML = `
-            <div class="category">${store.category}</div>
+<!--            <div class="category">${store.category}</div>-->
             <img src="${imgUrl}" alt="${store.storeName}" onerror="this.onerror=null; this.src='/assets/img/defaultImage.jpg';">
             <p class="storeName">${store.storeName}</p>
-            <span class="storePrice">가격: ${store.price}</span>
-            <span class="productCnt">수량: ${store.productCnt}</span>
-            <span class="remainingTime">🌱${formattedTime}</span>
+            <span class="storePrice">${store.price}원</span>
+            <span class="productCnt">${store.productCnt}개 남았어요!</span>
+            <span class="remainingTime">${formattedTime}</span>
+            <span class="reputation"> ✰ 4.5 </span>
+            <span class="store-area">(${store.address})</span>
             ${store.productCnt == 0 ? '<div class="overlay">SOLD OUT</div>' : ''}
         `;
 

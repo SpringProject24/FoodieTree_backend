@@ -1,12 +1,14 @@
 package org.nmfw.foodietree.domain.reservation.repository;
 
 import org.apache.ibatis.annotations.Param;
+import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ReservationRepositoryCustom {
@@ -35,7 +37,6 @@ public interface ReservationRepositoryCustom {
     // 가게 예약리스트 조회
     List<StoreReservationDto> findReservations(String storeId);
 
-
-
-
+    // 결제 식별 값으로 예약건들의 가격정보 조회
+    List<PaymentIdDto> findByPaymentIdForPrice(String paymentId);
 }

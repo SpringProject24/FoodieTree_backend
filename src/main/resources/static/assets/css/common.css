@@ -1,6 +1,5 @@
 @import url('https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css');
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css");
-
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
 :root {
     --green1-color: #eef2e3;
@@ -14,214 +13,91 @@
     --footer-font-color: var(--green4-color);
 }
 
-/* reset */
-
 html {
     font-size: 16px;
-}
-a {
-    color: inherit;
-    text-decoration: none;
+    scroll-behavior: smooth; /* 부드러운 스크롤 */
 }
 
 body {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    margin: 0;
     padding: 0;
+    width: 100%;  /* 화면 너비에 맞추기 */
+    max-width: 1920px;  /* 최대 너비 1920px로 제한 */
+    margin: 0 auto;  /* 중앙 정렬 */
+    background-color: #F5F5DD; /* 예시 배경색 */
+    overflow-x: hidden; /* 가로 스크롤 제거 */
+}
+
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start; /* 스크롤 스냅 위치 설정 */
+}
+
+.hero {
+    padding: 20px; /* 상하 여백 추가 */
+}
+
+.info {
+
+}
+
+.guest-store-list-section {
+
+}
+
+.info-section {
+
+}
+
+.food-info {
+    position: relative;
+}
+
+.food-info-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+footer {
+    scroll-snap-align: start;
+    color: var(--white-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 * {
     box-sizing: border-box;
 }
 
-/* 헤더 시작 */
-
-header {
-    /* background-color: var(--white-color); */
-    background-color: #2a6f2b;
-    border-bottom-style: solid;
-    border-color: #FFF;
-    border-width: 2px;
-
-    
-
-    color: var(--header-font-color);
-    padding: 20px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px;
-}
-
-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    text-align: center;
-}
-
-.container {
-    width: 80%;
-    margin: 0 auto;
-}
-
-header .logo {
-    font-size: 30px;
-    font-weight :900;
-    color: #eef2e3;
-    /*src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');*/
-    padding: 0px 55px 0px 0px;
-  }
-
-.margarine-regular {
-    font-family: "Margarine", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-}
-
-header .logo-img {
-    width: 70px;
-    height: 70px;
-}
-
-header .logo-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-
-.wrapper-header {
-  display: flex;
-  justify-content: space-between; /* 이 속성을 사용하여 버튼 사이의 간격을 조절할 수 있습니다 */
-  align-items: center;
-}
-
-a.button {
-  display: block;
-  position: relative;
-  float: left;
-  width: 80px;
-  padding: 0;
-  margin: 10px 10px 10px 10px;
-  font-weight: 600;
-  text-align: center;
-  line-height: 40px;
-  color: beige;
-  border-radius: 15px;
-  transition: all 0.2s ;
-}
-
-.btnBlueGreen {
-  /* background: #00AE68; */
-  background: #2a6f2b;
-}
-
-/* FADE */
-.btnFade.btnBlueGreen:hover {
-  background: #002E5D;
-}
-
-
-header .signup, .signin {
-  /* background-color: white; */
-  color: var(--header-font-color);
-  /* padding: 10px 20px; */
-  /* border: var(--header-font-color) 1px solid; */
-  cursor: pointer;
-}
-
-/* 헤더 끝 */
-
-
-.img-box {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    box-shadow: white 0 0 0 2px;
-    transform: translateZ(0);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.img-box img {
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    object-fit: cover;
-    transition: transform 0.5s;
-}
-
-.jua-regular {
-    font-family: "Jua", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-}
-
-.search span{
-    /*font-weight: 200;*/
-}
-
-
-
-/* 기존 푸터 (삭제예정) */
-/* footer {
-    background-color: var(--white-color);
-    color: var(--footer-font-color);
-    text-align: center;
-    padding: 20px 0;
-    width: 100%;
-    margin-top: 20px;
-} */
-
-
-
-/* 새로운 푸터 */
-footer {
-    height: 400px; /* 푸터의 고정된 높이를 설정 */
-    background-color: #2a6f2b;;
-    color: beige;
-  }
-
-.francois-one-regular {
-    font-family: "Francois One", sans-serif;
-    font-weight: 700;
-    font-style: normal;
-}
-
-.big-title {
-  font-size: 150pt;
-  font-weight: 1000;
-  /* font-family: 'Roboto', sans-serif;  */
-  margin-bottom: 30px;
-  padding-top: 10px;
-  text-align: center; /* 텍스트 수평 정렬 */
-  letter-spacing: 1px; /* 글자 사이 간격 조절 */
-  /*src: url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');*/
-}
-
-.custom_link_all {
-  display: flex;
-  justify-content: center; /* 모든 항목을 가로로 중앙 정렬 */
-  align-items: center; /* 모든 항목을 수직 중앙 정렬 */
-  gap: 20px; /* 각 항목 사이의 간격을 설정 */
-}
-
-.custom_link_all a {
-  text-decoration: none; /* 링크의 기본 밑줄을 제거 */
-  color: inherit; /* 부모 요소의 색상을 상속 */
-}
-
-.custom_link_all a p {
-  margin: 0;
-  padding-top: 0px;
-}
-
-.footer-text {
-  text-align: center;
-  margin-top: 10px; /* margin-top 설정 */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+    .footer {
+        padding: 10px;
+    }
+    .footer .emailTitle {
+        font-size: 18px;
+        bottom: 200px;
+    }
+    .footer .email {
+        font-size: 16px;
+        left: 20px;
+    }
+    .footer .copyRight {
+        font-size: 18px;
+        bottom: -20px;
+    }
+    .footer .footerLinks a {
+        font-size: 20px;
+    }
 }
