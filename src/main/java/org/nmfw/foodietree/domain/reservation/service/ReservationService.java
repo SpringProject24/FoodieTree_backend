@@ -41,11 +41,10 @@ public class ReservationService {
      * @param reservationId 취소할 예약의 ID
      * @return 취소가 완료되었는지 여부
      */
-    public boolean cancelReservation(long reservationId, TokenUserInfo userInfo) {
+    public boolean cancelReservation(long reservationId) {
 
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
-        if(!reservation.getCustomerId().equals(userInfo.getUsername())) return false;
 
         // 취소한 적이 없으면 취소
         if(reservation.getCancelReservationAt() == null) {
@@ -62,11 +61,10 @@ public class ReservationService {
      * @param reservationId 픽업 완료할 예약의 ID
      * @return 픽업 완료가 성공했는지 여부
      */
-    public boolean completePickup(long reservationId, TokenUserInfo userInfo) {
+    public boolean completePickup(long reservationId) {
 
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
-        if(!reservation.getCustomerId().equals(userInfo.getUsername())) return false;
 
         if(reservation.getPickedUpAt() == null) {
             reservation.setPickedUpAt(LocalDateTime.now());

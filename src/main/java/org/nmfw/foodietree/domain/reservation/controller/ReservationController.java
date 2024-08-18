@@ -54,12 +54,9 @@ public class ReservationController {
      * @return 취소 성공 여부
      */
     @PatchMapping("/cancel")
-    public ResponseEntity<?> cancelReservation(
-            @RequestParam long reservationId,
-            @AuthenticationPrincipal TokenUserInfo userInfo
-    ) {
+    public ResponseEntity<?> cancelReservation(@RequestParam long reservationId) {
         log.info("cancel reservation with ID: {}", reservationId);
-        boolean flag = reservationService.cancelReservation(reservationId, userInfo);
+        boolean flag = reservationService.cancelReservation(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 
@@ -69,14 +66,11 @@ public class ReservationController {
      * @return 픽업 완료 성공 여부
      */
     @PatchMapping("/pickup")
-    public ResponseEntity<?> completePickup(
-            @RequestParam long reservationId,
-            @AuthenticationPrincipal TokenUserInfo userInfo
-    ) {
+    public ResponseEntity<?> completePickup(@RequestParam long reservationId) {
         log.info("complete pickup with ID: {}", reservationId);
         // 추후 토큰을 통해 예약 ID를 가져옴
         // int reservationId = getReservationIdFromToken();
-        boolean flag = reservationService.completePickup(reservationId, userInfo);
+        boolean flag = reservationService.completePickup(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 
