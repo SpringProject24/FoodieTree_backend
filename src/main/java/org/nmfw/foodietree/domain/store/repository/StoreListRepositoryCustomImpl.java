@@ -8,9 +8,11 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
@@ -23,6 +25,7 @@ import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
+import org.nmfw.foodietree.global.utils.QueryDslUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
@@ -92,24 +95,19 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
         QProduct p = product;
         QStore s = store;
 
-        NumberExpression<Integer> currProductCnt = new CaseBuilder()
-            .when(r.reservationTime.isNull().and(p.pickupTime.gt(LocalDateTime.now())))
-            .then(1)
-            .otherwise(0).sum();
-
-        Expression<Integer> cnt = ExpressionUtils.as(currProductCnt, "currProductCnt");
+        Expression<Integer> cnt = QueryDslUtils.getCurrProductCntExpression(p, r);
 
         return jpaQueryFactory
-            .select(store, cnt)
-            .from(product)
-            .leftJoin(reservation).on(p.productId.eq(r.productId))
-            .leftJoin(store).on(p.storeId.eq(s.storeId))
-            .groupBy(p.storeId)
-            .having(store.isNotNull())
-            .fetch()
-            .stream()
-            .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(cnt)))
-            .collect(Collectors.toList());
+                .select(store, cnt)
+                .from(store)
+                .leftJoin(product).on(p.storeId.eq(p.storeId))
+                .leftJoin(reservation).on(p.productId.eq(r.productId))
+                .groupBy(s.storeId)
+                .having(store.isNotNull())
+                .fetch()
+                .stream()
+                .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(cnt)))
+                .collect(Collectors.toList());
     }
 
     // 도시 부분을 추출하는 helper method - 현재는 데이터가 부족해 '시'로만 추출
