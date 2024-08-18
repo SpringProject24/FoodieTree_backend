@@ -7,7 +7,6 @@ import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.store.entity.Store;
-import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,7 +95,7 @@ public class NotificationService {
                 .type("PICKUP_REVIEW")
                 .receiverId(customerId)
                 .senderId(storeId)
-                .content("[리뷰]" +storeId + " 맛있게 드셨나요? 리뷰를 남기면 뱃지를 드려요😉")
+                .content("[리뷰]" +storeId + " 리뷰를 남기면 뱃지를 드려요😉")
                 .targetId(String.valueOf(reservation.getReservationId()))
                 .isRead(false)
                 .build();
