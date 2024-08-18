@@ -76,7 +76,7 @@ public class ReservationController {
         log.info("complete pickup with ID: {}", reservationId);
         // 추후 토큰을 통해 예약 ID를 가져옴
         // int reservationId = getReservationIdFromToken();
-        boolean flag = reservationService.completePickup(reservationId);
+        boolean flag = reservationService.completePickup(reservationId, userInfo);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 

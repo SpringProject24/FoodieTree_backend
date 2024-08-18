@@ -12,11 +12,14 @@ import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,10 +32,9 @@ import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
 @Slf4j
 @Transactional
 public class ReservationService {
-    private final ReservationMapper reservationMapper;
     private final ReservationRepository reservationRepository;
-    private final ProductRepository productRepository;
     private final NotificationService notificationService;
+    private final TaskScheduler taskScheduler;
 
     /**
      * 예약을 취소하고 취소가 성공했는지 여부를 반환
@@ -41,20 +43,9 @@ public class ReservationService {
      */
     public boolean cancelReservation(long reservationId, TokenUserInfo userInfo) {
 
-//        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-//        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
-//
-//        ReservationStatus status = determinePickUpStatus(reservation);
-//        if(status == ReservationStatus.RESERVED) {
-//            reservationRepository.cancelReservation(reservationId);
-//
-//            return true;
-//        }
-//
-//        return false;
-
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
+        if(!reservation.getCustomerId().equals(userInfo.getUsername())) return false;
 
         // 취소한 적이 없으면 취소
         if(reservation.getCancelReservationAt() == null) {
@@ -71,22 +62,17 @@ public class ReservationService {
      * @param reservationId 픽업 완료할 예약의 ID
      * @return 픽업 완료가 성공했는지 여부
      */
-    public boolean completePickup(long reservationId) {
+    public boolean completePickup(long reservationId, TokenUserInfo userInfo) {
 
-//        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-//        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
-//
-//        // 취소시간, 픽업시간이 있는 경우 false
-//        ReservationStatus status = determinePickUpStatus(reservation);
-//        if(status == ReservationStatus.RESERVED) {
-//            reservationRepository.completePickup(reservationId);
-//            return true;
-//        }
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
+        if(!reservation.getCustomerId().equals(userInfo.getUsername())) return false;
 
         if(reservation.getPickedUpAt() == null) {
             reservation.setPickedUpAt(LocalDateTime.now());
+            reservationRepository.save(reservation);
+            // 30분 후에 리뷰 권유 알림을 보내는 작업을 예약
+            scheduleReviewRequest(reservation);
             return true;
         }
 
@@ -172,5 +158,17 @@ public class ReservationService {
         notificationService.sendCreatedReservationAlert(customerId, data);
 
         return true;
+    }
+
+    /**
+     * 픽업 완료 30분 후 리뷰알림 발송 예약
+     * @param reservation - 픽업 완료 된 예약 엔터티 -> ReservationDetailDto로 변경해도 될지?
+     */
+    private void scheduleReviewRequest(Reservation reservation) {
+//        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(30);
+        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(1);
+        ZoneId zoneId = ZoneId.of("Asia/Seoul");
+        Date targetDate = Date.from(targetTime.atZone(zoneId).toInstant());
+        taskScheduler.schedule(() -> notificationService.sendReviewRequest(reservation), targetDate);
     }
 }

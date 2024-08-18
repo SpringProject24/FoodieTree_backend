@@ -2,7 +2,6 @@ package org.nmfw.foodietree.domain.notification.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.notification.dto.res.MessageDto;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
@@ -15,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
-import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -24,7 +21,6 @@ import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
 public class NotificationService {
 
     private final SimpMessagingTemplate messagingTemplate;
-    private final StoreRepository storeRepository;
     private final ProductRepository productRepository;
 
     // 예약 추가 시 예약고객 및 가게에 알림 발송
@@ -34,7 +30,7 @@ public class NotificationService {
                 .type("RESERVATION_ADD")
                 .receiverId(customerId)
                 .senderId(data.get("storeId"))
-                .content(data.get("storeId") + ": 예약 성공하셨습니다!")
+                .content("[예약]" + data.get("storeId") + " 예약 하셨습니다.")
                 .targetId(data.get("targetId"))
                 .isRead(false)
                 .build();
@@ -42,7 +38,7 @@ public class NotificationService {
                 .type("RESERVATION_ADD")
                 .receiverId(data.get("storeId"))
                 .senderId(customerId)
-                .content("새로운 예약 주문 : " + customerId)
+                .content("[예약]" + customerId)
                 .targetId(data.get("targetId"))
                 .isRead(false)
                 .build();
@@ -56,7 +52,8 @@ public class NotificationService {
     // 예약 취소 시 취소한 고객, 가게에게 알림
     public void sendCancelReservationAlert(Reservation reservation) {
         String customerId = reservation.getCustomerId();
-        Product byProductId = productRepository.findByProductId(reservation.getProductId());
+        Product byProductId = productRepository.findById(reservation.getProductId())
+                .orElseThrow(() -> new RuntimeException("재고가 없습니다."));
         Store store = byProductId.getStore();
         log.debug("취소 product 기준 store: {}", store);
         String storeId = byProductId.getStoreId();
@@ -66,7 +63,7 @@ public class NotificationService {
                 .type("RESERVATION_CANCEL")
                 .receiverId(customerId)
                 .senderId(storeId)
-                .content(storeId + ": 예약이 취소되었습니다.")
+                .content("[예약 취소]" + storeId + " 예약을 취소하셨습니다.")
                 .targetId(String.valueOf(reservation.getReservationId()))
                 .isRead(false)
                 .build();
@@ -74,7 +71,7 @@ public class NotificationService {
                 .type("RESERVATION_CANCEL")
                 .receiverId(storeId)
                 .senderId(customerId)
-                .content("‼️예약 취소 : " + customerId)
+                .content("[예약 취소‼️] "+reservation.getReservationId()+ "/" + customerId)
                 .targetId(String.valueOf(reservation.getReservationId()))
                 .isRead(false)
                 .build();
@@ -87,18 +84,19 @@ public class NotificationService {
     public void sendReviewRequest(Reservation reservation) {
 
         String customerId = reservation.getCustomerId();
-        Product byProductId = productRepository.findByProductId(reservation.getProductId());
+        Product byProductId = productRepository.findById(reservation.getProductId())
+                .orElseThrow(() -> new RuntimeException("재고가 없습니다."));
         Store store = byProductId.getStore();
-        log.debug("취소 product 기준 store: {}", store);
+        log.debug("픽업리뷰 product 기준 store: {}", store);
         String storeId = byProductId.getStoreId();
-        log.debug("취소 storeId 확인: {}", storeId);
+        log.debug("픽업리뷰 storeId 확인: {}", storeId);
 
         // 리뷰 권유 알림을 보내는 로직을 구현
         MessageDto message = MessageDto.builder()
-                .type("RESERVATION_CANCEL")
+                .type("PICKUP_REVIEW")
                 .receiverId(customerId)
                 .senderId(storeId)
-                .content(storeId + ": 예약이 취소되었습니다.")
+                .content("[리뷰]" +storeId + " 맛있게 드셨나요? 리뷰를 남기면 뱃지를 드려요😉")
                 .targetId(String.valueOf(reservation.getReservationId()))
                 .isRead(false)
                 .build();
