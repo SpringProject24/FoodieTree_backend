@@ -83,4 +83,26 @@ public class NotificationService {
         messagingTemplate.convertAndSend("/topic/store/" + storeId, messageStore);
         log.debug("예약 취소 알림 발송: {}", message);
     }
+    // 픽업 완료 시 고객에게 리뷰 권유 알림
+    public void sendReviewRequest(Reservation reservation) {
+
+        String customerId = reservation.getCustomerId();
+        Product byProductId = productRepository.findByProductId(reservation.getProductId());
+        Store store = byProductId.getStore();
+        log.debug("취소 product 기준 store: {}", store);
+        String storeId = byProductId.getStoreId();
+        log.debug("취소 storeId 확인: {}", storeId);
+
+        // 리뷰 권유 알림을 보내는 로직을 구현
+        MessageDto message = MessageDto.builder()
+                .type("RESERVATION_CANCEL")
+                .receiverId(customerId)
+                .senderId(storeId)
+                .content(storeId + ": 예약이 취소되었습니다.")
+                .targetId(String.valueOf(reservation.getReservationId()))
+                .isRead(false)
+                .build();
+        messagingTemplate.convertAndSend("/queue/customer/" + customerId, message);
+    }
+
 }

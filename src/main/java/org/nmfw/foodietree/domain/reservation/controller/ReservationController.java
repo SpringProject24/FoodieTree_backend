@@ -69,7 +69,10 @@ public class ReservationController {
      * @return 픽업 완료 성공 여부
      */
     @PatchMapping("/pickup")
-    public ResponseEntity<?> completePickup(@RequestParam long reservationId) {
+    public ResponseEntity<?> completePickup(
+            @RequestParam long reservationId,
+            @AuthenticationPrincipal TokenUserInfo userInfo
+    ) {
         log.info("complete pickup with ID: {}", reservationId);
         // 추후 토큰을 통해 예약 ID를 가져옴
         // int reservationId = getReservationIdFromToken();
