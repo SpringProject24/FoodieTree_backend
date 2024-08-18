@@ -45,7 +45,7 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
         List<SearchedStoreListDto> result = factory
                 .select(store, cnt)
                 .from(store)
-                .leftJoin(product).on(p.storeId.eq(p.storeId))
+                .leftJoin(product).on(s.storeId.eq(p.storeId))
                 .leftJoin(reservation).on(p.productId.eq(r.productId))
                 .where(expression)
                 .groupBy(s.storeId)
@@ -59,7 +59,7 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
         List<Store> fetch = factory
                 .select(store)
                 .from(store)
-                .leftJoin(product).on(p.storeId.eq(p.storeId))
+                .leftJoin(product).on(s.storeId.eq(p.storeId))
                 .leftJoin(reservation).on(p.productId.eq(r.productId))
                 .where(expression)
                 .groupBy(s.storeId)

@@ -100,7 +100,7 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
         return jpaQueryFactory
                 .select(store, cnt)
                 .from(store)
-                .leftJoin(product).on(p.storeId.eq(p.storeId))
+                .leftJoin(product).on(s.storeId.eq(p.storeId))
                 .leftJoin(reservation).on(p.productId.eq(r.productId))
                 .groupBy(s.storeId)
                 .having(store.isNotNull())
