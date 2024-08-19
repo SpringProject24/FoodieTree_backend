@@ -39,13 +39,13 @@ public class Review {
     @Column(name = "store_name", nullable = false)
     private String storeName; // 예약 상품의 상점 이름
 
-    @Column(name = "store_img")
+    @Column(name = "store_img", nullable = true)
     private String storeImg; // 상점 이미지
 
-    @Column(name = "review_score", nullable = false)
+    @Column(name = "review_score", nullable = true)
     private Integer reviewScore; // 별점 최대 5점
 
-    @Column(name = "review_img")
+    @Column(name = "review_img", nullable = true)
     private String reviewImg; // 단일 리뷰 이미지
 
     @Column(name = "review_content", columnDefinition = "TEXT")
