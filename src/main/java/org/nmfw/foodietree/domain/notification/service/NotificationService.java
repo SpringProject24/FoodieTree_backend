@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.notification.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.notification.dto.req.NotificationDataDto;
 import org.nmfw.foodietree.domain.notification.dto.res.MessageDto;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
@@ -91,13 +92,26 @@ public class NotificationService {
         String storeId = byProductId.getStoreId();
         log.debug("픽업리뷰 storeId 확인: {}", storeId);
 
-        // 리뷰 권유 알림을 보내는 로직을 구현
         MessageDto message = MessageDto.builder()
                 .type("PICKUP_REVIEW")
                 .receiverId(customerId)
                 .senderId(storeId)
                 .content("[리뷰]" +storeId + " 리뷰를 남기면 뱃지를 드려요😉")
                 .targetId(String.valueOf(reservation.getReservationId()))
+                .isRead(false)
+                .build();
+        messagingTemplate.convertAndSend("/queue/customer/" + customerId, message);
+    }
+
+    // 가게에서 픽업 확인 시 고객에게 픽업 완료 알림
+    public void sendPickupConfirm(NotificationDataDto dto) {
+        String customerId = dto.getCustomerId();
+        MessageDto message = MessageDto.builder()
+                .type("PICKUP_CONFIRM")
+                .receiverId(customerId)
+                .senderId(dto.getStoreId())
+                .content("[픽업 완료]" + dto.getStoreId() + " ")
+                .targetId(String.valueOf(dto.getTargetId()))
                 .isRead(false)
                 .build();
         messagingTemplate.convertAndSend("/queue/customer/" + customerId, message);

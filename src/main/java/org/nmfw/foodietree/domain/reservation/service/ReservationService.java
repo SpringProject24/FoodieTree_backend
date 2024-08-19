@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.notification.dto.req.NotificationDataDto;
 import org.nmfw.foodietree.domain.notification.service.NotificationService;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
@@ -76,6 +77,11 @@ public class ReservationService {
         if(reservation.getPickedUpAt() == null) {
             reservation.setPickedUpAt(LocalDateTime.now());
             reservationRepository.save(reservation);
+            NotificationDataDto dto = NotificationDataDto.builder()
+                    .customerId(reservation.getCustomerId())
+//                    .storeId(productRepository.findById(reservation.getProductId()).get)
+                    .build();
+            notificationService.sendPickupConfirm(dto);
             // 30분 후에 리뷰 권유 알림을 보내는 작업을 예약
             scheduleReviewRequest(reservation);
             return true;
