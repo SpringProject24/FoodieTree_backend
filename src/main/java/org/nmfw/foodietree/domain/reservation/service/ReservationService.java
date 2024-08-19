@@ -19,8 +19,9 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDt
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.entity.value.PaymentStatus;
-import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
+import org.nmfw.foodietree.domain.store.entity.Store;
+import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,6 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final NotificationService notificationService;
     private final TaskScheduler taskScheduler;
-    private final ProductRepository productRepository;
 
     @Value("${env.payment.api.url}")
     private String apiUrl;
@@ -67,7 +67,6 @@ public class ReservationService {
             notificationService.sendCancelReservationAlert(dto);
             return true;
         }
-        // 이미 픽업했거나, 노쇼인 경우를 확인하지 않아도 되는지?
         return false;
     }
 
@@ -92,7 +91,7 @@ public class ReservationService {
                     .targetId(List.of(String.valueOf(reservationId)))
                     .build();
             notificationService.sendPickupConfirm(dto);
-            // 30분 후에 리뷰 권유 알림을 보내는 작업을 예약
+            // 30분 후 리뷰 알림 예약
             scheduleReviewRequest(dto);
             return true;
         }
@@ -164,6 +163,7 @@ public class ReservationService {
         int cnt = Integer.parseInt(data.get("cnt"));
         String storeId = data.get("storeId");
         String paymentId = data.get("paymentId");
+        String storeName = data.get("storeName");
 
         List<ReservationFoundStoreIdDto> list = reservationRepository.findByStoreIdLimit(storeId, cnt);
         if (list.isEmpty()) return false;
@@ -179,6 +179,7 @@ public class ReservationService {
         NotificationDataDto dto = NotificationDataDto.builder()
                 .customerId(customerId)
                 .storeId(storeId)
+                .storeName(storeName)
                 .targetId(reservations.stream().map(r->r.getReservationId().toString()).collect(Collectors.toList()))
                 .build();
         notificationService.sendCreatedReservationAlert(dto);
