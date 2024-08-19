@@ -27,8 +27,8 @@ public class ReviewService {
         private final ProductRepository productRepository;
         private final CustomerRepository customerRepository;
 
-        public boolean isReviewExist(Long reservationId, String customerId) {
-            return reviewRepository.existsByReservationIdAndCustomerId(reservationId, customerId);
+        public boolean isReviewExist(Long reservationId) {
+            return reviewRepository.existByReservationId(reservationId);
         }
 
         public Review saveReview(ReviewSaveDto reviewSaveDto, TokenUserInfo tokenUserInfo) {

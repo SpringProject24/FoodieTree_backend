@@ -1,14 +1,13 @@
 package org.nmfw.foodietree.domain.review.dto.res;
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
+@EqualsAndHashCode
 @NoArgsConstructor
-@Slf4j
+@AllArgsConstructor
 @Builder
 public class ReviewSaveDto {
     private Long reservationId; // 예약 관리
