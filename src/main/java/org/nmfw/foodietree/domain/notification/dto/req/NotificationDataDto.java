@@ -2,6 +2,8 @@ package org.nmfw.foodietree.domain.notification.dto.req;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @ToString
 @EqualsAndHashCode
@@ -14,5 +16,6 @@ public class NotificationDataDto {
     private String customerId;
     private String storeId;
     private String storeName;
-    private String targetId; // 예약 ID, 리뷰 ID, ...
+    private List<String> targetId; // 예약 ID, 리뷰 ID, ...
+    private String targetType; // RESERVATION_ADD, ...
 }

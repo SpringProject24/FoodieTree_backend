@@ -57,7 +57,14 @@ public class ReservationService {
         // 취소한 적이 없으면 취소
         if(reservation.getCancelReservationAt() == null) {
             reservation.setCancelReservationAt(LocalDateTime.now());
-            notificationService.sendCancelReservationAlert(reservation);
+            ReservationDetailDto detail = reservationRepository.findReservationByReservationId(reservationId);
+            NotificationDataDto dto = NotificationDataDto.builder()
+                    .customerId(detail.getCustomerId())
+                    .storeId(detail.getStoreId())
+                    .storeName(detail.getStoreName())
+                    .targetId(List.of(String.valueOf(reservationId)))
+                    .build();
+            notificationService.sendCancelReservationAlert(dto);
             return true;
         }
         // 이미 픽업했거나, 노쇼인 경우를 확인하지 않아도 되는지?
@@ -77,13 +84,16 @@ public class ReservationService {
         if(reservation.getPickedUpAt() == null) {
             reservation.setPickedUpAt(LocalDateTime.now());
             reservationRepository.save(reservation);
+            ReservationDetailDto detail = reservationRepository.findReservationByReservationId(reservationId);
             NotificationDataDto dto = NotificationDataDto.builder()
                     .customerId(reservation.getCustomerId())
-//                    .storeId(productRepository.findById(reservation.getProductId()).get)
+                    .storeId(detail.getStoreId())
+                    .storeName(detail.getStoreName())
+                    .targetId(List.of(String.valueOf(reservationId)))
                     .build();
             notificationService.sendPickupConfirm(dto);
             // 30분 후에 리뷰 권유 알림을 보내는 작업을 예약
-            scheduleReviewRequest(reservation);
+            scheduleReviewRequest(dto);
             return true;
         }
 
@@ -118,6 +128,7 @@ public class ReservationService {
      * @return 예약 상태
      */
     public ReservationStatus determinePickUpStatus(ReservationDetailDto reservation) {
+
         if (reservation.getPickedUpAt() != null) {
             return ReservationStatus.PICKEDUP;
         } else if (reservation.getCancelReservationAt() != null) {
@@ -163,7 +174,13 @@ public class ReservationService {
                 .paymentId(paymentId)
                 .build())
             .collect(Collectors.toList());
-        reservationRepository.saveAll(collect);
+        List<Reservation> reservations = reservationRepository.saveAll(collect);
+
+        NotificationDataDto dto = NotificationDataDto.builder()
+                .customerId(customerId)
+                .storeId(storeId)
+                .targetId(reservations.stream().map(r->r.getReservationId().toString()).collect(Collectors.toList()))
+                .build();
         notificationService.sendCreatedReservationAlert(customerId, data);
 		return true;
 	}
@@ -217,13 +234,13 @@ public class ReservationService {
 
     /**
      * 픽업 완료 30분 후 리뷰알림 발송 예약
-     * @param reservation - 픽업 완료 된 예약 엔터티 -> ReservationDetailDto로 변경해도 될지?
+     * @param dto - 알림에 필요한 정보를 담은 NotificationDataDto
      */
-    private void scheduleReviewRequest(Reservation reservation) {
+    private void scheduleReviewRequest(NotificationDataDto dto) {
 //        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(30);
         LocalDateTime targetTime = LocalDateTime.now().plusMinutes(1);
         ZoneId zoneId = ZoneId.of("Asia/Seoul");
         Date targetDate = Date.from(targetTime.atZone(zoneId).toInstant());
-        taskScheduler.schedule(() -> notificationService.sendReviewRequest(reservation), targetDate);
+        taskScheduler.schedule(() -> notificationService.sendReviewRequest(dto), targetDate);
     }
 }
