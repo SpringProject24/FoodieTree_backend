@@ -11,7 +11,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Value("${CHAT_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001,http://localhost:3002}")
+    @Value("${env.domain:http://localhost:3000,http://localhost:3001,http://localhost:3002}")
     private String[] allowedOrigins;
 
     @Override
