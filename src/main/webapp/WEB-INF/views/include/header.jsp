@@ -1,5 +1,8 @@
+<%@ page import="org.springframework.beans.factory.annotation.Value" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<spring:eval expression="@environment.getProperty('env.url')" var="url" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,14 +53,14 @@
     </form>
 
     <!-- 리뷰 게시판 버튼 -->
-    <button class="review-main-btn" onclick="location.href='http://localhost:3000/reviewMain'">
+    <button class="review-main-btn" onclick="location.href='${url}/reviewMain'">
         <img src="${pageContext.request.contextPath}/assets/img/icon/board.png" alt="Review Board Btn">
     </button>
 
     <!-- 로그인 및 회원가입 버튼 -->
     <div class="login-btn-section">
 <%--        <c:if test="${login == null}">--%>
-            <button class="main-page-btn" onclick="location.href='http://localhost:3000/main'">주문하러가기</button>
+            <button class="main-page-btn" onclick="location.href='${url}/main'">주문하러가기</button>
 <%--            <div class="dot">・</div>--%>
 <%--            <button class="sign-up-btn" onclick="location.href='http://localhost:3000/sign-up'">Sign up</button>--%>
 <%--        </c:if>--%>

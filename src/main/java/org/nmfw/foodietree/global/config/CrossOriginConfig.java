@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.global.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -7,12 +8,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 // 전역 크로스오리진 설정: 어떤 클라이언트를 허용할 것인지
 @Configuration
 public class CrossOriginConfig implements WebMvcConfigurer {
+    @Value("${env.url}")
+    private String url;
 
     private String[] urls = {
             "http://localhost:3000",
             "http://localhost:3001",
             "http://localhost:3002",
-            "http://localhost:3003"
+            "http://localhost:3003",
+            url
     };
 
     @Override

@@ -8,6 +8,7 @@ import org.nmfw.foodietree.domain.auth.repository.EmailRepository;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.customer.repository.CustomerRepository;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -29,6 +30,9 @@ public class EmailService {
     private final CustomerRepository customerRepository;
     private final StoreRepository storeRepository;
     private final TokenProvider tokenProvider;
+
+    @Value("${env.url}")
+    private String url;
 
     public EmailCodeDto getEmailCodeDtoByEmail(String email) {
         EmailVerification emailVerification = emailRepository.findOneByEmail(email)
@@ -81,7 +85,7 @@ public class EmailService {
         } else updateEmailVerification(dto);
 
         // 이메일에 포함될 링크 생성
-        String verificationLink = "http://localhost:3000/verifyEmail?token=" + token + "&refreshToken=" + refreshToken;
+        String verificationLink = url + "/verifyEmail?token=" + token + "&refreshToken=" + refreshToken;
 
 
         log.info("인증링크 {} :", verificationLink);

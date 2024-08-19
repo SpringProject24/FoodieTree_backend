@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8" %> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<spring:eval expression="@environment.getProperty('env.url')" var="url" />
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -97,7 +99,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
   <script>
       const $storeSignup = document.querySelector(".store-signup");
       $storeSignup.addEventListener("click", () => {
-          location.href = "http://localhost:3000/sign-up";
+          location.href = ${url} + "/sign-up";
       });
 
       document.addEventListener('click', function(event) {
