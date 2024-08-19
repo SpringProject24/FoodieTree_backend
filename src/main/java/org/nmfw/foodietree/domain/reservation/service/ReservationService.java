@@ -181,7 +181,7 @@ public class ReservationService {
                 .storeId(storeId)
                 .targetId(reservations.stream().map(r->r.getReservationId().toString()).collect(Collectors.toList()))
                 .build();
-        notificationService.sendCreatedReservationAlert(customerId, data);
+        notificationService.sendCreatedReservationAlert(dto);
 		return true;
 	}
 

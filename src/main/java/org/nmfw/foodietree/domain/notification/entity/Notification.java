@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @ToString
@@ -25,7 +26,10 @@ public class Notification {
     private String type; // 알림 유형
     private String receiverId;
     private String senderId;
-    private String targetId; // 예약이면 예약ID, 리뷰면 리뷰ID
+
+    @Column(name = "notification_target_list")
+    @Convert(converter = StringListConverter.class)
+    private List<String> targetIdList; // 예약이면 예약ID, 리뷰면 리뷰ID
 
     @Column(name = "notification_content")
     private String content; // 알림 내용
