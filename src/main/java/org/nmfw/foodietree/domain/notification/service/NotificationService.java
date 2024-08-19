@@ -107,8 +107,7 @@ public class NotificationService {
     }
     // 리스트 조회
     public List<MessageDto> getList(String userId) {
-//        notificationRepository.find
-        return null;
+        return notificationRepository.findAllByReceiverId(userId);
     }
 
     public MessageDto saveEntityAndGetDto(MessageDto dto) {

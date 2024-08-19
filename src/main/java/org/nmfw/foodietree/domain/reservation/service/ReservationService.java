@@ -235,7 +235,7 @@ public class ReservationService {
 
     /**
      * 픽업 완료 30분 후 리뷰알림 발송 예약
-     * @param dto - 알림에 필요한 정보를 담은 NotificationDataDto
+     * @param dto - 알림에 필요한 정보
      */
     private void scheduleReviewRequest(NotificationDataDto dto) {
 //        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(30);
