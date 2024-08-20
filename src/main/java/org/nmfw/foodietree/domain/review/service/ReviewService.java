@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,60 +30,80 @@ import java.util.List;
 @Slf4j
 public class ReviewService {
 
-        private final ReviewRepository reviewRepository;
-        private final ReviewHashtagRepository reviewHashtagRepository;
-        private final ReservationRepository reservationRepository;
-        private final ProductRepository productRepository;
-        private final CustomerRepository customerRepository;
+    private final ReviewRepository reviewRepository;
+    private final ReviewHashtagRepository reviewHashtagRepository;
+    private final ReservationRepository reservationRepository;
+    private final ProductRepository productRepository;
+    private final CustomerRepository customerRepository;
 
-        public boolean isReviewExist(Long reservationId) {
-            return reviewRepository.existByReservationId(reservationId);
-        }
+    public boolean isReviewExist(Long reservationId) {
+        return reviewRepository.existByReservationId(reservationId);
+    }
 
-        public Review saveReview(ReviewSaveDto reviewSaveDto
+    public Review saveReview(ReviewSaveDto reviewSaveDto
 //                                 ,@AuthenticationPrincipal TokenUserInfo tokenUserInfo
-        ) {
+    ) {
 
-            // hard coding
-            String customerId = "sinyunjong@gmail.com";
+        // hard coding
+        String customerId = "sinyunjong@gmail.com";
 
-            // Reservation과 Product 객체를 가져와야 함
-            Reservation reservation = reservationRepository.findById(reviewSaveDto.getReservationId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
-            Product product = productRepository.findById(reservation.getProductId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 제품이 존재하지 않습니다."));
+        // Reservation과 Product 객체를 가져와야 함
+        Reservation reservation = reservationRepository.findById(reviewSaveDto.getReservationId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
+        Product product = productRepository.findById(reservation.getProductId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 제품이 존재하지 않습니다."));
 //            Customer customer = customerRepository.findByCustomerId(tokenUserInfo.getUsername())
-            Customer customer = customerRepository.findByCustomerId(customerId)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+        Customer customer = customerRepository.findByCustomerId(customerId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
-            // Review 객체 생성
-            Review review = Review.builder()
-                    .reservation(reservation)
-                    .customer(customer)
-                    .product(product)
-                    .storeName(product.getStoreId())
-                    .storeImg(reviewSaveDto.getStoreImg())
-                    .reviewScore(reviewSaveDto.getReviewScore())
-                    .reviewImg(reviewSaveDto.getReviewImg())
-                    .reviewContent(reviewSaveDto.getReviewContent())
-                    .build();
+        // Review 객체 생성
+        Review review = Review.builder()
+                .reservation(reservation)
+                .customer(customer)
+                .product(product)
+                .storeName(product.getStoreId())
+                .storeImg(reviewSaveDto.getStoreImg())
+                .reviewScore(reviewSaveDto.getReviewScore())
+                .reviewImg(reviewSaveDto.getReviewImg())
+                .reviewContent(reviewSaveDto.getReviewContent())
+                .build();
 
-            // Review 저장
-            Review savedReview = reviewRepository.save(review);
+        // Review 저장
+        Review savedReview = reviewRepository.save(review);
 
-            // 해시태그 저장 로직 호출
-            saveReviewHashtags(savedReview, reviewSaveDto.getHashtags());
+        // 해시태그 저장 로직 호출
+        saveReviewHashtags(savedReview, reviewSaveDto.getHashtags());
 
-            return savedReview;
-        }
+        return savedReview;
+    }
 
     // 해시태그 저장 로직
     public void saveReviewHashtags(Review review, List<Hashtag> hashtags) {
         for (Hashtag hashtag : hashtags) {
             reviewHashtagRepository.save(ReviewHashtag.builder()
-                            .hashtag(hashtag) // 해시태그 저장
-                            .review(review) // 리뷰 저장
+                    .hashtag(hashtag) // 해시태그 저장
+                    .review(review) // 리뷰 저장
                     .build());
         }
     }
+
+    // 모든 리뷰 조회 메서드
+    public List<ReviewSaveDto> getAllReviews() {
+        List<Review> reviews = reviewRepository.findAll();
+
+        return reviews.stream()
+                .map(review -> ReviewSaveDto.builder()
+                        .reservationId(review.getReservation().getReservationId())
+                        .customerId(review.getCustomer().getCustomerId())
+                        .storeImg(review.getStoreImg())
+                        .reviewScore(review.getReviewScore())
+                        .reviewImg(review.getReviewImg())
+                        .reviewContent(review.getReviewContent())
+                        .hashtags(review.getHashtags().stream()
+                                .map(ReviewHashtag::getHashtag)
+                                .collect(Collectors.toList()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 }

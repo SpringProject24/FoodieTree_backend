@@ -2,19 +2,16 @@ package org.nmfw.foodietree.domain.review.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
+import org.nmfw.foodietree.domain.review.entity.ReviewHashtag;
 import org.nmfw.foodietree.domain.review.service.ReviewService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -24,10 +21,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveReview(@RequestBody ReviewSaveDto reviewSaveDto
-                                        , String customerId
-//            , @AuthenticationPrincipal TokenUserInfo tokenUserInfo
-    ) {
+    public ResponseEntity<?> saveReview(@RequestBody ReviewSaveDto reviewSaveDto) {
         // 예약 아이디와 고객 아이디를 이용하여 리뷰가 이미 존재하는지 확인
         boolean isReviewExist = reviewService.isReviewExist(reviewSaveDto.getReservationId());
 
@@ -52,6 +46,10 @@ public class ReviewController {
             return ResponseEntity.ok(savedReview);
         }
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ReviewSaveDto>> getAllReviews() {
+        List<ReviewSaveDto> reviewResponseDto = reviewService.getAllReviews();
+        return ResponseEntity.ok(reviewResponseDto);
+    }
 }
-
-
