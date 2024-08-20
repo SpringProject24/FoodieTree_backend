@@ -127,7 +127,6 @@ public class ReservationService {
      * @return 예약 상태
      */
     public ReservationStatus determinePickUpStatus(ReservationDetailDto reservation) {
-
         if (reservation.getPickedUpAt() != null) {
             return ReservationStatus.PICKEDUP;
         } else if (reservation.getCancelReservationAt() != null) {

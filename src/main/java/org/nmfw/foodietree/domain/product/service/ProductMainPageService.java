@@ -51,37 +51,37 @@ public class ProductMainPageService {
                 .build();
     }
 
-    /**
-     * Finds products by customer's preferred food.
-     *
-     * @param customerId the ID of the customer
-     * @param request    the HTTP servlet request
-     * @param response   the HTTP servlet response
-     * @return a list of TotalInfoDto containing filtered product information
-     */
-    public List<ProductDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response) {
-        List<PreferredFoodDto> preferredFood = customerMyPageService.getCustomerInfo(customerId).getPreferredFood();
-
-        // 선호음식 없으면 최신 리뷰 기준 5개 조회 - 임시로 예약 내역 사용
-        List<ProductDto> categoryByFood = null;
-        if (preferredFood == null) {
-            log.warn("Preferred food list is null for customerId: {}", customerId);
-            categoryByFood = favFoodRepository.findByReviews();
-        } else {
-            List<StoreCategory> categories = preferredFood.stream()
-                    .map(preferredFoodDto -> StoreCategory.valueOf(preferredFoodDto.getPreferredFood()))
-                    .collect(Collectors.toList());
-            categoryByFood = favFoodRepository.findCategoryByFood(categories);
-        }
-
-        for (ProductDto productDto : categoryByFood) {
-            LocalDateTime pickupTime = productDto.getPickupTime();
-            String formatted = setFormattedPickupTime(pickupTime);
-
-            productDto.setFormattedPickupTime(formatted);
-        }
-        return categoryByFood;
-    }
+//    /**
+//     * Finds products by customer's preferred food.
+//     *
+//     * @param customerId the ID of the customer
+//     * @param request    the HTTP servlet request
+//     * @param response   the HTTP servlet response
+//     * @return a list of TotalInfoDto containing filtered product information
+//     */
+//    public List<ProductDto> findProductByFood(String customerId, HttpServletRequest request, HttpServletResponse response) {
+//        List<PreferredFoodDto> preferredFood = customerMyPageService.getCustomerInfo(customerId).getPreferredFood();
+//
+//        // 선호음식 없으면 최신 리뷰 기준 5개 조회 - 임시로 예약 내역 사용
+//        List<ProductDto> categoryByFood = null;
+//        if (preferredFood == null) {
+//            log.warn("Preferred food list is null for customerId: {}", customerId);
+//            categoryByFood = favFoodRepository.findByReviews();
+//        } else {
+//            List<StoreCategory> categories = preferredFood.stream()
+//                    .map(preferredFoodDto -> StoreCategory.valueOf(preferredFoodDto.getPreferredFood()))
+//                    .collect(Collectors.toList());
+//            categoryByFood = favFoodRepository.findCategoryByFood(categories);
+//        }
+//
+//        for (ProductDto productDto : categoryByFood) {
+//            LocalDateTime pickupTime = productDto.getPickupTime();
+//            String formatted = setFormattedPickupTime(pickupTime);
+//
+//            productDto.setFormattedPickupTime(formatted);
+//        }
+//        return categoryByFood;
+//    }
 
 
 
