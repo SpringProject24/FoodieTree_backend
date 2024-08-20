@@ -37,7 +37,7 @@ public class ReviewController {
     /**
      *
      * @param reviewSaveDto
-     * @param customerId
+     * @param tokenUserInfo
      * @return 리뷰아이디가 이미있는경우, 없는경우
      */
     @PostMapping("/save")

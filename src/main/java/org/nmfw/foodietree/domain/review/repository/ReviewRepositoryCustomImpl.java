@@ -20,9 +20,9 @@ public class ReviewRepositoryCustomImpl  implements ReviewRepositoryCustom{
     public boolean existByReservationId(Long reservationId) {
         QReview review = QReview.review;
 
-        // BooleanBuilder를 사용하여 조건을 동적으로 생성
+        // 조건 생성: reservationId가 null이 아닌 경우 해당 reservationId와 일치하는 리뷰가 있는지 확인
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(review.reservation.reservationId.isNull());
+        builder.and(review.reservation.reservationId.eq(reservationId));
 
         // 쿼리 실행
         long count = jpaQueryFactory
