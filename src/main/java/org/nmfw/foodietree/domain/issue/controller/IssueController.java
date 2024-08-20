@@ -161,4 +161,10 @@ public class IssueController {
 
         return ResponseEntity.ok(fileUrls);
     }
+
+    @GetMapping("/photo/{issueId}")
+    public ResponseEntity<?> getIssuePhoto(@PathVariable Long issueId) {
+        List<IssuePhoto> issuePhotos = issuePhotoRepository.findAllByIssueId(issueId);
+        return ResponseEntity.ok(issuePhotos);
+    }
 }
