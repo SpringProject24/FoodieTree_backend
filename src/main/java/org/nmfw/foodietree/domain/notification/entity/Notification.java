@@ -31,6 +31,7 @@ public class Notification {
     @Convert(converter = StringListConverter.class)
     private List<String> targetIdList; // 예약이면 예약ID, 리뷰면 리뷰ID
 
+    private String label; // 알림 내용의 prefix [예약] ...
     @Column(name = "notification_content")
     private String content; // 알림 내용
     private String isRead; // 알림 수신자의 열람 여부, null 또는 R

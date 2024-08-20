@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.nmfw.foodietree.domain.notification.dto.res.MessageDto;
-import org.nmfw.foodietree.domain.notification.entity.QNotification;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -20,12 +19,24 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
 
     @Override
     public List<MessageDto> findAllByReceiverId(String receiverId) {
-        return factory.select(Projections.constructor(MessageDto.class))
+        return factory
+                .select(Projections.fields(
+                        MessageDto.class,
+                        notification.notificationId.as("id"),
+                        notification.type.as("type"),
+                        notification.label.as("label"),
+                        notification.content.as("content"),
+                        notification.receiverId.as("receiverId"),
+                        notification.senderId.as("senderId"),
+                        notification.createdAt.as("createdAt")
+                ))
                 .from(notification)
                 .where(
-                    notification.receiverId.eq(receiverId)
-                    .and(notification.createdAt.lt(LocalDateTime.now().minusDays(3)))
-                    .or(notification.isRead.isNull())
+                        notification.receiverId.eq(receiverId)
+                        .and(
+                            notification.isRead.isNull()
+                            .or(notification.createdAt.goe(LocalDateTime.now().minusDays(3)))
+                        )
                 ).fetch();
     }
 }

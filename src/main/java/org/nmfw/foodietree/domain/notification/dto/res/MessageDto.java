@@ -20,6 +20,7 @@ public class MessageDto {
     private String receiverId; // 알림 받을 Id (customer, store ...)
     private String senderId; // 알림 보낸 Id (store, ...)
     private List<String> targetId; // 예약Id, 게시글Id 등
+    private String label; // [예약], [픽업확인] 등 메세지 prefix
     private String content; // 알림 내용
     private boolean isRead; // 알림 확인 여부
     @Setter
@@ -31,6 +32,7 @@ public class MessageDto {
                 .receiverId(this.receiverId)
                 .senderId(this.senderId)
                 .targetIdList(this.targetId)
+                .label(this.label)
                 .content(this.content)
                 .build();
     }

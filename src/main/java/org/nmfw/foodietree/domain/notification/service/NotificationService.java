@@ -30,7 +30,8 @@ public class NotificationService {
                 .type("RESERVATION_ADD")
                 .receiverId(customerId)
                 .senderId(storeId)
-                .content("[예약]" + dto.getStoreName() + " 스페셜팩 " +list.size()+ "개 예약하셨습니다.")
+                .label("예약")
+                .content(dto.getStoreName() + " 스페셜팩 " +list.size()+ "개 예약하셨습니다.")
                 .targetId(list)
                 .isRead(false)
                 .build();
@@ -38,7 +39,8 @@ public class NotificationService {
                 .type("RESERVATION_ADD")
                 .receiverId(storeId)
                 .senderId(customerId)
-                .content("[예약]" + customerId + " " + list.size()+"건")
+                .label("예약")
+                .content(customerId + " " + list.size()+"건")
                 .targetId(list)
                 .isRead(false)
                 .build();
@@ -59,7 +61,8 @@ public class NotificationService {
                 .type("RESERVATION_CANCEL")
                 .receiverId(customerId)
                 .senderId(storeId)
-                .content("[예약 취소]" + dto.getStoreName() + " 예약을 취소하셨습니다.")
+                .label("예약 취소")
+                .content(dto.getStoreName() + " 예약을 취소하셨습니다.")
                 .targetId(list)
                 .isRead(false)
                 .build();
@@ -67,7 +70,8 @@ public class NotificationService {
                 .type("RESERVATION_CANCEL")
                 .receiverId(storeId)
                 .senderId(customerId)
-                .content("[예약 취소‼️] " + customerId)
+                .label("예약 취소")
+                .content(customerId + "님 주문 취소‼️")
                 .targetId(list)
                 .isRead(false)
                 .build();
@@ -83,7 +87,8 @@ public class NotificationService {
                 .type("PICKUP_REVIEW")
                 .receiverId(customerId)
                 .senderId(storeId)
-                .content("[리뷰]" + dto.getStoreName() + " 리뷰를 남기면 뱃지를 드려요😉")
+                .label("리뷰")
+                .content(dto.getStoreName() + " 리뷰를 남기면 뱃지를 드려요😉")
                 .targetId(dto.getTargetId())
                 .isRead(false)
                 .build();
@@ -98,7 +103,8 @@ public class NotificationService {
                 .type("PICKUP_CONFIRM")
                 .receiverId(customerId)
                 .senderId(dto.getStoreId())
-                .content("[픽업 완료]" + dto.getStoreName() + " 맛있게 드세요! 🤤")
+                .label("픽업 완료")
+                .content(dto.getStoreName() + " 맛있게 드세요! 🤤")
                 .targetId(dto.getTargetId())
                 .isRead(false)
                 .build();
@@ -107,7 +113,9 @@ public class NotificationService {
     }
     // 리스트 조회
     public List<MessageDto> getList(String userId) {
-        return notificationRepository.findAllByReceiverId(userId);
+        List<MessageDto> list = notificationRepository.findAllByReceiverId(userId);
+        log.debug("\ngetList: {}", list);
+        return list;
     }
 
     public MessageDto saveEntityAndGetDto(MessageDto dto) {
