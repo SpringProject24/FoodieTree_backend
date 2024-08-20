@@ -88,7 +88,7 @@ public class NotificationService {
                 .receiverId(customerId)
                 .senderId(storeId)
                 .label("리뷰")
-                .content(dto.getStoreName() + " 스페셜팩 어떠셨나요? 리뷰로 공유해주세요 😉 ")
+                .content(dto.getStoreName() + " 어떠셨나요? 궁금해요 😉 ")
                 .targetId(dto.getTargetId())
                 .isRead(false)
                 .build();
@@ -127,13 +127,19 @@ public class NotificationService {
         log.debug("세이브엔터티 dto: {}", dto);
         return dto;
     }
-    // 하나의 알림을 읽음처리
+    // 개별 알림 읽음처리
     public boolean markOneAsRead(Long id) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 알림입니다."));
-        notification.setIsRead("y");
+        notification.setRead(true);
         Notification save = notificationRepository.save(notification);
         log.debug("\n읽음 처리 수정된 알림 {}",save);
         return true;
+    }
+    // 모든 알림 읽음처리 isRead -> true
+    public boolean markAllAsRead(List<Long> ids) {
+        Long resultCnt = notificationRepository.updateIsReadAll(ids);
+        if(resultCnt == ids.size()) return true;
+        else return false;
     }
 }
