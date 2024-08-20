@@ -46,7 +46,7 @@ public class ReservationController {
         List<ReservationDetailDto> reservations = customerMyPageService.getReservationList(customerId);
         return ResponseEntity.ok().body(reservations);
     }
-
+    
 
     /**
      * 특정 예약을 취소
@@ -54,12 +54,9 @@ public class ReservationController {
      * @return 취소 성공 여부
      */
     @PatchMapping("/cancel")
-    public ResponseEntity<?> cancelReservation(
-            @RequestParam long reservationId,
-            @AuthenticationPrincipal TokenUserInfo userInfo
-    ) {
+    public ResponseEntity<?> cancelReservation(@RequestParam long reservationId) {
         log.info("cancel reservation with ID: {}", reservationId);
-        boolean flag = reservationService.cancelReservation(reservationId, userInfo);
+        boolean flag = reservationService.cancelReservation(reservationId);
         return flag ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 

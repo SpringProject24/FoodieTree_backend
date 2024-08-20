@@ -69,9 +69,9 @@ public class AdminApprovalController {
     @PostMapping
     public ResponseEntity<?> approveStore(
             @RequestBody ApprovalStatusDto dto
-//            , @AuthenticationPrincipal TokenUserInfo userInfo
+            , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
-        TokenUserInfo userInfo = null;
+//        TokenUserInfo userInfo = null;
         Map<String, Object> result;
         try {
             result = adminApprovalService.updateApprovalsStatus(dto, userInfo);
