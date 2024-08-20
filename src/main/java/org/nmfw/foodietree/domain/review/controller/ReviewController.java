@@ -7,10 +7,7 @@ import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
 import org.nmfw.foodietree.domain.review.service.ReviewService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,9 +18,30 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
+    /**
+     *
+     * @param reservationId
+     * @return boolean
+     *
+     * 리뷰테이블에 예약번호가 있을 경우 (리뷰를 이미작성한 경우) : true
+     * 리뷰 테이블에 예약번호가 없을 경우 (리뷰를 작성하지 않은 경우) : false
+     */
+    @GetMapping("/check/{reservationId}")
+    public ResponseEntity<Boolean> checkReviewReservationId(@PathVariable Long reservationId) {
+        boolean isReviewExist = reviewService.isReviewExist(reservationId);
+        log.info("리뷰를 이미 작성했나요 ? {}",isReviewExist);
+        return ResponseEntity.ok(isReviewExist);
+    }
+
+    /**
+     *
+     * @param reviewSaveDto
+     * @param customerId
+     * @return
+     */
     @PostMapping("/save")
     public ResponseEntity<?> saveReview(@RequestBody ReviewSaveDto reviewSaveDto
-                                        , String customerId
+                                        , String customerId // 토ㅋ느 정보로 대체
 //            , @AuthenticationPrincipal TokenUserInfo tokenUserInfo
     ) {
         // 예약 아이디로 이미 작성된 아이디 인지 확인

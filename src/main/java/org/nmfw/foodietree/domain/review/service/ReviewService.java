@@ -43,16 +43,13 @@ public class ReviewService {
 //                                 ,@AuthenticationPrincipal TokenUserInfo tokenUserInfo
         ) {
 
-            // hard coding
-            String customerId = "sinyunjong@gmail.com";
-
             // Reservation과 Product 객체를 가져와야 함
             Reservation reservation = reservationRepository.findById(reviewSaveDto.getReservationId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
             Product product = productRepository.findById(reservation.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 제품이 존재하지 않습니다."));
 //            Customer customer = customerRepository.findByCustomerId(tokenUserInfo.getUsername())
-            Customer customer = customerRepository.findByCustomerId(customerId)
+            Customer customer = customerRepository.findByCustomerId(reviewSaveDto.getCustomerId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
             // Review 객체 생성
