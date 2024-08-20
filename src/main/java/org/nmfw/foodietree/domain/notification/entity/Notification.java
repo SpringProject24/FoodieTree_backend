@@ -34,6 +34,7 @@ public class Notification {
     private String label; // 알림 내용의 prefix [예약] ...
     @Column(name = "notification_content")
     private String content; // 알림 내용
+    @Setter
     private String isRead; // 알림 수신자의 열람 여부, null 또는 R
 
     @CreationTimestamp

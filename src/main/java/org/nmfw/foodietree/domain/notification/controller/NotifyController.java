@@ -7,9 +7,7 @@ import org.nmfw.foodietree.domain.notification.dto.res.MessageDto;
 import org.nmfw.foodietree.domain.notification.service.NotificationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +30,17 @@ public class NotifyController {
         List<MessageDto> list = notificationService.getList(userEmail);
 
         return ResponseEntity.ok().body(list);
+    }
+
+    @PatchMapping("/{id}/read")
+    public ResponseEntity<?> markOneAsRead(@PathVariable Long id) {
+        try {
+            // 알림 읽음 처리
+            boolean b = notificationService.markOneAsRead(id);
+            return b ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("알림 읽음 처리 중 오류 발생");
+        }
     }
 
 }

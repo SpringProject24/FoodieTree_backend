@@ -31,7 +31,7 @@ public class NotificationService {
                 .receiverId(customerId)
                 .senderId(storeId)
                 .label("예약")
-                .content(dto.getStoreName() + " 스페셜팩 " +list.size()+ "개 예약하셨습니다.")
+                .content(dto.getStoreName() + " 스페셜팩 " +list.size()+ "개 예약하셨습니다. ")
                 .targetId(list)
                 .isRead(false)
                 .build();
@@ -62,7 +62,7 @@ public class NotificationService {
                 .receiverId(customerId)
                 .senderId(storeId)
                 .label("예약 취소")
-                .content(dto.getStoreName() + " 예약을 취소하셨습니다.")
+                .content(dto.getStoreName() + " 예약을 취소하셨습니다. ")
                 .targetId(list)
                 .isRead(false)
                 .build();
@@ -71,7 +71,7 @@ public class NotificationService {
                 .receiverId(storeId)
                 .senderId(customerId)
                 .label("예약 취소")
-                .content(customerId + "님 주문 취소‼️")
+                .content(customerId + "님 주문 취소‼️ ")
                 .targetId(list)
                 .isRead(false)
                 .build();
@@ -88,7 +88,7 @@ public class NotificationService {
                 .receiverId(customerId)
                 .senderId(storeId)
                 .label("리뷰")
-                .content(dto.getStoreName() + " 리뷰를 남기면 뱃지를 드려요😉")
+                .content(dto.getStoreName() + " 스페셜팩 어떠셨나요? 리뷰로 공유해주세요 😉 ")
                 .targetId(dto.getTargetId())
                 .isRead(false)
                 .build();
@@ -104,7 +104,7 @@ public class NotificationService {
                 .receiverId(customerId)
                 .senderId(dto.getStoreId())
                 .label("픽업 완료")
-                .content(dto.getStoreName() + " 맛있게 드세요! 🤤")
+                .content(dto.getStoreName() + " 맛있게 드세요! 🤤 ")
                 .targetId(dto.getTargetId())
                 .isRead(false)
                 .build();
@@ -124,7 +124,16 @@ public class NotificationService {
         if(save == null) throw new RuntimeException("알림 처리 실패");
         dto.setId(save.getNotificationId());
         dto.setCreatedAt(save.getCreatedAt());
+        log.debug("세이브엔터티 dto: {}", dto);
         return dto;
     }
-
+    // 하나의 알림을 읽음처리
+    public boolean markOneAsRead(Long id) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 알림입니다."));
+        notification.setIsRead("y");
+        Notification save = notificationRepository.save(notification);
+        log.debug("\n읽음 처리 수정된 알림 {}",save);
+        return true;
+    }
 }
