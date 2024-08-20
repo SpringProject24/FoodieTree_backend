@@ -1,7 +1,6 @@
 package org.nmfw.foodietree.domain.review.entity;
 
 import lombok.*;
-import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 

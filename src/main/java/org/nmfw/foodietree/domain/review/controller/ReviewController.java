@@ -2,9 +2,7 @@ package org.nmfw.foodietree.domain.review.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
-import org.nmfw.foodietree.domain.review.dto.res.ReviewDetailDto;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
@@ -21,7 +19,6 @@ import java.util.List;
 @RequestMapping("/review")
 public class ReviewController {
     private final ReviewService reviewService;
-
     /**
      *
      * @param reservationId
@@ -56,24 +53,20 @@ public class ReviewController {
             // 이미 리뷰가 작성된 경우 bad request
             return ResponseEntity.badRequest().body("이미 작성된 리뷰가 있습니다.");
         } else {
-
             // 별점은 1점 이상인지 확인
             Integer reviewScore = reviewSaveDto.getReviewScore();
             if(reviewScore < 1) {
                 return ResponseEntity.badRequest().body("별점은 최소 1점 이상 이어야 합니다.");
             }
-
             // 해시태그가 최소 3개 이상인지 확인
             List<Hashtag> hashtags = reviewSaveDto.getHashtags();
             if (hashtags.size() < 3) {
                 return ResponseEntity.badRequest().body("최소 3개의 해시태그를 선택해야 합니다.");
             }
-
             // 리뷰 저장
             Review savedReview = reviewService.saveReview(reviewSaveDto,tokenUserInfo);
             // 로그로 저장한 값 확인
             log.debug("Saved Review: {}", savedReview);
-
             // 해시태그 저장
             reviewService.saveReviewHashtags(savedReview, hashtags);
 
@@ -87,6 +80,7 @@ public class ReviewController {
 
         return ResponseEntity.ok(all);
     }
+
 }
 
 

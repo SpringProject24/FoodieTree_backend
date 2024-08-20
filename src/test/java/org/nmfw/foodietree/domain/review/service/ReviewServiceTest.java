@@ -48,6 +48,8 @@ class ReviewServiceTest {
                 , new TokenUserInfo("customer", "sinyunjong@gmail.com", LocalDateTime.of(2024, 8, 30, 12, 12))
         );
 
+        System.out.println("savedReview = " + savedReview);
+
         // Then
         assertThat(savedReview).isNotNull();
         assertThat(savedReview.getReviewScore()).isEqualTo(5);
