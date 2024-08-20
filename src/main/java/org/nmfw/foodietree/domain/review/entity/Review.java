@@ -10,11 +10,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "tbl_review")
-@ToString(exclude = {"customer", "reservation", "product"})
+@ToString(exclude = {"reservation", "product"})
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(of = "reviewId") // ID 기반으로 비교
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +28,10 @@ public class Review {
     private Reservation reservation;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
-    private Customer customer;
+//    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "customer_id", nullable = false)
+//    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+    private String customerId;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)

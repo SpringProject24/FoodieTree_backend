@@ -2,11 +2,15 @@ package org.nmfw.foodietree.domain.review.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
+import org.nmfw.foodietree.domain.review.dto.res.ReviewDetailDto;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
 import org.nmfw.foodietree.domain.review.service.ReviewService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,20 +41,27 @@ public class ReviewController {
      *
      * @param reviewSaveDto
      * @param customerId
-     * @return
+     * @return 리뷰아이디가 이미있는경우, 없는경우
      */
     @PostMapping("/save")
     public ResponseEntity<?> saveReview(@RequestBody ReviewSaveDto reviewSaveDto
-                                        , String customerId // 토ㅋ느 정보로 대체
-//            , @AuthenticationPrincipal TokenUserInfo tokenUserInfo
+//                                        , String customerId // 토큰 정보로 대체
+            , @AuthenticationPrincipal TokenUserInfo tokenUserInfo
     ) {
         // 예약 아이디로 이미 작성된 아이디 인지 확인
         boolean isReviewExist = reviewService.isReviewExist(reviewSaveDto.getReservationId());
 
         if (isReviewExist) {
-            // 이미 리뷰가 작성된 경우
+
+            // 이미 리뷰가 작성된 경우 bad request
             return ResponseEntity.badRequest().body("이미 작성된 리뷰가 있습니다.");
         } else {
+
+            // 별점은 1점 이상인지 확인
+            Integer reviewScore = reviewSaveDto.getReviewScore();
+            if(reviewScore < 1) {
+                return ResponseEntity.badRequest().body("별점은 최소 1점 이상 이어야 합니다.");
+            }
 
             // 해시태그가 최소 3개 이상인지 확인
             List<Hashtag> hashtags = reviewSaveDto.getHashtags();
@@ -59,9 +70,7 @@ public class ReviewController {
             }
 
             // 리뷰 저장
-            Review savedReview = reviewService.saveReview(reviewSaveDto
-//                    , tokenUserInfo
-            );
+            Review savedReview = reviewService.saveReview(reviewSaveDto,tokenUserInfo);
             // 로그로 저장한 값 확인
             log.debug("Saved Review: {}", savedReview);
 
@@ -70,6 +79,13 @@ public class ReviewController {
 
             return ResponseEntity.ok(savedReview);
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllReviews () {
+        List<Review> all = reviewService.findAll();
+
+        return ResponseEntity.ok(all);
     }
 }
 

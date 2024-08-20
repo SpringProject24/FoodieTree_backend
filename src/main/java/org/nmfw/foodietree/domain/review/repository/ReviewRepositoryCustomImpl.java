@@ -22,7 +22,7 @@ public class ReviewRepositoryCustomImpl  implements ReviewRepositoryCustom{
 
         // BooleanBuilder를 사용하여 조건을 동적으로 생성
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(review.reservation.reservationId.eq(reservationId));
+        builder.and(review.reservation.reservationId.isNull());
 
         // 쿼리 실행
         long count = jpaQueryFactory

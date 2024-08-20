@@ -45,7 +45,7 @@ class ReviewServiceTest {
 
         // When
         Review savedReview = reviewService.saveReview(reviewSaveDto
-//                , new TokenUserInfo("customer", "test@test.com", LocalDateTime.of(2024, 8, 30, 12, 12))
+                , new TokenUserInfo("customer", "sinyunjong@gmail.com", LocalDateTime.of(2024, 8, 30, 12, 12))
         );
 
         // Then
@@ -74,7 +74,7 @@ class ReviewServiceTest {
 
         //when
         Review savedReview = reviewService.saveReview(reviewSaveDto
-//                , new TokenUserInfo("customer", "test@test.com", LocalDateTime.of(2024, 8, 30, 12, 12))
+                , new TokenUserInfo("customer", "sinyunjong@gmail.com", LocalDateTime.of(2024, 8, 30, 12, 12))
         );
 
         //then

@@ -40,7 +40,7 @@ public class ReviewService {
         }
 
         public Review saveReview(ReviewSaveDto reviewSaveDto
-//                                 ,@AuthenticationPrincipal TokenUserInfo tokenUserInfo
+                                 ,@AuthenticationPrincipal TokenUserInfo tokenUserInfo
         ) {
 
             // Reservation과 Product 객체를 가져와야 함
@@ -48,14 +48,14 @@ public class ReviewService {
                     .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
             Product product = productRepository.findById(reservation.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 제품이 존재하지 않습니다."));
-//            Customer customer = customerRepository.findByCustomerId(tokenUserInfo.getUsername())
-            Customer customer = customerRepository.findByCustomerId(reviewSaveDto.getCustomerId())
+            Customer customerId = customerRepository.findByCustomerId(tokenUserInfo.getUsername())
+//            String customerId = customerRepository.findByCustomerId(reviewSaveDto.getCustomerId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
             // Review 객체 생성
             Review review = Review.builder()
                     .reservation(reservation)
-                    .customer(customer)
+                    .customerId(String.valueOf(customerId))
                     .product(product)
                     .storeName(product.getStoreId())
                     .storeImg(reviewSaveDto.getStoreImg())
@@ -81,5 +81,10 @@ public class ReviewService {
                             .review(review) // 리뷰 저장
                     .build());
         }
+    }
+
+    // 모든 리뷰 리스트로 찾기
+    public List<Review> findAll() {
+            return reviewRepository.findAll();
     }
 }
