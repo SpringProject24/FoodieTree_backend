@@ -3,7 +3,6 @@ package org.nmfw.foodietree.domain.review.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
-import org.nmfw.foodietree.domain.customer.entity.Customer;
 import org.nmfw.foodietree.domain.customer.repository.CustomerRepository;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
@@ -107,5 +106,18 @@ public class ReviewService {
 
 
         return storeDetails;
+    }
+
+    /**
+     * reservationId가 주어진 조건을 모두 만족하는지 확인
+     * @param reservationId
+     * @return true if the reservation exists and matches the conditions, otherwise false
+     */
+    public boolean isReservationValid(Long reservationId) {
+        // 구매, 픽업 완료한 예약 건 구분
+        boolean reservationValid = reservationRepository.isReservationValid(reservationId);
+
+        // 예약이 존재하고 조건을 모두 만족하면 true 반환
+        return reservationValid;
     }
 }

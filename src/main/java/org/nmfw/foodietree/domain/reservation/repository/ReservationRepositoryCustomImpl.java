@@ -13,6 +13,7 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
+import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.springframework.stereotype.Repository;
@@ -197,5 +198,21 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                 .innerJoin(store).on(product.storeId.eq(store.storeId))
                 .where(reservation.paymentId.eq(paymentId))
                 .fetch();
+    }
+
+    // 구매, 픽업 완료한 예약 건인지 예약 아이디로 판단
+    @Override
+    public boolean isReservationValid(Long reservationId) {
+        QReservation reservation = QReservation.reservation;
+
+        Reservation result = factory
+                .selectFrom(reservation)
+                .where(reservation.reservationId.eq(reservationId)
+                        .and(reservation.cancelReservationAt.isNull())
+                        .and(reservation.pickedUpAt.isNotNull()))
+                .fetchOne();
+
+        // null 값이 아닐때만 true 반환
+        return result != null;
     }
 }
