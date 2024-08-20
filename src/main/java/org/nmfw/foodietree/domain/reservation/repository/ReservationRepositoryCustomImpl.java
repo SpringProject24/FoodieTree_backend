@@ -208,8 +208,8 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
         Reservation result = factory
                 .selectFrom(reservation)
                 .where(reservation.reservationId.eq(reservationId)
-                        .and(reservation.cancelReservationAt.isNull())
-                        .and(reservation.pickedUpAt.isNotNull()))
+                        .and(reservation.cancelReservationAt.isNull()) // 취소가 되지 않은 건
+                        .and(reservation.pickedUpAt.isNotNull())) // 픽업이 완료된 건
                 .fetchOne();
 
         // null 값이 아닐때만 true 반환

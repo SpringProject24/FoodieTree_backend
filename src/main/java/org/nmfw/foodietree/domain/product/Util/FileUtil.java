@@ -3,9 +3,12 @@ package org.nmfw.foodietree.domain.product.Util;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -79,4 +82,29 @@ public class FileUtil {
     private static String len2(int n) {
         return new DecimalFormat("00").format(n);
     }
-}
+
+    // Base64 문자열을 파일로 변환하기
+    public static void saveImageFromBase64(String base64String, String filePath) {
+        if (base64String == null || base64String.isEmpty()) {
+            return;
+        }
+
+        try {
+            // Base64 데이터에서 메타데이터 부분 제거 (data:image/jpeg;base64,)
+            String base64Data = base64String.split(",")[1];
+
+            // Base64 디코딩
+            byte[] imageBytes = Base64.getDecoder().decode(base64Data);
+
+            // 파일로 저장
+            File imageFile = new File(filePath);
+            imageFile.getParentFile().mkdirs(); // 파일의 부모 디렉토리 생성
+
+            try (OutputStream os = new FileOutputStream(imageFile)) {
+                os.write(imageBytes);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    }

@@ -3,13 +3,16 @@ package org.nmfw.foodietree.domain.review.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
+import org.nmfw.foodietree.domain.product.Util.FileUtil;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
 import org.nmfw.foodietree.domain.review.service.ReviewService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,6 +37,10 @@ public class ReviewController {
         return ResponseEntity.ok(isReviewExist);
     }
 
+    // 이미지 저장 경로
+    @Value("${env.upload.path}")
+    private String uploadDir;
+
     /**
      *
      * @param reviewSaveDto
@@ -41,8 +48,23 @@ public class ReviewController {
      * @return 리뷰아이디가 이미있는경우, 없는경우
      */
     @PostMapping("/save")
-    public ResponseEntity<?> saveReview(@RequestBody ReviewSaveDto reviewSaveDto,
+    public ResponseEntity<?> saveReview(@RequestBody ReviewSaveDto reviewSaveDto, MultipartFile reviewImg,
                                         @AuthenticationPrincipal TokenUserInfo tokenUserInfo) {
+
+//        if (reviewImg != null && !reviewImg.isEmpty()) {
+//            // MultipartFile을 사용한 이미지저장
+//            String imagePath = reviewService.uploadReviewImage(reviewImg);
+//            if (imagePath != null) {
+//            reviewSaveDto.setReviewImg(imagePath);
+//            }
+//            } else //저장 안됨
+            if (reviewSaveDto.getReviewImg() != null && !reviewSaveDto.getReviewImg().isEmpty()) {
+            // Base64 문자열을 사용한 이미지 저장
+            String imagePath = uploadDir + "reviewImg_" + System.currentTimeMillis() + ".jpg";
+            FileUtil.saveImageFromBase64(reviewSaveDto.getReviewImg(), imagePath);
+            reviewSaveDto.setReviewImg(imagePath);
+            }
+
         // 예약 아이디로 이미 작성된 아이디인지 확인
         boolean isReviewExist = reviewService.isReviewExist(reviewSaveDto.getReservationId());
 
@@ -74,6 +96,7 @@ public class ReviewController {
                 log.warn("Error: {}", errorMessage);
                 return ResponseEntity.badRequest().body(errorMessage);
             }
+
             // 리뷰 저장
             Review savedReview = reviewService.saveReview(reviewSaveDto, tokenUserInfo);
             // 로그로 저장한 값 확인

@@ -87,7 +87,7 @@ class ReviewControllerTest {
 
         // 응답 본문 출력
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("***************************************");
+        System.out.println("**************x*************************");
         System.out.println("응답 본문 = " + responseBody);
         System.out.println("***************************************");
     }

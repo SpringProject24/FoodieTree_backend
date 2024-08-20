@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.review.dto.res;
 
 import lombok.*;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

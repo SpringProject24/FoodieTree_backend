@@ -3,7 +3,9 @@ package org.nmfw.foodietree.domain.review.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
+import org.nmfw.foodietree.domain.customer.dto.resp.UpdateDto;
 import org.nmfw.foodietree.domain.customer.repository.CustomerRepository;
+import org.nmfw.foodietree.domain.product.Util.FileUtil;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
@@ -16,10 +18,14 @@ import org.nmfw.foodietree.domain.review.entity.ReviewHashtag;
 import org.nmfw.foodietree.domain.review.repository.ReviewHashtagRepository;
 import org.nmfw.foodietree.domain.review.repository.ReviewRepository;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,14 +43,23 @@ public class ReviewService {
     private final CustomerRepository customerRepository;
     private final StoreRepository storeRepository;
 
+
+    // 이미지 저장 경로
+    @Value("${env.upload.path}")
+    private String uploadDir;
+
     public boolean isReviewExist(Long reservationId) {
         return reviewRepository.existByReservationId(reservationId);
     }
 
+    public String uploadReviewImage(MultipartFile reviewImg) {
+        return FileUtil.uploadFile(uploadDir, reviewImg);
+    }
+
+
     public Review saveReview(ReviewSaveDto reviewSaveDto
             , @AuthenticationPrincipal TokenUserInfo tokenUserInfo
     ) {
-
         // Reservation과 Product 객체를 가져와야 함
         Reservation reservation = reservationRepository.findById(reviewSaveDto.getReservationId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
@@ -75,6 +90,7 @@ public class ReviewService {
         return savedReview;
     }
 
+
     // 해시태그 저장 로직
     public void saveReviewHashtags(Review review, List<Hashtag> hashtags) {
         for (Hashtag hashtag : hashtags) {
@@ -83,11 +99,6 @@ public class ReviewService {
                     .review(review) // 리뷰 저장
                     .build());
         }
-    }
-
-    // 모든 리뷰 리스트로 찾기
-    public List<Review> findAll() {
-        return reviewRepository.findAll();
     }
 
     // 예약정보에 담긴 값들 찾기
@@ -115,9 +126,14 @@ public class ReviewService {
      */
     public boolean isReservationValid(Long reservationId) {
         // 구매, 픽업 완료한 예약 건 구분
-        boolean reservationValid = reservationRepository.isReservationValid(reservationId);
-
         // 예약이 존재하고 조건을 모두 만족하면 true 반환
-        return reservationValid;
+        return reservationRepository.isReservationValid(reservationId);
+
+    }
+
+
+    // 모든 리뷰 리스트로 찾기
+    public List<Review> findAll() {
+        return reviewRepository.findAll();
     }
 }
