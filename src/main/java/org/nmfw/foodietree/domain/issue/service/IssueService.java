@@ -9,6 +9,7 @@ import org.nmfw.foodietree.domain.issue.entity.Issue;
 import org.nmfw.foodietree.domain.issue.entity.IssuePhoto;
 import org.nmfw.foodietree.domain.issue.repository.IssuePhotoRepository;
 import org.nmfw.foodietree.domain.issue.repository.IssueRepository;
+import org.nmfw.foodietree.domain.issue.repository.IssueRepositoryCustom;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class IssueService {
 
     private final IssueRepository issueRepository;
+    private final IssueRepositoryCustom issueRepositoryCustom;
     private final IssuePhotoRepository issuePhotoRepository;
 
     public List<IssueDto> getIssues() {
@@ -68,5 +70,12 @@ public class IssueService {
                 .issueCategory(IssueCategory.fromString(issueCategory).toString())
                 .build();
         issueRepository.save(issue);
+    }
+
+    public void updateCategory(Long issueId, String issueCategory) {
+        log.info("updateCategory");
+        log.info("issueId : {}", issueId);
+        log.info("issueCategory : {}", issueCategory);
+        issueRepositoryCustom.updateCategory(issueId, issueCategory);
     }
 }

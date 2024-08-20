@@ -135,24 +135,30 @@ public class IssueController {
     public ResponseEntity<?> updateIssuePhoto(@RequestParam("files") List<MultipartFile> files, @RequestParam Long issueId) {
         List<String> fileUrls = new ArrayList<>();
 
+        // 파일을 서버에 저장하고 URL을 모은다.
         for (MultipartFile file : files) {
             try {
                 String fileUrl = FileUtil.uploadFile(rootPath, file);
                 fileUrls.add(fileUrl);
-
-                issuePhotoRepository.saveAll(fileUrls.stream()
-                        .map(url -> IssuePhoto.builder()
-                                .issueId(issueId)
-                                .issuePhoto(url)
-                                .build())
-                        .collect(Collectors.toList()));
-
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 실패: " + file.getOriginalFilename());
             }
         }
 
+        // 모든 파일 URL을 DB에 저장한다.
+        try {
+            List<IssuePhoto> issuePhotos = fileUrls.stream()
+                    .map(url -> IssuePhoto.builder()
+                            .issueId(issueId)
+                            .issuePhoto(url)
+                            .build())
+                    .collect(Collectors.toList());
+
+            issuePhotoRepository.saveAll(issuePhotos);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("데이터베이스 저장 실패");
+        }
+
         return ResponseEntity.ok(fileUrls);
     }
-
 }

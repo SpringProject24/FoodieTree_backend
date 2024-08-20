@@ -12,4 +12,6 @@ public interface IssueRepositoryCustom{
      * @return 이슈와 사진을 함께 조회한 결과 dto
      */
     List<IssueWithPhotoDto> findIssueWithPhoto();
+
+    void updateCategory(Long issueId, String issueCategory);
 }
