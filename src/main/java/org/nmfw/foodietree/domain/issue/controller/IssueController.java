@@ -10,14 +10,16 @@ import org.nmfw.foodietree.domain.issue.entity.IssuePhoto;
 import org.nmfw.foodietree.domain.issue.repository.IssuePhotoRepository;
 import org.nmfw.foodietree.domain.issue.repository.IssueRepository;
 import org.nmfw.foodietree.domain.issue.service.IssueService;
+import org.nmfw.foodietree.domain.product.Util.FileUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,12 +34,25 @@ public class IssueController {
     private final IssueRepository issueRepository;
     private final IssuePhotoRepository issuePhotoRepository;
 
+    @Value("${file.upload.root-path}")
+    private String rootPath;
+
+
     @GetMapping
     public ResponseEntity<?> issue() {
         log.info("get issues");
         List<IssueDto> issues = issueService.getIssues();
         log.info("issues : {}", issues);
         return ResponseEntity.ok().body(issues);
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<?> issueDetail(@RequestParam String issueId) {
+        log.info("get issue detail");
+        Long issueId1 = Long.valueOf(issueId);
+        Issue issue1 = issueRepository.findById(issueId1).orElseThrow(() -> new IllegalArgumentException("해당 이슈가 존재하지 않습니다."));
+        IssueDto issueDto = new IssueDto(issue1);
+        return ResponseEntity.ok().body(issueDto);
     }
 
     @PostMapping
@@ -97,31 +112,47 @@ public class IssueController {
         return ResponseEntity.ok().body(true);
     }
 
-    @PostMapping("/text")
+    @PostMapping("/saveText")
     public ResponseEntity<?> updateIssueText(@RequestBody Map<String, String> issue) {
         Long issueId = Long.valueOf(issue.get("issueId"));
         String issueText = issue.get("issueText");
+        String done = issue.get("done");
         Issue issue1 = issueRepository.findById(issueId).orElseThrow(() -> new IllegalArgumentException("해당 이슈가 존재하지 않습니다."));
 
         issue1.setIssueText(issueText);
+
+        if(done.equals("cancel")){
+            issue1.setCancelIssueAt(LocalDateTime.now());
+        }else{
+            issue1.setIssueCompleteAt(LocalDateTime.now());
+        }
 
         issueRepository.save(issue1);
         return ResponseEntity.ok().body(true);
     }
 
-    @PostMapping("/photo")
-    public ResponseEntity<?> updateIssuePhoto(@RequestBody IssueWithPhotoDto issue) {
-        Long issueId = issue.getIssueId();
-        List<String> issuePhoto = issue.getIssuePhotos();
+    @PostMapping("/uploadPhoto")
+    public ResponseEntity<?> updateIssuePhoto(@RequestParam("files") List<MultipartFile> files, @RequestParam Long issueId) {
+        List<String> fileUrls = new ArrayList<>();
 
-        issuePhotoRepository.saveAll(issuePhoto.stream()
-                .map(photo -> IssuePhoto.builder()
-                        .issueId(issueId)
-                        .issuePhoto(photo)
-                        .build())
-                .collect(Collectors.toList()));
+        for (MultipartFile file : files) {
+            try {
+                String fileUrl = FileUtil.uploadFile(rootPath, file);
+                fileUrls.add(fileUrl);
 
-        return ResponseEntity.ok().body(true);
+                issuePhotoRepository.saveAll(fileUrls.stream()
+                        .map(url -> IssuePhoto.builder()
+                                .issueId(issueId)
+                                .issuePhoto(url)
+                                .build())
+                        .collect(Collectors.toList()));
+
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 실패: " + file.getOriginalFilename());
+            }
+        }
+
+        return ResponseEntity.ok(fileUrls);
     }
 
 }

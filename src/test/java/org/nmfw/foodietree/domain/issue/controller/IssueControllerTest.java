@@ -31,4 +31,14 @@ class IssueControllerTest {
         //then
         System.out.println("issue1 = " + issue1);
     }
+
+    @Test
+    @DisplayName("이슈 카테고리 수정 테스트")
+    void updateCategoryTest() {
+        //given
+
+        //when
+        issueController.updateIssueCategory(Map.of("issueId", "7", "issueCategory", "가게"));
+        //then
+    }
 }
