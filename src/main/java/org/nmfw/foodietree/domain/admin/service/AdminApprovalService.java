@@ -33,38 +33,15 @@ public class AdminApprovalService {
 
     private final StoreApprovalRepository storeApprovalRepository;
 
-    // 페이징 된 요청 리스트
-//    public Map<String, Object> getApprovals(
-//            int page,
-//            TokenUserInfo userInfo
-//    ) {
-////        if(!isAdmin(userInfo)) {
-////            throw new RuntimeException("관리자 권한이 없습니다.");
-////        }
-//        Pageable pageable = PageRequest.of(page, 10);
-//
-//        ApproveStatus approveStatus = ApproveStatus.APPROVED;
-//        Page<ApprovalInfoDto> approvalsPage = storeApprovalRepository.findApprovalsByStatus(pageable, approveStatus);
-//        List<ApprovalInfoDto> approvals = approvalsPage.getContent();
-//
-//        // 총 개수
-//        long totalElements = approvalsPage.getTotalElements();
-//
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("approvals", approvals);
-//        map.put("totalCount", totalElements);
-//
-//        return map;
-//    }
     // 기간 기준으로 필터링 된 요청 리스트
     public Map<String, Object> getApprovals(
             LocalDateTime start
             , LocalDateTime end
-//            , TokenUserInfo userInfo
+            , TokenUserInfo userInfo
     ) {
-//        if(!isAdmin(userInfo)) {
-//            throw new RuntimeException("관리자 권한이 없습니다.");
-//        }
+        if(!isAdmin(userInfo)) {
+            throw new RuntimeException("관리자 권한이 없습니다.");
+        }
         LocalDateTime startDate = timeConverter(start, "start");
         LocalDateTime endDate = timeConverter(end, "end");
 
@@ -97,10 +74,9 @@ public class AdminApprovalService {
             ApprovalStatusDto dto,
             TokenUserInfo userInfo
     ) {
-        // 관리자가 아닌 경우 BadRequest
-//        if(!isAdmin(userInfo)) {
-//            throw new RuntimeException("관리자 권한이 없습니다.");
-//        }
+        if(!isAdmin(userInfo)) {
+            throw new RuntimeException("관리자 권한이 없습니다.");
+        }
         ApproveStatus status = ApproveStatus.valueOf(dto.getActionType().toUpperCase());
 
         List<Long> approvalIdList = dto.getApprovalIdList();

@@ -7,11 +7,8 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.notification.dto.req.NotificationDataDto;
 import org.nmfw.foodietree.domain.notification.service.NotificationService;
-import org.nmfw.foodietree.domain.product.entity.Product;
-import org.nmfw.foodietree.domain.product.repository.ProductRepository;
 import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentResponseDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
@@ -20,9 +17,6 @@ import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.entity.value.PaymentStatus;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
-import org.nmfw.foodietree.domain.store.entity.Store;
-import org.nmfw.foodietree.domain.store.repository.StoreRepository;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +32,6 @@ import java.time.LocalDateTime;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final NotificationService notificationService;
-    private final TaskScheduler taskScheduler;
 
     @Value("${env.payment.api.url}")
     private String apiUrl;
@@ -92,7 +85,8 @@ public class ReservationService {
                     .build();
             notificationService.sendPickupConfirm(dto);
             // 30분 후 리뷰 알림 예약
-            scheduleReviewRequest(dto);
+            // 30분 후 리뷰 알림 예약을 NotificationService로 이동
+            notificationService.scheduleReviewRequest(dto);
             return true;
         }
 
@@ -232,15 +226,5 @@ public class ReservationService {
         return PaymentStatus.INCONSISTENCY;
     }
 
-    /**
-     * 픽업 완료 30분 후 리뷰알림 발송 예약
-     * @param dto - 알림에 필요한 정보
-     */
-    private void scheduleReviewRequest(NotificationDataDto dto) {
-//        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(30);
-        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(1);
-        ZoneId zoneId = ZoneId.of("Asia/Seoul");
-        Date targetDate = Date.from(targetTime.atZone(zoneId).toInstant());
-        taskScheduler.schedule(() -> notificationService.sendReviewRequest(dto), targetDate);
-    }
+
 }

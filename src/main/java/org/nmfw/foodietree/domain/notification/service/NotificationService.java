@@ -6,20 +6,34 @@ import org.nmfw.foodietree.domain.notification.dto.req.NotificationDataDto;
 import org.nmfw.foodietree.domain.notification.dto.res.MessageDto;
 import org.nmfw.foodietree.domain.notification.entity.Notification;
 import org.nmfw.foodietree.domain.notification.repository.NotificationRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 @Slf4j
 public class NotificationService {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final NotificationRepository notificationRepository;
+    private final TaskScheduler notificationTaskScheduler;
+
+    public NotificationService(SimpMessagingTemplate messagingTemplate,
+               NotificationRepository notificationRepository,
+               @Qualifier("notificationTaskScheduler")TaskScheduler notificationTaskScheduler) {
+        this.messagingTemplate = messagingTemplate;
+        this.notificationRepository = notificationRepository;
+        this.notificationTaskScheduler = notificationTaskScheduler;
+    }
+
 
     // 예약 추가 시 예약고객 및 가게에 알림 발송
     public void sendCreatedReservationAlert(NotificationDataDto dto) {
@@ -141,5 +155,17 @@ public class NotificationService {
         Long resultCnt = notificationRepository.updateIsReadAll(ids);
         if(resultCnt == ids.size()) return true;
         else return false;
+    }
+
+    /**
+     * 픽업 완료 30분 후 리뷰알림 발송 예약
+     * @param dto - 알림에 필요한 정보
+     */
+    public void scheduleReviewRequest(NotificationDataDto dto) {
+//        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(30);
+        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(1);
+        ZoneId zoneId = ZoneId.of("Asia/Seoul");
+        Date targetDate = Date.from(targetTime.atZone(zoneId).toInstant());
+        notificationTaskScheduler.schedule(() -> sendReviewRequest(dto), targetDate);
     }
 }

@@ -44,7 +44,7 @@ public class AdminApprovalController {
             @RequestParam(value = "end", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             LocalDateTime end
-//          , @AuthenticationPrincipal TokenUserInfo userInfo
+          , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
         if (start == null) {start = LocalDateTime.of(2024, 7, 1, 0, 0, 0);
         }
@@ -53,11 +53,7 @@ public class AdminApprovalController {
         }
         log.info("관리자 - 승인요청 : 시작일 {} / 종료일 {}", start, end );
 
-        Map<String, Object> approvalsMap = adminApprovalService.getApprovals(
-                start
-                , end
-//                , userInfo
-        );
+        Map<String, Object> approvalsMap = adminApprovalService.getApprovals(start, end, userInfo);
         log.info("조회 결과: {}", approvalsMap.get("approvals").toString());
 
         return ResponseEntity.ok().body(approvalsMap);
@@ -71,7 +67,6 @@ public class AdminApprovalController {
             @RequestBody ApprovalStatusDto dto
             , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
-//        TokenUserInfo userInfo = null;
         Map<String, Object> result;
         try {
             result = adminApprovalService.updateApprovalsStatus(dto, userInfo);
