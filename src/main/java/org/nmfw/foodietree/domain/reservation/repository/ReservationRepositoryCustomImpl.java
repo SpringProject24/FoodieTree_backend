@@ -13,6 +13,7 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
+import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,7 @@ import java.util.List;
 import static org.nmfw.foodietree.domain.customer.entity.QCustomer.customer;
 import static org.nmfw.foodietree.domain.product.entity.QProduct.product;
 import static org.nmfw.foodietree.domain.reservation.entity.QReservation.reservation;
+import static org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect.reservationSubSelect;
 import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 
 @Repository
@@ -128,7 +130,7 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
     // 예약 가능 제품 조회
     @Override
     public List<ReservationFoundStoreIdDto> findByStoreIdLimit(String storeId, int cnt) {
-        QReservation r = reservation;
+        QReservationSubSelect r = reservationSubSelect;
         QProduct p = product;
 
         BooleanExpression condition = p.storeId.eq(storeId)
@@ -146,8 +148,8 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                         product.storeId,
                         product.productId))
                 .from(product)
-                .leftJoin(reservation).on(p.productId.eq(r.productId))
-                .where(condition.and(reservation.rowNum.eq(1L)))
+                .leftJoin(reservationSubSelect).on(p.productId.eq(r.productId))
+                .where(condition.and(r.rowNum.isNull().or(r.rowNum.eq(1L))))
                 .limit(cnt)
                 .fetch();
     }

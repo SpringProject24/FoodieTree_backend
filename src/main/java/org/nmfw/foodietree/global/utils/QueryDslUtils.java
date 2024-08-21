@@ -8,10 +8,11 @@ import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
 
 import java.time.LocalDateTime;
+import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
 
 public class QueryDslUtils {
 
-    public static Expression<Integer> getCurrProductCntExpression(QProduct p, QReservation r) {
+    public static Expression<Integer> getCurrProductCntExpression(QProduct p, QReservationSubSelect r) {
         NumberExpression<Integer> currProductCnt = new CaseBuilder()
                 .when(p.pickupTime.gt(LocalDateTime.now())
                         .and(r.reservationTime.isNull()

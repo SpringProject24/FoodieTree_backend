@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
+import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
 import org.nmfw.foodietree.domain.store.dto.resp.SearchedStoreListDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.store.entity.Store;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 
 import static com.querydsl.jpa.JPAExpressions.select;
 import static org.nmfw.foodietree.domain.product.entity.QProduct.product;
-import static org.nmfw.foodietree.domain.reservation.entity.QReservation.reservation;
+import static org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect.reservationSubSelect;
 import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 
 @Repository
@@ -36,7 +37,7 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
 
     @Override
     public Page<SearchedStoreListDto> findStores(Pageable pageable, String keyword) {
-        QReservation r = reservation;
+        QReservationSubSelect r = reservationSubSelect;
         QProduct p = product;
         QStore s = store;
         Expression<Integer> cnt = QueryDslUtils.getCurrProductCntExpression(p, r);
@@ -46,8 +47,8 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
                 .select(store, cnt)
                 .from(store)
                 .leftJoin(product).on(s.storeId.eq(p.storeId))
-                .leftJoin(reservation).on(p.productId.eq(r.productId))
-                .where(expression.and(r.rowNum.eq(1L)))
+                .leftJoin(reservationSubSelect).on(p.productId.eq(r.productId))
+                .where(expression.and(r.rowNum.isNull().or(r.rowNum.eq(1L))))
                 .groupBy(s.storeId)
                 .having(store.isNotNull())
                 .offset(pageable.getOffset())
@@ -60,7 +61,7 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
                 .select(store)
                 .from(store)
                 .leftJoin(product).on(s.storeId.eq(p.storeId))
-                .leftJoin(reservation).on(p.productId.eq(r.productId))
+                .leftJoin(reservationSubSelect).on(p.productId.eq(r.productId))
                 .where(expression)
                 .groupBy(s.storeId)
                 .having(store.isNotNull())

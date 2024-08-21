@@ -18,6 +18,7 @@ import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
+import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListByEndTimeDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListCo2Dto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static org.nmfw.foodietree.domain.product.entity.QProduct.product;
-import static org.nmfw.foodietree.domain.reservation.entity.QReservation.reservation;
+import static org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect.reservationSubSelect;
 import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 
 @Repository
@@ -86,7 +87,7 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
 
     @Override
     public List<StoreListDto> findAllProductsStoreId() {
-        QReservation r = reservation;
+        QReservationSubSelect r = reservationSubSelect;
         QProduct p = product;
         QStore s = store;
 
@@ -96,7 +97,7 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                 .select(store, cnt)
                 .from(store)
                 .leftJoin(product).on(s.storeId.eq(p.storeId))
-                .leftJoin(reservation).on(p.productId.eq(r.productId))
+                .leftJoin(reservationSubSelect).on(p.productId.eq(r.productId))
                 .groupBy(s.storeId)
                 .having(store.isNotNull())
                 .fetch()
