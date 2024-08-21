@@ -60,6 +60,7 @@ public class FavStoreRepositoryCustomImpl implements FavStoreRepositoryCustom {
                 .from(store)
                 .leftJoin(product).on(s.storeId.eq(p.storeId))
                 .leftJoin(reservation).on(p.productId.eq(r.productId))
+                .where(r.rowNum.eq(1L))
                 .groupBy(s.storeId)
                 .having(s.storeId.in(inTarget))
                 .fetch()
