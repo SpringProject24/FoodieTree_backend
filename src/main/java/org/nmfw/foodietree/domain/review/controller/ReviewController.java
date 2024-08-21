@@ -58,7 +58,7 @@ public class ReviewController {
 //            if (imagePath != null) {
 //            reviewSaveDto.setReviewImg(imagePath);
 //            }
-//            } else //저장 안됨
+//            } else //저장 안됨, DB 에 문자열로 저장되며 dir 생성되지 않음 추후 경로 설정 예정
             if (reviewSaveDto.getReviewImg() != null && !reviewSaveDto.getReviewImg().isEmpty()) {
             // Base64 문자열을 사용한 이미지 저장
             String imagePath = uploadDir + "reviewImg_" + System.currentTimeMillis() + ".jpg";
@@ -82,7 +82,6 @@ public class ReviewController {
                 log.warn("Error: {}", errorMessage);
                 return ResponseEntity.badRequest().body(errorMessage);
             }
-
             // 별점은 1점 이상인지 확인
             Integer reviewScore = reviewSaveDto.getReviewScore();
             if (reviewScore < 1) {
@@ -97,7 +96,6 @@ public class ReviewController {
                 log.warn("Error: {}", errorMessage);
                 return ResponseEntity.badRequest().body(errorMessage);
             }
-
             // 리뷰 저장
             Review savedReview = reviewService.saveReview(reviewSaveDto, tokenUserInfo);
             // 로그로 저장한 값 확인

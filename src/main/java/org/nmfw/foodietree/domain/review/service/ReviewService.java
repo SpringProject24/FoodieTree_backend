@@ -11,6 +11,7 @@ import org.nmfw.foodietree.domain.product.repository.ProductRepository;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
+import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
@@ -60,21 +61,24 @@ public class ReviewService {
     public Review saveReview(ReviewSaveDto reviewSaveDto
             , @AuthenticationPrincipal TokenUserInfo tokenUserInfo
     ) {
-        // Reservation과 Product 객체를 가져와야 함
+        // Reservation과 Product 객체를 가져와서 각각의 id(기본키)  조회
         Reservation reservation = reservationRepository.findById(reviewSaveDto.getReservationId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
         Product product = productRepository.findById(reservation.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 제품이 존재하지 않습니다."));
-        String customerId = tokenUserInfo.getUsername();
+        String customerId = tokenUserInfo.getUsername(); // token 처리
 //            String customerId = customerRepository.findByCustomerId(reviewSaveDto.getCustomerId())
 //                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        ReservationDetailDto reservationByReservationId = reservationRepository.findReservationByReservationId(reviewSaveDto.getReservationId());
 
         // Review 객체 생성
         Review review = Review.builder()
                 .reservation(reservation)
                 .customerId(customerId)
                 .product(product)
-                .storeName(product.getStoreId())
+                .storeId(product.getStoreId())
+                .storeName(reservationByReservationId.getStoreName())
                 .storeImg(reviewSaveDto.getStoreImg())
                 .reviewScore(reviewSaveDto.getReviewScore())
                 .reviewImg(reviewSaveDto.getReviewImg())

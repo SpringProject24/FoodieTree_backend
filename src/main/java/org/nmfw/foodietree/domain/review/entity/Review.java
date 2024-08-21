@@ -37,6 +37,9 @@ public class Review {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(name = "store_id", nullable = false)
+    private String storeId; // 예약 상품의 상점 아이디
+
     @Column(name = "store_name", nullable = false)
     private String storeName; // 예약 상품의 상점 이름
 
