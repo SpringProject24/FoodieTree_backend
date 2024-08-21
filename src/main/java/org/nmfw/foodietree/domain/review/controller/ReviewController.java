@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
-
+import org.nmfw.foodietree.domain.review.dto.res.ReviewDetailDto;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -25,7 +26,11 @@ import java.util.Map;
 public class ReviewController {
     private final ReviewService reviewService;
 
+    @Value("${env.upload.path}")
+    private String uploadDir;
+
     /**
+     * 리뷰가 이미 작성되었는지 확인
      *
      * @param reservationId
      * @return boolean
@@ -40,12 +45,8 @@ public class ReviewController {
         return ResponseEntity.ok(isReviewExist);
     }
 
-
-    // 이미지 저장 경로
-    @Value("${env.upload.path}")
-    private String uploadDir;
-
     /**
+     * 리뷰 저장
      *
      * @param reviewSaveDto
      * @param tokenUserInfo
@@ -113,19 +114,20 @@ public class ReviewController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllReviews () {
-        List<Review> all = reviewService.findAll();
-
-        return ResponseEntity.ok(all);
+    public ResponseEntity<List<ReviewDetailDto>> getAllReviews() {
+        List<ReviewDetailDto> reviewDetailDtos = reviewService.getAllReviews();
+        return ResponseEntity.ok(reviewDetailDtos);
     }
 
+    /**
+     * 특정 예약 ID에 대한 스토어 정보 조회
+     *
+     * @param reservationId 예약 ID
+     * @return 스토어 정보
+     */
     @GetMapping("/storeInfo")
-    public ResponseEntity<?> getStoreInfo (Long reservationId) {
-        Map<String, Object> store = reviewService.findStore(reservationId);
-
-        return ResponseEntity.ok(store);
+    public ResponseEntity<Map<String, Object>> getStoreInfo(@RequestParam Long reservationId) {
+        Map<String, Object> storeInfo = reviewService.findStore(reservationId);
+        return ResponseEntity.ok(storeInfo);
     }
-
 }
-
-
