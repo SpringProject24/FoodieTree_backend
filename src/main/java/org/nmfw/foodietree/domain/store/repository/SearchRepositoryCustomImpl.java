@@ -13,6 +13,7 @@ import org.nmfw.foodietree.domain.reservation.entity.QReservation;
 import org.nmfw.foodietree.domain.store.dto.resp.SearchedStoreListDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.store.entity.Store;
+import org.nmfw.foodietree.global.utils.QueryDslUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -38,21 +39,16 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
         QReservation r = reservation;
         QProduct p = product;
         QStore s = store;
-
-        NumberExpression<Integer> currProductCnt = new CaseBuilder()
-                .when(r.reservationTime.isNull().and(p.pickupTime.gt(LocalDateTime.now())))
-                .then(1)
-                .otherwise(0).sum();
-        Expression<Integer> cnt = ExpressionUtils.as(currProductCnt, "currProductCnt");
+        Expression<Integer> cnt = QueryDslUtils.getCurrProductCntExpression(p, r);
         BooleanExpression expression = s.storeName.contains(keyword).or(s.address.contains(keyword));
 
         List<SearchedStoreListDto> result = factory
                 .select(store, cnt)
-                .from(product)
+                .from(store)
+                .leftJoin(product).on(s.storeId.eq(p.storeId))
                 .leftJoin(reservation).on(p.productId.eq(r.productId))
-                .leftJoin(store).on(p.storeId.eq(s.storeId))
                 .where(expression)
-                .groupBy(p.storeId)
+                .groupBy(s.storeId)
                 .having(store.isNotNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -62,11 +58,11 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
 
         List<Store> fetch = factory
                 .select(store)
-                .from(product)
+                .from(store)
+                .leftJoin(product).on(s.storeId.eq(p.storeId))
                 .leftJoin(reservation).on(p.productId.eq(r.productId))
-                .leftJoin(store).on(p.storeId.eq(s.storeId))
                 .where(expression)
-                .groupBy(p.storeId)
+                .groupBy(s.storeId)
                 .having(store.isNotNull())
                 .fetch();
 
