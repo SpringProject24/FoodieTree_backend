@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tbl_review")
-@ToString(exclude = {"reservation", "product"})
+@ToString(exclude =  "product")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,15 +22,15 @@ public class Review {
     private Long reviewId; // 리뷰 아이디
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_id", nullable = false)
-    private Reservation reservation;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "reservation_id", nullable = false)
+    @Column(name = "reservation_id", nullable = false)
+    private Long reservationId;
 
     @Setter
-
 //    @ManyToOne(fetch = FetchType.LAZY)
+    //    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     @Column(name = "customer_id", nullable = false)
-//    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private String customerId;
 
 //     @ManyToOne(fetch = FetchType.LAZY)

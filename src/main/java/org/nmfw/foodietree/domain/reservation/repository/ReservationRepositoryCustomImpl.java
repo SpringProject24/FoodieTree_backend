@@ -200,19 +200,4 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                 .fetch();
     }
 
-    // 구매, 픽업 완료한 예약 건인지 예약 아이디로 판단
-    @Override
-    public boolean isReservationValid(Long reservationId) {
-        QReservation reservation = QReservation.reservation;
-
-        Reservation result = factory
-                .selectFrom(reservation)
-                .where(reservation.reservationId.eq(reservationId)
-                        .and(reservation.cancelReservationAt.isNull()) // 취소가 되지 않은 건
-                        .and(reservation.pickedUpAt.isNotNull())) // 픽업이 완료된 건
-                .fetchOne();
-
-        // null 값이 아닐때만 true 반환
-        return result != null;
-    }
 }

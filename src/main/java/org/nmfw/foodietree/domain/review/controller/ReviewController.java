@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
 
+import org.nmfw.foodietree.domain.review.dto.res.MyReviewDto;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
@@ -126,6 +127,12 @@ public class ReviewController {
         return ResponseEntity.ok(store);
     }
 
+    @GetMapping("/findEnableWritingReview")
+    public ResponseEntity<?> getEnableReview(@AuthenticationPrincipal TokenUserInfo userInfo) {
+        String customerId = userInfo.getUsername();
+        List<MyReviewDto> enableWritingReviews = reviewService.findEnableReview(customerId);
+        return ResponseEntity.ok(enableWritingReviews);
+    }
 }
 
 
