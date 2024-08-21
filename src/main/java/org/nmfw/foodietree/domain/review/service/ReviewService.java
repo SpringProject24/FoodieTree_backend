@@ -170,6 +170,10 @@ public class ReviewService {
                 .reviewScore(review.getReviewScore())
                 .reviewImg(review.getReviewImg())
                 .reviewContent(review.getReviewContent())
+                .storeId(review.getStoreId())
+                .storeName(review.getStoreName())
+                .storeImg(review.getStoreImg())
+                .address(review.getAddress())
                 .hashtags(hashtags)
                 .build();
     }

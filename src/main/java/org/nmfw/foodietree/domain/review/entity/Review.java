@@ -53,6 +53,9 @@ public class Review {
     @Column(name = "store_img", nullable = true)
     private String storeImg; // 상점 이미지
 
+    @Column(name = "address", nullable = true)
+    private String address;
+
     @Column(name = "review_score", nullable = true)
     private Integer reviewScore; // 별점 최대 5점
 
