@@ -94,7 +94,7 @@ public class ReviewService {
         // Review 저장
         Review savedReview = reviewRepository.save(review);
 
-        // 해시태그 저장 로직 호출
+        // 해시태그 저장
         saveReviewHashtags(savedReview, reviewSaveDto.getHashtags());
 
         return savedReview;

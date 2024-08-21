@@ -62,7 +62,6 @@ public class ReviewController {
             return ResponseEntity.badRequest().body("Invalid review data");
         }
 
-
         if (reviewImg != null && !reviewImg.isEmpty()) {
             // MultipartFile을 사용한 이미지저장
             String imagePath = reviewService.uploadReviewImage(reviewImg);
@@ -107,7 +106,7 @@ public class ReviewController {
             log.debug("Saved Review: {}", savedReview);
 
             // 해시태그 저장
-            reviewService.saveReviewHashtags(savedReview, hashtags);
+//            reviewService.saveReviewHashtags(savedReview, hashtags);
 
             return ResponseEntity.ok(savedReview);
         }
