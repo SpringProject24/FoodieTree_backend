@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -48,7 +49,7 @@ public class ReviewController {
      * @return 리뷰아이디가 이미있는경우, 없는경우
      */
     @PostMapping("/save")
-    public ResponseEntity<?> saveReview(@RequestBody ReviewSaveDto reviewSaveDto, MultipartFile reviewImg,
+    public ResponseEntity<?> saveReview(@RequestBody ReviewSaveDto reviewSaveDto, MultipartFile reviewImg, // metadata로 저장되어 사용하지 않음
                                         @AuthenticationPrincipal TokenUserInfo tokenUserInfo) {
 
 //        if (reviewImg != null && !reviewImg.isEmpty()) {
@@ -115,6 +116,12 @@ public class ReviewController {
         return ResponseEntity.ok(all);
     }
 
+    @GetMapping("/storeInfo")
+    public ResponseEntity<?> getStoreInfo (Long reservationId) {
+        Map<String, Object> store = reviewService.findStore(reservationId);
+
+        return ResponseEntity.ok(store);
+    }
 }
 
 
