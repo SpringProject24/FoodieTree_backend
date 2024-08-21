@@ -38,4 +38,15 @@ public class Reservation {
     @Column(name = "picked_up_at")
     private LocalDateTime pickedUpAt;
 
+    @Setter
+    @Column(name = "payment_id")
+    private String paymentId;
+
+    @Setter
+    @Column(name = "payment_time")
+    private LocalDateTime paymentTime;
+
+    @Setter
+    @Column(name = "cancel_payment_at")
+    private LocalDateTime cancelPaymentAt;
 }

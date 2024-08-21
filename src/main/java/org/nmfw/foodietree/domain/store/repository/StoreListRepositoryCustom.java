@@ -20,4 +20,7 @@ public interface StoreListRepositoryCustom {
 
     List<StoreListDto> findAllProductsStoreId();
 
+    List<StoreListDto> findAllStoresRandom();
+
+    List<StoreListDto> findCategoryByFood(List<StoreCategory> preferredFood);
 }

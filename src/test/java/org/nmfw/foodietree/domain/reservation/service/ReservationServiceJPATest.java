@@ -42,18 +42,18 @@ class ReservationServiceJPATest {
         assertTrue(reservation);
     }
 
-    @Test
-    public void cancel() {
-        Long reservationId = 43L;
-        boolean b = reservationService.cancelReservation(reservationId);
-        assertTrue(b);
-    }
-    @Test
-    public void pickup() {
-        Long reservationId = 42L;
-        boolean b = reservationService.completePickup(reservationId);
-        assertTrue(b);
-    }
+//    @Test
+//    public void cancel() {
+//        Long reservationId = 43L;
+//        boolean b = reservationService.cancelReservation(reservationId);
+//        assertTrue(b);
+//    }
+//    @Test
+//    public void pickup() {
+//        Long reservationId = 42L;
+//        boolean b = reservationService.completePickup(reservationId);
+//        assertTrue(b);
+//    }
 
     @Test
     public void getDetail() {

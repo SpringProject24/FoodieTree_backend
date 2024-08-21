@@ -1,23 +1,34 @@
 package org.nmfw.foodietree.domain.reservation.service;
 
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.notification.dto.req.NotificationDataDto;
+import org.nmfw.foodietree.domain.notification.service.NotificationService;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
+import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentIdDto;
+import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentResponseDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDto;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
-import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
+import org.nmfw.foodietree.domain.reservation.entity.value.PaymentStatus;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
+import org.nmfw.foodietree.domain.store.entity.Store;
+import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 
 @Service
@@ -25,9 +36,14 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 public class ReservationService {
-    private final ReservationMapper reservationMapper;
     private final ReservationRepository reservationRepository;
-    private final ProductRepository productRepository;
+    private final NotificationService notificationService;
+    private final TaskScheduler taskScheduler;
+
+    @Value("${env.payment.api.url}")
+    private String apiUrl;
+    @Value("${env.payment.api.key}")
+    private String paymentKey;
 
     /**
      * 예약을 취소하고 취소가 성공했는지 여부를 반환
@@ -35,28 +51,22 @@ public class ReservationService {
      * @return 취소가 완료되었는지 여부
      */
     public boolean cancelReservation(long reservationId) {
-
-//        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-//        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
-//
-//        ReservationStatus status = determinePickUpStatus(reservation);
-//        if(status == ReservationStatus.RESERVED) {
-//            reservationRepository.cancelReservation(reservationId);
-//
-//            return true;
-//        }
-//
-//        return false;
-
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
 
         // 취소한 적이 없으면 취소
         if(reservation.getCancelReservationAt() == null) {
             reservation.setCancelReservationAt(LocalDateTime.now());
+            ReservationDetailDto detail = reservationRepository.findReservationByReservationId(reservationId);
+            NotificationDataDto dto = NotificationDataDto.builder()
+                    .customerId(detail.getCustomerId())
+                    .storeId(detail.getStoreId())
+                    .storeName(detail.getStoreName())
+                    .targetId(List.of(String.valueOf(reservationId)))
+                    .build();
+            notificationService.sendCancelReservationAlert(dto);
             return true;
         }
-        // 이미 픽업했거나, 노쇼인 경우를 확인하지 않아도 되는지?
         return false;
     }
 
@@ -67,20 +77,22 @@ public class ReservationService {
      */
     public boolean completePickup(long reservationId) {
 
-//        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-//        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
-//
-//        // 취소시간, 픽업시간이 있는 경우 false
-//        ReservationStatus status = determinePickUpStatus(reservation);
-//        if(status == ReservationStatus.RESERVED) {
-//            reservationRepository.completePickup(reservationId);
-//            return true;
-//        }
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
 
         if(reservation.getPickedUpAt() == null) {
             reservation.setPickedUpAt(LocalDateTime.now());
+            reservationRepository.save(reservation);
+            ReservationDetailDto detail = reservationRepository.findReservationByReservationId(reservationId);
+            NotificationDataDto dto = NotificationDataDto.builder()
+                    .customerId(reservation.getCustomerId())
+                    .storeId(detail.getStoreId())
+                    .storeName(detail.getStoreName())
+                    .targetId(List.of(String.valueOf(reservationId)))
+                    .build();
+            notificationService.sendPickupConfirm(dto);
+            // 30분 후 리뷰 알림 예약
+            scheduleReviewRequest(dto);
             return true;
         }
 
@@ -149,18 +161,86 @@ public class ReservationService {
         log.info("Creating reservation for customer: {}, data: {}", customerId, data);
         int cnt = Integer.parseInt(data.get("cnt"));
         String storeId = data.get("storeId");
+        String paymentId = data.get("paymentId");
+        String storeName = data.get("storeName");
+
         List<ReservationFoundStoreIdDto> list = reservationRepository.findByStoreIdLimit(storeId, cnt);
-        for (ReservationFoundStoreIdDto tar : list) {
-            long productId = tar.getProductId();
-            Reservation reservation = Reservation.builder()
-                    .customerId(customerId)
-                    .productId(productId)
-                    .build();
-            Reservation save = reservationRepository.save(reservation);
-            log.info("save 결과 출력: {}", save);
-            if (save == null) return false;
-        }
         if (list.isEmpty()) return false;
-        return true;
+        List<Reservation> collect = list.stream()
+            .map(e -> Reservation.builder()
+                .productId(e.getProductId())
+                .customerId(customerId)
+                .paymentId(paymentId)
+                .build())
+            .collect(Collectors.toList());
+        List<Reservation> reservations = reservationRepository.saveAll(collect);
+
+        NotificationDataDto dto = NotificationDataDto.builder()
+                .customerId(customerId)
+                .storeId(storeId)
+                .storeName(storeName)
+                .targetId(reservations.stream().map(r->r.getReservationId().toString()).collect(Collectors.toList()))
+                .build();
+        notificationService.sendCreatedReservationAlert(dto);
+		return true;
+	}
+
+    public PaymentStatus processPaymentUpdate(Map<String, String> data) throws InterruptedException {
+        String paymentId = data.get("paymentId");
+        final PaymentResponseDto[] dto = new PaymentResponseDto[1];
+        CountDownLatch cdl = new CountDownLatch(1);
+
+        initiatePaymentRequest(dto, paymentId, cdl); // non-block
+        List<PaymentIdDto> paymentIdList = reservationRepository.findByPaymentIdForPrice(paymentId);
+        List<Reservation> reservationList = reservationRepository.findByPaymentId(paymentId);
+        Integer totalPrice = paymentIdList.stream().reduce(0, (total, y) -> total + y.getPrice(), Integer::sum);
+        cdl.await();
+        return handlePaymentResponse(dto[0], totalPrice, reservationList);
+    }
+
+    private void initiatePaymentRequest(PaymentResponseDto[] tar, String paymentId, CountDownLatch cdl) {
+        String url = apiUrl + paymentId;
+        WebClient.create()
+                .get()
+                .uri(url)
+                .header("Authorization", "PortOne " + paymentKey)
+                .retrieve()
+                .bodyToMono(PaymentResponseDto.class)
+                .doOnTerminate(cdl::countDown)
+                .subscribe(e -> tar[0] = e, error -> {
+                    log.warn("{} API Error: {};", this, error.getMessage());
+                    cdl.countDown();
+                });
+    }
+
+    private PaymentStatus handlePaymentResponse(PaymentResponseDto dto, Integer totalPrice, List<Reservation> list) {
+        if (totalPrice.equals(dto.getAmount().getPaid())) {
+            switch (dto.getStatus()) {
+                case ("PAID") :
+                    List<Reservation> result = list.stream()
+                            .peek(e -> e.setPaymentTime(dto.getPaidAt().atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()))
+                            .collect(Collectors.toList());
+                    reservationRepository.saveAll(result);
+                    return PaymentStatus.PAID;
+                case ("FAILED") :
+                    log.info("failed!");
+                    return PaymentStatus.FAILED;
+                default:
+                    return PaymentStatus.DEFAULT;
+            }
+        }
+        return PaymentStatus.INCONSISTENCY;
+    }
+
+    /**
+     * 픽업 완료 30분 후 리뷰알림 발송 예약
+     * @param dto - 알림에 필요한 정보
+     */
+    private void scheduleReviewRequest(NotificationDataDto dto) {
+//        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(30);
+        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(1);
+        ZoneId zoneId = ZoneId.of("Asia/Seoul");
+        Date targetDate = Date.from(targetTime.atZone(zoneId).toInstant());
+        taskScheduler.schedule(() -> notificationService.sendReviewRequest(dto), targetDate);
     }
 }

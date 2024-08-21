@@ -1,32 +1,37 @@
 package org.nmfw.foodietree.domain.store.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
+import org.nmfw.foodietree.domain.reservation.entity.QReservation;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListByEndTimeDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListCo2Dto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
+import org.nmfw.foodietree.global.utils.QueryDslUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.types.dsl.Expressions.*;
 import static org.nmfw.foodietree.domain.product.entity.QProduct.product;
 import static org.nmfw.foodietree.domain.reservation.entity.QReservation.reservation;
 import static org.nmfw.foodietree.domain.store.entity.QStore.store;
@@ -37,7 +42,6 @@ import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-//    private final FavAreaRepository favAreaRepository;
 
     @Override
     public List<StoreListDto> findStoresByCategory(StoreCategory category) {
@@ -82,19 +86,40 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
 
     @Override
     public List<StoreListDto> findAllProductsStoreId() {
+        QReservation r = reservation;
+        QProduct p = product;
+        QStore s = store;
+
+        Expression<Integer> cnt = QueryDslUtils.getCurrProductCntExpression(p, r);
 
         return jpaQueryFactory
-            .select(store, store.count())
-            .from(product)
-            .leftJoin(reservation).on(product.productId.eq(reservation.productId))
-            .leftJoin(store).on(product.storeId.eq(store.storeId))
-            .where(product.pickupTime.gt(LocalDateTime.now())
-                .and(reservation.reservationTime.isNull()))
-            .groupBy(product.storeId)
-            .fetch()
-            .stream()
-            .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(store.count()).intValue()))
-            .collect(Collectors.toList());
+                .select(store, cnt)
+                .from(store)
+                .leftJoin(product).on(s.storeId.eq(p.storeId))
+                .leftJoin(reservation).on(p.productId.eq(r.productId))
+                .groupBy(s.storeId)
+                .having(store.isNotNull())
+                .fetch()
+                .stream()
+                .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(cnt)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StoreListDto> findAllStoresRandom() {
+        // Fetch all stores
+        List<Store> stores = jpaQueryFactory
+                .selectFrom(store)
+                .fetch();
+
+        List<StoreListDto> storeListDtos = stores.stream()
+                .map(StoreListDto::fromEntity)
+                .collect(Collectors.toList());
+
+        // 랜덤
+        Collections.shuffle(storeListDtos);
+
+        return storeListDtos;
     }
 
     // 도시 부분을 추출하는 helper method - 현재는 데이터가 부족해 '시'로만 추출
@@ -138,12 +163,13 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                             .fetchOne().intValue();
 
                     // CO2 계산 (예: 상품 수 * 0.12)
-                    double coTwo = productCount * 0.12;
+                    double coTwo = Math.round((productCount * 0.12) * 100.0) / 100.0;
+
                     // StoreListDto 빌드 및 반환
                     return StoreListCo2Dto.builder()
                             .storeId(s.getStoreId())
                             .storeName(s.getStoreName())
-                            .category(String.valueOf(s.getCategory()))
+                            .category(String.valueOf(s.getCategory().getFoodType()))
                             .address(s.getAddress())
                             .price(s.getPrice())
                             .storeImg(s.getStoreImg())
@@ -220,7 +246,7 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                     return StoreListByEndTimeDto.builder()
                             .storeId(s.getStoreId())
                             .storeName(s.getStoreName())
-                            .category(String.valueOf(s.getCategory()))
+                            .category(String.valueOf(s.getCategory().getFoodType()))
                             .address(s.getAddress())
                             .price(s.getPrice())
                             .storeImg(s.getStoreImg())
@@ -237,6 +263,18 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                 .sorted(Comparator.comparing(StoreListByEndTimeDto::getRemainingTime))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<StoreListDto> findCategoryByFood(List<StoreCategory> preferredFood) {
+        return jpaQueryFactory
+                .selectFrom(store)
+                .where(store.category.in(preferredFood))
+                .fetch()
+                .stream()
+                .map(StoreListDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 
 
     /**
