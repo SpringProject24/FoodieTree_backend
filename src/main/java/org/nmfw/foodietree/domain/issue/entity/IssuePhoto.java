@@ -26,6 +26,4 @@ public class IssuePhoto {
     @Column(name = "issue_photo")
     private String issuePhoto;
 
-
-
 }
