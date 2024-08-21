@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
+
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
@@ -23,6 +24,7 @@ import java.util.Map;
 @RequestMapping("/review")
 public class ReviewController {
     private final ReviewService reviewService;
+
     /**
      *
      * @param reservationId
@@ -37,6 +39,7 @@ public class ReviewController {
         log.info("리뷰를 이미 작성했나요 ? {}",isReviewExist);
         return ResponseEntity.ok(isReviewExist);
     }
+
 
     // 이미지 저장 경로
     @Value("${env.upload.path}")
@@ -102,12 +105,14 @@ public class ReviewController {
             Review savedReview = reviewService.saveReview(reviewSaveDto, tokenUserInfo);
             // 로그로 저장한 값 확인
             log.debug("Saved Review: {}", savedReview);
+
             // 해시태그 저장
             reviewService.saveReviewHashtags(savedReview, hashtags);
 
             return ResponseEntity.ok(savedReview);
         }
     }
+
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllReviews () {
@@ -122,6 +127,7 @@ public class ReviewController {
 
         return ResponseEntity.ok(store);
     }
+
 }
 
 

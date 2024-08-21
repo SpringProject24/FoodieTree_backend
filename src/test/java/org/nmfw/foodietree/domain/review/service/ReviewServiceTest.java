@@ -31,11 +31,14 @@ class ReviewServiceTest {
 
     // 이미 있는 리뷰를 저장하려고 할 때
     @Test
+
     @DisplayName("중복 확인하기")
+
     public void testSaveAndRetrieveExistReview() {
         // Given
         ReviewSaveDto reviewSaveDto = ReviewSaveDto.builder()
                 .customerId("sinyunjong@gmail.com")
+
                 .reservationId(616L)
                 .storeImg("store_img.jpg")
                 .reviewScore(5)
@@ -43,6 +46,7 @@ class ReviewServiceTest {
                 .reviewContent("Great experience!")
                 .hashtags(Arrays.asList(Hashtag.FAST_SERVICE, Hashtag.PLEASANT_SURPRISE, Hashtag.EASY_TO_EAT))
                 .build();
+
 
         Long reservationId = reviewSaveDto.getReservationId();
 
@@ -56,7 +60,6 @@ class ReviewServiceTest {
 
         //then
         assertThat(isReviewExist).isTrue();
-
     }
 
     @Test
@@ -75,7 +78,9 @@ class ReviewServiceTest {
 
         //when
         Review savedReview = reviewService.saveReview(reviewSaveDto
+
                 , new TokenUserInfo("customer", "sinyunjong@gmail.com", LocalDateTime.of(2024, 8, 30, 12, 12))
+
         );
 
         //then
