@@ -27,10 +27,16 @@ public class Review {
     private Reservation reservation;
 
     @Setter
+
 //    @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "customer_id", nullable = false)
 //    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private String customerId;
+
+//     @ManyToOne(fetch = FetchType.LAZY)
+//     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+//     private Customer customer;
+
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
