@@ -8,10 +8,9 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +29,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
@@ -46,7 +42,6 @@ import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-//    private final FavAreaRepository favAreaRepository;
 
     @Override
     public List<StoreListDto> findStoresByCategory(StoreCategory category) {
@@ -108,6 +103,23 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                 .stream()
                 .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(cnt)))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StoreListDto> findAllStoresRandom() {
+        // Fetch all stores
+        List<Store> stores = jpaQueryFactory
+                .selectFrom(store)
+                .fetch();
+
+        List<StoreListDto> storeListDtos = stores.stream()
+                .map(StoreListDto::fromEntity)
+                .collect(Collectors.toList());
+
+        // 랜덤
+        Collections.shuffle(storeListDtos);
+
+        return storeListDtos;
     }
 
     // 도시 부분을 추출하는 helper method - 현재는 데이터가 부족해 '시'로만 추출
@@ -251,6 +263,18 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
                 .sorted(Comparator.comparing(StoreListByEndTimeDto::getRemainingTime))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<StoreListDto> findCategoryByFood(List<StoreCategory> preferredFood) {
+        return jpaQueryFactory
+                .selectFrom(store)
+                .where(store.category.in(preferredFood))
+                .fetch()
+                .stream()
+                .map(StoreListDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 
 
     /**

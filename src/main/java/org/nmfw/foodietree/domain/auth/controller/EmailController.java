@@ -55,7 +55,7 @@ public class EmailController {
                     .userType(userType)
                     .build();
 
-            emailService.sendVerificationEmailLink(email, userType, emailCodeDto);
+            emailService.sendVerificationEmailLink(email, userType);
 
             return ResponseEntity.ok("Verification Link sent");
         } catch (MessagingException e) {
@@ -87,7 +87,7 @@ public class EmailController {
             String userType = accessTokenUserInfo.getRole();
             log.info("유효성 검증 후  userType : {}", userType);
 
-            // 이메일 dto 정보를 데이터베이스에서 조회
+            // 이메일 정보를 인증 테이블 데이터베이스 에서 조회
             Optional<EmailVerification> emailVerificationOpt = emailService.findOneByEmail(email);
 
             if (emailVerificationOpt.isPresent()) {

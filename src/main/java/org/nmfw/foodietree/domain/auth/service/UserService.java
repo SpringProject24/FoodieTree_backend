@@ -51,7 +51,7 @@ public class UserService {
 
             storeService.signUpSaveStore(emailCodeStoreDto);
 
-        } else if(emailCodeDtoUserType.equals("customer")) {
+        } else if(emailCodeDtoUserType.equals("customer") || (emailCodeDtoUserType.equals("admin"))) {
 
             EmailCustomerDto emailCodeCustomerDto = EmailCustomerDto.builder()
                     .customerId(emailCodeDtoEmail)
@@ -99,7 +99,7 @@ public class UserService {
             storeApprove = store.getApprove() != null ? store.getApprove().getStatusDesc() : null;
 
             // customer 일 경우
-        } else if (emailCodeDtoUserType.equals("customer")) {
+        } else if (emailCodeDtoUserType.equals("customer") || emailCodeDtoUserType.equals("admin")) {
 
             EmailCustomerDto emailCodeCustomerDto = EmailCustomerDto.builder()
                     .customerId(emailCodeDtoEmail)
@@ -153,17 +153,26 @@ public class UserService {
     }
 
     public LocalDateTime getUserRefreshTokenExpiryDate(String email, String userType) {
-        if ("customer".equals(userType)) {
+        if ("customer".equals(userType) || "admin".equals(userType)) {
+
             Customer customer = customerService.getCustomerById(email);
+
             log.info("customer object : {},customer email : {}, customer 의 리프레시 만료일자 인 서버 : {}", customer,customer.getCustomerId(), customer.getRefreshTokenExpireDate());
+
             return customer != null ? customer.getRefreshTokenExpireDate() : null;
+
         } else if ("store".equals(userType)) {
+
             Store store = storeService.getStoreById(email);
 
             log.info("store email : {}, store 의 리프레시 만료일자 인 서버 : {}", email, store.getRefreshTokenExpireDate());
+
             return store != null ? store.getRefreshTokenExpireDate() : null;
+
         } else {
+
             throw new IllegalArgumentException("Invalid user type");
+
         }
     }
 
@@ -176,14 +185,18 @@ public class UserService {
             Customer customer = customerService.getCustomerById(email);
             if (customer != null) {
                 customerService.updateCustomer(newExpiryDate, email);
+            } else if ("admin".equals(userType)) {
+                if (customer != null) {
+                    customerService.updateCustomer(newExpiryDate, email);
+                }
+            } else if ("store".equals(userType)) {
+                Store store = storeService.getStoreById(email);
+                if (store != null) {
+                    storeService.updateStore(newExpiryDate, email);
+                }
+            } else {
+                throw new IllegalArgumentException("Invalid user type");
             }
-        } else if ("store".equals(userType)) {
-            Store store = storeService.getStoreById(email);
-            if (store != null) {
-                storeService.updateStore(newExpiryDate, email);
-            }
-        } else {
-            throw new IllegalArgumentException("Invalid user type");
         }
     }
 
@@ -193,7 +206,7 @@ public class UserService {
         String defaultCustomerImage = "/assets/img/defaultImage.jpg"; // 기본 고객 프로필 이미지 경로
         String defaultStoreImage = "/assets/img/defaultImage.jpg"; // 기본 상점 프로필 이미지 경로
 
-        if ("customer".equals(userType)) {
+        if ("customer".equals(userType) || "admin".equals(userType)) {
             Customer customer = customerService.getCustomerById(email);
 
             // 이미지가 없을 경우 기본 이미지 사용

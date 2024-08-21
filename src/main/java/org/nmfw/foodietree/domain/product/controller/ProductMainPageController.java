@@ -51,12 +51,12 @@ public class ProductMainPageController {
 //                log.warn("No product information found for customerId: {}", customerId);
 //            }
 
-            // 3. 선호 음식 기반 제품 조회
-            List<ProductDto> productByFood = productMainPageService.findProductByFood(customerId, request, response);
-            productByFood.forEach(e -> {
-                log.info("{}",e);
-            });
-            model.addAttribute("findByFood", productByFood);
+//            // 3. 선호 음식 기반 제품 조회
+//            List<ProductDto> productByFood = productMainPageService.findProductByFood(customerId, request, response);
+//            productByFood.forEach(e -> {
+//                log.info("{}",e);
+//            });
+//            model.addAttribute("findByFood", productByFood);
 
 
             // 4. 선호 지역 기반 제품 조회

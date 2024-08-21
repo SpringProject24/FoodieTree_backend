@@ -22,10 +22,10 @@ public class ReviewHashtag {
     private Long id; // 자동 증가 키
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id", nullable = false)
+    @JoinColumn(name = "review_id", nullable = true)
     private Review review; // 리뷰 아이디 저장
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "hashtag", nullable = false)
+    @Column(name = "hashtag", nullable = true)
     private Hashtag hashtag; // 해시태그 저장
 }

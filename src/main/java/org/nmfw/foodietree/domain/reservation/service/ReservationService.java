@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nmfw.foodietree.domain.auth.security.TokenProvider;
+import org.nmfw.foodietree.domain.notification.dto.req.NotificationDataDto;
+import org.nmfw.foodietree.domain.notification.service.NotificationService;
+import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
 import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentResponseDto;
@@ -15,8 +19,10 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDt
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.entity.value.PaymentStatus;
-import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
+import org.nmfw.foodietree.domain.store.entity.Store;
+import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +36,10 @@ import java.time.LocalDateTime;
 @Slf4j
 @Transactional
 public class ReservationService {
-    private final ReservationMapper reservationMapper;
     private final ReservationRepository reservationRepository;
-    private final ProductRepository productRepository;
+    private final NotificationService notificationService;
+    private final TaskScheduler taskScheduler;
+
     @Value("${env.payment.api.url}")
     private String apiUrl;
     @Value("${env.payment.api.key}")
@@ -50,9 +57,16 @@ public class ReservationService {
         // 취소한 적이 없으면 취소
         if(reservation.getCancelReservationAt() == null) {
             reservation.setCancelReservationAt(LocalDateTime.now());
+            ReservationDetailDto detail = reservationRepository.findReservationByReservationId(reservationId);
+            NotificationDataDto dto = NotificationDataDto.builder()
+                    .customerId(detail.getCustomerId())
+                    .storeId(detail.getStoreId())
+                    .storeName(detail.getStoreName())
+                    .targetId(List.of(String.valueOf(reservationId)))
+                    .build();
+            notificationService.sendCancelReservationAlert(dto);
             return true;
         }
-        // 이미 픽업했거나, 노쇼인 경우를 확인하지 않아도 되는지?
         return false;
     }
 
@@ -63,20 +77,22 @@ public class ReservationService {
      */
     public boolean completePickup(long reservationId) {
 
-//        ReservationDetailDto reservation = reservationRepository.findReservationByReservationId(reservationId);
-//        if(reservation == null) throw new RuntimeException("예약내역을 찾울 수 없습니다.");
-//
-//        // 취소시간, 픽업시간이 있는 경우 false
-//        ReservationStatus status = determinePickUpStatus(reservation);
-//        if(status == ReservationStatus.RESERVED) {
-//            reservationRepository.completePickup(reservationId);
-//            return true;
-//        }
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
 
         if(reservation.getPickedUpAt() == null) {
             reservation.setPickedUpAt(LocalDateTime.now());
+            reservationRepository.save(reservation);
+            ReservationDetailDto detail = reservationRepository.findReservationByReservationId(reservationId);
+            NotificationDataDto dto = NotificationDataDto.builder()
+                    .customerId(reservation.getCustomerId())
+                    .storeId(detail.getStoreId())
+                    .storeName(detail.getStoreName())
+                    .targetId(List.of(String.valueOf(reservationId)))
+                    .build();
+            notificationService.sendPickupConfirm(dto);
+            // 30분 후 리뷰 알림 예약
+            scheduleReviewRequest(dto);
             return true;
         }
 
@@ -146,10 +162,10 @@ public class ReservationService {
         int cnt = Integer.parseInt(data.get("cnt"));
         String storeId = data.get("storeId");
         String paymentId = data.get("paymentId");
+        String storeName = data.get("storeName");
 
         List<ReservationFoundStoreIdDto> list = reservationRepository.findByStoreIdLimit(storeId, cnt);
         if (list.isEmpty()) return false;
-
         List<Reservation> collect = list.stream()
             .map(e -> Reservation.builder()
                 .productId(e.getProductId())
@@ -157,7 +173,15 @@ public class ReservationService {
                 .paymentId(paymentId)
                 .build())
             .collect(Collectors.toList());
-        reservationRepository.saveAll(collect);
+        List<Reservation> reservations = reservationRepository.saveAll(collect);
+
+        NotificationDataDto dto = NotificationDataDto.builder()
+                .customerId(customerId)
+                .storeId(storeId)
+                .storeName(storeName)
+                .targetId(reservations.stream().map(r->r.getReservationId().toString()).collect(Collectors.toList()))
+                .build();
+        notificationService.sendCreatedReservationAlert(dto);
 		return true;
 	}
 
@@ -206,5 +230,17 @@ public class ReservationService {
             }
         }
         return PaymentStatus.INCONSISTENCY;
+    }
+
+    /**
+     * 픽업 완료 30분 후 리뷰알림 발송 예약
+     * @param dto - 알림에 필요한 정보
+     */
+    private void scheduleReviewRequest(NotificationDataDto dto) {
+//        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(30);
+        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(1);
+        ZoneId zoneId = ZoneId.of("Asia/Seoul");
+        Date targetDate = Date.from(targetTime.atZone(zoneId).toInstant());
+        taskScheduler.schedule(() -> notificationService.sendReviewRequest(dto), targetDate);
     }
 }
