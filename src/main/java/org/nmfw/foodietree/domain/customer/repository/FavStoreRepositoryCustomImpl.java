@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
+import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.global.utils.QueryDslUtils;
@@ -24,6 +25,7 @@ import static com.querydsl.jpa.JPAExpressions.select;
 import static org.nmfw.foodietree.domain.customer.entity.QFavStore.favStore;
 import static org.nmfw.foodietree.domain.product.entity.QProduct.product;
 import static org.nmfw.foodietree.domain.reservation.entity.QReservation.reservation;
+import static org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect.reservationSubSelect;
 import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 
 @Repository
@@ -34,7 +36,7 @@ public class FavStoreRepositoryCustomImpl implements FavStoreRepositoryCustom {
 
     @Override
     public List<StoreListDto> findFavStoresByCustomerId(String customerId, String type) {
-        QReservation r = reservation;
+        QReservationSubSelect r = reservationSubSelect;
         QProduct p = product;
         QStore s = store;
         JPQLQuery<String> inTarget = null;
@@ -46,9 +48,9 @@ public class FavStoreRepositoryCustomImpl implements FavStoreRepositoryCustom {
                     .where(favStore.customerId.eq(customerId));
         } else if (type.equals("orders_3")) {
             inTarget = select(product.storeId)
-                    .from(reservation)
-                    .innerJoin(product).on(reservation.productId.eq(product.productId))
-                    .where(reservation.customerId.eq(customerId).and(reservation.pickedUpAt.isNotNull()))
+                    .from(reservationSubSelect)
+                    .innerJoin(product).on(r.productId.eq(product.productId))
+                    .where(r.customerId.eq(customerId).and(r.pickedUpAt.isNotNull()))
                     .groupBy(product.storeId)
                     .having(product.storeId.count().goe(3));
         }
@@ -59,8 +61,8 @@ public class FavStoreRepositoryCustomImpl implements FavStoreRepositoryCustom {
                 .select(store, cnt)
                 .from(store)
                 .leftJoin(product).on(s.storeId.eq(p.storeId))
-                .leftJoin(reservation).on(p.productId.eq(r.productId))
-                .where(r.rowNum.eq(1L))
+                .leftJoin(reservationSubSelect).on(p.productId.eq(r.productId))
+                .where(r.rowNum.isNull().or(r.rowNum.eq(1L)))
                 .groupBy(s.storeId)
                 .having(s.storeId.in(inTarget))
                 .fetch()

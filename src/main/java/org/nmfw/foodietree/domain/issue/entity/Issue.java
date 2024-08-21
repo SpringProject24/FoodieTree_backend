@@ -1,6 +1,7 @@
 package org.nmfw.foodietree.domain.issue.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,5 +39,9 @@ public class Issue {
 
     @Column(name = "reservation_id")
     private int reservationId;
+
+    @CreationTimestamp
+    @Column(name = "make_issue_at")
+    private LocalDateTime makeIssueAt;
 
 }
