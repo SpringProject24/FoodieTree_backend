@@ -150,7 +150,10 @@ public class ReviewService {
     }
 
     public List<ReviewDetailDto> getAllReviews() {
+        // DB에서 모든 리뷰를 가져오기
         List<Review> reviews = reviewRepository.findAll();
+
+        // Review 엔티티를 ReviewDetailDto로 변환
         return reviews.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -170,4 +173,9 @@ public class ReviewService {
                 .hashtags(hashtags)
                 .build();
     }
+
+//    public ReviewDetailDto getReviewDetail(Long reviewId) {
+//        return reviewRepository.findReviewDetailById(reviewId)
+//                .orElseThrow(() -> new RuntimeException("Review not found"));
+//    }
 }

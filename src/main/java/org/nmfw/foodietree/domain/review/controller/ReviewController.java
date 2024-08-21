@@ -116,6 +116,7 @@ public class ReviewController {
     @GetMapping("/all")
     public ResponseEntity<List<ReviewDetailDto>> getAllReviews() {
         List<ReviewDetailDto> reviewDetailDtos = reviewService.getAllReviews();
+        System.out.println("Reviews fetched: " + reviewDetailDtos.size()); // 디버깅용 로그
         return ResponseEntity.ok(reviewDetailDtos);
     }
 
