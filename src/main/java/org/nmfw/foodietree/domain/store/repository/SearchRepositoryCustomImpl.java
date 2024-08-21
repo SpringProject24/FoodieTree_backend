@@ -47,7 +47,7 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
                 .from(store)
                 .leftJoin(product).on(s.storeId.eq(p.storeId))
                 .leftJoin(reservation).on(p.productId.eq(r.productId))
-                .where(expression)
+                .where(expression.and(r.rowNum.eq(1L)))
                 .groupBy(s.storeId)
                 .having(store.isNotNull())
                 .offset(pageable.getOffset())

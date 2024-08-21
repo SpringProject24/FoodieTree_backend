@@ -135,7 +135,7 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
             .and(p.pickupTime.gt(LocalDateTime.now()))
             .and(r.reservationTime.isNull()
 				.or(
-					r.paymentId.isNull()
+					r.paymentTime.isNull()
 						.and(r.reservationTime.lt(LocalDateTime.now().minusMinutes(5)))
 				)
 			);
@@ -147,7 +147,7 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                         product.productId))
                 .from(product)
                 .leftJoin(reservation).on(p.productId.eq(r.productId))
-                .where(condition)
+                .where(condition.and(reservation.rowNum.eq(1L)))
                 .limit(cnt)
                 .fetch();
     }

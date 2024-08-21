@@ -5,6 +5,14 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.Subselect;
+
+@Subselect(
+    "select "
+	+ "    r.*, "
+	+ "    ROW_NUMBER() over (PARTITION BY r.product_id order by r.reservation_time desc) as row_num "
+	+ "from tbl_reservation r"
+)
 
 @Entity
 @Table(name = "tbl_reservation")
@@ -49,4 +57,7 @@ public class Reservation {
     @Setter
     @Column(name = "cancel_payment_at")
     private LocalDateTime cancelPaymentAt;
+
+	@Column(name = "row_num")
+	private Long rowNum;
 }

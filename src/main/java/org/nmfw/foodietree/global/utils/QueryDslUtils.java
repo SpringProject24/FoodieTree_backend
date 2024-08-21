@@ -15,7 +15,7 @@ public class QueryDslUtils {
         NumberExpression<Integer> currProductCnt = new CaseBuilder()
                 .when(p.pickupTime.gt(LocalDateTime.now())
                         .and(r.reservationTime.isNull()
-                                .or(r.paymentId.isNull().and(r.reservationTime.lt(LocalDateTime.now().minusMinutes(5))))
+                                .or(r.paymentTime.isNull().and(r.reservationTime.lt(LocalDateTime.now().minusMinutes(5))))
                         ))
                 .then(1)
                 .otherwise(0)
