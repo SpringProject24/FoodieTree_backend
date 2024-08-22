@@ -167,7 +167,7 @@ public class ReviewService {
                 .map(ReviewHashtag::getHashtag) // ReviewHashtag에서 Hashtag 추출
                 .collect(Collectors.toList()); // List<Hashtag>로 변환
         return ReviewDetailDto.builder()
-                .reservationId(review.getReservation() != null ? review.getReservation().getReservationId() : null)
+                .reservationId(review.getReservationId() != null ? review.getReservationId() : null)
                 .customerId(review.getCustomerId())
                 .storeImg(review.getStoreImg())
                 .reviewScore(review.getReviewScore())

@@ -19,7 +19,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
     List<MyReviewDto> findEnableReviewsByCustomerId(String customerId);
 
     @Query("SELECT new org.nmfw.foodietree.domain.review.dto.res.ReviewDetailDto(" +
-            "r.reservation.reservationId, " +
+            "r.reservationId, " +
             "r.customerId, " +
             "r.product.store.storeImg, " +
             "r.reviewScore, " +
