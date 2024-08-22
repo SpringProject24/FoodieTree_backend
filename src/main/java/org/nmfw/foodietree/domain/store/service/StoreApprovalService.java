@@ -100,7 +100,7 @@ public class StoreApprovalService {
         }
 
         // StoreApproval 상품 디테일 업데이트
-        StoreApproval entity = storeApprovalRepository.findByStoreId(storeId);
+        StoreApproval entity = storeApprovalRepository.findRecentOneByStoreId(storeId);
         entity.setPrice(dto.getPrice());
         entity.setProductCnt(dto.getProductCnt());
         entity.setProImage(productImage);
@@ -136,20 +136,6 @@ public class StoreApprovalService {
         String[] newApprovals = approvals.stream()
                 .map(StoreApproval::getLicense)
                 .toArray(String[]::new);
-
-//        List<StoreApproval> noVerifiedList
-//            = storeApprovalRepository.findApprovalsByLicenseVerification();
-//        log.debug("\n승인 대기 리스트 {}", noVerifiedList);
-
-        // API 요구대로 List를 사업자등록번호만 담은 Array로 변환
-//        String[] array = noVerifiedList.stream()
-//        String[] array = noVerifiedList.stream()
-//            .map(StoreApproval::getLicense)
-//            .toArray(String[]::new);
-//            .toArray(new String[noVerifiedList.size()]);
-
-        // API 호출 및 결과 LicenseResDto
-//        LicenseResDto resDto = licenseService.verifyLicensesByOpenApi(array);
         LicenseResDto resDto = licenseService.verifyLicensesByOpenApi(newApprovals);
 
         // API status code OK면 사업자등록번호 검증 결과 setter로 업데이트
@@ -198,6 +184,7 @@ public class StoreApprovalService {
      * @return DTO의 상태에 기반한 승인 상태 문자열 ("STEP_ONE", "STEP_TWO", "PENDING_APPROVAL", "ALREADY_APPROVED")
      */
     public String evaluateApprovalState(ApprovalInfoDto dto) {
+        log.info("승인 상태 evaluateApprovalState : {}", dto);
         if(dto == null) return "STEP_ONE";
         if(dto.getStatus() == ApproveStatus.APPROVED) return "ALREADY_APPROVED";
         if(dto.getStatus() == ApproveStatus.REJECTED) return "STEP_ONE";

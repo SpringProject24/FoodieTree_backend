@@ -167,6 +167,15 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
 
         return resultCnt;
     }
+    @Override
+    public StoreApproval findRecentOneByStoreId(String storeId) {
+        return factory.selectFrom(storeApproval)
+                .where(storeApproval.storeId.eq(storeId))
+                .orderBy(storeApproval.id.desc())
+                .limit(1)
+                .fetchOne();
+    }
+
 
     // 동적 쿼리 eq 메서드
     private <T> BooleanBuilder makeDynamicCondition(PathBuilder<T> field, T value) {

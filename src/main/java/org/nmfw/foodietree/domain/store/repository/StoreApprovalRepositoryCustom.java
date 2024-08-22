@@ -33,4 +33,6 @@ public interface StoreApprovalRepositoryCustom {
     // storeApproval 정보를 store 에 추가 (update)
     Long updateStoreInfo(List<StoreApproveDto> approvals);
 
+    // 가게 id로 최신 요청을 조회
+    StoreApproval findRecentOneByStoreId(String storeId);
 }

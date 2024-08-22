@@ -9,5 +9,4 @@ public interface StoreApprovalRepository
         extends JpaRepository<StoreApproval, Long>, StoreApprovalRepositoryCustom {
 
     StoreApproval findByStoreId(String storeId);
-    List<StoreApproval> findAllByStoreId(String storeId);
 }
