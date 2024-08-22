@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.reservation.service;
 
+import java.time.Duration;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -7,11 +8,14 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.notification.dto.req.NotificationDataDto;
 import org.nmfw.foodietree.domain.notification.service.NotificationService;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
+import org.nmfw.foodietree.domain.reservation.dto.req.PaymentCancelDto;
+import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentCancelRespDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentResponseDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
@@ -22,6 +26,8 @@ import org.nmfw.foodietree.domain.reservation.entity.value.PaymentStatus;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
+import reactor.core.publisher.Mono;
 
 
 @Service
@@ -53,6 +60,10 @@ public class ReservationService {
     public boolean cancelReservation(long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
+
+        if (reservation.getPaymentTime() != null) {
+            processPaymentCancel(reservation);
+        }
 
         // 취소한 적이 없으면 취소
         if(reservation.getCancelReservationAt() == null) {
@@ -242,5 +253,42 @@ public class ReservationService {
         ZoneId zoneId = ZoneId.of("Asia/Seoul");
         Date targetDate = Date.from(targetTime.atZone(zoneId).toInstant());
         taskScheduler.schedule(() -> notificationService.sendReviewRequest(dto), targetDate);
+    }
+
+    private void processPaymentCancel(Reservation reservation) {
+        String url = apiUrl + reservation.getPaymentId() + "/cancel";
+
+        Long reservationId = reservation.getReservationId();
+        ReservationDetailDto detailDto = reservationRepository.findReservationByReservationId(
+            reservationId);
+        int price = detailDto.getPrice();
+        LocalDateTime pickupTime = detailDto.getPickupTime();
+        Duration duration = Duration.between(LocalDateTime.now(), pickupTime);
+        if (duration.getSeconds() < 60 * 60) {
+            price /= 2;
+        }
+        PaymentCancelDto test = PaymentCancelDto.builder()
+            .amount(price)
+            .reason("test")
+            .build();
+        PaymentCancelRespDto authorization = WebClient.create()
+            .post()
+            .uri(url)
+            .header("Content-Type", "application/json")
+            .header("Authorization", "PortOne " + paymentKey)
+            .bodyValue(test)
+            .exchangeToMono(response -> {
+                if (response.statusCode() == HttpStatus.OK) {
+                    return response.bodyToMono(PaymentCancelRespDto.class);
+                } else {
+                    log.warn("{}", response.statusCode());
+                    return Mono.empty();
+                }
+            })
+            .block();
+        if (authorization == null) return;
+        if (authorization.getCancellation().getStatus().equals("SUCCEEDED")) {
+            reservation.setCancelPaymentAt(LocalDateTime.now());
+        }
     }
 }
