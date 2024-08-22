@@ -18,12 +18,14 @@ import org.nmfw.foodietree.domain.customer.dto.resp.UpdateAreaDto;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
+import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListByEndTimeDto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListCo2Dto;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.entity.value.StoreCategory;
+import org.nmfw.foodietree.global.utils.QueryDslUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static org.nmfw.foodietree.domain.product.entity.QProduct.product;
-import static org.nmfw.foodietree.domain.reservation.entity.QReservation.reservation;
+import static org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect.reservationSubSelect;
 import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 
 @Repository
@@ -41,7 +43,6 @@ import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-//    private final FavAreaRepository favAreaRepository;
 
     @Override
     public List<StoreListDto> findStoresByCategory(StoreCategory category) {
@@ -86,28 +87,23 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
 
     @Override
     public List<StoreListDto> findAllProductsStoreId() {
-        QReservation r = reservation;
+        QReservationSubSelect r = reservationSubSelect;
         QProduct p = product;
         QStore s = store;
 
-        NumberExpression<Integer> currProductCnt = new CaseBuilder()
-            .when(r.reservationTime.isNull().and(p.pickupTime.gt(LocalDateTime.now())))
-            .then(1)
-            .otherwise(0).sum();
-
-        Expression<Integer> cnt = ExpressionUtils.as(currProductCnt, "currProductCnt");
+        Expression<Integer> cnt = QueryDslUtils.getCurrProductCntExpression(p, r);
 
         return jpaQueryFactory
-            .select(store, cnt)
-            .from(product)
-            .leftJoin(reservation).on(p.productId.eq(r.productId))
-            .leftJoin(store).on(p.storeId.eq(s.storeId))
-            .groupBy(p.storeId)
-            .having(store.isNotNull())
-            .fetch()
-            .stream()
-            .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(cnt)))
-            .collect(Collectors.toList());
+                .select(store, cnt)
+                .from(store)
+                .leftJoin(product).on(s.storeId.eq(p.storeId))
+                .leftJoin(reservationSubSelect).on(p.productId.eq(r.productId))
+                .groupBy(s.storeId)
+                .having(store.isNotNull())
+                .fetch()
+                .stream()
+                .map(tuple -> StoreListDto.fromEntity(tuple.get(store), tuple.get(cnt)))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -292,6 +288,4 @@ public class StoreListRepositoryCustomImpl implements StoreListRepositoryCustom 
         }
         return Duration.between(now, endTime);
     }
-
-
 }

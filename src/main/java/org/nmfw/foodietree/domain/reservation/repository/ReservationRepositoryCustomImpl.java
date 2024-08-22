@@ -14,6 +14,9 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationFoundStoreIdDt
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationStatusDto;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
+
+import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
+
 import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.springframework.stereotype.Repository;
@@ -25,6 +28,7 @@ import java.util.List;
 import static org.nmfw.foodietree.domain.customer.entity.QCustomer.customer;
 import static org.nmfw.foodietree.domain.product.entity.QProduct.product;
 import static org.nmfw.foodietree.domain.reservation.entity.QReservation.reservation;
+import static org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect.reservationSubSelect;
 import static org.nmfw.foodietree.domain.store.entity.QStore.store;
 
 @Repository
@@ -129,14 +133,14 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
     // 예약 가능 제품 조회
     @Override
     public List<ReservationFoundStoreIdDto> findByStoreIdLimit(String storeId, int cnt) {
-        QReservation r = reservation;
+        QReservationSubSelect r = reservationSubSelect;
         QProduct p = product;
 
         BooleanExpression condition = p.storeId.eq(storeId)
             .and(p.pickupTime.gt(LocalDateTime.now()))
             .and(r.reservationTime.isNull()
 				.or(
-					r.paymentId.isNull()
+					r.paymentTime.isNull()
 						.and(r.reservationTime.lt(LocalDateTime.now().minusMinutes(5)))
 				)
 			);
@@ -147,8 +151,8 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                         product.storeId,
                         product.productId))
                 .from(product)
-                .leftJoin(reservation).on(p.productId.eq(r.productId))
-                .where(condition)
+                .leftJoin(reservationSubSelect).on(p.productId.eq(r.productId))
+                .where(condition.and(r.rowNum.isNull().or(r.rowNum.eq(1L))))
                 .limit(cnt)
                 .fetch();
     }
@@ -200,19 +204,4 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                 .fetch();
     }
 
-    // 구매, 픽업 완료한 예약 건인지 예약 아이디로 판단
-    @Override
-    public boolean isReservationValid(Long reservationId) {
-        QReservation reservation = QReservation.reservation;
-
-        Reservation result = factory
-                .selectFrom(reservation)
-                .where(reservation.reservationId.eq(reservationId)
-                        .and(reservation.cancelReservationAt.isNull()) // 취소가 되지 않은 건
-                        .and(reservation.pickedUpAt.isNotNull())) // 픽업이 완료된 건
-                .fetchOne();
-
-        // null 값이 아닐때만 true 반환
-        return result != null;
-    }
 }

@@ -1,10 +1,12 @@
 package org.nmfw.foodietree.domain.review.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider.TokenUserInfo;
 import org.nmfw.foodietree.domain.product.Util.FileUtil;
 
+import org.nmfw.foodietree.domain.review.dto.res.MyReviewDto;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
@@ -15,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +43,6 @@ public class ReviewController {
         return ResponseEntity.ok(isReviewExist);
     }
 
-
-    // 이미지 저장 경로
-    @Value("${env.upload.path}")
-    private String uploadDir;
-
     /**
      *
      * @param reviewSaveDto
@@ -52,22 +50,25 @@ public class ReviewController {
      * @return 리뷰아이디가 이미있는경우, 없는경우
      */
     @PostMapping("/save")
-    public ResponseEntity<?> saveReview(@RequestBody ReviewSaveDto reviewSaveDto, MultipartFile reviewImg, // metadata로 저장되어 사용하지 않음
-                                        @AuthenticationPrincipal TokenUserInfo tokenUserInfo) {
+    public ResponseEntity<?> saveReview( @RequestParam("reviewImg") MultipartFile reviewImg,
+                                         @RequestParam("reviewData") String reviewData,
+                                         @AuthenticationPrincipal TokenUserInfo tokenUserInfo) {
+        // JSON 문자열을 DTO로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        ReviewSaveDto reviewSaveDto;
+        try {
+            reviewSaveDto = objectMapper.readValue(reviewData, ReviewSaveDto.class);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().body("Invalid review data");
+        }
 
-//        if (reviewImg != null && !reviewImg.isEmpty()) {
-//            // MultipartFile을 사용한 이미지저장
-//            String imagePath = reviewService.uploadReviewImage(reviewImg);
-//            if (imagePath != null) {
-//            reviewSaveDto.setReviewImg(imagePath);
-//            }
-//            } else //저장 안됨, DB 에 문자열로 저장되며 dir 생성되지 않음 추후 경로 설정 예정
-            if (reviewSaveDto.getReviewImg() != null && !reviewSaveDto.getReviewImg().isEmpty()) {
-            // Base64 문자열을 사용한 이미지 저장
-            String imagePath = uploadDir + "reviewImg_" + System.currentTimeMillis() + ".jpg";
-            FileUtil.saveImageFromBase64(reviewSaveDto.getReviewImg(), imagePath);
-            reviewSaveDto.setReviewImg(imagePath);
+        if (reviewImg != null && !reviewImg.isEmpty()) {
+            // MultipartFile을 사용한 이미지저장
+            String imagePath = reviewService.uploadReviewImage(reviewImg);
+            if (imagePath != null) {
+                reviewSaveDto.setReviewImg(imagePath);
             }
+        }
 
         // 예약 아이디로 이미 작성된 아이디인지 확인
         boolean isReviewExist = reviewService.isReviewExist(reviewSaveDto.getReservationId());
@@ -105,7 +106,7 @@ public class ReviewController {
             log.debug("Saved Review: {}", savedReview);
 
             // 해시태그 저장
-            reviewService.saveReviewHashtags(savedReview, hashtags);
+//            reviewService.saveReviewHashtags(savedReview, hashtags);
 
             return ResponseEntity.ok(savedReview);
         }
@@ -126,6 +127,12 @@ public class ReviewController {
         return ResponseEntity.ok(store);
     }
 
+    @GetMapping("/findEnableWritingReview")
+    public ResponseEntity<?> getEnableReview(@AuthenticationPrincipal TokenUserInfo userInfo) {
+        String customerId = userInfo.getUsername();
+        List<MyReviewDto> enableWritingReviews = reviewService.findEnableReview(customerId);
+        return ResponseEntity.ok(enableWritingReviews);
+    }
 }
 
 

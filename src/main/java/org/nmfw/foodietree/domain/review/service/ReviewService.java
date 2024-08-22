@@ -13,6 +13,7 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
+import org.nmfw.foodietree.domain.review.dto.res.MyReviewDto;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
@@ -29,9 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -77,7 +80,7 @@ public class ReviewService {
 
         // Review 객체 생성
         Review review = Review.builder()
-                .reservation(reservation)
+                .reservationId(reservation.getReservationId())
                 .customerId(customerId)
                 .product(product)
                 .storeId(product.getStoreId())
@@ -91,7 +94,7 @@ public class ReviewService {
         // Review 저장
         Review savedReview = reviewRepository.save(review);
 
-        // 해시태그 저장 로직 호출
+        // 해시태그 저장
         saveReviewHashtags(savedReview, reviewSaveDto.getHashtags());
 
         return savedReview;
@@ -129,13 +132,14 @@ public class ReviewService {
 
     /**
      * reservationId가 주어진 조건을 모두 만족하는지 확인
+     *
      * @param reservationId
      * @return true if the reservation exists and matches the conditions, otherwise false
      */
     public boolean isReservationValid(Long reservationId) {
         // 구매, 픽업 완료한 예약 건 구분
         // 예약이 존재하고 조건을 모두 만족하면 true 반환
-        return reservationRepository.isReservationValid(reservationId);
+        return reviewRepository.isReservationValid(reservationId);
 
     }
 
@@ -144,4 +148,30 @@ public class ReviewService {
     public List<Review> findAll() {
         return reviewRepository.findAll();
     }
+
+    // Method to find reviews and combine with hashtags
+    @Transactional(readOnly = true)
+    public List<MyReviewDto> findEnableReviewsByCustomerId(String customerId) {
+        // Step 1: Fetch reviews
+        List<MyReviewDto> reviews = reviewRepository.findEnableReviewsByCustomerId(customerId);
+
+        // Extract review IDs
+        List<Long> reviewIds = reviews.stream()
+                .map(MyReviewDto::getReservationId)
+                .collect(Collectors.toList());
+
+        // Step 2: Fetch hashtags
+        Map<Long, List<Hashtag>> hashtagsByReviewId = reviewRepository.findHashtagsByReviewIds(reviewIds);
+
+        // Combine results
+        return reviews.stream()
+                .peek(review -> review.setHashtags(hashtagsByReviewId.getOrDefault(review.getReservationId(), List.of())))
+                .collect(Collectors.toList());
+    }
+
+    // Update existing method to use the new method for fetching reviews
+    public List<MyReviewDto> findEnableReview(String customerId) {
+        return findEnableReviewsByCustomerId(customerId);
+    }
 }
+
