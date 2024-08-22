@@ -16,8 +16,6 @@ import org.nmfw.foodietree.domain.reservation.entity.QReservation;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 
 import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
-
-
 import org.nmfw.foodietree.domain.store.dto.resp.StoreReservationDto;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.springframework.stereotype.Repository;

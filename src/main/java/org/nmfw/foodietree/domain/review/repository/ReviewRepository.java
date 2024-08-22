@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.review.repository;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewDetailDto;
+
 import org.nmfw.foodietree.domain.review.dto.res.MyReviewDto;
 import org.nmfw.foodietree.domain.review.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -112,9 +112,6 @@ public class ReviewController {
             // 로그로 저장한 값 확인
             log.debug("Saved Review: {}", savedReview);
 
-            // 해시태그 저장
-//            reviewService.saveReviewHashtags(savedReview, hashtags);
-
             return ResponseEntity.ok(savedReview);
         }
     }
@@ -138,7 +135,6 @@ public class ReviewController {
         Map<String, Object> storeInfo = reviewService.findStore(reservationId);
         return ResponseEntity.ok(storeInfo);
     }
-
 
     @GetMapping("/findEnableWritingReview")
     public ResponseEntity<?> getEnableReview(@AuthenticationPrincipal TokenUserInfo userInfo) {
