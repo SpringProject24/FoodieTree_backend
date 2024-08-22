@@ -13,7 +13,9 @@ import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
+import org.nmfw.foodietree.domain.review.dto.res.ReviewDetailDto;
 import org.nmfw.foodietree.domain.review.dto.res.MyReviewDto;
+
 import org.nmfw.foodietree.domain.review.dto.res.ReviewSaveDto;
 import org.nmfw.foodietree.domain.review.entity.Hashtag;
 import org.nmfw.foodietree.domain.review.entity.Review;
@@ -35,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 @Service
 @Transactional
@@ -120,7 +123,7 @@ public class ReviewService {
         Map<String, Object> storeDetails = new HashMap<>();
         storeDetails.put("storeName", reservationByReservationId.getStoreName()); // 예약 가게 이름
         storeDetails.put("address", reservationByReservationId.getAddress()); // 예약 가게 주소
-        storeDetails.put("nickname", reservationByReservationId.getNickname()); // 예약 닉네임
+        storeDetails.put("customerId", reservationByReservationId.getCustomerId()); // 예약 닉네임
         storeDetails.put("storeImg", reservationByReservationId.getStoreImg()); // 가게 이미지
         storeDetails.put("storeId", reservationByReservationId.getStoreId()); // 가게 아이디
         storeDetails.put("category", reservationByReservationId.getCategory());// 가게 카테고리
@@ -149,6 +152,39 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
+    public List<ReviewDetailDto> getAllReviews() {
+        // DB에서 모든 리뷰를 가져오기
+        List<Review> reviews = reviewRepository.findAll();
+
+        // Review 엔티티를 ReviewDetailDto로 변환
+        return reviews.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public ReviewDetailDto convertToDto(Review review) {
+        List<Hashtag> hashtags = review.getHashtags().stream()
+                .map(ReviewHashtag::getHashtag) // ReviewHashtag에서 Hashtag 추출
+                .collect(Collectors.toList()); // List<Hashtag>로 변환
+        return ReviewDetailDto.builder()
+                .reservationId(review.getReservation() != null ? review.getReservation().getReservationId() : null)
+                .customerId(review.getCustomerId())
+                .storeImg(review.getStoreImg())
+                .reviewScore(review.getReviewScore())
+                .reviewImg(review.getReviewImg())
+                .reviewContent(review.getReviewContent())
+                .storeId(review.getStoreId())
+                .storeName(review.getStoreName())
+                .storeImg(review.getStoreImg())
+                .address(review.getAddress())
+                .hashtags(hashtags)
+                .build();
+    }
+
+//    public ReviewDetailDto getReviewDetail(Long reviewId) {
+//        return reviewRepository.findReviewDetailById(reviewId)
+//                .orElseThrow(() -> new RuntimeException("Review not found"));
+//    }
     // Method to find reviews and combine with hashtags
     @Transactional(readOnly = true)
     public List<MyReviewDto> findEnableReviewsByCustomerId(String customerId) {
