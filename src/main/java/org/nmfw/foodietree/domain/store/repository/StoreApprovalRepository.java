@@ -8,5 +8,4 @@ import java.util.List;
 public interface StoreApprovalRepository
         extends JpaRepository<StoreApproval, Long>, StoreApprovalRepositoryCustom {
 
-    StoreApproval findByStoreId(String storeId);
 }
