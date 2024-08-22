@@ -56,12 +56,14 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
         return factory
                 .select(Projections.bean(
                         ReservationDetailDto.class,
-                        reservation.reservationId.as("reservationId"),
-                        reservation.customerId.as("customerId"),
-                        reservation.productId.as("productId"),
-                        reservation.reservationTime.as("reservationTime"),
-                        reservation.cancelReservationAt.as("cancelReservationAt"),
-                        reservation.pickedUpAt.as("pickedUpAt"),
+                        reservationSubSelect.reservationId.as("reservationId"),
+                        reservationSubSelect.customerId.as("customerId"),
+                        reservationSubSelect.productId.as("productId"),
+                        reservationSubSelect.reservationTime.as("reservationTime"),
+                        reservationSubSelect.cancelReservationAt.as("cancelReservationAt"),
+                        reservationSubSelect.pickedUpAt.as("pickedUpAt"),
+                        reservationSubSelect.paymentId.as("paymentId"),
+                        reservationSubSelect.paymentTime.as("paymentTime"),
                         product.storeId.as("storeId"),
                         product.pickupTime.as("pickupTime"),
                         store.storeName.as("storeName"),
@@ -70,11 +72,13 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                         store.price.as("price"),
                         store.storeImg.as("storeImg"),
                         customer.nickname.as("nickname")))
-                .from(reservation)
-                .join(product).on(reservation.productId.eq(product.productId))
+                .from(reservationSubSelect)
+                .join(product).on(reservationSubSelect.productId.eq(product.productId))
                 .join(store).on(product.storeId.eq(store.storeId))
-                .join(customer).on(reservation.customerId.eq(customer.customerId))
-                .where(reservation.customerId.eq(customerId))
+                .join(customer).on(reservationSubSelect.customerId.eq(customer.customerId))
+                .where(reservationSubSelect.rowNum.eq(1L))
+                .where(reservationSubSelect.customerId.eq(customerId))
+                .where(reservationSubSelect.paymentTime.isNotNull().or(reservationSubSelect.reservationTime.lt(LocalDateTime.now().minusMinutes(5))))
 //                .orderBy(product.pickupEndTime.desc())
                 .orderBy(product.pickupTime.desc())
                 .fetch();
