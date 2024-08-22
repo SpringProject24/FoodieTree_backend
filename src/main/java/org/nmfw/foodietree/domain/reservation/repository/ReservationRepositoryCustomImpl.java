@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.nmfw.foodietree.domain.customer.entity.QCustomer;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
@@ -206,6 +207,40 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
                 .innerJoin(product).on(reservation.productId.eq(product.productId))
                 .innerJoin(store).on(product.storeId.eq(store.storeId))
                 .where(reservation.paymentId.eq(paymentId))
+                .fetch();
+    }
+
+    @Override
+    public List<StoreReservationDto> findReservationsByStoreId(String storeId) {
+        QReservation reservation = QReservation.reservation;
+        QCustomer customer = QCustomer.customer;
+        QProduct product = QProduct.product;
+        QStore store = QStore.store;
+
+        return factory
+                .select(Projections.bean(StoreReservationDto.class,
+                        customer.customerId,
+                        customer.profileImage,
+                        customer.nickname,
+                        customer.customerPhoneNumber,
+                        product.productId,
+                        reservation.reservationId,
+                        reservation.reservationTime,
+                        reservation.cancelReservationAt,
+                        reservation.pickedUpAt,
+                        product.pickupTime,
+                        product.productUploadDate,
+                        store.price,
+                        store.openAt,
+                        store.closedAt
+                ))
+                .from(reservation)
+                .join(customer).on(reservation.customerId.eq(customer.customerId))
+                .join(product).on(reservation.productId.eq(product.productId))
+                .join(store).on(product.storeId.eq(store.storeId))
+                .where(reservation.paymentTime.isNotNull())
+                .where(store.storeId.eq(storeId))
+                .orderBy(product.pickupTime.desc())
                 .fetch();
     }
 }

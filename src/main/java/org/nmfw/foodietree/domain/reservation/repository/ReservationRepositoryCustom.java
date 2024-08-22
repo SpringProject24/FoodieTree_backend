@@ -39,4 +39,6 @@ public interface ReservationRepositoryCustom {
 
     // 결제 식별 값으로 예약건들의 가격정보 조회
     List<PaymentIdDto> findByPaymentIdForPrice(String paymentId);
+
+    List<StoreReservationDto> findReservationsByStoreId(String storeId);
 }
