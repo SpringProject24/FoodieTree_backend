@@ -27,6 +27,7 @@ import org.nmfw.foodietree.domain.review.repository.ReviewRepository;
 
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -34,10 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -153,8 +151,9 @@ public class ReviewService {
     }
 
     public List<ReviewDetailDto> getAllReviews() {
-        // DB에서 모든 리뷰를 가져오기
-        List<Review> reviews = reviewRepository.findAll();
+//        List<Review> reviews = reviewRepository.findAll();
+        // DB에서 모든 리뷰를 내림차순으로 가져오기
+        List<Review> reviews = reviewRepository.findAll(Sort.by(Sort.Order.desc("reviewId")));
 
         // Review 엔티티를 ReviewDetailDto로 변환
         return reviews.stream()
@@ -195,8 +194,13 @@ public class ReviewService {
         Map<Long, List<Hashtag>> hashtagsByReviewId = reviewRepository.findHashtagsByReviewIds(reviewIds);
 
         // Combine results
+        reviews.forEach(review -> review.setHashtags(hashtagsByReviewId.getOrDefault(review.getReservationId(), List.of())));
+
+        // Step 3: Sort reviews
         return reviews.stream()
-                .peek(review -> review.setHashtags(hashtagsByReviewId.getOrDefault(review.getReservationId(), List.of())))
+                .sorted(Comparator.comparing(MyReviewDto::getPickedUpAt, Comparator.reverseOrder())
+                        .thenComparing(review -> review.getReviewId() == null ? 1 : 0)
+                        .thenComparing(MyReviewDto::getReservationId))
                 .collect(Collectors.toList());
     }
 
