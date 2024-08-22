@@ -25,7 +25,7 @@ public class ReservationDetailDto {
     private LocalDateTime pickedUpAt; // 고객이 픽업한 시간
     private String storeId;
     private LocalDateTime pickupTime; // 가게에서 지정한 픽업시간
-//    private LocalDateTime pickupStartTime; // 가게에서 지정한 픽업가능 시작시간
+    //    private LocalDateTime pickupStartTime; // 가게에서 지정한 픽업가능 시작시간
 //    private LocalDateTime pickupEndTime; // 가게에서 지정한 픽업가능 마감시간
     private String storeName;
     private StoreCategory category;
@@ -48,7 +48,7 @@ public class ReservationDetailDto {
     private String pickupStartTimeF;
     private String pickupEndTimeF;
 
-    private LocalDateTime paymentTime;
+//    private LocalDateTime paymentTime;
 
     public void setCategory(String category) {
         this.category = StoreCategory.fromString(category);
@@ -75,7 +75,7 @@ public class ReservationDetailDto {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.paymentId = paymentId;
-        this.paymentTime = paymentTime;
+//        this.paymentTime = paymentTime;
     }
 
     // 포멧팅 함수
