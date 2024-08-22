@@ -5,11 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.admin.dto.req.ApprovalStatusDto;
 import org.nmfw.foodietree.domain.admin.dto.res.StoreApproveDto;
 import org.nmfw.foodietree.domain.admin.dto.res.ApprovalCellDto;
+import org.nmfw.foodietree.domain.notification.dto.req.NotificationDataDto;
+import org.nmfw.foodietree.domain.notification.service.NotificationService;
 import org.nmfw.foodietree.domain.store.dto.resp.ApprovalInfoDto;
 import org.nmfw.foodietree.domain.store.entity.StoreApproval;
 import org.nmfw.foodietree.domain.store.entity.value.ApproveStatus;
 import org.nmfw.foodietree.domain.store.repository.StoreApprovalRepository;
-import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ import static org.nmfw.foodietree.domain.auth.security.TokenProvider.*;
 public class AdminApprovalService {
 
     private final StoreApprovalRepository storeApprovalRepository;
+    private final NotificationService notificationService;
 
     // 기간 기준으로 필터링 된 요청 리스트
     public Map<String, Object> getApprovals(
@@ -83,13 +85,15 @@ public class AdminApprovalService {
         Long result = storeApprovalRepository.updateApprovalStatus(status, approvalIdList);
         int updateCnt = result.intValue();
 
+        List<StoreApproval> list = storeApprovalRepository.findAllByIdInIds(approvalIdList);
         if(status.equals(ApproveStatus.APPROVED)) { // 승인 요청인 경우 store 업데이트
-            updateCnt = sendStoreInfo(approvalIdList, userInfo);
+            updateCnt = sendStoreInfo(list);
         }
         if(approvalIdList.size() != updateCnt) {
             throw new RuntimeException("전체 " + approvalIdList.size()+ "건 중 "
                     + (approvalIdList.size() - updateCnt) + "건 처리 실패" );
         }
+        sendNotifications(list, status, userInfo.getUsername());
         Map<String, Object> map = new HashMap<>();
         map.put("ids", approvalIdList);
         map.put("status", status.getDesc());
@@ -97,16 +101,28 @@ public class AdminApprovalService {
     }
 
     /**
-     * 스토어 등록 요청을 승인하면 store 업데이트
-     * @param ids - 승인된 요청 Id 목록
-     * @param userInfo - 관리자 정보를 담은 토큰
+     * 요청 Id 기반으로 각각 알림 전송
+     *
+     * @param list     - StoreApproval Id 리스트
+     * @param status   - APPROVED, REJECTED 중 하나
+     * @param adminId  - 관리자 계정
      */
-    public int sendStoreInfo(
-            List<Long> ids,
-            TokenUserInfo userInfo
-    ) {
+    private void sendNotifications(List<StoreApproval> list, ApproveStatus status, String adminId) {
+        List<NotificationDataDto> notificationDataDtoList = list.stream().map(sa -> NotificationDataDto.builder()
+                .storeId(sa.getStoreId())
+                .storeName(sa.getName())
+                .targetId(Collections.singletonList(sa.getId().toString()))
+                .build()).collect(Collectors.toList());
+
+        notificationService.sendApprovalResult(notificationDataDtoList, status, adminId);
+    }
+
+    /**
+     * 스토어 등록 요청을 승인하면 store 업데이트
+     * @param foundApprovals - 승인된 요청 목록
+     */
+    public int sendStoreInfo(List<StoreApproval> foundApprovals) {
         // 엔터티를 DTO로 변환
-        List<StoreApproval> foundApprovals = storeApprovalRepository.findAllByIdInIds(ids);
         List<StoreApproveDto> dtos = foundApprovals.stream()
                 .map(StoreApproveDto::new)
                 .collect(Collectors.toList());

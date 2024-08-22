@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 // 승인 요청에 대한 가게, 상품 조회 response DTO
 public class ApprovalInfoDto {
 
+    private Long storeApprovalId; // storeApproval PK
     private String storeId;
     private String name; // 상호명
     private String contact; // 가게 연락처
@@ -27,7 +28,5 @@ public class ApprovalInfoDto {
     private int productCnt; // 상품 갯수
     private int price; // 상품 가격
     private String proImage; // 상품 등록용 이미지
-    private Long storeApprovalId; // storeApproval PK
-//    private Long productApprovalId; // productApproval PK
 
 }

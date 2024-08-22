@@ -23,7 +23,7 @@ public class StoreApproveDto {
     private String license;
     private int productCnt;
     private int price;
-//    private String productImage; // 상품 이미지
+    private String productImage; // 상품 이미지
 
     public StoreApproveDto(StoreApproval sa) {
         this.storeId = sa.getStoreId();
@@ -35,6 +35,6 @@ public class StoreApproveDto {
         this.license = sa.getLicense();
         this.productCnt = sa.getProductCnt();
         this.price = sa.getPrice();
-//        this.productImage = sa.getProImage();
+        this.productImage = sa.getProImage();
     }
 }
