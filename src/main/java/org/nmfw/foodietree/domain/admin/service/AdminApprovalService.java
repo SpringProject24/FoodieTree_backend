@@ -35,14 +35,20 @@ public class AdminApprovalService {
     private final StoreApprovalRepository storeApprovalRepository;
     private final NotificationService notificationService;
 
-    // 기간 기준으로 필터링 된 요청 리스트
+    /**
+     * 기간을 기준으로 승인 요청 목록 조회
+     * @param start - 시작일
+     * @param end - 종료일
+     * @param userInfo - 토큰
+     * @return 조회 결과(approvals)와 상태별 요청 갯수(stats)
+     */
     public Map<String, Object> getApprovals(
             LocalDateTime start
             , LocalDateTime end
             , TokenUserInfo userInfo
     ) {
         if(!isAdmin(userInfo)) {
-            throw new RuntimeException("관리자 권한이 없습니다.");
+            throw new SecurityException("관리자 권한이 없습니다.");
         }
         LocalDateTime startDate = timeConverter(start, "start");
         LocalDateTime endDate = timeConverter(end, "end");
@@ -71,13 +77,13 @@ public class AdminApprovalService {
      * @param dto - 액션타입(승인, 거절)과 요청 Id 목록
      * @param userInfo - 관리자 정보를 담은 토큰
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Map<String, Object> updateApprovalsStatus(
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateApprovalsStatus(
             ApprovalStatusDto dto,
             TokenUserInfo userInfo
     ) {
         if(!isAdmin(userInfo)) {
-            throw new RuntimeException("관리자 권한이 없습니다.");
+            throw new SecurityException("관리자 권한이 없습니다.");
         }
         ApproveStatus status = ApproveStatus.valueOf(dto.getActionType().toUpperCase());
 
@@ -86,7 +92,7 @@ public class AdminApprovalService {
         int updateCnt = result.intValue();
 
         List<StoreApproval> list = storeApprovalRepository.findAllByIdInIds(approvalIdList);
-        if(status.equals(ApproveStatus.APPROVED)) { // 승인 요청인 경우 store 업데이트
+        if(status == ApproveStatus.APPROVED) { // 승인 요청인 경우 store 업데이트
             updateCnt = sendStoreInfo(list);
         }
         if(approvalIdList.size() != updateCnt) {
@@ -94,10 +100,6 @@ public class AdminApprovalService {
                     + (approvalIdList.size() - updateCnt) + "건 처리 실패" );
         }
         sendNotifications(list, status, userInfo.getUsername());
-        Map<String, Object> map = new HashMap<>();
-        map.put("ids", approvalIdList);
-        map.put("status", status.getDesc());
-        return map;
     }
 
     /**
