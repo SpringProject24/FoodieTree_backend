@@ -69,5 +69,13 @@ public class StoreApprovalController {
         }
         return ResponseEntity.ok().body("");
     }
+    // 등록 상태 확인
+    @GetMapping("/check/approval")
+    public ResponseEntity<String> checkStoreApproval(
+            @AuthenticationPrincipal TokenUserInfo userInfo
+    ) {
+        String approvalState = storeApprovalService.findCurrentApprovalState(userInfo);
+        return ResponseEntity.ok().body(approvalState);
+    }
 
 }
