@@ -35,10 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -182,6 +179,7 @@ public class ReviewService {
                 .hashtags(hashtags)
                 .build();
     }
+
     // Method to find reviews and combine with hashtags
     @Transactional(readOnly = true)
     public List<MyReviewDto> findEnableReviewsByCustomerId(String customerId) {
@@ -197,8 +195,13 @@ public class ReviewService {
         Map<Long, List<Hashtag>> hashtagsByReviewId = reviewRepository.findHashtagsByReviewIds(reviewIds);
 
         // Combine results
+        reviews.forEach(review -> review.setHashtags(hashtagsByReviewId.getOrDefault(review.getReservationId(), List.of())));
+
+        // Step 3: Sort reviews
         return reviews.stream()
-                .peek(review -> review.setHashtags(hashtagsByReviewId.getOrDefault(review.getReservationId(), List.of())))
+                .sorted(Comparator.comparing(MyReviewDto::getPickedUpAt, Comparator.reverseOrder())
+                        .thenComparing(review -> review.getReviewId() == null ? 1 : 0)
+                        .thenComparing(MyReviewDto::getReservationId))
                 .collect(Collectors.toList());
     }
 
