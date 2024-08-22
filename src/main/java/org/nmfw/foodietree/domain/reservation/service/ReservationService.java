@@ -174,6 +174,11 @@ public class ReservationService {
         String storeId = data.get("storeId");
         String paymentId = data.get("paymentId");
         String storeName = data.get("storeName");
+        String reservationId = data.get("reservationId");
+
+        if (reservationId != null) {
+            return patchReservation(reservationId, paymentId);
+        }
 
         List<ReservationFoundStoreIdDto> list = reservationRepository.findByStoreIdLimit(storeId, cnt);
         if (list.isEmpty()) return false;
@@ -290,5 +295,16 @@ public class ReservationService {
         if (authorization.getCancellation().getStatus().equals("SUCCEEDED")) {
             reservation.setCancelPaymentAt(LocalDateTime.now());
         }
+    }
+
+    private boolean patchReservation(String reservationId, String paymentId) {
+        Reservation byId = reservationRepository.findById(Long.valueOf(reservationId))
+            .orElseThrow(() -> new IllegalArgumentException("예약 내역이 존재하지 않습니다."));
+        Duration duration = Duration.between(LocalDateTime.now(), byId.getReservationTime());
+        if (duration.getSeconds() <= 60 * 5) {
+            byId.setPaymentId(paymentId);
+            return true;
+        }
+        return false;
     }
 }
