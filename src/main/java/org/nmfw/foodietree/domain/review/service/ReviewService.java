@@ -46,13 +46,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ReviewService {
 
-
     private final ReviewRepository reviewRepository;
     private final ReviewHashtagRepository reviewHashtagRepository;
     private final ReservationRepository reservationRepository;
     private final ProductRepository productRepository;
-    private final CustomerRepository customerRepository;
-    private final StoreRepository storeRepository;
 
 
     // 이미지 저장 경로
@@ -77,8 +74,6 @@ public class ReviewService {
         Product product = productRepository.findById(reservation.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 제품이 존재하지 않습니다."));
         String customerId = tokenUserInfo.getUsername(); // token 처리
-//            String customerId = customerRepository.findByCustomerId(reviewSaveDto.getCustomerId())
-//                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
         ReservationDetailDto reservationByReservationId = reservationRepository.findReservationByReservationId(reviewSaveDto.getReservationId());
 
@@ -86,10 +81,10 @@ public class ReviewService {
         Review review = Review.builder()
                 .reservationId(reservation.getReservationId())
                 .customerId(customerId)
-                .product(product)
-                .storeId(product.getStoreId())
+                .storeId(reservationByReservationId.getStoreId()) //storeId
                 .storeName(reservationByReservationId.getStoreName())
-                .storeImg(reviewSaveDto.getStoreImg())
+                .storeImg(reservationByReservationId.getStoreImg())
+                .address(reservationByReservationId.getAddress())
                 .reviewScore(reviewSaveDto.getReviewScore())
                 .reviewImg(reviewSaveDto.getReviewImg())
                 .reviewContent(reviewSaveDto.getReviewContent())
@@ -122,13 +117,17 @@ public class ReviewService {
         ReservationDetailDto reservationByReservationId = reservationRepository.findReservationByReservationId(reservationId);
 
         Map<String, Object> storeDetails = new HashMap<>();
-        storeDetails.put("storeName", reservationByReservationId.getStoreName()); // 예약 가게 이름
-        storeDetails.put("address", reservationByReservationId.getAddress()); // 예약 가게 주소
-        storeDetails.put("customerId", reservationByReservationId.getCustomerId()); // 예약 닉네임
-        storeDetails.put("storeImg", reservationByReservationId.getStoreImg()); // 가게 이미지
+
+        storeDetails.put("reservationId", reservationId);
+        storeDetails.put("customerId", reservationByReservationId.getCustomerId()); // 구매한 customer Id
+        storeDetails.put("profileImg", reservationByReservationId.getProfileImage()); // 구매자 플필 사진
         storeDetails.put("storeId", reservationByReservationId.getStoreId()); // 가게 아이디
+        storeDetails.put("storeName", reservationByReservationId.getStoreName()); // 예약 가게 이름
+        storeDetails.put("storeImg", reservationByReservationId.getStoreImg()); // 상품 상점 사진
         storeDetails.put("category", reservationByReservationId.getCategory());// 가게 카테고리
-        storeDetails.put("", reservationByReservationId.getProfileImage()); // 사용자의 이미지
+        storeDetails.put("address", reservationByReservationId.getAddress()); // address 가져오기
+        storeDetails.put("price", reservationByReservationId.getPrice());// 상품 가격
+        storeDetails.put("pickedUpAt", reservationByReservationId.getPickupTime());// 상품 픽업 일시
 
 
         return storeDetails;
@@ -181,11 +180,6 @@ public class ReviewService {
                 .hashtags(hashtags)
                 .build();
     }
-
-//    public ReviewDetailDto getReviewDetail(Long reviewId) {
-//        return reviewRepository.findReviewDetailById(reviewId)
-//                .orElseThrow(() -> new RuntimeException("Review not found"));
-//    }
     // Method to find reviews and combine with hashtags
     @Transactional(readOnly = true)
     public List<MyReviewDto> findEnableReviewsByCustomerId(String customerId) {
