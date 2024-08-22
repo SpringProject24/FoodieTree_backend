@@ -3,6 +3,7 @@ package org.nmfw.foodietree.domain.review.entity;
 import lombok.*;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.reservation.entity.Reservation;
+import org.nmfw.foodietree.domain.store.entity.Store;
 
 import javax.persistence.*;
 import java.util.List;
@@ -52,6 +53,9 @@ public class Review {
     @Column(name = "store_img", nullable = true)
     private String storeImg; // 상점 이미지
 
+    @Column(name = "address", nullable = true)
+    private String address;
+
     @Column(name = "review_score", nullable = true)
     private Integer reviewScore; // 별점 최대 5점
 
@@ -63,5 +67,9 @@ public class Review {
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewHashtag> hashtags; // 리뷰에서 선택한 해시태그 (최소 3개 최대 제한 없음)
+
+    public Store getStore(){
+        return this.product.getStore();
+    }
 }
 
