@@ -41,7 +41,7 @@ public class ReservationService {
     /**
      * 예약을 취소하고 취소가 성공했는지 여부를 반환
      * @param reservationId 취소할 예약의 ID
-     * @return 취소가 완료되었는지 여부
+     * @return 취소 완료 여부
      */
     public boolean cancelReservation(long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
@@ -66,7 +66,7 @@ public class ReservationService {
     /**
      * 예약을 픽업 완료로 변경하고 완료 여부를 반환
      * @param reservationId 픽업 완료할 예약의 ID
-     * @return 픽업 완료가 성공했는지 여부
+     * @return 픽업 완료 성공 여부
      */
     public boolean completePickup(long reservationId) {
 
@@ -83,9 +83,9 @@ public class ReservationService {
                     .storeName(detail.getStoreName())
                     .targetId(List.of(String.valueOf(reservationId)))
                     .build();
+            // 픽업 확인 알림 즉시 발송
             notificationService.sendPickupConfirm(dto);
             // 30분 후 리뷰 알림 예약
-            // 30분 후 리뷰 알림 예약을 NotificationService로 이동
             notificationService.scheduleReviewRequest(dto);
             return true;
         }
