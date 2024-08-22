@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.review.repository;
 import org.nmfw.foodietree.domain.review.dto.res.ReviewDetailDto;
+import org.nmfw.foodietree.domain.review.dto.res.MyReviewDto;
 import org.nmfw.foodietree.domain.review.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +14,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
 
     boolean existByReservationId(Long reservationId);
 
-    List<Review> findAll();
+    boolean existsByReservationId(Long reservationId);
+
+    List<MyReviewDto> findEnableReviewsByCustomerId(String customerId);
 
     @Query("SELECT new org.nmfw.foodietree.domain.review.dto.res.ReviewDetailDto(" +
             "r.reservation.reservationId, " +

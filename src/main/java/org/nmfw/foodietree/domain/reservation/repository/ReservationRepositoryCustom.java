@@ -39,7 +39,4 @@ public interface ReservationRepositoryCustom {
 
     // 결제 식별 값으로 예약건들의 가격정보 조회
     List<PaymentIdDto> findByPaymentIdForPrice(String paymentId);
-
-    // 구매, 픽업 완료한 예약 건 구분
-    boolean isReservationValid(Long reservationId);
 }

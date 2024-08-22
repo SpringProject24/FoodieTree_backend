@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.Subselect;
 
 @Entity
 @Table(name = "tbl_reservation")
@@ -49,4 +50,5 @@ public class Reservation {
     @Setter
     @Column(name = "cancel_payment_at")
     private LocalDateTime cancelPaymentAt;
+
 }
