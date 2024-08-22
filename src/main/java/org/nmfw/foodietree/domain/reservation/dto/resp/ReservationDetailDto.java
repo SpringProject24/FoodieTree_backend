@@ -36,6 +36,10 @@ public class ReservationDetailDto {
     private String profileImage;
     private ReservationStatus status;
 
+    // 결제 관련 필드
+    private String paymentId;
+    private LocalDateTime paymentTime;
+
     // 시간 관련 필드 포멧팅
     private String reservationTimeF;
     private String cancelReservationAtF;
@@ -52,7 +56,7 @@ public class ReservationDetailDto {
     public ReservationDetailDto(long reservationId, long productId, String customerId, LocalDateTime reservationTime,
                                 LocalDateTime cancelReservationAt, LocalDateTime pickedUpAt, String storeId,
                                 LocalDateTime pickupTime, String storeName, StoreCategory category, String address, int price,
-                                String storeImg, String nickname, String profileImage) {
+                                String storeImg, String nickname, String profileImage, String paymentId, LocalDateTime paymentTime) {
         this.reservationId = reservationId;
         this.productId = productId;
         this.customerId = customerId;
@@ -68,6 +72,8 @@ public class ReservationDetailDto {
         this.storeImg = storeImg;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.paymentId = paymentId;
+        this.paymentTime = paymentTime;
     }
 
     // 포멧팅 함수

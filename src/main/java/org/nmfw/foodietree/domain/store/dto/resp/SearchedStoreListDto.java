@@ -22,9 +22,8 @@ public class SearchedStoreListDto {
     private Integer restCnt;
     private LocalTime openAt;
     private LocalTime closedAt;
-    private LocalDateTime limitTime;
-    private Boolean emailVerified;
     private String productImg;
+    private Long productId;
 
     public static SearchedStoreListDto fromEntity(Store store) {
         return SearchedStoreListDto.builder()
@@ -37,15 +36,14 @@ public class SearchedStoreListDto {
                 .productCnt(store.getProductCnt())
                 .openAt(store.getOpenAt())
                 .closedAt(store.getClosedAt())
-                .limitTime(store.getLimitTime())
-                .emailVerified(store.getEmailVerified())
                 .productImg(store.getProductImg())
                 .build();
     }
 
-    public static SearchedStoreListDto fromEntity(Store store, int cnt) {
+    public static SearchedStoreListDto fromEntity(Store store, int cnt, Long productId) {
 		SearchedStoreListDto storeListDto = fromEntity(store);
 		storeListDto.setRestCnt(cnt);
+        storeListDto.setProductId(productId);
 		return storeListDto;
     }
 }

@@ -8,6 +8,7 @@ import org.nmfw.foodietree.domain.product.repository.ProductRepository;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.mapper.ReservationMapper;
+import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.entity.StoreHolidays;
@@ -32,6 +33,7 @@ public class StoreMyPageService {
     private final StoreMyPageMapper storeMyPageMapper;
     private final ReservationService reservationService;
     private final ReservationMapper reservationMapper;
+    private final ReservationRepository reservationRepository;
     private final StoreMyPageRepository storeMyPageRepository;
     private final StoreHolidaysRepository storeHolidaysRepository;
     private final ProductRepository productRepository;
@@ -47,7 +49,7 @@ public class StoreMyPageService {
 
     public List<StoreReservationDto> findReservations(String storeId) {
         log.info("service get store reservations");
-        List<StoreReservationDto> reservations = reservationMapper.findReservations(storeId);
+        List<StoreReservationDto> reservations = reservationRepository.findReservationsByStoreId(storeId);
 
         for (StoreReservationDto dto : reservations) {
             ReservationDetailDto rdto = ReservationDetailDto.builder()
@@ -105,7 +107,7 @@ public class StoreMyPageService {
     }
 
     public StoreStatsDto getStats(String storeId) {
-        List<StoreReservationDto> reservations = reservationMapper.findReservations(storeId);
+        List<StoreReservationDto> reservations = reservationRepository.findReservations(storeId);
 
         // 예약 내역 중 pickedUpAt이 null이 아닌 것들의 리스트
         List<StoreReservationDto> pickedUpReservations = reservations.stream()
