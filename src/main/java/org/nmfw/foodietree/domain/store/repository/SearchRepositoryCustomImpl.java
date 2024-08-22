@@ -44,7 +44,7 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
         BooleanExpression expression = s.storeName.contains(keyword).or(s.address.contains(keyword));
 
         List<SearchedStoreListDto> result = factory
-                .select(store, cnt)
+                .select(store, cnt, p.productId)
                 .from(store)
                 .leftJoin(product).on(s.storeId.eq(p.storeId))
                 .leftJoin(reservationSubSelect).on(p.productId.eq(r.productId))
@@ -54,7 +54,7 @@ public class SearchRepositoryCustomImpl implements SearchRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch()
-                .stream().map(t -> SearchedStoreListDto.fromEntity(t.get(store), t.get(cnt)))
+                .stream().map(t -> SearchedStoreListDto.fromEntity(t.get(store), t.get(cnt), t.get(p.productId)))
                 .collect(Collectors.toList());
 
         List<Store> fetch = factory

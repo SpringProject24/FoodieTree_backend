@@ -23,7 +23,7 @@ public class SearchedStoreListDto {
     private LocalTime openAt;
     private LocalTime closedAt;
     private String productImg;
-    private String productId;
+    private Long productId;
 
     public static SearchedStoreListDto fromEntity(Store store) {
         return SearchedStoreListDto.builder()
@@ -40,9 +40,10 @@ public class SearchedStoreListDto {
                 .build();
     }
 
-    public static SearchedStoreListDto fromEntity(Store store, int cnt) {
+    public static SearchedStoreListDto fromEntity(Store store, int cnt, Long productId) {
 		SearchedStoreListDto storeListDto = fromEntity(store);
 		storeListDto.setRestCnt(cnt);
+        storeListDto.setProductId(productId);
 		return storeListDto;
     }
 }
