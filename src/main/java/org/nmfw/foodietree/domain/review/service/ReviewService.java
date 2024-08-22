@@ -27,6 +27,7 @@ import org.nmfw.foodietree.domain.review.repository.ReviewRepository;
 
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -153,8 +154,9 @@ public class ReviewService {
     }
 
     public List<ReviewDetailDto> getAllReviews() {
-        // DB에서 모든 리뷰를 가져오기
-        List<Review> reviews = reviewRepository.findAll();
+//        List<Review> reviews = reviewRepository.findAll();
+        // DB에서 모든 리뷰를 내림차순으로 가져오기
+        List<Review> reviews = reviewRepository.findAll(Sort.by(Sort.Order.desc("reviewId")));
 
         // Review 엔티티를 ReviewDetailDto로 변환
         return reviews.stream()
