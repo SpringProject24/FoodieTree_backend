@@ -21,4 +21,6 @@ public class ProductInfoDto {
     private LocalDateTime reservationTime;
     private LocalDateTime cancelReservationAt;
     private LocalDateTime pickedUpAt;
+
+    private LocalDateTime paymentTime;
 }
