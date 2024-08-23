@@ -214,7 +214,8 @@ public class StoreMyPageService {
         int readyToPickUpCnt = dto.stream()
                 .filter(product -> product.getReservationTime() != null
                         && product.getPickedUpAt() == null
-                        && product.getCancelReservationAt() == null)
+                        && product.getCancelReservationAt() == null
+                        && product.getPaymentTime() != null)
                 .collect(Collectors.toList())
                 .size();
 
