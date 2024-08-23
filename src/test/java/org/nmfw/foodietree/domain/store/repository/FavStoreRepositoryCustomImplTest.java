@@ -3,6 +3,8 @@ package org.nmfw.foodietree.domain.store.repository;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.nmfw.foodietree.domain.customer.repository.FavStoreRepository;
 import org.nmfw.foodietree.domain.store.dto.resp.StoreListDto;
@@ -28,10 +30,16 @@ class FavStoreRepositoryCustomImplTest {
 		// when
 		List<StoreListDto> favStoresByCustomerId = favStoreRepository.findFavStoresByCustomerId(
 			customerId, "favStore");
+		int size = favStoresByCustomerId.size();
 		List<StoreListDto> orders_3 = favStoreRepository.findFavStoresByCustomerId(customerId, "orders_3");
 		favStoresByCustomerId.addAll(orders_3);
+		int size1 = favStoresByCustomerId.size();
+		int size2 = orders_3.size();
 		// then
-		favStoresByCustomerId.forEach(e -> log.info("{}", e));
+		Assertions.assertAll(
+				() -> assertNotNull(favStoresByCustomerId),
+				() -> assertEquals(size1, size + size2)
+		);
 
 	}
 

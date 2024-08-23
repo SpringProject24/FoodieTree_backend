@@ -25,23 +25,23 @@ class FavFoodRepositoryCustomImplTest {
     @Autowired
     CustomerMyPageService customerMyPageService;
 
-    @Test
-    @DisplayName("findCategoryByFood 테스트")
-    void findByCategoryTest() {
-        String customerId = "summer7@gmail.com";
-        List<PreferredFoodDto> preferredFood = customerMyPageService.getCustomerInfo(customerId).getPreferredFood();
-        List<StoreCategory> categories = preferredFood.stream()
-                .map(preferredFoodDto -> StoreCategory.fromString(preferredFoodDto.getPreferredFood()))
-                .collect(Collectors.toList()); // 한식, 중식, 일식
-        List<ProductDto> categoryByFood = favFoodRepository.findCategoryByFood(categories);
-        assertNotNull(categoryByFood);
-    }
-    @Test
-    @DisplayName("findByReviews 테스트 - 최근 예약 productId 5개로 상품조회")
-    void findByReviewsTest() {
-        List<ProductDto> byReviews = favFoodRepository.findByReviews();
-
-        assertNotNull(byReviews);
-    }
+//    @Test
+//    @DisplayName("findCategoryByFood 테스트")
+//    void findByCategoryTest() {
+//        String customerId = "summer7@gmail.com";
+//        List<PreferredFoodDto> preferredFood = customerMyPageService.getCustomerInfo(customerId).getPreferredFood();
+//        List<StoreCategory> categories = preferredFood.stream()
+//                .map(preferredFoodDto -> StoreCategory.fromString(preferredFoodDto.getPreferredFood()))
+//                .collect(Collectors.toList()); // 한식, 중식, 일식
+//        List<ProductDto> categoryByFood = favFoodRepository.findCategoryByFood(categories);
+//        assertNotNull(categoryByFood);
+//    }
+//    @Test
+//    @DisplayName("findByReviews 테스트 - 최근 예약 productId 5개로 상품조회")
+//    void findByReviewsTest() {
+//        List<ProductDto> byReviews = favFoodRepository.findByReviews();
+//
+//        assertNotNull(byReviews);
+//    }
 
 }

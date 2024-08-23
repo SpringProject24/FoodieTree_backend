@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.notification.dto.res.MessageDto;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,10 +19,12 @@ import static org.nmfw.foodietree.domain.notification.entity.QNotification.*;
 public class NotificationRepositoryCustomImpl implements NotificationRepositoryCustom{
 
     private final JPAQueryFactory factory;
+    private final EntityManager em;
 
     @Override
     public List<MessageDto> findAllByReceiverId(String receiverId) {
-        List<MessageDto> list = factory
+        int days = 3;
+        return factory
             .select(Projections.fields(
                 MessageDto.class,
                 notification.notificationId.as("id"),
@@ -31,17 +34,28 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
                 notification.receiverId.as("receiverId"),
                 notification.senderId.as("senderId"),
                 notification.createdAt.as("createdAt"),
-                notification.targetIdList.as("targetId")
-                ))
+                notification.targetIdList.as("targetId"),
+                notification.isRead.as("isRead")
+            ))
             .from(notification)
             .where(
                 notification.receiverId.eq(receiverId)
-                    .and(
-                        notification.isRead.isNull()
-                        .or(notification.createdAt.goe(LocalDateTime.now().minusDays(3)))
-                    )
+                .and(
+                    notification.isRead.isFalse()
+                    .or(notification.createdAt.goe(LocalDateTime.now().minusDays(days)))
+                )
             ).fetch();
-        log.debug("\n\n알림 조회 결과: {}",list);
-        return list;
+    }
+
+    @Override
+    public Long updateIsReadAll(List<Long> ids) {
+        Long result = factory
+                .update(notification)
+                .set(notification.isRead, true)
+                .where(notification.notificationId.in(ids))
+                .execute();
+        em.flush();
+        em.clear();
+        return result;
     }
 }

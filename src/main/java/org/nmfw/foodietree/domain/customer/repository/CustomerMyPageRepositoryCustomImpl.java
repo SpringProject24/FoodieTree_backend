@@ -10,6 +10,7 @@ import org.nmfw.foodietree.domain.customer.dto.resp.CustomerFavStoreDto;
 import org.nmfw.foodietree.domain.customer.entity.*;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
+import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
 import org.nmfw.foodietree.domain.reservation.entity.ReservationStatus;
 import org.nmfw.foodietree.domain.reservation.service.ReservationService;
 import org.nmfw.foodietree.domain.store.entity.QFoodCategory;
@@ -18,7 +19,10 @@ import org.nmfw.foodietree.domain.reservation.entity.QReservation;
 import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect.reservationSubSelect;
 
 @Repository
 @RequiredArgsConstructor
@@ -93,10 +97,11 @@ public class CustomerMyPageRepositoryCustomImpl implements CustomerMyPageReposit
 
     @Override
     public List<ReservationDetailDto> findReservationsByCustomerId(String customerId) {
-        QReservation reservation = QReservation.reservation;
+//        QReservation reservation = QReservation.reservation;
         QProduct product = QProduct.product;
         QStore store = QStore.store;
         QCustomer customer = QCustomer.customer;
+        QReservationSubSelect reservation = QReservationSubSelect.reservationSubSelect;
 
         List<ReservationDetailDto> reservations = queryFactory.select(
                         Projections.constructor(ReservationDetailDto.class,
@@ -114,13 +119,17 @@ public class CustomerMyPageRepositoryCustomImpl implements CustomerMyPageReposit
                                 store.price,
                                 store.storeImg,
                                 customer.nickname,
-                                customer.profileImage
+                                customer.profileImage,
+                                reservation.paymentId,
+                                reservation.paymentTime
                         ))
                 .from(reservation)
                 .join(product).on(reservation.productId.eq(product.productId))
                 .join(store).on(product.storeId.eq(store.storeId))
                 .join(customer).on(reservation.customerId.eq(customer.customerId))
+                .where(reservation.rowNum.eq(1L))
                 .where(reservation.customerId.eq(customerId))
+                .where(reservation.paymentTime.isNotNull().or(reservation.reservationTime.gt(LocalDateTime.now().minusMinutes(5))))
                 .orderBy(product.pickupTime.desc())
                 .fetch();
 

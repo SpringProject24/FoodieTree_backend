@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.reservation.service;
 
+import java.time.Duration;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -7,11 +8,14 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
 import org.nmfw.foodietree.domain.auth.security.TokenProvider;
 import org.nmfw.foodietree.domain.notification.dto.req.NotificationDataDto;
 import org.nmfw.foodietree.domain.notification.service.NotificationService;
 import org.nmfw.foodietree.domain.product.entity.Product;
 import org.nmfw.foodietree.domain.product.repository.ProductRepository;
+import org.nmfw.foodietree.domain.reservation.dto.req.PaymentCancelDto;
+import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentCancelRespDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentIdDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.PaymentResponseDto;
 import org.nmfw.foodietree.domain.reservation.dto.resp.ReservationDetailDto;
@@ -22,6 +26,8 @@ import org.nmfw.foodietree.domain.reservation.entity.value.PaymentStatus;
 import org.nmfw.foodietree.domain.reservation.repository.ReservationRepository;
 import org.nmfw.foodietree.domain.store.entity.Store;
 import org.nmfw.foodietree.domain.store.repository.StoreRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
+import reactor.core.publisher.Mono;
 
 
 @Service
@@ -38,7 +45,6 @@ import java.time.LocalDateTime;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final NotificationService notificationService;
-    private final TaskScheduler taskScheduler;
 
     @Value("${env.payment.api.url}")
     private String apiUrl;
@@ -48,11 +54,15 @@ public class ReservationService {
     /**
      * 예약을 취소하고 취소가 성공했는지 여부를 반환
      * @param reservationId 취소할 예약의 ID
-     * @return 취소가 완료되었는지 여부
+     * @return 취소 완료 여부
      */
     public boolean cancelReservation(long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약 내역이 존재하지 않습니다."));
+
+        if (reservation.getPaymentTime() != null) {
+            processPaymentCancel(reservation);
+        }
 
         // 취소한 적이 없으면 취소
         if(reservation.getCancelReservationAt() == null) {
@@ -73,7 +83,7 @@ public class ReservationService {
     /**
      * 예약을 픽업 완료로 변경하고 완료 여부를 반환
      * @param reservationId 픽업 완료할 예약의 ID
-     * @return 픽업 완료가 성공했는지 여부
+     * @return 픽업 완료 성공 여부
      */
     public boolean completePickup(long reservationId) {
 
@@ -90,9 +100,10 @@ public class ReservationService {
                     .storeName(detail.getStoreName())
                     .targetId(List.of(String.valueOf(reservationId)))
                     .build();
+            // 픽업 확인 알림 즉시 발송
             notificationService.sendPickupConfirm(dto);
             // 30분 후 리뷰 알림 예약
-            scheduleReviewRequest(dto);
+            notificationService.scheduleReviewRequest(dto);
             return true;
         }
 
@@ -163,6 +174,12 @@ public class ReservationService {
         String storeId = data.get("storeId");
         String paymentId = data.get("paymentId");
         String storeName = data.get("storeName");
+        String reservationId = data.get("reservationId");
+
+        if (reservationId != null) {
+            boolean b = patchReservation(reservationId, paymentId);
+            return b;
+        }
 
         List<ReservationFoundStoreIdDto> list = reservationRepository.findByStoreIdLimit(storeId, cnt);
         if (list.isEmpty()) return false;
@@ -232,15 +249,51 @@ public class ReservationService {
         return PaymentStatus.INCONSISTENCY;
     }
 
-    /**
-     * 픽업 완료 30분 후 리뷰알림 발송 예약
-     * @param dto - 알림에 필요한 정보
-     */
-    private void scheduleReviewRequest(NotificationDataDto dto) {
-//        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(30);
-        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(1);
-        ZoneId zoneId = ZoneId.of("Asia/Seoul");
-        Date targetDate = Date.from(targetTime.atZone(zoneId).toInstant());
-        taskScheduler.schedule(() -> notificationService.sendReviewRequest(dto), targetDate);
+    private void processPaymentCancel(Reservation reservation) {
+        String url = apiUrl + reservation.getPaymentId() + "/cancel";
+
+        Long reservationId = reservation.getReservationId();
+        ReservationDetailDto detailDto = reservationRepository.findReservationByReservationId(
+            reservationId);
+        int price = detailDto.getPrice();
+        LocalDateTime pickupTime = detailDto.getPickupTime();
+        Duration duration = Duration.between(LocalDateTime.now(), pickupTime);
+        if (Math.abs(duration.getSeconds()) < 60 * 60) {
+            price /= 2;
+        }
+        PaymentCancelDto test = PaymentCancelDto.builder()
+            .amount(price)
+            .reason("test")
+            .build();
+        PaymentCancelRespDto authorization = WebClient.create()
+            .post()
+            .uri(url)
+            .header("Content-Type", "application/json")
+            .header("Authorization", "PortOne " + paymentKey)
+            .bodyValue(test)
+            .exchangeToMono(response -> {
+                if (response.statusCode() == HttpStatus.OK) {
+                    return response.bodyToMono(PaymentCancelRespDto.class);
+                } else {
+                    log.warn("{}", response.statusCode());
+                    return Mono.empty();
+                }
+            })
+            .block();
+        if (authorization == null) return;
+        if (authorization.getCancellation().getStatus().equals("SUCCEEDED")) {
+            reservation.setCancelPaymentAt(LocalDateTime.now());
+        }
+    }
+
+    private boolean patchReservation(String reservationId, String paymentId) {
+        Reservation byId = reservationRepository.findById(Long.valueOf(reservationId))
+            .orElseThrow(() -> new IllegalArgumentException("예약 내역이 존재하지 않습니다."));
+        Duration duration = Duration.between(LocalDateTime.now(), byId.getReservationTime());
+        if (Math.abs(duration.getSeconds()) <= 60 * 5) {
+            byId.setPaymentId(paymentId);
+            return true;
+        }
+        return false;
     }
 }

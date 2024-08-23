@@ -23,4 +23,5 @@ public interface StoreRepository extends JpaRepository<Store, Long>, SearchRepos
 
     @Query("SELECT COUNT(c) > 0 FROM Store c WHERE c.storeId = :email")
     boolean existsByStoreId(@Param("email") String email);
+
 }

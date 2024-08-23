@@ -27,11 +27,10 @@ public class StoreApprovalController {
 
     // 가게 디테일 등록 요청
     @PostMapping("/approval")
-    public ResponseEntity<?> approveStore(
+    public ResponseEntity<String> approveStore(
             @Valid @RequestBody StoreApprovalReqDto dto
         , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
-        // Validation 예외처리는 ExceptionAdvisor.java
         log.info("Request to approveStore : {}", dto.toString());
 
         // 가게 등록 요청 처리 (tbl_store_approval)
@@ -40,43 +39,43 @@ public class StoreApprovalController {
                     dto, userInfo
             );
         } catch (NoSuchElementException e) { // 등록 요청 실패
-//            throw new RuntimeException(e);
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
 
-        // 등록 요청 성공
         return ResponseEntity.ok().body("Approved Store");
     }
 
     // 상품 디테일 등록 요청
     @ResponseBody
     @PostMapping(value="/approval/p")
-    public ResponseEntity<?> approveProduct(
+    public ResponseEntity<String> approveProduct(
             @Validated @RequestPart(value = "productInfo") ProductApprovalReqDto dto
             , @Validated @RequestPart(value = "productImage") MultipartFile productImage
         , @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
-        // 컨트롤러의 Validation 예외처리는 ExceptionAdvisor.java
-        // userInfo는 service에서 처리
-
         dto.setProductImage(productImage);
-
         // 상품 등록 요청 처리 (tbl_product_approval)
         try {
             storeApprovalService.askProductApproval(
                     dto, userInfo
             );
-        } catch (NoSuchElementException e) { // 등록 요청 실패, 예외처리 보완 필요
+        } catch (NoSuchElementException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
-
-        // 등록 요청 성공
         return ResponseEntity.ok().body("");
+    }
+    // 등록 상태 확인
+    @GetMapping("/check/approval")
+    public ResponseEntity<String> checkStoreApproval(
+            @AuthenticationPrincipal TokenUserInfo userInfo
+    ) {
+        String approvalState = storeApprovalService.findCurrentApprovalState(userInfo);
+        return ResponseEntity.ok().body(approvalState);
     }
 
 }

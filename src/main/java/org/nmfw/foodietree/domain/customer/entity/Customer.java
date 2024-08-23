@@ -2,6 +2,7 @@ package org.nmfw.foodietree.domain.customer.entity;
 
 import lombok.*;
 import org.nmfw.foodietree.domain.auth.entity.EmailVerification;
+import org.nmfw.foodietree.domain.review.entity.Review;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

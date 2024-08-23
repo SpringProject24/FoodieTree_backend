@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.product.dto.response.ProductInfoDto;
 import org.nmfw.foodietree.domain.product.entity.QProduct;
 import org.nmfw.foodietree.domain.reservation.entity.QReservation;
+import org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect;
 import org.nmfw.foodietree.domain.store.dto.resp.*;
 import org.nmfw.foodietree.domain.store.entity.QStore;
 import org.nmfw.foodietree.domain.store.entity.Store;
@@ -21,6 +22,8 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.nmfw.foodietree.domain.reservation.entity.QReservationSubSelect.reservationSubSelect;
 
 
 @Repository
@@ -132,7 +135,7 @@ public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCus
     @Override
     public List<ProductInfoDto> getProductCntByDate(String storeId, String date) {
         QProduct qProduct = QProduct.product;
-        QReservation qReservation = QReservation.reservation;
+        QReservationSubSelect qReservation = reservationSubSelect;
 
         // String으로 변환하여 날짜 비교
         StringTemplate formattedDate = Expressions.stringTemplate(
@@ -146,10 +149,12 @@ public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCus
 //                        qProduct.cancelByStore,
                         qReservation.reservationTime,
                         qReservation.cancelReservationAt,
-                        qReservation.pickedUpAt))
+                        qReservation.pickedUpAt,
+                        qReservation.paymentTime))
                 .from(qProduct)
                 .leftJoin(qReservation).on(qProduct.productId.eq(qReservation.productId))
-                .where(qProduct.storeId.eq(storeId).and(dateCondition))
+                .where(qProduct.storeId.eq(storeId).and(dateCondition)
+                        .and(qReservation.rowNum.eq(1L)))
                 .fetch();
     }
 
