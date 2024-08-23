@@ -2,7 +2,6 @@ package org.nmfw.foodietree.domain.store.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -69,22 +68,20 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
         LocalDateTime yesterday = LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0);
 
         return factory
-                .selectFrom(storeApproval)
-                .where(storeApproval.licenseVerification.eq(ApproveStatus.PENDING)
-                    .and(storeApproval.createdAt.after(yesterday)))
-                .limit(100)
-                .fetch();
+            .selectFrom(storeApproval)
+            .where(storeApproval.licenseVerification.eq(ApproveStatus.PENDING)
+                .and(storeApproval.createdAt.after(yesterday)))
+            .limit(100)
+            .fetch();
     }
 
-    @Override // 해당 가게의 승인 요청 조회
-    public ApprovalInfoDto findApprovalsByStoreId(String storeId) {
-
-        BooleanBuilder booleanBuilder = makeDynamicCondition(storeApproval.status, ApproveStatus.APPROVED);
-
+    // 해당 가게의 모든 요청 조회
+    public List<ApprovalInfoDto> findDtoListByStoreId(String storeId) {
         return selectToDto()
-        .from(storeApproval)
-        .where(booleanBuilder.and(storeApproval.storeId.eq(storeId)))
-        .fetchOne();
+            .from(storeApproval)
+            .where(storeApproval.storeId.eq(storeId))
+            .orderBy(storeApproval.id.desc())
+            .fetch();
     }
 
     @Override // 기간 기준 조회
@@ -155,7 +152,7 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
                     .set(store.storeLicenseNumber, sa.getLicense())
                     .set(store.productCnt, sa.getProductCnt())
                     .set(store.price, sa.getPrice())
-//                    .set(store.productImage, sa.getProductImage()) // store 필드에 따라 변경 필요
+                    .set(store.productImg, sa.getProductImage()) // store 필드에 따라 변경 필요
                     .where(store.storeId.eq(sa.getStoreId()))
                     .execute();
             if(result > 0) resultCnt++;
@@ -170,6 +167,15 @@ public class StoreApprovalRepositoryCustomImpl implements StoreApprovalRepositor
 
         return resultCnt;
     }
+    @Override
+    public StoreApproval findRecentOneByStoreId(String storeId) {
+        return factory.selectFrom(storeApproval)
+                .where(storeApproval.storeId.eq(storeId))
+                .orderBy(storeApproval.id.desc())
+                .limit(1)
+                .fetchOne();
+    }
+
 
     // 동적 쿼리 eq 메서드
     private <T> BooleanBuilder makeDynamicCondition(PathBuilder<T> field, T value) {

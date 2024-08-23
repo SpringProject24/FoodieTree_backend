@@ -73,17 +73,4 @@ public class StoreApproval {
     @Builder.Default
     private ApproveStatus licenseVerification = ApproveStatus.PENDING;
 
-    // StoreApproval 승인되면 Store setter 후 리턴
-    public Store updateFromStoreApproval(Store store) {
-        store.setCategory(String.valueOf(category));
-        store.setAddress(address);
-        store.setApprove(status);
-        store.setStoreContact(contact);
-        store.setStoreName(name);
-        store.setStoreLicenseNumber(license);
-        store.setProductCnt(productCnt);
-        store.setPrice(price);
-        store.setApprove(ApproveStatus.APPROVED);
-        return store;
-    }
 }

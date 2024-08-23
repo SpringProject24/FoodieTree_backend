@@ -45,7 +45,6 @@ import reactor.core.publisher.Mono;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final NotificationService notificationService;
-    private final TaskScheduler taskScheduler;
 
     @Value("${env.payment.api.url}")
     private String apiUrl;
@@ -55,7 +54,7 @@ public class ReservationService {
     /**
      * 예약을 취소하고 취소가 성공했는지 여부를 반환
      * @param reservationId 취소할 예약의 ID
-     * @return 취소가 완료되었는지 여부
+     * @return 취소 완료 여부
      */
     public boolean cancelReservation(long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
@@ -84,7 +83,7 @@ public class ReservationService {
     /**
      * 예약을 픽업 완료로 변경하고 완료 여부를 반환
      * @param reservationId 픽업 완료할 예약의 ID
-     * @return 픽업 완료가 성공했는지 여부
+     * @return 픽업 완료 성공 여부
      */
     public boolean completePickup(long reservationId) {
 
@@ -101,9 +100,10 @@ public class ReservationService {
                     .storeName(detail.getStoreName())
                     .targetId(List.of(String.valueOf(reservationId)))
                     .build();
+            // 픽업 확인 알림 즉시 발송
             notificationService.sendPickupConfirm(dto);
             // 30분 후 리뷰 알림 예약
-            scheduleReviewRequest(dto);
+            notificationService.scheduleReviewRequest(dto);
             return true;
         }
 
@@ -247,18 +247,6 @@ public class ReservationService {
             }
         }
         return PaymentStatus.INCONSISTENCY;
-    }
-
-    /**
-     * 픽업 완료 30분 후 리뷰알림 발송 예약
-     * @param dto - 알림에 필요한 정보
-     */
-    private void scheduleReviewRequest(NotificationDataDto dto) {
-//        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(30);
-        LocalDateTime targetTime = LocalDateTime.now().plusMinutes(1);
-        ZoneId zoneId = ZoneId.of("Asia/Seoul");
-        Date targetDate = Date.from(targetTime.atZone(zoneId).toInstant());
-        taskScheduler.schedule(() -> notificationService.sendReviewRequest(dto), targetDate);
     }
 
     private void processPaymentCancel(Reservation reservation) {
