@@ -98,7 +98,8 @@ public class ReviewRepositoryCustomImpl  implements ReviewRepositoryCustom{
                 .leftJoin(review).on(review.reservationId.eq(reservation.reservationId))
                 .where(reservation.customerId.eq(customerId)
                         .and(reservation.cancelReservationAt.isNull()) // 취소되지 않은 예약
-                        .and(reservation.pickedUpAt.isNotNull())) // 픽업 완료된 예약
+                        .and(reservation.pickedUpAt.isNotNull())
+                    .and(reservation.paymentTime.isNotNull())) // 픽업 완료된 예약
                 .fetch();
     }
 

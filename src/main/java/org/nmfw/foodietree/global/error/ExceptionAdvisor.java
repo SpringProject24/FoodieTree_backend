@@ -54,10 +54,10 @@ public class ExceptionAdvisor {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> handleNullPointerException(NullPointerException ex) {
-        log.info("{}", ex.getMessage());
-        return ResponseEntity.internalServerError().body("잠시 후 다시 이용해주세요");
-    }
+//    @ExceptionHandler(NullPointerException.class)
+//    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+//    public ResponseEntity<?> handleNullPointerException(NullPointerException ex) {
+//
+//        return ResponseEntity.internalServerError().body("잠시 후 다시 이용해주세요");
+//    }
 }
