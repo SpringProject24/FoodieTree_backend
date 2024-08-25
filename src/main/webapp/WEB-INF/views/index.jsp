@@ -1,11 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8" %> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<spring:eval expression="@environment.getProperty('env.url')" var="url" />
 <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="음식을 낭비하지 않고 탄소 배출을 줄여, 지구를 지키는 푸디트리의 여정에 동참하세요!">
+      <meta property="og:type" content="website">
+      <meta property="og:title" content="푸디트리에 오신걸 환영합니다!">
+      <meta property="og:description" content="음식을 낭비하지 않고 탄소 배출을 줄여, 지구를 지키는 푸디트리의 여정에 동참하세요!">
+      <meta property="og:image" content="https://foodietree.store/assets/img/icon/greenlogo.png">
+      <meta property="og:url" content="https://foodietree.store">
+    <link rel="icon" href="/assets/img/favicon_dark.ico" />
+    <meta name="naver-site-verification" content="2a70d51d328579e31df97d5129e3f9162ecbafcd" />
     <title>FoodieTree</title>
     <link rel="stylesheet" href="/assets/css/index.css" />
     <!-- 구글폰트 -->
@@ -97,7 +107,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
   <script>
       const $storeSignup = document.querySelector(".store-signup");
       $storeSignup.addEventListener("click", () => {
-          location.href = "http://localhost:3000/sign-up";
+          location.href = `${url}/sign-up`;
       });
 
       document.addEventListener('click', function(event) {

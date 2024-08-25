@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketTransportRegist
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Value("${env.domain:http://localhost:3000,http://localhost:3001,http://localhost:3002,http://172.30.1.14:3000}")
+    @Value("${env.url:http://localhost:3000,http://localhost:3001,http://localhost:3002,http://172.30.1.14:3000}")
     private String[] allowedOrigins;
 
     @Override
