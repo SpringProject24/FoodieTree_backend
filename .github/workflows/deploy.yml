@@ -1,0 +1,71 @@
+name: Deploy foodietree back
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: == build project ==
+        run: |
+          chmod +x gradlew
+          echo "${{ secrets.ENV_PROPERTIES2 }}" > ./src/main/resources/env.properties
+          ./gradlew clean build -x test
+
+      - name: == spring docker image build ==
+        run: |
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME2 }} -p ${{ secrets.DOCKERHUB_PASSWORD2 }}
+          docker build --no-cache -t ${{ secrets.DOCKERHUB_USERNAME2 }}/foodie-api:latest .
+          docker push ${{ secrets.DOCKERHUB_USERNAME2 }}/foodie-api:latest
+
+      - name: == conn remote ==
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.NAME2 }}
+          host: ${{ secrets.HOST2 }}
+          key: ${{ secrets.SSH_KEY2 }}
+          script: |
+            
+            export PATH=$PATH:/usr/local/bin
+            mkdir -p ./foodie-app/back
+            cd ./foodie-app/back
+            echo "${{ secrets.SSL_KEYSTORE }}" | base64 -d > ./foodie_cert_key.p12
+            
+            echo "${{ secrets.DOCKER_YML2 }}" > ./docker-compose.yml
+            
+            docker login -u ${{ secrets.DOCKER_USERNAME2 }} -p ${{ secrets.DOCKERHUB_PASSWORD2 }}
+  
+            echo "Stopping existing container..."
+            docker compose down --remove-orphans || true
+            
+            echo "Remove Existing Docker image..."
+            docker rmi ${{ secrets.DOCKER_USERNAME2 }}/foodie-api:latest || true
+            
+            echo "Pulling Docker image..."
+            docker pull ${{ secrets.DOCKER_USERNAME2 }}/foodie-api:latest
+            
+            echo "Starting new container..."
+            docker compose up -d
+
+#      - name: Discord Alert Success
+#        uses: sarisia/actions-status-discord@v1
+#        if: success()
+#        with:
+#            webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#            description: "Success foodie-api CI/CD"
+#
+#      - name: Discord Alert Failure
+#        uses: sarisia/actions-status-discord@v1
+#        if: failure()
+#        with:
+#          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#          description: "Fail foodie-api CI/CD"
+
+

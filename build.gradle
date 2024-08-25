@@ -25,6 +25,10 @@ java {
     }
 }
 
+jar {
+    enabled = false
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -62,7 +66,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     //swagger API 문서화
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+//    implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
     // 메일서버와 연결해서 메일을 발송
     implementation 'org.springframework.boot:spring-boot-starter-mail'
