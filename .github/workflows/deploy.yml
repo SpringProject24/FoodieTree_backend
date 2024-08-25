@@ -40,16 +40,16 @@ jobs:
             
             echo "${{ secrets.DOCKER_YML2 }}" > ./docker-compose.yml
             
-            docker login -u ${{ secrets.DOCKER_USERNAME2 }} -p ${{ secrets.DOCKERHUB_PASSWORD2 }}
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME2 }} -p ${{ secrets.DOCKERHUB_PASSWORD2 }}
   
             echo "Stopping existing container..."
             docker compose down --remove-orphans || true
             
             echo "Remove Existing Docker image..."
-            docker rmi ${{ secrets.DOCKER_USERNAME2 }}/foodie-api:latest || true
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME2 }}/foodie-api:latest || true
             
             echo "Pulling Docker image..."
-            docker pull ${{ secrets.DOCKER_USERNAME2 }}/foodie-api:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/foodie-api:latest
             
             echo "Starting new container..."
             docker compose up -d
