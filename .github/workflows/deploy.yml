@@ -53,18 +53,18 @@ jobs:
             echo "Starting new container..."
             docker compose up -d
 
-      - name: Discord Alert Success
-        uses: sarisia/actions-status-discord@v1
-        if: success()
-        with:
-            webhook: ${{ secrets.DISCORD_WEBHOOK }}
-            description: "Success foodie-api CI/CD"
-
-      - name: Discord Alert Failure
-        uses: sarisia/actions-status-discord@v1
-        if: failure()
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          description: "Fail foodie-api CI/CD"
-
+#      - name: Discord Alert Success
+#        uses: sarisia/actions-status-discord@v1
+#        if: success()
+#        with:
+#            webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#            description: "Success foodie-api CI/CD"
+#
+#      - name: Discord Alert Failure
+#        uses: sarisia/actions-status-discord@v1
+#        if: failure()
+#        with:
+#          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#          description: "Fail foodie-api CI/CD"
+#
 
