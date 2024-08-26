@@ -234,9 +234,8 @@ public class ReservationService {
         if (totalPrice.equals(dto.getAmount().getPaid())) {
             switch (dto.getStatus()) {
                 case ("PAID") :
-                    log.info("{}", dto);
                     List<Reservation> result = list.stream()
-                            .peek(e -> e.setPaymentTime(LocalDateTime.now()))
+                            .peek(e -> e.setPaymentTime(dto.getPaidAt().atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()))
                             .collect(Collectors.toList());
                     reservationRepository.saveAll(result);
                     return PaymentStatus.PAID;

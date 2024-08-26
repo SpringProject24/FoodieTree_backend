@@ -22,7 +22,7 @@ public class CrossOriginConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 어떤 url 요청에서
-                .allowedOrigins(urls) // 어떤 클라이언트를
+                .allowedOrigins(url) // 어떤 클라이언트를
                 .allowedMethods("*") // 어떤 방식에서 "GET", "POST" ...
                 .allowedHeaders("*") // 어떤 헤더를 허용할지 ex. Content-Type..
                 .allowCredentials(true) // 쿠키 전송을 허용할 지
