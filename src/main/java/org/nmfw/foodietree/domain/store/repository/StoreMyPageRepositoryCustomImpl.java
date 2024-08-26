@@ -154,7 +154,7 @@ public class StoreMyPageRepositoryCustomImpl implements StoreMyPageRepositoryCus
                 .from(qProduct)
                 .leftJoin(qReservation).on(qProduct.productId.eq(qReservation.productId))
                 .where(qProduct.storeId.eq(storeId).and(dateCondition)
-                        .and(qReservation.rowNum.eq(1L).or(QReservation.reservation.isNull())))
+                        .and(qReservation.rowNum.eq(1L).or(qReservation.rowNum.isNull())))
                 .fetch();
     }
 
