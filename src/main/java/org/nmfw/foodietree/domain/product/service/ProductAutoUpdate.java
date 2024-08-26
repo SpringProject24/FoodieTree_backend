@@ -1,5 +1,6 @@
 package org.nmfw.foodietree.domain.product.service;
 
+import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nmfw.foodietree.domain.product.entity.Product;
@@ -21,30 +22,31 @@ import java.util.List;
 @Slf4j
 public class ProductAutoUpdate {
 
-    private final StoreMyPageService storeMyPageService;
-    private final ProductRepository productRepository;
-    private final StoreMyPageRepository storeMyPageRepository;
-    boolean isHoliday;
+	private final StoreMyPageService storeMyPageService;
+	private final ProductRepository productRepository;
+	private final StoreMyPageRepository storeMyPageRepository;
+	boolean isHoliday;
 
-//    @Scheduled(cron = "0 0 0 * * *") // 매일 00시에 실행
-    public void updateProducts() {
-        List<StoreCheckDto> stores = storeMyPageRepository.getAllStore();
-        LocalDate today = LocalDate.now();
-        for (StoreCheckDto store : stores) {
-            isHoliday = storeMyPageService.checkHoliday(store.getStoreId(), today.toString());
-            if (isHoliday) {
-                continue;
-            }
-            LocalDateTime pickupDateTime = today.atTime(store.getClosedAt());
-            int count = store.getProductCnt();
-            for (int i = 0; i < count; i++) {
-                productRepository.save(Product.builder()
-                                .storeId(store.getStoreId())
-                                .pickupTime(pickupDateTime)
-                                .productUploadDate(LocalDateTime.now())
-                        .build());
-            }
-        }
+	@Scheduled(cron = "0 0 0 * * *") // 매일 00시에 실행
+	public void updateProducts() {
+		List<StoreCheckDto> stores = storeMyPageRepository.getAllStore();
+		LocalDate today = LocalDate.now();
+		for (StoreCheckDto store : stores) {
+			isHoliday = storeMyPageService.checkHoliday(store.getStoreId(), today.toString());
+			if (isHoliday) {
+				continue;
+			}
+			LocalDateTime pickupDateTime = today.atTime(
+				store.getClosedAt() != null ? store.getClosedAt() : LocalTime.now().plusHours(23));
+			int count = store.getProductCnt();
+			for (int i = 0; i < count; i++) {
+				productRepository.save(Product.builder()
+					.storeId(store.getStoreId())
+					.pickupTime(pickupDateTime)
+					.productUploadDate(LocalDateTime.now())
+					.build());
+			}
+		}
 
-    }
+	}
 }
