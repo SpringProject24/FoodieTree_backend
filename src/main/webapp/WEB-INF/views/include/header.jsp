@@ -23,11 +23,6 @@
 </head>
 <body>
 <header class="header">
-    <!-- 햄버거 버튼 -->
-    <div class="sidebar-btn">
-        <i class="fa-solid fa-bars"></i>
-    </div>
-
     <!-- 로고 -->
     <a href="/" class="logoBtn">
         <img src="${pageContext.request.contextPath}/assets/img/icon/greenlogo.png" alt="Green Foodie Tree Logo">
@@ -45,22 +40,22 @@
     </div>
 
     <!-- 검색창 -->
-    <form class="search-store-section">
-        <button type="button" class="magnify-click-btn">
+    <div class="search-store-section">
+        <button type="button" class="magnify-click-btn" id="search-btn">
             <i class="fa-solid fa-magnifying-glass magnify-icon"></i>
         </button>
-        <input type="text" placeholder="여기에 음식점 혹은 위치를 검색해보세요.">
-    </form>
+        <input id="search-input" type="text" placeholder="여기에 음식점 혹은 위치를 검색해보세요.">
+    </div>
 
     <!-- 리뷰 게시판 버튼 -->
-    <button class="review-main-btn" onclick="location.href='${url}/reviewMain'">
+    <a class="review-main-btn" href='${url}/reviewMain'>
         <img src="${pageContext.request.contextPath}/assets/img/icon/board.png" alt="Review Board Btn">
-    </button>
+    </a>
 
     <!-- 로그인 및 회원가입 버튼 -->
     <div class="login-btn-section">
         <%--        <c:if test="${login == null}">--%>
-        <button class="main-page-btn" onclick="location.href='${url}/main'">주문하러가기</button>
+        <a class="main-page-btn" href="${url}/main">주문하러가기</a>
         <%--            <div class="dot">・</div>--%>
         <%--            <button class="sign-up-btn" onclick="location.href='http://localhost:3000/sign-up'">Sign up</button>--%>
         <%--        </c:if>--%>
@@ -85,6 +80,20 @@
             modal.style.display = "none";
         }
     }
+    const $searchBtn = document.getElementById("search-btn");
+    const $searchInput = document.getElementById("search-input");
+    const onClickHandler = () => {
+        window.location.href = `${url}/search?q=` + $searchInput.value;
+    }
+
+    $searchBtn.addEventListener('click', onClickHandler);
+
+    $searchInput.addEventListener('keydown', (e) => {
+        console.log(e);
+        if (e.key === "Enter") {
+            onClickHandler();
+        }
+    })
 </script>
 </body>
 </html>

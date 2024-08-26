@@ -14,9 +14,9 @@ button {
     justify-content: space-between;
     align-items: center;
     padding: 0 30px;
-    height: 60px;
     background-color: #F5F5DD;
     flex-wrap: wrap; /* 반응형 정렬을 위해 추가 */
+    margin-top: 15px;
 }
 
 /* 햄버거 버튼 */
@@ -108,12 +108,6 @@ button {
     margin-right: 10px;
 }
 
-.review-main-btn img:hover {
-    width: 35px;
-    height: 35px;
-    transition: 0.3s ease-in-out;
-}
-
 /* 로그인 및 회원가입 버튼 */
 .login-btn-section {
     display: flex;
@@ -127,23 +121,10 @@ button {
     cursor: pointer;
 }
 
-.sign-in-btn:hover, .sign-up-btn:hover {
-    transform: translate(-10%, -10%);
-    border-bottom: 1px solid #06654e;
-}
-
 .main-page-btn {
     font-size: 18px;
     color: #06654E;
     transition: 0.3s ease-in-out;
-    cursor: pointer;
-}
-
-.main-page-btn:hover {
-    font-size: 20px;
-    color: #06654E;
-    transition: 0.3s ease-in-out;
-    border-bottom: solid #06654E;
     cursor: pointer;
 }
 
